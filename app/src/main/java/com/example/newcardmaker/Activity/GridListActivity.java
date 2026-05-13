@@ -35,6 +35,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -1000,17 +1001,144 @@ public class GridListActivity extends AppCompatActivity {
     // SHARE CELL
     // ════════════════════════════════════════════════════════
     private void shareCell(JSONObject obj) {
-        String name = obj.optString("name", "");
-        String info = obj.optString("info", "");
+        String name  = obj.optString("name",  "");
+        String info  = obj.optString("info",  "");
         String notes = obj.optString("notes", "");
+
         StringBuilder sb = new StringBuilder("Cell Info\n--------\n");
-        if (!name.isEmpty()) sb.append("Name: ").append(name).append("\n");
-        if (!info.isEmpty()) sb.append("Info: ").append(info).append("\n");
+        if (!name.isEmpty())  sb.append("Name: ").append(name).append("\n");
+        if (!info.isEmpty())  sb.append("Info: ").append(info).append("\n");
         if (!notes.isEmpty()) sb.append("Notes: ").append(notes).append("\n");
-        Intent i = new Intent(Intent.ACTION_SEND);
-        i.setType("text/plain");
-        i.putExtra(Intent.EXTRA_TEXT, sb.toString());
-        startActivity(Intent.createChooser(i, "Share Cell Info"));
+        String shareText = sb.toString();
+
+        // ── Photo bitmap (Base64 or URI) ─────────────────────
+        String photoB64 = obj.optString("photoBitmap", "");
+        String photoUri = obj.optString("photoUri",    "");
+
+        Bitmap photoBmp = null;
+        if (!photoB64.isEmpty()) {
+            try {
+                byte[] by = android.util.Base64.decode(photoB64, android.util.Base64.DEFAULT);
+                photoBmp = BitmapFactory.decodeByteArray(by, 0, by.length);
+            } catch (Exception ignored) { }
+        }
+        if (photoBmp == null && !photoUri.isEmpty()) {
+            try {
+                photoBmp = android.provider.MediaStore.Images.Media
+                        .getBitmap(getContentResolver(), Uri.parse(photoUri));
+            } catch (Exception ignored) { }
+        }
+
+        // ── Dialog: WhatsApp / WhatsApp Business / Generic ───
+        AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+        dlg.setTitle("Share — " + (name.isEmpty() ? "Cell" : name));
+
+        final Bitmap finalBmp = photoBmp;
+
+        LinearLayout root = new LinearLayout(this);
+        root.setOrientation(LinearLayout.VERTICAL);
+        root.setPadding(dp(20), dp(16), dp(20), dp(16));
+
+        // WhatsApp button
+        Button btnWA = makeDlgBtn("WhatsApp", Color.parseColor("#25D366"));
+        btnWA.setOnClickListener(v -> {
+            shareCellViaWhatsApp("com.whatsapp", shareText, finalBmp);
+        });
+        root.addView(btnWA);
+
+        // WhatsApp Business button
+        LinearLayout.LayoutParams bLp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        bLp.setMargins(0, dp(8), 0, 0);
+
+        Button btnWAB = makeDlgBtn("WhatsApp Business", Color.parseColor("#128C7E"));
+        btnWAB.setLayoutParams(bLp);
+        btnWAB.setOnClickListener(v -> {
+            shareCellViaWhatsApp("com.whatsapp.w4b", shareText, finalBmp);
+        });
+        root.addView(btnWAB);
+
+        // Generic Share button
+        Button btnGen = makeDlgBtn("Other Apps", Color.parseColor("#1565C0"));
+        LinearLayout.LayoutParams bLp2 = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        bLp2.setMargins(0, dp(8), 0, 0);
+        btnGen.setLayoutParams(bLp2);
+        btnGen.setOnClickListener(v -> {
+            Intent si = new Intent(Intent.ACTION_SEND);
+            if (finalBmp != null) {
+                Uri imgUri = saveBitmapForShare(finalBmp);
+                if (imgUri != null) {
+                    si.setType("image/*");
+                    si.putExtra(Intent.EXTRA_STREAM, imgUri);
+                    si.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                } else {
+                    si.setType("text/plain");
+                }
+            } else {
+                si.setType("text/plain");
+            }
+            si.putExtra(Intent.EXTRA_TEXT, shareText);
+            startActivity(Intent.createChooser(si, "Share Cell Info"));
+        });
+        root.addView(btnGen);
+
+        dlg.setView(root);
+        dlg.setNegativeButton("Cancel", null);
+        dlg.show();
+    }
+
+    /** WhatsApp/WhatsApp Business direct share (text + optional image) */
+    private void shareCellViaWhatsApp(String pkg, String text, Bitmap bmp) {
+        // Check if app is installed
+        try {
+            getPackageManager().getPackageInfo(pkg, 0);
+        } catch (android.content.pm.PackageManager.NameNotFoundException e) {
+            String appName = pkg.contains("w4b") ? "WhatsApp Business" : "WhatsApp";
+            Toast.makeText(this, appName + " installed nathi!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Intent wa = new Intent(Intent.ACTION_SEND);
+        wa.setPackage(pkg);
+
+        if (bmp != null) {
+            Uri imgUri = saveBitmapForShare(bmp);
+            if (imgUri != null) {
+                wa.setType("image/*");
+                wa.putExtra(Intent.EXTRA_STREAM, imgUri);
+                wa.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            } else {
+                wa.setType("text/plain");
+            }
+        } else {
+            wa.setType("text/plain");
+        }
+
+        wa.putExtra(Intent.EXTRA_TEXT, text);
+        try {
+            startActivity(wa);
+        } catch (Exception ex) {
+            Toast.makeText(this, "Share karva ma error aavyo.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /** Save bitmap to cache dir and return FileProvider URI for sharing */
+    private Uri saveBitmapForShare(Bitmap bmp) {
+        try {
+            java.io.File cacheDir = new java.io.File(getCacheDir(), "share_imgs");
+            if (!cacheDir.exists()) cacheDir.mkdirs();
+            java.io.File imgFile = new java.io.File(cacheDir, "cell_share_" + System.currentTimeMillis() + ".png");
+            java.io.FileOutputStream fos = new java.io.FileOutputStream(imgFile);
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.flush();
+            fos.close();
+            return androidx.core.content.FileProvider.getUriForFile(
+                    this, getPackageName() + ".provider", imgFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     // ════════════════════════════════════════════════════════
