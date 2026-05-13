@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F8F9FA">
+
+    <!-- ── TOP BAR -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="12dp"
+        android:background="#1A237E"
+        android:elevation="4dp">
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@android:drawable/ic_menu_edit"
+            android:tint="#FFFFFF"
+            android:layout_marginEnd="10dp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Text Edit"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/btn_edit_cancel"
+            android:layout_width="80dp"
+            android:layout_height="36dp"
+            android:text="Cancel"
+            android:textSize="12sp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#C62828"
+            android:layout_marginEnd="8dp"/>
+
+        <Button
+            android:id="@+id/btn_edit_apply"
+            android:layout_width="80dp"
+            android:layout_height="36dp"
+            android:text="✓ Done"
+            android:textSize="12sp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#2E7D32"/>
+
+    </LinearLayout>
+
+    <!-- ── PREVIEW BOX -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#FFFFFF"
+        android:elevation="2dp"
+        android:padding="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PREVIEW"
+            android:textSize="10sp"
+            android:textColor="#9E9E9E"
+            android:letterSpacing="0.1"
+            android:layout_marginBottom="6dp"/>
+
+        <TextView
+            android:id="@+id/tv_edit_preview"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="#1A237E"
+            android:background="#EEF2FF"
+            android:padding="10dp"
+            android:maxLines="3"
+            android:ellipsize="end"/>
+
+    </LinearLayout>
+
+    <!-- ── INPUT BOX -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="6dp"
+        android:layout_marginTop="6dp"
+        android:elevation="2dp">
+
+        <EditText
+            android:id="@+id/et_edit_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minLines="3"
+            android:maxLines="5"
+            android:textSize="16sp"
+            android:padding="10dp"
+            android:inputType="textMultiLine|textCapSentences"
+            android:gravity="top|start"
+            android:hint="અહીં લખો..."
+            android:background="@drawable/bg_edittext_rounded"/>
+
+    </LinearLayout>
+
+    <!-- ── TAB ROW -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:layout_marginTop="6dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:elevation="2dp">
+
+        <TextView
+            android:id="@+id/tab_transform"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="🔤 Format"
+            android:textSize="11sp"
+            android:textColor="#1A237E"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/bg_tab_selected"/>
+
+        <TextView
+            android:id="@+id/tab_date"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="📅 Date"
+            android:textSize="11sp"
+            android:textColor="#1A237E"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/bg_tab_normal"/>
+
+        <TextView
+            android:id="@+id/tab_voice"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="🎤 Voice"
+            android:textSize="11sp"
+            android:textColor="#1A237E"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/bg_tab_normal"/>
+
+        <TextView
+            android:id="@+id/tab_clip"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="📋 Clip"
+            android:textSize="11sp"
+            android:textColor="#1A237E"
+            android:background="@drawable/bg_tab_normal"/>
+
+    </LinearLayout>
+
+    <!-- ── PANELS -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <!-- ════ TRANSFORM PANEL ════ -->
+            <LinearLayout
+                android:id="@+id/panel_transform"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TEXT TRANSFORM"
+                    android:textSize="10sp"
+                    android:textColor="#9E9E9E"
+                    android:letterSpacing="0.1"
+                    android:layout_marginBottom="8dp"/>
+
+                <LinearLayout
+                    android:id="@+id/row_transform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="16dp"/>
+
+            </LinearLayout>
+
+            <!-- ════ DATE PANEL ════ -->
+            <LinearLayout
+                android:id="@+id/panel_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DATE &amp; TIME SELECT"
+                    android:textSize="10sp"
+                    android:textColor="#9E9E9E"
+                    android:letterSpacing="0.1"
+                    android:layout_marginBottom="12dp"/>
+
+                <Button
+                    android:id="@+id/btn_date_pick"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:text="📅  Date Select"
+                    android:textSize="15sp"
+                    android:textColor="#1A237E"
+                    android:backgroundTint="#E8EAF6"
+                    android:layout_marginBottom="10dp"/>
+
+                <Button
+                    android:id="@+id/btn_time_pick"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:text="🕐  Time Select"
+                    android:textSize="15sp"
+                    android:textColor="#1B5E20"
+                    android:backgroundTint="#E8F5E9"/>
+
+            </LinearLayout>
+
+            <!-- ════ VOICE PANEL ════ -->
+            <LinearLayout
+                android:id="@+id/panel_voice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:visibility="gone"
+                android:paddingTop="30dp"
+                android:paddingBottom="30dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ગુજરાતીમાં બોલો"
+                    android:textSize="18sp"
+                    android:textColor="#1A237E"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button press કરી બોલો — text આપોઆપ add થશે"
+                    android:textSize="12sp"
+                    android:textColor="#757575"
+                    android:gravity="center"
+                    android:layout_marginBottom="24dp"/>
+
+                <Button
+                    android:id="@+id/btn_voice_input"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:text="🎤"
+                    android:textSize="52sp"
+                    android:backgroundTint="#C62828"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/tv_voice_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="13sp"
+                    android:textColor="#C62828"
+                    android:layout_marginTop="16dp"/>
+
+            </LinearLayout>
+
+            <!-- ════ CLIPBOARD PANEL ════ -->
+            <LinearLayout
+                android:id="@+id/panel_clip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CLIPBOARD"
+                    android:textSize="10sp"
+                    android:textColor="#9E9E9E"
+                    android:letterSpacing="0.1"
+                    android:layout_marginBottom="12dp"/>
+
+                <Button
+                    android:id="@+id/btn_clip_copy"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:text="📋  Copy Text"
+                    android:textSize="15sp"
+                    android:textColor="#1B5E20"
+                    android:backgroundTint="#E8F5E9"
+                    android:layout_marginBottom="10dp"/>
+
+                <Button
+                    android:id="@+id/btn_clip_paste"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp"
+                    android:text="📌  Paste Text"
+                    android:textSize="15sp"
+                    android:textColor="#E65100"
+                    android:backgroundTint="#FFF8E1"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

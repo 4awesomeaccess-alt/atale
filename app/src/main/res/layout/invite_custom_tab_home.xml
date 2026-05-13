@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+   >
+
+    <LinearLayout
+        android:id="@+id/tabRoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+
+        android:paddingTop="7dp"
+
+        android:paddingBottom="7dp"
+        android:orientation="vertical"
+       >
+
+        <ImageView
+            android:id="@+id/tab_image"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_search" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tabText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Home"
+        android:lines="1"
+        android:textColor="#5A5A5A"
+        android:textSize="10sp"
+        android:textStyle="bold" />
+</LinearLayout><!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/tab_image"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:contentDescription="@null"
+        android:src="@drawable/home_select"/>
+
+    <TextView
+        android:id="@+id/tabText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:text="Home"
+        android:textSize="12sp"
+        android:textColor="@android:color/darker_gray"/>-->
+
+
+    <!--
+        <RelativeLayout
+            android:layout_centerHorizontal="true"
+            android:paddingVertical="@dimen/_8sdp"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:gravity="center_horizontal"
+            android:id="@+id/tabfsdfsdText"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="@drawable/invite_tab_background_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:id="@+id/tab_image"
+                android:layout_centerVertical="true"
+                android:src="@drawable/categories"
+                android:adjustViewBounds="true"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                app:tint="@color/white" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/tabfsdfsdText"
+            android:id="@+id/tabText"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Category"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:fontFamily="@font/roboto_reg"
+            android:textColor="@color/tab_text_selector"
+            android:textStyle="bold"
+            android:textSize="@dimen/_10sdp" />
+
+        <TextView
+            android:visibility="gone"
+            android:layout_alignEnd="@+id/tabfsdfsdText"
+            android:id="@+id/draft_count_text"
+            android:layout_width="@dimen/_17sdp"
+            android:layout_height="@dimen/_17sdp"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:background="@drawable/invite_round"
+            android:fontFamily="@font/rajkot"
+            android:gravity="center"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10sdp" />-->
+
+
+

@@ -1,0 +1,50 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:background="@android:color/transparent" android:minWidth="260dp">
+    <!--  ══ DRAG HANDLE (GREEN = Image theme) ══  -->
+    <TextView android:id="@+id/drag_handle_sel" android:layout_width="match_parent" android:layout_height="36dp" android:text="🖼 Image Controls ↕ drag" android:textColor="#FFFFFF" android:textSize="12sp" android:gravity="center" android:background="#2E7D32" android:paddingStart="10dp" android:paddingEnd="10dp"/>
+    <!--  ══ MAIN CARD ══  -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#F1F8E9" android:padding="8dp">
+        <!--  ── W/H Size Label + Seekbar ──  -->
+        <TextView android:id="@+id/tv_sel_size_label" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="W:300 H:300" android:textSize="11sp" android:textColor="#2E7D32" android:gravity="center" android:paddingBottom="2dp"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="6dp">
+            <TextView android:id="@+id/btn_sel_size_minus" android:layout_width="36dp" android:layout_height="36dp" android:text="−" android:textSize="18sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#2E7D32"/>
+            <SeekBar android:id="@+id/seek_sel_size" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginStart="6dp" android:layout_marginEnd="6dp" android:max="100" android:progress="50"/>
+            <TextView android:id="@+id/btn_sel_size_plus" android:layout_width="36dp" android:layout_height="36dp" android:text="+" android:textSize="18sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#2E7D32"/>
+        </LinearLayout>
+        <!--  ── DIVIDER ──  -->
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#A5D6A7" android:layout_marginBottom="4dp"/>
+        <!--  ── TOGGLE BUTTONS (Move / Layer / Align) ──  -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="4dp">
+            <TextView android:id="@+id/btn_toggle_move" android:layout_width="0dp" android:layout_height="30dp" android:layout_weight="1" android:text="↕ Move" android:textSize="10sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#37474F" android:layout_marginEnd="3dp"/>
+            <TextView android:id="@+id/btn_toggle_layer" android:layout_width="0dp" android:layout_height="30dp" android:layout_weight="1" android:text="⧈ Layer" android:textSize="10sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#1B5E20" android:layout_marginEnd="3dp"/>
+            <TextView android:id="@+id/btn_toggle_align" android:layout_width="0dp" android:layout_height="30dp" android:layout_weight="1" android:text="⊞ Align" android:textSize="10sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#2E7D32" android:layout_marginEnd="3dp"/>
+            <TextView android:id="@+id/btn_sel_close" android:layout_width="30dp" android:layout_height="30dp" android:text="✕" android:textSize="12sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#B71C1C"/>
+        </LinearLayout>
+        <!--  ── MOVE BUTTONS ROW ──  -->
+        <LinearLayout android:id="@+id/row_move_btns" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:visibility="gone" android:layout_marginBottom="4dp">
+            <TextView android:id="@+id/btn_sel_left" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:text="◀" android:textSize="16sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#2E7D32" android:layout_marginEnd="3dp"/>
+            <TextView android:id="@+id/btn_sel_up" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:text="▲" android:textSize="16sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#2E7D32" android:layout_marginEnd="3dp"/>
+            <TextView android:id="@+id/btn_sel_down" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:text="▼" android:textSize="16sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#2E7D32" android:layout_marginEnd="3dp"/>
+            <TextView android:id="@+id/btn_sel_right" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:text="▶" android:textSize="16sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#2E7D32"/>
+        </LinearLayout>
+        <!--  ── LAYER BUTTONS ROW ──  -->
+        <LinearLayout android:id="@+id/row_layer_btns" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:visibility="gone" android:layout_marginBottom="4dp">
+            <TextView android:id="@+id/btn_pop_bring_front" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:text="⬆Front" android:textSize="9sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#1B5E20" android:layout_marginEnd="3dp"/>
+            <TextView android:id="@+id/btn_pop_layer_up" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:text="↑Up" android:textSize="9sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#2E7D32" android:layout_marginEnd="3dp"/>
+            <TextView android:id="@+id/btn_pop_layer_down" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:text="↓Down" android:textSize="9sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#388E3C" android:layout_marginEnd="3dp"/>
+            <TextView android:id="@+id/btn_pop_send_back" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:text="⬇Back" android:textSize="9sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#1B5E20"/>
+        </LinearLayout>
+        <!--  ── ALIGN BUTTONS ROW ──  -->
+        <HorizontalScrollView android:id="@+id/hsv_align_row" android:layout_width="match_parent" android:layout_height="wrap_content" android:scrollbars="none" android:visibility="gone" android:layout_marginBottom="4dp">
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal">
+                <TextView android:id="@+id/btn_sel_align_left" android:layout_width="44dp" android:layout_height="36dp" android:text="⊢L" android:textSize="10sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#2E7D32" android:layout_marginEnd="3dp"/>
+                <TextView android:id="@+id/btn_sel_align_center_h" android:layout_width="44dp" android:layout_height="36dp" android:text="⊣⊢H" android:textSize="10sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#2E7D32" android:layout_marginEnd="3dp"/>
+                <TextView android:id="@+id/btn_sel_align_right" android:layout_width="44dp" android:layout_height="36dp" android:text="R⊣" android:textSize="10sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#2E7D32" android:layout_marginEnd="3dp"/>
+                <TextView android:id="@+id/btn_sel_align_top" android:layout_width="44dp" android:layout_height="36dp" android:text="⊤T" android:textSize="10sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#1B5E20" android:layout_marginEnd="3dp"/>
+                <TextView android:id="@+id/btn_sel_align_middle" android:layout_width="44dp" android:layout_height="36dp" android:text="⊥⊤V" android:textSize="10sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#1B5E20" android:layout_marginEnd="3dp"/>
+                <TextView android:id="@+id/btn_sel_align_bottom" android:layout_width="44dp" android:layout_height="36dp" android:text="B⊥" android:textSize="10sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#1B5E20" android:layout_marginEnd="3dp"/>
+                <TextView android:id="@+id/btn_sel_distribute_h" android:layout_width="44dp" android:layout_height="36dp" android:text="||H" android:textSize="10sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#388E3C" android:layout_marginEnd="3dp"/>
+                <TextView android:id="@+id/btn_sel_distribute_v" android:layout_width="44dp" android:layout_height="36dp" android:text="=V" android:textSize="10sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#388E3C"/>
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+</LinearLayout>

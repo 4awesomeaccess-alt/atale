@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- ══════════════════════════════════
+         MAIN CONTENT
+    ══════════════════════════════════ -->
+    <RelativeLayout
+        android:id="@+id/main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/main_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- ── Lock Panel Open Button (left edge) -->
+
+
+        <HorizontalScrollView
+            android:id="@+id/bottom_bt_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/bg_bottom_toolbar"
+            android:fillViewport="true"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/bottom_controls"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp">
+
+                <TextView
+                    android:id="@+id/btn_open_lock_panel"
+                    android:layout_width="28dp"
+                    android:layout_height="72dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="true"
+                    android:gravity="center"
+                    android:text="🔒"
+                    android:textSize="12sp"
+                    android:background="#CC1565C0"
+                    android:textColor="#FFFFFF"
+                    android:elevation="6dp"/>
+
+                <LinearLayout
+                    android:id="@+id/btn_add_text"
+                    style="@style/BottomToolItem">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_add_text"
+                        app:tint="@android:color/white"/>
+                    <TextView
+                        style="@style/BottomToolText"
+                        android:text="Add Text"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_photo_frame"
+                    style="@style/BottomToolItem">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_add_text"
+                        app:tint="@android:color/white"/>
+                    <TextView
+                        style="@style/BottomToolText"
+                        android:text="Photo frame"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_sticker_gallery"
+                    style="@style/BottomToolItem">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_add_text"
+                        app:tint="@android:color/white"/>
+                    <TextView
+                        style="@style/BottomToolText"
+                        android:text="Add Image"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_remove_bg_offline"
+                    style="@style/BottomToolItem">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_change_bg"
+                        app:tint="@android:color/white"/>
+                    <TextView
+                        style="@style/BottomToolText"
+                        android:text="Remove BG"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_set_background"
+                    style="@style/BottomToolItem">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_add_image"
+                        app:tint="@android:color/white"/>
+                    <TextView
+                        style="@style/BottomToolText"
+                        android:text="Add bg Image+"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_save_json"
+                    style="@style/BottomToolItem">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_save_json"
+                        app:tint="@android:color/white"/>
+                    <TextView
+                        style="@style/BottomToolText"
+                        android:text="Save JSON"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_location"
+                    style="@style/BottomToolItem">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_location"
+                        app:tint="@android:color/white"/>
+                    <TextView
+                        style="@style/BottomToolText"
+                        android:text="Location"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_show_list"
+                    style="@style/BottomToolItem">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_list_json"
+                        app:tint="@android:color/white"/>
+                    <TextView
+                        style="@style/BottomToolText"
+                        android:text="List JSON"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_add_sticker"
+                    style="@style/BottomToolItem">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_sticker"
+                        app:tint="@android:color/white"/>
+                    <TextView
+                        style="@style/BottomToolText"
+                        android:text="Sticker"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_add_page"
+                    style="@style/BottomToolItem">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_add_page"
+                        app:tint="@android:color/white"/>
+                    <TextView
+                        style="@style/BottomToolText"
+                        android:text="Add Page"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_delete_page"
+                    style="@style/BottomToolItem">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_delete_page"
+                        app:tint="@android:color/white"/>
+                    <TextView
+                        style="@style/BottomToolText"
+                        android:text="Delete Page"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_show_delete_page"
+                    style="@style/BottomToolItem">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_delete_page_show"
+                        app:tint="@android:color/white"/>
+                    <TextView
+                        style="@style/BottomToolText"
+                        android:text="Show Pages"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_show_deleted_texts"
+                    style="@style/BottomToolItem">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_deleted_text"
+                        app:tint="@android:color/white"/>
+                    <TextView
+                        style="@style/BottomToolText"
+                        android:text="Deleted Text"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_saveimage"
+                    style="@style/BottomToolItem">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_save_image"
+                        app:tint="@android:color/white"/>
+                    <TextView
+                        style="@style/BottomToolText"
+                        android:text="Save Image"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_download_pdf"
+                    style="@style/BottomToolItem">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_pdf"
+                        app:tint="@android:color/white"/>
+                    <TextView
+                        style="@style/BottomToolText"
+                        android:text="Export PDF"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_arc_text"
+                    style="@style/BottomToolItem">
+                    <TextView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:gravity="center"
+                        android:text="Ω"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        style="@style/BottomToolText"
+                        android:text="Arc Text"/>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/btn_pdf_list"
+                    style="@style/BottomToolItem">
+                    <TextView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:gravity="center"
+                        android:text="Ω"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        style="@style/BottomToolText"
+                        android:text="Pdf LIst activity"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_image_list"
+                    style="@style/BottomToolItem">
+                    <TextView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:gravity="center"
+                        android:text="Ω"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        style="@style/BottomToolText"
+                        android:text="Image  List activity"/>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/btn_grid_frame"
+                    style="@style/BottomToolItem">
+                    <TextView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:gravity="center"
+                        android:text="Ω"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        style="@style/BottomToolText"
+                        android:text="Grid photo"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <include
+            android:id="@+id/include_multi_select_toolbar"
+            layout="@layout/layout_multi_select_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_above="@id/bottom_bt_scroll"/>
+
+        <include
+            android:id="@+id/include_page_liner"
+            layout="@layout/layout_page_liner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/bottom_bt_scroll"/>
+
+    </RelativeLayout>
+
+    <!-- ══════════════════════════════════
+         LEFT DRAWER — Locked Layers
+    ══════════════════════════════════ -->
+    <LinearLayout
+        android:id="@+id/lock_panel_drawer"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:orientation="vertical"
+        android:background="#FFFFFF"
+        android:elevation="8dp">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#1565C0"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="🔒 Locked Layers"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/btn_close_lock_panel"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:text="✕"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:clickable="true"
+                android:focusable="true"/>
+
+        </LinearLayout>
+
+        <!-- Unlock All -->
+        <Button
+            android:id="@+id/btn_unlock_all"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="🔓 Unlock All"
+            android:textSize="13sp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#43A047"
+            android:layout_margin="8dp"/>
+        <!-- Drawer ની અંદર — Unlock All Button ની નીચે -->
+
+        <!-- ── Tab Bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:background="#F5F5F5">
+
+            <TextView
+                android:id="@+id/tab_all_layers"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="All"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:background="#1565C0"
+                android:clickable="true"
+                android:focusable="true"/>
+
+            <TextView
+                android:id="@+id/tab_locked_layers"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="🔒 Locked"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="#888888"
+                android:background="#F5F5F5"
+                android:clickable="true"
+                android:focusable="true"/>
+
+            <TextView
+                android:id="@+id/tab_unlocked_layers"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="🔓 Open"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="#888888"
+                android:background="#F5F5F5"
+                android:clickable="true"
+                android:focusable="true"/>
+
+        </LinearLayout>
+
+        <!-- Count -->
+        <TextView
+            android:id="@+id/tv_lock_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0 layers locked"
+            android:textSize="12sp"
+            android:textColor="#888888"
+            android:paddingStart="16dp"
+            android:paddingBottom="8dp"/>
+
+        <!-- List -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_locked_layers"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="gone"/>
+
+        <!-- Empty -->
+        <TextView
+            android:id="@+id/tv_lock_empty"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="🔓&#10;Koi layer locked nathi"
+            android:textSize="14sp"
+            android:textColor="#BBBBBB"
+            android:visibility="visible"/>
+
+    </LinearLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>

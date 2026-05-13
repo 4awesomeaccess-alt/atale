@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/text_popup_toolbar"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_popup_toolbar"
+    android:padding="10dp"
+    android:elevation="12dp">
+
+    <!-- Row 1 : Main actions -->
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Edit -->
+            <TextView
+                android:id="@+id/btn_pop_edit_text"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:text="✏\nEdit"
+                android:gravity="center"
+                android:textSize="10sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/bg_tool_btn_blue"
+                android:layout_marginEnd="5dp"
+                android:padding="4dp" />
+
+            <TextView
+                android:id="@+id/btn_pop_border_style"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:text="□\nBorder"
+                android:gravity="center"
+                android:textSize="10sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/bg_tool_btn_normal"
+                android:layout_marginEnd="5dp"
+                android:padding="4dp" />
+
+            <!-- Border Color -->
+            <TextView
+                android:id="@+id/btn_pop_border_color"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:text="🖌\nB.Color"
+                android:gravity="center"
+                android:textSize="10sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/bg_tool_btn_normal"
+                android:layout_marginEnd="5dp"
+                android:padding="4dp" />
+
+            <!-- Lock -->
+            <TextView
+                android:id="@+id/btn_pop_lock"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:text="🔓\nLock"
+                android:gravity="center"
+                android:textSize="10sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/bg_tool_btn_green"
+                android:layout_marginEnd="5dp"
+                android:padding="4dp" />
+
+            <!-- Delete -->
+            <TextView
+                android:id="@+id/btn_pop_delete"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:text="🗑\nDelete"
+                android:gravity="center"
+                android:textSize="10sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/bg_tool_btn_red"
+                android:padding="4dp" />
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#44FFFFFF"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp" />
+
+
+
+</LinearLayout>
