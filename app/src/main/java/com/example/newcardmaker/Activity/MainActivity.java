@@ -13929,10 +13929,10 @@ public class MainActivity extends AppCompatActivity {
      * Drag handle setup — same for both popups
      */
     private void setupDragHandle(View cv) {
-        final int[] popupX = {selControlsLastX};
-        final int[] popupY = {selControlsLastY};
         final float[] lastTX = {0};
         final float[] lastTY = {0};
+        final int[] popupX = {selControlsLastX};
+        final int[] popupY = {selControlsLastY};
 
         View dragHandle = cv.findViewById(R.id.drag_handle_sel);
         if (dragHandle == null) return;
@@ -13942,14 +13942,13 @@ public class MainActivity extends AppCompatActivity {
                 case MotionEvent.ACTION_DOWN:
                     lastTX[0] = event.getRawX();
                     lastTY[0] = event.getRawY();
-                    // ✅ Actual popup position — status bar offset minus karo
-                    int[] loc = new int[2];
-                    cv.getLocationOnScreen(loc);
-                    int statusBarHeight = 0;
-                    int resId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-                    if (resId > 0) statusBarHeight = getResources().getDimensionPixelSize(resId);
-                    popupX[0] = loc[0];
-                    popupY[0] = loc[1] - statusBarHeight;
+                    // ✅ cv ni actual position — mainLayout offset minus karo
+                    int[] cvLoc = new int[2];
+                    int[] rootLoc = new int[2];
+                    cv.getLocationOnScreen(cvLoc);
+                    mainLayout.getLocationOnScreen(rootLoc);
+                    popupX[0] = cvLoc[0] - rootLoc[0];
+                    popupY[0] = cvLoc[1] - rootLoc[1];
                     return true;
                 case MotionEvent.ACTION_MOVE:
                     float dx = event.getRawX() - lastTX[0];
