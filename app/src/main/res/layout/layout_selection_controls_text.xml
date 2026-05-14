@@ -470,6 +470,16 @@
                             android:orientation="horizontal"
                             android:paddingVertical="4dp">
 
+                            <!-- Gradient -->
+                            <LinearLayout android:id="@+id/btn_pop_gradient"
+                                android:layout_width="52dp" android:layout_height="50dp"
+                                android:layout_marginEnd="4dp" android:background="#FFFFFF"
+                                android:gravity="center" android:orientation="vertical"
+                                android:padding="4dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🌈" android:textSize="15sp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Gradient" android:textColor="#6B7280" android:textSize="6sp" android:layout_marginTop="2dp" />
+                            </LinearLayout>
+
                             <!-- Edit -->
                             <LinearLayout android:id="@+id/btn_sel_edit_text"
                                 android:layout_width="52dp" android:layout_height="50dp"
