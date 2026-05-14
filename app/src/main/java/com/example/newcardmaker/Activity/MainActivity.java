@@ -18101,6 +18101,17 @@ public class MainActivity extends AppCompatActivity {
         int bgColor = obj.optInt("bgColor", Color.TRANSPARENT);
         int borderStyle = obj.optInt("borderStyle", 0);
 
+        // ── Full border info load
+        int borderWidth  = obj.optInt("borderWidth",  0);
+        int borderColor  = obj.optInt("borderColor",  Color.TRANSPARENT);
+        int borderCorner = obj.optInt("borderCorner", 0);
+
+        // ── tv_border_info tag set karo jethi restore thay
+        if (borderWidth > 0) {
+            textView.setTag(R.id.tv_border_info,
+                    new int[]{borderWidth, borderColor, borderCorner, borderStyle});
+        }
+
         // ── Padding — JSON માંથી read
         int savedPadLeft = obj.optInt("paddingLeft", 20);
         int savedPadTop = obj.optInt("paddingTop", 20);
@@ -18191,6 +18202,9 @@ public class MainActivity extends AppCompatActivity {
         // ── final variables for post()
         final int fBgColor = bgColor;
         final int fBorderStyle = borderStyle;
+        final int fBorderWidth  = borderWidth;
+        final int fBorderColor  = borderColor;
+        final int fBorderCorner = borderCorner;
         final int fPadLeft = savedPadLeft;
         final int fPadTop = savedPadTop;
         final int fPadRight = savedPadRight;
@@ -18205,7 +18219,18 @@ public class MainActivity extends AppCompatActivity {
             // ── Border + BG apply
             GradientDrawable gd = new GradientDrawable();
             gd.setColor(fBgColor);
-            applyBorderStyle(gd, fBorderStyle);
+            if (fBorderWidth > 0) {
+                gd.setCornerRadius(dpToPx(fBorderCorner));
+                switch (fBorderStyle) {
+                    case 0: gd.setStroke(dpToPx(fBorderWidth), fBorderColor); break;
+                    case 1: gd.setStroke(dpToPx(fBorderWidth), fBorderColor, dpToPx(8), dpToPx(4)); break;
+                    case 2: gd.setStroke(dpToPx(fBorderWidth), fBorderColor, dpToPx(2), dpToPx(4)); break;
+                    case 3: gd.setStroke(dpToPx(fBorderWidth + 2), fBorderColor); break;
+                    default: applyBorderStyle(gd, fBorderStyle);
+                }
+            } else {
+                applyBorderStyle(gd, fBorderStyle);
+            }
             textView.setBackground(gd);
 
             // ── Stroke re-apply (gradient safe)
