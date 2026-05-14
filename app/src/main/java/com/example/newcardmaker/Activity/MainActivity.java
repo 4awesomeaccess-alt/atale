@@ -13161,8 +13161,11 @@ public class MainActivity extends AppCompatActivity {
                         GradientDrawable gd = new GradientDrawable();
                         gd.setColor(getStoredBackgroundColor(targetView));
                         gd.setStroke(0, Color.TRANSPARENT);
-                        gd.setCornerRadius(8f);
+                        gd.setCornerRadius(0f);
                         targetView.setBackground(gd);
+                        // ✅ Border info tag clear karo — jethi restore na thay
+                        targetView.setTag(R.id.tv_border_info, null);
+                        targetView.setTag(R.id.btn_add_sticker, 0);
                         exportToJson();
                         borderPopup.dismiss();
                     });
