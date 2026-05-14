@@ -12951,30 +12951,33 @@ public class MainActivity extends AppCompatActivity {
                 borderPopup.setOutsideTouchable(true);
 
                 View rootView = getWindow().getDecorView().getRootView();
-                borderPopup.showAtLocation(rootView, Gravity.CENTER, 0, 0);
+                android.util.DisplayMetrics dm2 = new android.util.DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(dm2);
+                borderPopup.showAtLocation(rootView, Gravity.TOP | Gravity.LEFT, 0, dm2.heightPixels / 4);
 
-                // ── Drag
+                // ── Drag (smooth)
                 View borderDrag = borderPopupView.findViewById(R.id.drag_handle_border);
-                final int[] bLastX = {0}, bLastY = {0}, bPopX = {0}, bPopY = {0};
+                final float[] bLastX = {0}, bLastY = {0};
+                final int[] bPopX = {0}, bPopY = {0};
                 if (borderDrag != null) {
                     borderDrag.setOnTouchListener((bv, event) -> {
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_DOWN:
-                                bLastX[0] = (int) event.getRawX();
-                                bLastY[0] = (int) event.getRawY();
+                                bLastX[0] = event.getRawX();
+                                bLastY[0] = event.getRawY();
                                 int[] bloc = new int[2];
                                 borderPopupView.getLocationOnScreen(bloc);
                                 bPopX[0] = bloc[0];
                                 bPopY[0] = bloc[1];
                                 break;
                             case MotionEvent.ACTION_MOVE:
-                                int dx = (int) event.getRawX() - bLastX[0];
-                                int dy = (int) event.getRawY() - bLastY[0];
-                                bPopX[0] += dx;
-                                bPopY[0] += dy;
+                                float dx = event.getRawX() - bLastX[0];
+                                float dy = event.getRawY() - bLastY[0];
+                                bPopX[0] += (int) dx;
+                                bPopY[0] += (int) dy;
                                 borderPopup.update(bPopX[0], bPopY[0], -1, -1);
-                                bLastX[0] = (int) event.getRawX();
-                                bLastY[0] = (int) event.getRawY();
+                                bLastX[0] = event.getRawX();
+                                bLastY[0] = event.getRawY();
                                 break;
                         }
                         return true;
