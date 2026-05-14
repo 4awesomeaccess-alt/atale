@@ -12902,6 +12902,10 @@ public class MainActivity extends AppCompatActivity {
         if (btnFont != null)
             btnFont.setOnClickListener(v -> showFontPickerDialog(targetView));
 
+        View btnGradient = cv.findViewById(R.id.btn_pop_gradient);
+        if (btnGradient != null)
+            btnGradient.setOnClickListener(v -> showGradientPopupWindow(targetView));
+
         View btnStroke2 = cv.findViewById(R.id.btn_sel_stroke);
         if (btnStroke2 != null)
             btnStroke2.setOnClickListener(v -> showStrokeDialog(targetView));
@@ -13561,7 +13565,122 @@ public class MainActivity extends AppCompatActivity {
      * Gradient — movable PopupWindow
      */
     private void showGradientPopupWindow(final StrokeTextView targetText) {
-        int dp8 = dpToPx(8); int dp4 = dpToPx(4); int dp6 = dpToPx(6);
+        int dp4 = dpToPx(4), dp6 = dpToPx(6), dp8 = dpToPx(8);
+
+        // 100+ gradient presets {color1, color2, name}
+        final Object[][] GRADIENTS = {
+            // Warm
+            {0xFFFF6B35, 0xFFF7C59F, "Sunset"},
+            {0xFFFF416C, 0xFFFF4B2B, "Fire"},
+            {0xFFF7971E, 0xFFFFD200, "Gold"},
+            {0xFFFF9A9E, 0xFFFAD0C4, "Rose"},
+            {0xFFFF9F43, 0xFFFF6B6B, "Peach"},
+            {0xFFFFB347, 0xFFFFCC02, "Amber"},
+            {0xFFFF6B6B, 0xFFFFE66D, "Warm Sun"},
+            {0xFFFF4E50, 0xFFF9D423, "Flame"},
+            {0xFFFF8C00, 0xFFFF0080, "Neon Warm"},
+            {0xFFFC4A1A, 0xFFF7B733, "Fire Gold"},
+            {0xFFED213A, 0xFF93291E, "Deep Red"},
+            {0xFFFF8008, 0xFFFFC837, "Orange Sun"},
+            {0xFFDA4453, 0xFF89216B, "Crimson"},
+            {0xFFBD3F32, 0xFFCB8B2A, "Rust"},
+            {0xFFFF5F6D, 0xFFFFC371, "Coral"},
+            // Cool
+            {0xFF667EEA, 0xFF764BA2, "Purple"},
+            {0xFF4FACFE, 0xFF00F2FE, "Sky"},
+            {0xFF43E97B, 0xFF38F9D7, "Mint"},
+            {0xFF11998E, 0xFF38EF7D, "Emerald"},
+            {0xFF4776E6, 0xFF8E54E9, "Blue Purple"},
+            {0xFF0099F7, 0xFFF11712, "Triton"},
+            {0xFF02AABD, 0xFF00CDAC, "Teal"},
+            {0xFF56CCF2, 0xFF2F80ED, "Ocean"},
+            {0xFF6A3093, 0xFFA044FF, "Violet"},
+            {0xFF1A1A2E, 0xFF16213E, "Midnight"},
+            {0xFF000428, 0xFF004E92, "Deep Sea"},
+            {0xFF0F2027, 0xFF203A43, "Slate"},
+            {0xFF2193B0, 0xFF6DD5FA, "Aqua"},
+            {0xFF373B44, 0xFF4286F4, "Storm"},
+            {0xFF5C258D, 0xFF4389A2, "Indigo"},
+            // Nature
+            {0xFF56AB2F, 0xFFA8E063, "Green"},
+            {0xFF134E5E, 0xFF71B280, "Forest"},
+            {0xFF1D976C, 0xFF93F9B9, "Jungle"},
+            {0xFF52C234, 0xFF061700, "Nature"},
+            {0xFF005C97, 0xFF363795, "Deep Blue"},
+            {0xFF1488CC, 0xFF2B32B2, "Royal Blue"},
+            {0xFF2980B9, 0xFF2C3E50, "Marine"},
+            {0xFF3A7BD5, 0xFF3A6073, "Calm"},
+            {0xFF16A085, 0xFFF4D03F, "Turquoise Gold"},
+            {0xFF27AE60, 0xFF1ABC9C, "Fresh"},
+            // Pastel
+            {0xFFA18CD1, 0xFFFBC2EB, "Lavender"},
+            {0xFFFDA085, 0xFFF6D365, "Peach Cream"},
+            {0xFFD4FC79, 0xFF96E6A1, "Lime"},
+            {0xFFFCB69F, 0xFFFF9A9E, "Blush"},
+            {0xFFE0C3FC, 0xFF8EC5FC, "Soft Purple"},
+            {0xFFFFF1EB, 0xFFACE0F9, "Cotton Candy"},
+            {0xFFD9AFD9, 0xFF97D9E1, "Lilac"},
+            {0xFFCFDEF3, 0xFFE0EAFC, "Baby Blue"},
+            {0xFFFDDB92, 0xFF1FA2FF, "Retro"},
+            {0xFFFCCCCC, 0xFFFFCCCC, "Baby Pink"},
+            // Vibrant
+            {0xFF00B4D8, 0xFF90E0EF, "Cyan"},
+            {0xFFE96C6C, 0xFFF9C784, "Salsa"},
+            {0xFF8EC5FC, 0xFFE0C3FC, "Dream"},
+            {0xFF00C6FF, 0xFF0072FF, "Electric Blue"},
+            {0xFF7F00FF, 0xFFE100FF, "Neon Purple"},
+            {0xFF00F260, 0xFF0575E6, "Matrix"},
+            {0xFFFC00FF, 0xFF00DBDE, "Neon Cyan"},
+            {0xFFFFFF00, 0xFFFF00FF, "Neon Yellow"},
+            {0xFFFF0099, 0xFF493240, "Hot Pink"},
+            {0xFF00D2FF, 0xFF3A7BD5, "Sky Blue"},
+            {0xFF6EE2F5, 0xFF6454F0, "Electric"},
+            {0xFFF953C6, 0xFFB91D73, "Magenta"},
+            {0xFFB24592, 0xFFF15F79, "Pink Purple"},
+            {0xFFDE6161, 0xFF2657EB, "Mixed"},
+            {0xFF66FF00, 0xFF00FFCC, "Neon Green"},
+            // Dark
+            {0xFF2C3E50, 0xFF4CA1AF, "Dark Teal"},
+            {0xFF232526, 0xFF414345, "Charcoal"},
+            {0xFF0F0C29, 0xFF302B63, "Dark Purple"},
+            {0xFF16213E, 0xFF0F3460, "Navy"},
+            {0xFF1A1A2E, 0xFF533483, "Galactic"},
+            {0xFF2D3561, 0xFFC05C7E, "Twilight"},
+            {0xFF4B1248, 0xFFF10711, "Dark Red"},
+            {0xFF403B4A, 0xFFE7E9BB, "Dark Warm"},
+            {0xFF000000, 0xFF434343, "Carbon"},
+            {0xFF11998E, 0xFF2980B9, "Dark Green Blue"},
+            // Sunset/Sunrise
+            {0xFFf83600, 0xFFf9d423, "Sunrise"},
+            {0xFFf7971e, 0xFFffd200, "Golden Hour"},
+            {0xFFff6e7f, 0xFFbfe9ff, "Dusk"},
+            {0xFFfc5c7d, 0xFF6a3093, "Twilight Rose"},
+            {0xFFee0979, 0xFFff6a00, "Sunset Fire"},
+            {0xFFf64f59, 0xFFc471ed, "Pink Fire"},
+            {0xFFff9966, 0xFFff5e62, "Warm Dusk"},
+            {0xFFfddb92, 0xFFd1fdff, "Morning"},
+            // Special
+            {0xFFFFFFFF, 0xFF000000, "B&W"},
+            {0xFF000000, 0xFFFFFFFF, "Dark Light"},
+            {0xFFc0c0c0, 0xFFFFFFFF, "Silver"},
+            {0xFFFFD700, 0xFFFFA500, "Gold Shine"},
+            {0xFFe8d5b7, 0xFFe8d5b7, "Cream"},
+            {0xFF667eea, 0xFF764ba2, "Royal"},
+            {0xFF355C7D, 0xFF6C5B7B, "Denim"},
+            {0xFF40E0D0, 0xFFFF8C00, "Tropical"},
+            {0xFFbdc3c7, 0xFF2c3e50, "Steel"},
+            {0xFFc94b4b, 0xFF4b134f, "Wine"},
+            {0xFF11c5cf, 0xFFaf2ee5, "Aurora"},
+            {0xFF0081C6, 0xFF00C6FF, "Water"},
+            {0xFFa8e6cf, 0xFFdcedc1, "Sage"},
+            {0xFFff9a9e, 0xFFfecfef, "Sakura"},
+            {0xFF764ba2, 0xFFf093fb, "Galaxy"},
+            {0xFF6a3093, 0xFFa044ff, "Deep Violet"},
+            {0xFF43b89c, 0xFF28a0b5, "Seafoam"},
+            {0xFFff6a00, 0xFFee0979, "Hot Sunset"},
+            {0xFF00c3ff, 0xFFffff1c, "Neon Day"},
+            {0xFF833ab4, 0xFFfd1d1d, "Instagram"},
+        };
 
         // ── Root layout
         LinearLayout root = new LinearLayout(this);
@@ -13574,212 +13693,152 @@ public class MainActivity extends AppCompatActivity {
         dragRow.setGravity(Gravity.CENTER_VERTICAL);
         dragRow.setBackgroundColor(Color.parseColor("#2A3439"));
         dragRow.setPadding(dp8, dp4, dp6, dp4);
-        dragRow.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(30)));
+        dragRow.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(30)));
         TextView dragHandle = new TextView(this);
-        dragHandle.setText("\u2261  Gradient");
+        dragHandle.setText("\u2261  Gradient Color");
         dragHandle.setTextColor(Color.parseColor("#F3F4F6"));
         dragHandle.setTextSize(9);
         dragHandle.setTypeface(null, android.graphics.Typeface.BOLD);
-        dragHandle.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+        dragHandle.setLayoutParams(new LinearLayout.LayoutParams(0,
+                LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
         dragRow.addView(dragHandle);
-        TextView btnClose = new TextView(this);
-        btnClose.setText("\u2715");
-        btnClose.setTextColor(Color.WHITE);
-        btnClose.setTextSize(11);
-        btnClose.setGravity(Gravity.CENTER);
-        btnClose.setBackgroundColor(Color.parseColor("#607D8B"));
-        btnClose.setPadding(dp8, dp4, dp8, dp4);
-        btnClose.setTypeface(null, android.graphics.Typeface.BOLD);
-        dragRow.addView(btnClose);
+        TextView btnCloseG = new TextView(this);
+        btnCloseG.setText("\u2715");
+        btnCloseG.setTextColor(Color.WHITE);
+        btnCloseG.setTextSize(11);
+        btnCloseG.setGravity(Gravity.CENTER);
+        btnCloseG.setBackgroundColor(Color.parseColor("#607D8B"));
+        btnCloseG.setPadding(dp8, dp4, dp8, dp4);
+        btnCloseG.setTypeface(null, android.graphics.Typeface.BOLD);
+        dragRow.addView(btnCloseG);
         root.addView(dragRow);
 
-        // ── ScrollView content
+        // ── Remove button row
+        LinearLayout removeRow = new LinearLayout(this);
+        removeRow.setOrientation(LinearLayout.HORIZONTAL);
+        removeRow.setBackgroundColor(Color.WHITE);
+        removeRow.setPadding(dp8, dp4, dp8, dp4);
+        removeRow.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(32)));
+        TextView btnRemoveG = new TextView(this);
+        btnRemoveG.setText("\u2715  Remove Gradient");
+        btnRemoveG.setTextSize(9);
+        btnRemoveG.setTextColor(Color.WHITE);
+        btnRemoveG.setGravity(Gravity.CENTER);
+        btnRemoveG.setBackgroundColor(Color.parseColor("#374151"));
+        btnRemoveG.setPadding(dp8, dp4, dp8, dp4);
+        btnRemoveG.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(24)));
+        removeRow.addView(btnRemoveG);
+        root.addView(removeRow);
+
+        // Divider
+        View div = new View(this);
+        div.setBackgroundColor(Color.parseColor("#D1D5DB"));
+        div.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 1));
+        root.addView(div);
+
+        // ── Grid scroll
         android.widget.ScrollView sv = new android.widget.ScrollView(this);
-        sv.setBackgroundColor(Color.parseColor("#F3F4F6"));
-        LinearLayout inner = new LinearLayout(this);
-        inner.setOrientation(LinearLayout.VERTICAL);
-        inner.setPadding(dp8, dp4, dp8, dp8);
-        sv.addView(inner);
-        root.addView(sv);
+        android.widget.GridLayout grid = new android.widget.GridLayout(this);
+        grid.setColumnCount(3);
+        grid.setPadding(dp4, dp4, dp4, dp4);
+        grid.setBackgroundColor(Color.parseColor("#F3F4F6"));
 
-        // ── Preview
-        StrokeTextView preview = new StrokeTextView(this);
-        preview.setText(targetText.getText().toString().isEmpty() ? "Preview" : targetText.getText());
-        preview.setTextSize(20);
-        preview.setGravity(Gravity.CENTER);
-        preview.setPadding(dp8, dp8, dp8, dp8);
-        preview.setStrokeWidth(targetText.getStrokeWidth());
-        preview.setStrokeColor(targetText.getStrokeColor());
-        LinearLayout.LayoutParams prevLp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(52));
-        prevLp.setMargins(0, dp4, 0, dp4);
-        preview.setLayoutParams(prevLp);
-        preview.setBackgroundColor(Color.WHITE);
-        inner.addView(preview);
-
-        // ── State
-        final int[] color1 = {Color.parseColor("#FF6B35")};
-        final int[] color2 = {Color.parseColor("#667eea")};
-        final String[] direction = {"HORIZONTAL"};
-        final Runnable[] updatePreview = {null};
-
-        // Color box helpers
-        GradientDrawable cb1Gd = new GradientDrawable(); cb1Gd.setColor(color1[0]); cb1Gd.setCornerRadius(6f); cb1Gd.setStroke(1, Color.parseColor("#D1D5DB"));
-        GradientDrawable cb2Gd = new GradientDrawable(); cb2Gd.setColor(color2[0]); cb2Gd.setCornerRadius(6f); cb2Gd.setStroke(1, Color.parseColor("#D1D5DB"));
-        View colorBox1 = new View(this); colorBox1.setBackground(cb1Gd);
-        View colorBox2 = new View(this); colorBox2.setBackground(cb2Gd);
-        LinearLayout.LayoutParams cbLp = new LinearLayout.LayoutParams(dpToPx(28), dpToPx(22)); cbLp.setMargins(0, 0, dp8, 0);
-        colorBox1.setLayoutParams(cbLp); colorBox2.setLayoutParams(cbLp);
-
-        // Color rows
-        LinearLayout.LayoutParams cRowLp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(34));
-        cRowLp.setMargins(0, dpToPx(2), 0, dpToPx(2));
-        for (int c = 0; c < 2; c++) {
-            final boolean isC1 = (c == 0);
-            LinearLayout cRow = new LinearLayout(this);
-            cRow.setOrientation(LinearLayout.HORIZONTAL);
-            cRow.setGravity(Gravity.CENTER_VERTICAL);
-            cRow.setBackgroundColor(Color.WHITE);
-            cRow.setPadding(dp8, dp4, dp8, dp4);
-            cRow.setLayoutParams(cRowLp);
-            TextView lbl = new TextView(this);
-            lbl.setText(isC1 ? "Color 1" : "Color 2");
-            lbl.setTextSize(8); lbl.setTextColor(Color.parseColor("#6B7280"));
-            lbl.setTypeface(null, android.graphics.Typeface.BOLD);
-            lbl.setLayoutParams(new LinearLayout.LayoutParams(dpToPx(48), LinearLayout.LayoutParams.WRAP_CONTENT));
-            cRow.addView(lbl);
-            cRow.addView(isC1 ? colorBox1 : colorBox2);
-            TextView btnPick = new TextView(this);
-            btnPick.setText("Pick");
-            btnPick.setTextSize(8); btnPick.setTextColor(Color.WHITE);
-            btnPick.setGravity(Gravity.CENTER);
-            btnPick.setBackgroundColor(Color.parseColor("#607D8B"));
-            btnPick.setPadding(dp8, dp4, dp8, dp4);
-            final GradientDrawable cbGd = isC1 ? cb1Gd : cb2Gd;
-            btnPick.setOnClickListener(vv -> new AmbilWarnaDialog(this, isC1 ? color1[0] : color2[0], new AmbilWarnaDialog.OnAmbilWarnaListener() {
-                public void onCancel(AmbilWarnaDialog d) {}
-                public void onOk(AmbilWarnaDialog d, int color) {
-                    if (isC1) color1[0] = color; else color2[0] = color;
-                    cbGd.setColor(color);
-                    if (updatePreview[0] != null) updatePreview[0].run();
-                }
-            }).show());
-            cRow.addView(btnPick);
-            inner.addView(cRow);
-        }
-
-        // Direction row
-        LinearLayout dirRow = new LinearLayout(this);
-        dirRow.setOrientation(LinearLayout.HORIZONTAL);
-        dirRow.setGravity(Gravity.CENTER_VERTICAL);
-        dirRow.setBackgroundColor(Color.WHITE);
-        dirRow.setPadding(dp8, dp4, dp8, dp4);
-        LinearLayout.LayoutParams drLp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(32));
-        drLp.setMargins(0, dpToPx(2), 0, dpToPx(2));
-        dirRow.setLayoutParams(drLp);
-        TextView lblDir = new TextView(this); lblDir.setText("Dir"); lblDir.setTextSize(8); lblDir.setTextColor(Color.parseColor("#6B7280")); lblDir.setTypeface(null, android.graphics.Typeface.BOLD);
-        lblDir.setLayoutParams(new LinearLayout.LayoutParams(dpToPx(48), LinearLayout.LayoutParams.WRAP_CONTENT));
-        dirRow.addView(lblDir);
-        TextView btnH = new TextView(this); btnH.setText("\u2194 H"); btnH.setTextSize(8); btnH.setTextColor(Color.WHITE); btnH.setGravity(Gravity.CENTER); btnH.setBackgroundColor(Color.parseColor("#2A3439")); btnH.setPadding(dp8, dp4, dp8, dp4);
-        LinearLayout.LayoutParams hLp = new LinearLayout.LayoutParams(0, dpToPx(22), 1f); hLp.setMargins(0, 0, dp4, 0); btnH.setLayoutParams(hLp);
-        dirRow.addView(btnH);
-        TextView btnV = new TextView(this); btnV.setText("\u2195 V"); btnV.setTextSize(8); btnV.setTextColor(Color.parseColor("#374151")); btnV.setGravity(Gravity.CENTER); btnV.setBackgroundColor(Color.parseColor("#D1D5DB")); btnV.setPadding(dp8, dp4, dp8, dp4);
-        btnV.setLayoutParams(new LinearLayout.LayoutParams(0, dpToPx(22), 1f));
-        dirRow.addView(btnV);
-        inner.addView(dirRow);
-
-        // Presets row
-        LinearLayout presetRow = new LinearLayout(this);
-        presetRow.setOrientation(LinearLayout.HORIZONTAL);
-        presetRow.setPadding(dp8, dp4, dp8, dp4);
-        presetRow.setBackgroundColor(Color.WHITE);
-        LinearLayout.LayoutParams prLp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(36));
-        prLp.setMargins(0, dpToPx(2), 0, dpToPx(2));
-        presetRow.setLayoutParams(prLp);
-        int[][] presets = {{Color.parseColor("#FF6B35"),Color.parseColor("#F7C59F")},{Color.parseColor("#667eea"),Color.parseColor("#764ba2")},{Color.parseColor("#11998e"),Color.parseColor("#38ef7d")},{Color.parseColor("#F7971E"),Color.parseColor("#FFD200")},{Color.parseColor("#FF416C"),Color.parseColor("#FF4B2B")},{Color.parseColor("#4facfe"),Color.parseColor("#00f2fe")}};
-        for (int[] p : presets) {
-            GradientDrawable swBg = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{p[0],p[1]}); swBg.setCornerRadius(6f);
-            View sw = new View(this); sw.setBackground(swBg);
-            LinearLayout.LayoutParams swLp = new LinearLayout.LayoutParams(0, dpToPx(24), 1f); swLp.setMargins(dpToPx(2),0,dpToPx(2),0); sw.setLayoutParams(swLp);
-            final int pc1=p[0], pc2=p[1];
-            sw.setOnClickListener(vv -> { color1[0]=pc1; color2[0]=pc2; cb1Gd.setColor(pc1); cb2Gd.setColor(pc2); if(updatePreview[0]!=null) updatePreview[0].run(); });
-            presetRow.addView(sw);
-        }
-        inner.addView(presetRow);
-
-        // Apply / Remove row
-        LinearLayout actRow = new LinearLayout(this);
-        actRow.setOrientation(LinearLayout.HORIZONTAL);
-        actRow.setPadding(dp8, dp4, dp8, dp4);
-        LinearLayout.LayoutParams arLp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(36));
-        arLp.setMargins(0, dpToPx(2), 0, 0);
-        actRow.setLayoutParams(arLp);
-        TextView btnApply = new TextView(this); btnApply.setText("\u2705 Apply"); btnApply.setTextSize(9); btnApply.setTextColor(Color.WHITE); btnApply.setGravity(Gravity.CENTER); btnApply.setBackgroundColor(Color.parseColor("#2A3439")); btnApply.setPadding(dp8, dp4, dp8, dp4);
-        LinearLayout.LayoutParams apLp = new LinearLayout.LayoutParams(0, dpToPx(28), 1f); apLp.setMargins(0,0,dp4,0); btnApply.setLayoutParams(apLp);
-        actRow.addView(btnApply);
-        TextView btnRemove = new TextView(this); btnRemove.setText("\u2715 Remove"); btnRemove.setTextSize(9); btnRemove.setTextColor(Color.parseColor("#374151")); btnRemove.setGravity(Gravity.CENTER); btnRemove.setBackgroundColor(Color.parseColor("#D1D5DB")); btnRemove.setPadding(dp8, dp4, dp8, dp4);
-        btnRemove.setLayoutParams(new LinearLayout.LayoutParams(0, dpToPx(28), 1f));
-        actRow.addView(btnRemove);
-        inner.addView(actRow);
-
-        // ── PopupWindow
         android.util.DisplayMetrics dm = new android.util.DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        int popW = (int)(dm.widthPixels * 0.85f);
-        PopupWindow gradPopup = new PopupWindow(root, popW, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        gradPopup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+        int popW = (int)(dm.widthPixels * 0.88f);
+        int cellW = (popW - dp4 * 2) / 3;
+
+        for (Object[] g : GRADIENTS) {
+            int c1 = (int)(Integer) g[0];
+            int c2 = (int)(Integer) g[1];
+            String name = (String) g[2];
+
+            LinearLayout cell = new LinearLayout(this);
+            cell.setOrientation(LinearLayout.VERTICAL);
+            cell.setGravity(Gravity.CENTER);
+            android.widget.GridLayout.LayoutParams cellLp =
+                    new android.widget.GridLayout.LayoutParams();
+            cellLp.width = cellW;
+            cellLp.height = dpToPx(52);
+            cellLp.setMargins(dpToPx(2), dpToPx(2), dpToPx(2), dpToPx(2));
+            cell.setLayoutParams(cellLp);
+
+            // Gradient swatch
+            View swatch = new View(this);
+            GradientDrawable gd = new GradientDrawable(
+                    GradientDrawable.Orientation.LEFT_RIGHT, new int[]{c1, c2});
+            gd.setCornerRadius(dpToPx(6));
+            swatch.setBackground(gd);
+            swatch.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(32)));
+            cell.addView(swatch);
+
+            // Name label
+            TextView nameTv = new TextView(this);
+            nameTv.setText(name);
+            nameTv.setTextSize(6.5f);
+            nameTv.setTextColor(Color.parseColor("#374151"));
+            nameTv.setGravity(Gravity.CENTER);
+            nameTv.setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
+            cell.addView(nameTv);
+
+            // Click → real-time apply
+            cell.setOnClickListener(vv -> {
+                applyGradientToView(targetText, c1, c2, "HORIZONTAL");
+                targetText.setTag(R.id.tv_move_speed, c1 + "," + c2 + ",HORIZONTAL");
+                targetText.setStrokeWidth(targetText.getStrokeWidth());
+                targetText.setStrokeColor(targetText.getStrokeColor());
+                targetText.invalidate();
+                exportToJson();
+            });
+
+            grid.addView(cell);
+        }
+
+        sv.addView(grid);
+        root.addView(sv);
+
+        // ── PopupWindow
+        PopupWindow gradPopup = new PopupWindow(root, popW,
+                (int)(dm.heightPixels * 0.55f), true);
+        gradPopup.setBackgroundDrawable(
+                new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
         gradPopup.setElevation(20f);
         gradPopup.setOutsideTouchable(true);
-        gradPopup.showAtLocation(getWindow().getDecorView().getRootView(), Gravity.TOP | Gravity.LEFT, (dm.widthPixels - popW) / 2, dm.heightPixels / 5);
+        int initX = (dm.widthPixels - popW) / 2;
+        int initY = dm.heightPixels / 6;
+        gradPopup.showAtLocation(getWindow().getDecorView().getRootView(),
+                Gravity.TOP | Gravity.LEFT, initX, initY);
 
-        // ── Drag logic
-        final float[] lastDX = {0}, lastDY = {0};
-        final int[] popXY = {(dm.widthPixels - popW) / 2, dm.heightPixels / 5};
+        // ── Drag
+        final float[] lastDrag = {0, 0};
+        final int[] popXY = {initX, initY};
         dragHandle.setOnTouchListener((vv, ev) -> {
             switch (ev.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    lastDX[0] = ev.getRawX(); lastDY[0] = ev.getRawY();
+                    lastDrag[0] = ev.getRawX(); lastDrag[1] = ev.getRawY();
                     int[] loc = new int[2]; root.getLocationOnScreen(loc);
                     int[] mLoc = new int[2]; mainLayout.getLocationOnScreen(mLoc);
                     popXY[0] = loc[0] - mLoc[0]; popXY[1] = loc[1] - mLoc[1];
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    popXY[0] += (int)(ev.getRawX() - lastDX[0]);
-                    popXY[1] += (int)(ev.getRawY() - lastDY[0]);
-                    lastDX[0] = ev.getRawX(); lastDY[0] = ev.getRawY();
+                    popXY[0] += (int)(ev.getRawX() - lastDrag[0]);
+                    popXY[1] += (int)(ev.getRawY() - lastDrag[1]);
+                    lastDrag[0] = ev.getRawX(); lastDrag[1] = ev.getRawY();
                     gradPopup.update(popXY[0], popXY[1], -1, -1);
                     break;
             }
             return true;
         });
 
-        // updatePreview — preview + targetText par real-time
-        updatePreview[0] = () -> {
-            applyGradientToView(preview, color1[0], color2[0], direction[0]);
-            applyGradientToView(targetText, color1[0], color2[0], direction[0]);
-            targetText.setTag(R.id.tv_move_speed, color1[0]+","+color2[0]+","+direction[0]);
-            targetText.invalidate();
-        };
-        updatePreview[0].run();
-
-        btnH.setOnClickListener(vv -> { direction[0]="HORIZONTAL"; btnH.setBackgroundColor(Color.parseColor("#2A3439")); btnH.setTextColor(Color.WHITE); btnV.setBackgroundColor(Color.parseColor("#D1D5DB")); btnV.setTextColor(Color.parseColor("#374151")); updatePreview[0].run(); });
-        btnV.setOnClickListener(vv -> { direction[0]="VERTICAL"; btnV.setBackgroundColor(Color.parseColor("#2A3439")); btnV.setTextColor(Color.WHITE); btnH.setBackgroundColor(Color.parseColor("#D1D5DB")); btnH.setTextColor(Color.parseColor("#374151")); updatePreview[0].run(); });
-        btnClose.setOnClickListener(vv -> {
-            // Close karva thi gradient remove karo
-            targetText.getPaint().setShader(null);
-            targetText.setTag(R.id.tv_move_speed, null);
-            targetText.invalidate();
-            gradPopup.dismiss();
-        });
-        btnApply.setOnClickListener(vv -> {
-            applyGradientToView(targetText, color1[0], color2[0], direction[0]);
-            targetText.setTag(R.id.tv_move_speed, color1[0]+","+color2[0]+","+direction[0]);
-            targetText.setStrokeWidth(targetText.getStrokeWidth());
-            targetText.setStrokeColor(targetText.getStrokeColor());
-            targetText.invalidate();
-            exportToJson();
-            gradPopup.dismiss();
-        });
-        btnRemove.setOnClickListener(vv -> {
+        btnCloseG.setOnClickListener(vv -> gradPopup.dismiss());
+        btnRemoveG.setOnClickListener(vv -> {
             targetText.getPaint().setShader(null);
             targetText.setTag(R.id.tv_move_speed, null);
             targetText.invalidate();
