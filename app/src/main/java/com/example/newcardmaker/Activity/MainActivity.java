@@ -13046,6 +13046,11 @@ public class MainActivity extends AppCompatActivity {
 
                     targetView.setBackground(gd);
                     targetView.setTag(R.id.btn_add_sticker, borderStyleArr[0]);
+
+                    // ✅ Border info tag ma save karo jethi deselect pachhi pan restore thay
+                    targetView.setTag(R.id.tv_border_info,
+                            new int[]{width, color, corner, borderStyleArr[0]});
+
                     exportToJson();
                 };
 
@@ -20177,7 +20182,35 @@ public class MainActivity extends AppCompatActivity {
         int bgColor = getStoredBackgroundColor(tv);
         GradientDrawable gd = new GradientDrawable();
         gd.setColor(bgColor);
-        applyBorderStyle(gd, borderStyle);
+
+        // ✅ tv_border_info tag mathi width, color, corner read karo
+        Object borderInfoTag = tv.getTag(R.id.tv_border_info);
+        if (borderInfoTag instanceof int[]) {
+            int[] info = (int[]) borderInfoTag;
+            int savedWidth  = info.length > 0 ? info[0] : 2;
+            int savedColor  = info.length > 1 ? info[1] : Color.BLACK;
+            int savedCorner = info.length > 2 ? info[2] : 0;
+            int savedStyle  = info.length > 3 ? info[3] : borderStyle;
+            gd.setCornerRadius(dpToPx(savedCorner));
+            switch (savedStyle) {
+                case 0: // Solid
+                    gd.setStroke(dpToPx(savedWidth), savedColor);
+                    break;
+                case 1: // Dash
+                    gd.setStroke(dpToPx(savedWidth), savedColor, dpToPx(8), dpToPx(4));
+                    break;
+                case 2: // Dot
+                    gd.setStroke(dpToPx(savedWidth), savedColor, dpToPx(2), dpToPx(4));
+                    break;
+                case 3: // Double
+                    gd.setStroke(dpToPx(savedWidth + 2), savedColor);
+                    break;
+                default:
+                    applyBorderStyle(gd, savedStyle);
+            }
+        } else {
+            applyBorderStyle(gd, borderStyle);
+        }
         tv.setBackground(gd);
 
         // ✅ User padding restore
