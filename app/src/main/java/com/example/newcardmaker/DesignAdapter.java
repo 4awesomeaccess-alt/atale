@@ -55,7 +55,7 @@ public class DesignAdapter extends RecyclerView.Adapter<DesignAdapter.MyViewHold
         });
     }
 
-    // Share File Function
+    // Share File Function — WhatsApp dialog sathe
     private void shareJsonFile(Context context, String filePath) {
         File file = new File(filePath);
         if (!file.exists()) {
@@ -63,14 +63,81 @@ public class DesignAdapter extends RecyclerView.Adapter<DesignAdapter.MyViewHold
             return;
         }
 
-        // FileProvider no upyog jethi secure rite file share thai shake
         Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
 
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("application/json");
-        intent.putExtra(Intent.EXTRA_STREAM, uri);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // Permission farajiyat che
-        context.startActivity(Intent.createChooser(intent, "Share Design via"));
+        // Dialog banavo
+        androidx.appcompat.app.AlertDialog.Builder dlg =
+                new androidx.appcompat.app.AlertDialog.Builder(context);
+        dlg.setTitle("Share Design");
+
+        android.widget.LinearLayout root = new android.widget.LinearLayout(context);
+        root.setOrientation(android.widget.LinearLayout.VERTICAL);
+        int pad = (int) (16 * context.getResources().getDisplayMetrics().density);
+        root.setPadding(pad, pad, pad, pad);
+
+        // WhatsApp button
+        android.widget.Button btnWA = new android.widget.Button(context);
+        btnWA.setText("WhatsApp");
+        btnWA.setBackgroundColor(android.graphics.Color.parseColor("#25D366"));
+        btnWA.setTextColor(android.graphics.Color.WHITE);
+        btnWA.setOnClickListener(v -> shareViaWhatsApp(context, "com.whatsapp", uri));
+        root.addView(btnWA);
+
+        // WhatsApp Business button
+        android.widget.Button btnWAB = new android.widget.Button(context);
+        btnWAB.setText("WhatsApp Business");
+        btnWAB.setBackgroundColor(android.graphics.Color.parseColor("#128C7E"));
+        btnWAB.setTextColor(android.graphics.Color.WHITE);
+        android.widget.LinearLayout.LayoutParams lp = new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(0, pad / 2, 0, 0);
+        btnWAB.setLayoutParams(lp);
+        btnWAB.setOnClickListener(v -> shareViaWhatsApp(context, "com.whatsapp.w4b", uri));
+        root.addView(btnWAB);
+
+        // Other Apps button
+        android.widget.Button btnOther = new android.widget.Button(context);
+        btnOther.setText("Other Apps");
+        btnOther.setBackgroundColor(android.graphics.Color.parseColor("#1565C0"));
+        btnOther.setTextColor(android.graphics.Color.WHITE);
+        android.widget.LinearLayout.LayoutParams lp2 = new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp2.setMargins(0, pad / 2, 0, 0);
+        btnOther.setLayoutParams(lp2);
+        btnOther.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("application/json");
+            intent.putExtra(Intent.EXTRA_STREAM, uri);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            context.startActivity(Intent.createChooser(intent, "Share Design via"));
+        });
+        root.addView(btnOther);
+
+        dlg.setView(root);
+        dlg.setNegativeButton("Cancel", null);
+        dlg.show();
+    }
+
+    private void shareViaWhatsApp(Context context, String pkg, Uri uri) {
+        try {
+            context.getPackageManager().getPackageInfo(pkg, 0);
+        } catch (android.content.pm.PackageManager.NameNotFoundException e) {
+            String name = pkg.contains("w4b") ? "WhatsApp Business" : "WhatsApp";
+            Toast.makeText(context, name + " installed nathi!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Intent wa = new Intent(Intent.ACTION_SEND);
+        wa.setPackage(pkg);
+        wa.setType("application/json");
+        wa.putExtra(Intent.EXTRA_STREAM, uri);
+        wa.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        try {
+            context.startActivity(wa);
+        } catch (Exception e) {
+            Toast.makeText(context, "Share karva ma error aavyo.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
