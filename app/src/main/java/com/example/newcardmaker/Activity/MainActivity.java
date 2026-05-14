@@ -12904,7 +12904,7 @@ public class MainActivity extends AppCompatActivity {
 
         View btnGradient = cv.findViewById(R.id.btn_pop_gradient);
         if (btnGradient != null)
-            btnGradient.setOnClickListener(v -> showGradientColorDialog(targetView));
+            btnGradient.setOnClickListener(v -> showInlineGradientPanel(cv, targetView));
 
         View btnStroke2 = cv.findViewById(R.id.btn_sel_stroke);
         if (btnStroke2 != null)
