@@ -1,1818 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="320dp"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    android:minWidth="280dp"
     android:orientation="vertical">
-    <!--  ══ DRAG HANDLE 20dp ══  -->
+
+    <!-- ══ DRAG HANDLE ══ -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:background="#1565C0"
+        android:layout_height="28dp"
+        android:background="#111111"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingHorizontal="8dp">
 
         <TextView
             android:id="@+id/drag_handle_sel"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            android:text="✏ Text Controls ↕"
+            android:gravity="center_vertical"
+            android:text="≡  Text Controls"
             android:textColor="#FFFFFF"
-            android:textSize="8sp" />
-
-        <TextView
-            android:id="@+id/btn_sel_close"
-            android:layout_width="0dp"
-            android:layout_height="16dp"
-            android:layout_weight="1"
-            android:background="#B71C1C"
-            android:gravity="center"
-            android:text="✕ Close"
-            android:textColor="#FFFFFF"
-            android:textSize="8sp" />
+            android:textSize="9sp"
+            android:letterSpacing="0.1"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/btn_panel_toggle"
             android:layout_width="28dp"
-            android:layout_height="match_parent"
-            android:background="#0D47A1"
+            android:layout_height="20dp"
+            android:background="#333333"
             android:gravity="center"
             android:text="▼"
-            android:textColor="#FFFFFF"
-            android:textSize="9sp" />
+            android:textColor="#AAAAAA"
+            android:textSize="8sp" />
+
+        <TextView
+            android:id="@+id/btn_sel_close"
+            android:layout_width="28dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="4dp"
+            android:background="#FFFFFF"
+            android:gravity="center"
+            android:text="✕"
+            android:textColor="#111111"
+            android:textSize="9sp"
+            android:textStyle="bold" />
     </LinearLayout>
-    <!--  ══ MAIN PANEL 100dp ══  -->
+
+    <!-- ══ MAIN PANEL ══ -->
     <LinearLayout
         android:id="@+id/panel_main_content"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:background="#EEF4FF"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
         android:orientation="vertical">
-        <!--  ── SIZE ROW — ek j horizontal row ──  -->
+
+        <!-- SIZE ROW -->
         <LinearLayout
             android:id="@+id/size_row"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#EEF4FF"
+            android:layout_height="36dp"
+            android:background="#F5F5F5"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingHorizontal="4dp"
-            android:paddingTop="3dp"
-            android:paddingBottom="2dp">
+            android:paddingHorizontal="8dp">
 
             <TextView
                 android:id="@+id/btn_sel_size_minus"
-                android:layout_width="30dp"
-                android:layout_height="20dp"
-                android:background="#1565C0"
+                android:layout_width="28dp"
+                android:layout_height="24dp"
+                android:background="#111111"
                 android:gravity="center"
                 android:text="−"
                 android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <SeekBar
                 android:id="@+id/seek_sel_size"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="3dp"
+                android:layout_marginHorizontal="6dp"
                 android:layout_weight="1"
                 android:max="100"
-                android:progress="50" />
+                android:progress="50"
+                android:progressTint="#111111"
+                android:thumbTint="#111111" />
 
             <TextView
                 android:id="@+id/tv_sel_size_label"
-                android:layout_width="28dp"
+                android:layout_width="32dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="20sp"
-                android:textColor="#1565C0"
+                android:textColor="#111111"
                 android:textSize="8sp" />
 
             <TextView
                 android:id="@+id/btn_sel_size_plus"
-                android:layout_width="30dp"
-                android:layout_height="20dp"
-                android:layout_marginStart="2dp"
-                android:layout_marginEnd="2dp"
-                android:background="#1565C0"
+                android:layout_width="28dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="4dp"
+                android:background="#111111"
                 android:gravity="center"
                 android:text="+"
                 android:textColor="#FFFFFF"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/btn_sel_align_center_h1"
-                android:layout_width="30dp"
-                android:layout_height="20dp"
-                android:background="#1565C0"
+                android:layout_width="28dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="4dp"
+                android:background="#444444"
                 android:gravity="center"
                 android:text="⊣⊢"
                 android:textColor="#FFFFFF"
                 android:textSize="7sp" />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="#BBDEFB" />
-        <!--  ── QUICK STYLE ROW 20dp ──  -->
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" />
+
+        <!-- QUICK STYLE ROW -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="32dp"
+            android:background="#FFFFFF"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingHorizontal="4dp"
-            android:paddingVertical="2dp">
+            android:paddingHorizontal="8dp">
 
-            <TextView
-                android:id="@+id/btn_curve"
-                android:layout_width="0dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="1dp"
-                android:layout_weight="1"
-                android:background="#E3F2FD"
-                android:gravity="center"
-                android:text="⌢"
-                android:textColor="#1565C0"
-                android:textSize="11sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/btn_quick_bold"
-                android:layout_width="0dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="1dp"
-                android:layout_weight="1"
-                android:background="#E3F2FD"
-                android:gravity="center"
-                android:text="B"
-                android:textColor="#1565C0"
-                android:textSize="11sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/btn_quick_italic"
-                android:layout_width="0dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="1dp"
-                android:layout_weight="1"
-                android:background="#E3F2FD"
-                android:gravity="center"
-                android:text="I"
-                android:textColor="#1565C0"
-                android:textSize="11sp"
-                android:textStyle="italic" />
-
-            <TextView
-                android:id="@+id/btn_quick_underline"
-                android:layout_width="0dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="1dp"
-                android:layout_weight="1"
-                android:background="#E3F2FD"
-                android:gravity="center"
-                android:text="U̲"
-                android:textColor="#1565C0"
-                android:textSize="11sp" />
-
-            <TextView
-                android:id="@+id/btn_quick_strike"
-                android:layout_width="0dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="1dp"
-                android:layout_weight="1"
-                android:background="#E3F2FD"
-                android:gravity="center"
-                android:text="S̶"
-                android:textColor="#1565C0"
-                android:textSize="11sp" />
-
-            <TextView
-                android:id="@+id/btn_quick_flip_h"
-                android:layout_width="0dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="1dp"
-                android:layout_weight="1"
-                android:background="#FFF3E0"
-                android:gravity="center"
-                android:text="↔"
-                android:textColor="#E65100"
-                android:textSize="11sp" />
-
-            <TextView
-                android:id="@+id/btn_quick_flip_v"
-                android:layout_width="0dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="1dp"
-                android:layout_weight="1"
-                android:background="#FFF3E0"
-                android:gravity="center"
-                android:text="↕"
-                android:textColor="#E65100"
-                android:textSize="11sp" />
-
-            <TextView
-                android:id="@+id/btn_undo"
-                android:layout_width="0dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="1dp"
-                android:layout_weight="1"
-                android:background="#546E7A"
-                android:gravity="center"
-                android:text="↩"
-                android:textColor="#FFFFFF"
-                android:textSize="11sp" />
-
-            <TextView
-                android:id="@+id/btn_redo"
-                android:layout_width="0dp"
-                android:layout_height="20dp"
-                android:layout_weight="1"
-                android:background="#546E7A"
-                android:gravity="center"
-                android:text="↪"
-                android:textColor="#FFFFFF"
-                android:textSize="11sp" />
+            <TextView android:id="@+id/btn_curve" android:layout_width="0dp" android:layout_height="24dp" android:layout_marginEnd="2dp" android:layout_weight="1" android:background="#F0F0F0" android:gravity="center" android:text="⌢" android:textColor="#111111" android:textSize="12sp" android:textStyle="bold" />
+            <TextView android:id="@+id/btn_quick_bold" android:layout_width="0dp" android:layout_height="24dp" android:layout_marginEnd="2dp" android:layout_weight="1" android:background="#F0F0F0" android:gravity="center" android:text="B" android:textColor="#111111" android:textSize="12sp" android:textStyle="bold" />
+            <TextView android:id="@+id/btn_quick_italic" android:layout_width="0dp" android:layout_height="24dp" android:layout_marginEnd="2dp" android:layout_weight="1" android:background="#F0F0F0" android:gravity="center" android:text="I" android:textColor="#111111" android:textSize="12sp" android:textStyle="italic" />
+            <TextView android:id="@+id/btn_quick_underline" android:layout_width="0dp" android:layout_height="24dp" android:layout_marginEnd="2dp" android:layout_weight="1" android:background="#F0F0F0" android:gravity="center" android:text="U̲" android:textColor="#111111" android:textSize="12sp" />
+            <TextView android:id="@+id/btn_quick_strike" android:layout_width="0dp" android:layout_height="24dp" android:layout_marginEnd="2dp" android:layout_weight="1" android:background="#F0F0F0" android:gravity="center" android:text="S̶" android:textColor="#111111" android:textSize="12sp" />
+            <TextView android:id="@+id/btn_quick_flip_h" android:layout_width="0dp" android:layout_height="24dp" android:layout_marginEnd="2dp" android:layout_weight="1" android:background="#F0F0F0" android:gravity="center" android:text="⇔" android:textColor="#111111" android:textSize="12sp" />
+            <TextView android:id="@+id/btn_quick_flip_v" android:layout_width="0dp" android:layout_height="24dp" android:layout_marginEnd="2dp" android:layout_weight="1" android:background="#F0F0F0" android:gravity="center" android:text="⇕" android:textColor="#111111" android:textSize="12sp" />
+            <TextView android:id="@+id/btn_undo" android:layout_width="0dp" android:layout_height="24dp" android:layout_marginEnd="2dp" android:layout_weight="1" android:background="#111111" android:gravity="center" android:text="↩" android:textColor="#FFFFFF" android:textSize="12sp" />
+            <TextView android:id="@+id/btn_redo" android:layout_width="0dp" android:layout_height="24dp" android:layout_weight="1" android:background="#111111" android:gravity="center" android:text="↪" android:textColor="#FFFFFF" android:textSize="12sp" />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="#BBDEFB" />
-        <!--  ══ SCROLLABLE AREA ══  -->
-        <ScrollView
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" />
+
+        <!-- TAB ROW -->
+        <HorizontalScrollView
             android:id="@+id/main_scroll"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:fadeScrollbars="false"
-            android:scrollbars="vertical">
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+            <LinearLayout
+                android:id="@+id/hsv_tab_row"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:background="#F5F5F5"
+                android:orientation="horizontal">
+                <TextView android:id="@+id/tab_action" android:layout_width="wrap_content" android:layout_height="match_parent" android:background="#111111" android:gravity="center" android:paddingHorizontal="14dp" android:text="Action" android:textColor="#FFFFFF" android:textSize="8sp" android:textStyle="bold" />
+                <TextView android:id="@+id/tab_spacing" android:layout_width="wrap_content" android:layout_height="match_parent" android:gravity="center" android:paddingHorizontal="14dp" android:text="Spacing" android:textColor="#555555" android:textSize="8sp" />
+                <TextView android:id="@+id/tab_transform" android:layout_width="wrap_content" android:layout_height="match_parent" android:gravity="center" android:paddingHorizontal="14dp" android:text="Transform" android:textColor="#555555" android:textSize="8sp" />
+                <TextView android:id="@+id/tab_effects" android:layout_width="wrap_content" android:layout_height="match_parent" android:gravity="center" android:paddingHorizontal="14dp" android:text="Effects" android:textColor="#555555" android:textSize="8sp" />
+                <TextView android:id="@+id/tab_layout" android:layout_width="wrap_content" android:layout_height="match_parent" android:gravity="center" android:paddingHorizontal="14dp" android:text="Layout" android:textColor="#555555" android:textSize="8sp" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" />
+
+        <!-- SCROLL CONTENT -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="4dp">
-                <!--  ── TAB ROW 18dp ──  -->
-                <HorizontalScrollView
-                    android:id="@+id/hsv_tab_row"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="3dp"
-                    android:scrollbars="none">
+                android:paddingBottom="4dp">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tab_action"
-                            android:layout_width="wrap_content"
-                            android:layout_height="18dp"
-                            android:layout_marginEnd="2dp"
-                            android:background="#1565C0"
-                            android:gravity="center"
-                            android:paddingHorizontal="6dp"
-                            android:text="✏ Action"
-                            android:textColor="#FFFFFF"
-                            android:textSize="8sp" />
-
-                        <TextView
-                            android:id="@+id/tab_spacing"
-                            android:layout_width="wrap_content"
-                            android:layout_height="18dp"
-                            android:layout_marginEnd="2dp"
-                            android:background="#BBDEFB"
-                            android:gravity="center"
-                            android:paddingHorizontal="6dp"
-                            android:text="↔ Space"
-                            android:textColor="#1565C0"
-                            android:textSize="8sp" />
-
-                        <TextView
-                            android:id="@+id/tab_transform"
-                            android:layout_width="wrap_content"
-                            android:layout_height="18dp"
-                            android:layout_marginEnd="2dp"
-                            android:background="#BBDEFB"
-                            android:gravity="center"
-                            android:paddingHorizontal="6dp"
-                            android:text="⟳ Trans"
-                            android:textColor="#1565C0"
-                            android:textSize="8sp" />
-
-                        <TextView
-                            android:id="@+id/tab_effects"
-                            android:layout_width="wrap_content"
-                            android:layout_height="18dp"
-                            android:layout_marginEnd="2dp"
-                            android:background="#BBDEFB"
-                            android:gravity="center"
-                            android:paddingHorizontal="6dp"
-                            android:text="✨ FX"
-                            android:textColor="#1565C0"
-                            android:textSize="8sp" />
-
-                        <TextView
-                            android:id="@+id/tab_layout"
-                            android:layout_width="wrap_content"
-                            android:layout_height="18dp"
-                            android:background="#BBDEFB"
-                            android:gravity="center"
-                            android:paddingHorizontal="6dp"
-                            android:text="⊞ Layout"
-                            android:textColor="#1565C0"
-                            android:textSize="8sp" />
+                <!-- Arc Controls -->
+                <LinearLayout android:id="@+id/panel_arc_controls" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="28dp" android:gravity="center_vertical" android:orientation="horizontal" android:paddingHorizontal="8dp">
+                        <TextView android:id="@+id/btn_arc_back" android:layout_width="28dp" android:layout_height="22dp" android:background="#111111" android:gravity="center" android:text="←" android:textColor="#FFFFFF" android:textSize="10sp" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="Arc Text" android:textColor="#111111" android:textSize="9sp" android:textStyle="bold" />
+                        <TextView android:id="@+id/btn_arc_toggle_on" android:layout_width="40dp" android:layout_height="22dp" android:layout_marginEnd="2dp" android:background="#111111" android:gravity="center" android:text="ON" android:textColor="#FFFFFF" android:textSize="8sp" />
+                        <TextView android:id="@+id/btn_arc_toggle_off" android:layout_width="40dp" android:layout_height="22dp" android:background="#DDDDDD" android:gravity="center" android:text="OFF" android:textColor="#111111" android:textSize="8sp" />
                     </LinearLayout>
-                </HorizontalScrollView>
-                <!--  ══ ARC PANEL ══  -->
-                <LinearLayout
-                    android:id="@+id/panel_arc_controls"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#FFF8E1"
-                    android:orientation="vertical"
-                    android:padding="4dp"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="⌢ Arc Text"
-                            android:textColor="#E65100"
-                            android:textSize="9sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/btn_arc_back"
-                            android:layout_width="44dp"
-                            android:layout_height="18dp"
-                            android:background="#E65100"
-                            android:gravity="center"
-                            android:text="← Back"
-                            android:textColor="#FFFFFF"
-                            android:textSize="8sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="26dp" android:gravity="center_vertical" android:orientation="horizontal" android:paddingHorizontal="8dp">
+                        <TextView android:layout_width="36dp" android:layout_height="wrap_content" android:text="Angle" android:textColor="#555555" android:textSize="8sp" />
+                        <TextView android:id="@+id/btn_arc_angle_minus" android:layout_width="22dp" android:layout_height="20dp" android:background="#111111" android:gravity="center" android:text="−" android:textColor="#FFFFFF" android:textSize="12sp" />
+                        <SeekBar android:id="@+id/sb_arc_angle" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="4dp" android:layout_weight="1" android:max="360" android:progress="180" android:progressTint="#111111" android:thumbTint="#111111" />
+                        <TextView android:id="@+id/btn_arc_angle_plus" android:layout_width="22dp" android:layout_height="20dp" android:background="#111111" android:gravity="center" android:text="+" android:textColor="#FFFFFF" android:textSize="12sp" />
+                        <TextView android:id="@+id/tv_arc_angle_val" android:layout_width="32dp" android:layout_height="wrap_content" android:gravity="center" android:text="180°" android:textColor="#111111" android:textSize="8sp" />
                     </LinearLayout>
-                    <!--  Arc ON/OFF  -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/btn_arc_toggle_on"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="2dp"
-                            android:layout_weight="1"
-                            android:background="#E65100"
-                            android:gravity="center"
-                            android:text="⌢ ON"
-                            android:textColor="#FFFFFF"
-                            android:textSize="8sp" />
-
-                        <TextView
-                            android:id="@+id/btn_arc_toggle_off"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_weight="1"
-                            android:background="#BBBBBB"
-                            android:gravity="center"
-                            android:text="— OFF"
-                            android:textColor="#FFFFFF"
-                            android:textSize="8sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="26dp" android:gravity="center_vertical" android:orientation="horizontal" android:paddingHorizontal="8dp">
+                        <TextView android:layout_width="36dp" android:layout_height="wrap_content" android:text="Radius" android:textColor="#555555" android:textSize="8sp" />
+                        <TextView android:id="@+id/btn_arc_radius_minus" android:layout_width="22dp" android:layout_height="20dp" android:background="#111111" android:gravity="center" android:text="−" android:textColor="#FFFFFF" android:textSize="12sp" />
+                        <SeekBar android:id="@+id/sb_arc_radius" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="4dp" android:layout_weight="1" android:max="500" android:progress="150" android:progressTint="#111111" android:thumbTint="#111111" />
+                        <TextView android:id="@+id/btn_arc_radius_plus" android:layout_width="22dp" android:layout_height="20dp" android:background="#111111" android:gravity="center" android:text="+" android:textColor="#FFFFFF" android:textSize="12sp" />
+                        <TextView android:id="@+id/tv_arc_radius_val" android:layout_width="32dp" android:layout_height="wrap_content" android:gravity="center" android:text="150" android:textColor="#111111" android:textSize="8sp" />
                     </LinearLayout>
-                    <!--  Angle row  -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="36dp"
-                            android:layout_height="wrap_content"
-                            android:text="Angle"
-                            android:textColor="#E65100"
-                            android:textSize="8sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/btn_arc_angle_minus"
-                            android:layout_width="28dp"
-                            android:layout_height="18dp"
-                            android:background="#E65100"
-                            android:gravity="center"
-                            android:text="−"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp" />
-
-                        <SeekBar
-                            android:id="@+id/sb_arc_angle"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="2dp"
-                            android:layout_weight="1"
-                            android:max="360" />
-
-                        <TextView
-                            android:id="@+id/btn_arc_angle_plus"
-                            android:layout_width="28dp"
-                            android:layout_height="18dp"
-                            android:background="#E65100"
-                            android:gravity="center"
-                            android:text="+"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/tv_arc_angle_val"
-                            android:layout_width="28dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="180°"
-                            android:textColor="#E65100"
-                            android:textSize="8sp" />
-                    </LinearLayout>
-                    <!--  Radius row  -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="36dp"
-                            android:layout_height="wrap_content"
-                            android:text="Radius"
-                            android:textColor="#E65100"
-                            android:textSize="8sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/btn_arc_radius_minus"
-                            android:layout_width="28dp"
-                            android:layout_height="18dp"
-                            android:background="#E65100"
-                            android:gravity="center"
-                            android:text="−"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp" />
-
-                        <SeekBar
-                            android:id="@+id/sb_arc_radius"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="2dp"
-                            android:layout_weight="1"
-                            android:max="500" />
-
-                        <TextView
-                            android:id="@+id/btn_arc_radius_plus"
-                            android:layout_width="28dp"
-                            android:layout_height="18dp"
-                            android:background="#E65100"
-                            android:gravity="center"
-                            android:text="+"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/tv_arc_radius_val"
-                            android:layout_width="28dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="150"
-                            android:textColor="#E65100"
-                            android:textSize="8sp" />
-                    </LinearLayout>
-                    <!--  Up/Down row  -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/btn_arc_dir_up"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="2dp"
-                            android:layout_weight="1"
-                            android:background="#E65100"
-                            android:gravity="center"
-                            android:text="⌢ Up"
-                            android:textColor="#FFFFFF"
-                            android:textSize="8sp" />
-
-                        <TextView
-                            android:id="@+id/btn_arc_dir_down"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_weight="1"
-                            android:background="#BBBBBB"
-                            android:gravity="center"
-                            android:text="⌣ Down"
-                            android:textColor="#FFFFFF"
-                            android:textSize="8sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="26dp" android:gravity="center_vertical" android:orientation="horizontal" android:paddingHorizontal="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="Direction:" android:textColor="#555555" android:textSize="8sp" />
+                        <TextView android:id="@+id/btn_arc_dir_up" android:layout_width="60dp" android:layout_height="20dp" android:layout_marginEnd="4dp" android:background="#111111" android:gravity="center" android:text="⌢ Up" android:textColor="#FFFFFF" android:textSize="8sp" />
+                        <TextView android:id="@+id/btn_arc_dir_down" android:layout_width="60dp" android:layout_height="20dp" android:background="#DDDDDD" android:gravity="center" android:text="⌣ Down" android:textColor="#111111" android:textSize="8sp" />
                     </LinearLayout>
                 </LinearLayout>
-                <!--  ══ TAB 1: ACTION ══  -->
-                <LinearLayout
-                    android:id="@+id/panel_tab_action"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="visible">
 
-                    <HorizontalScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:scrollbars="none">
+                <!-- ACTION TAB -->
+                <LinearLayout android:id="@+id/panel_tab_action" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingTop="4dp">
+                    <HorizontalScrollView android:layout_width="match_parent" android:layout_height="wrap_content" android:scrollbars="none">
+                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingHorizontal="8dp">
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/btn_pop_gradient"
-                                android:layout_width="36dp"
-                                android:layout_height="36dp"
-                                android:layout_marginEnd="2dp"
-                                android:background="#EDE7F6"
-                                android:gravity="center"
-                                android:text="🌈 Grad"
-                                android:textColor="#4527A0"
-                                android:textSize="7sp" />
-
-                            <LinearLayout
-                                android:id="@+id/btn_sel_edit_text"
-                                android:layout_width="36dp"
-                                android:layout_height="36dp"
-                                android:layout_marginEnd="2dp"
-                                android:background="#E3F2FD"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="✏"
-                                    android:textSize="13sp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Edit"
-                                    android:textColor="#1565C0"
-                                    android:textSize="7sp" />
+                            <LinearLayout android:id="@+id/btn_pop_gradient" android:layout_width="48dp" android:layout_height="44dp" android:layout_marginEnd="4dp" android:background="#F5F5F5" android:gravity="center" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🌈" android:textSize="14sp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Gradient" android:textColor="#333333" android:textSize="6sp" />
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:id="@+id/btn_sel_text_color"
-                                android:layout_width="36dp"
-                                android:layout_height="36dp"
-                                android:layout_marginEnd="2dp"
-                                android:background="#E8F5E9"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="🎨"
-                                    android:textSize="13sp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Color"
-                                    android:textColor="#2E7D32"
-                                    android:textSize="7sp" />
+                            <LinearLayout android:id="@+id/btn_sel_edit_text" android:layout_width="48dp" android:layout_height="44dp" android:layout_marginEnd="4dp" android:background="#111111" android:gravity="center" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="✏" android:textColor="#FFFFFF" android:textSize="14sp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Edit" android:textColor="#FFFFFF" android:textSize="6sp" />
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:id="@+id/btn_sel_bg_color"
-                                android:layout_width="36dp"
-                                android:layout_height="36dp"
-                                android:layout_marginEnd="2dp"
-                                android:background="#FFF8E1"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="🖌"
-                                    android:textSize="13sp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="BG"
-                                    android:textColor="#E65100"
-                                    android:textSize="7sp" />
+                            <LinearLayout android:id="@+id/btn_sel_text_color" android:layout_width="48dp" android:layout_height="44dp" android:layout_marginEnd="4dp" android:background="#F5F5F5" android:gravity="center" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="A" android:textColor="#111111" android:textSize="16sp" android:textStyle="bold" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Color" android:textColor="#333333" android:textSize="6sp" />
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:id="@+id/btn_sel_stroke"
-                                android:layout_width="36dp"
-                                android:layout_height="36dp"
-                                android:layout_marginEnd="2dp"
-                                android:background="#F3E5F5"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="S̲"
-                                    android:textSize="13sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Stroke"
-                                    android:textColor="#6A1B9A"
-                                    android:textSize="7sp" />
+                            <LinearLayout android:id="@+id/btn_sel_bg_color" android:layout_width="48dp" android:layout_height="44dp" android:layout_marginEnd="4dp" android:background="#F5F5F5" android:gravity="center" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="▭" android:textColor="#111111" android:textSize="14sp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="BG" android:textColor="#333333" android:textSize="6sp" />
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:id="@+id/btn_sel_font"
-                                android:layout_width="36dp"
-                                android:layout_height="36dp"
-                                android:layout_marginEnd="2dp"
-                                android:background="#E8EAF6"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Aa"
-                                    android:textSize="11sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Font"
-                                    android:textColor="#283593"
-                                    android:textSize="7sp" />
+                            <LinearLayout android:id="@+id/btn_sel_stroke" android:layout_width="48dp" android:layout_height="44dp" android:layout_marginEnd="4dp" android:background="#F5F5F5" android:gravity="center" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ⓢ" android:textColor="#111111" android:textSize="14sp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Stroke" android:textColor="#333333" android:textSize="6sp" />
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:id="@+id/btn_sel_border"
-                                android:layout_width="36dp"
-                                android:layout_height="36dp"
-                                android:layout_marginEnd="2dp"
-                                android:background="#FFEBEE"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="▭"
-                                    android:textSize="13sp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Border"
-                                    android:textColor="#C62828"
-                                    android:textSize="7sp" />
+                            <LinearLayout android:id="@+id/btn_sel_font" android:layout_width="48dp" android:layout_height="44dp" android:layout_marginEnd="4dp" android:background="#F5F5F5" android:gravity="center" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Aa" android:textColor="#111111" android:textSize="13sp" android:textStyle="bold" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Font" android:textColor="#333333" android:textSize="6sp" />
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:id="@+id/btn_sel_bg_image"
-                                android:layout_width="36dp"
-                                android:layout_height="36dp"
-                                android:layout_marginEnd="2dp"
-                                android:background="#E0F2F1"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="🌄"
-                                    android:textSize="13sp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="BG Img"
-                                    android:textColor="#00695C"
-                                    android:textSize="7sp" />
+                            <LinearLayout android:id="@+id/btn_sel_border" android:layout_width="48dp" android:layout_height="44dp" android:layout_marginEnd="4dp" android:background="#F5F5F5" android:gravity="center" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="▢" android:textColor="#111111" android:textSize="14sp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Border" android:textColor="#333333" android:textSize="6sp" />
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:id="@+id/btn_duplicate_text"
-                                android:layout_width="36dp"
-                                android:layout_height="36dp"
-                                android:layout_marginEnd="2dp"
-                                android:background="#E8F5E9"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="⧉"
-                                    android:textSize="13sp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Copy"
-                                    android:textColor="#2E7D32"
-                                    android:textSize="7sp" />
+                            <LinearLayout android:id="@+id/btn_sel_bg_image" android:layout_width="48dp" android:layout_height="44dp" android:layout_marginEnd="4dp" android:background="#F5F5F5" android:gravity="center" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🖼" android:textSize="14sp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="BG Img" android:textColor="#333333" android:textSize="6sp" />
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:id="@+id/btn_qr_generate"
-                                android:layout_width="36dp"
-                                android:layout_height="36dp"
-                                android:background="#FFF8E1"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="▦"
-                                    android:textSize="13sp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="QR"
-                                    android:textColor="#E65100"
-                                    android:textSize="7sp" />
+                            <LinearLayout android:id="@+id/btn_duplicate_text" android:layout_width="48dp" android:layout_height="44dp" android:layout_marginEnd="4dp" android:background="#F5F5F5" android:gravity="center" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⧉" android:textColor="#111111" android:textSize="14sp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Copy" android:textColor="#333333" android:textSize="6sp" />
                             </LinearLayout>
 
-                            <!-- Delete Text Button -->
-                            <LinearLayout
-                                android:id="@+id/btn_sel_delete_text"
-                                android:layout_width="36dp"
-                                android:layout_height="36dp"
-                                android:layout_marginStart="2dp"
-                                android:background="#FFEBEE"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="🗑"
-                                    android:textSize="13sp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Delete"
-                                    android:textColor="#C62828"
-                                    android:textSize="7sp" />
+                            <LinearLayout android:id="@+id/btn_qr_generate" android:layout_width="48dp" android:layout_height="44dp" android:layout_marginEnd="4dp" android:background="#F5F5F5" android:gravity="center" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="▦" android:textColor="#111111" android:textSize="14sp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="QR" android:textColor="#333333" android:textSize="6sp" />
                             </LinearLayout>
 
-                            <!-- Lock/Unlock Button -->
-                            <LinearLayout
-                                android:id="@+id/btn_sel_lock_text"
-                                android:layout_width="36dp"
-                                android:layout_height="36dp"
-                                android:layout_marginStart="2dp"
-                                android:background="#E8EAF6"
-                                android:gravity="center"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/tv_lock_icon"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="🔓"
-                                    android:textSize="13sp" />
-
-                                <TextView
-                                    android:id="@+id/tv_lock_label"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Lock"
-                                    android:textColor="#283593"
-                                    android:textSize="7sp" />
+                            <LinearLayout android:id="@+id/btn_sel_delete_text" android:layout_width="48dp" android:layout_height="44dp" android:layout_marginEnd="4dp" android:background="#111111" android:gravity="center" android:orientation="vertical">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🗑" android:textSize="14sp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Delete" android:textColor="#FFFFFF" android:textSize="6sp" />
                             </LinearLayout>
+
+                            <LinearLayout android:id="@+id/btn_sel_lock_text" android:layout_width="48dp" android:layout_height="44dp" android:background="#F5F5F5" android:gravity="center" android:orientation="vertical">
+                                <TextView android:id="@+id/tv_lock_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔓" android:textSize="14sp" />
+                                <TextView android:id="@+id/tv_lock_label" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Lock" android:textColor="#333333" android:textSize="6sp" />
+                            </LinearLayout>
+
                         </LinearLayout>
                     </HorizontalScrollView>
-                    <!--  Transform quick buttons  -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
-                        android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/btn_transform_upper"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="1dp"
-                            android:layout_weight="1"
-                            android:background="#E8EAF6"
-                            android:gravity="center"
-                            android:text="ABC"
-                            android:textColor="#283593"
-                            android:textSize="8sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/btn_transform_lower"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="1dp"
-                            android:layout_weight="1"
-                            android:background="#E8EAF6"
-                            android:gravity="center"
-                            android:text="abc"
-                            android:textColor="#283593"
-                            android:textSize="8sp" />
-
-                        <TextView
-                            android:id="@+id/btn_transform_title"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="1dp"
-                            android:layout_weight="1"
-                            android:background="#E8EAF6"
-                            android:gravity="center"
-                            android:text="Abc"
-                            android:textColor="#283593"
-                            android:textSize="8sp" />
-
-                        <TextView
-                            android:id="@+id/btn_copy_style_all"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="1dp"
-                            android:layout_weight="1"
-                            android:background="#E8F5E9"
-                            android:gravity="center"
-                            android:text="All"
-                            android:textColor="#2E7D32"
-                            android:textSize="8sp" />
-
-                        <TextView
-                            android:id="@+id/btn_reset_style"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_weight="1"
-                            android:background="#FFEBEE"
-                            android:gravity="center"
-                            android:text="Reset"
-                            android:textColor="#C62828"
-                            android:textSize="8sp" />
+                    <!-- Transform quick buttons -->
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="3dp" android:orientation="horizontal" android:paddingHorizontal="8dp">
+                        <TextView android:id="@+id/btn_transform_upper" android:layout_width="0dp" android:layout_height="22dp" android:layout_marginEnd="2dp" android:layout_weight="1" android:background="#F0F0F0" android:gravity="center" android:text="ABC" android:textColor="#111111" android:textSize="8sp" android:textStyle="bold" />
+                        <TextView android:id="@+id/btn_transform_lower" android:layout_width="0dp" android:layout_height="22dp" android:layout_marginEnd="2dp" android:layout_weight="1" android:background="#F0F0F0" android:gravity="center" android:text="abc" android:textColor="#111111" android:textSize="8sp" />
+                        <TextView android:id="@+id/btn_transform_title" android:layout_width="0dp" android:layout_height="22dp" android:layout_marginEnd="2dp" android:layout_weight="1" android:background="#F0F0F0" android:gravity="center" android:text="Abc" android:textColor="#111111" android:textSize="8sp" />
+                        <TextView android:id="@+id/btn_copy_style_all" android:layout_width="0dp" android:layout_height="22dp" android:layout_marginEnd="2dp" android:layout_weight="1" android:background="#111111" android:gravity="center" android:text="Copy Style" android:textColor="#FFFFFF" android:textSize="7sp" />
+                        <TextView android:id="@+id/btn_reset_style" android:layout_width="0dp" android:layout_height="22dp" android:layout_weight="1" android:background="#DDDDDD" android:gravity="center" android:text="Reset" android:textColor="#111111" android:textSize="7sp" />
                     </LinearLayout>
                 </LinearLayout>
-                <!--  ══ TAB 2: SPACING ══  -->
-                <LinearLayout
-                    android:id="@+id/panel_tab_spacing"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-                    <!--  Text Align  -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/btn_text_align_left"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="1dp"
-                            android:layout_weight="1"
-                            android:background="#E3F2FD"
-                            android:gravity="center"
-                            android:text="≡←"
-                            android:textColor="#1565C0"
-                            android:textSize="11sp" />
-
-                        <TextView
-                            android:id="@+id/btn_text_align_center"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="1dp"
-                            android:layout_weight="1"
-                            android:background="#E3F2FD"
-                            android:gravity="center"
-                            android:text="≡↔"
-                            android:textColor="#1565C0"
-                            android:textSize="11sp" />
-
-                        <TextView
-                            android:id="@+id/btn_text_align_right"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_weight="1"
-                            android:background="#E3F2FD"
-                            android:gravity="center"
-                            android:text="→≡"
-                            android:textColor="#1565C0"
-                            android:textSize="11sp" />
+                <!-- SPACING TAB -->
+                <LinearLayout android:id="@+id/panel_tab_spacing" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="8dp" android:paddingTop="4dp" android:visibility="gone">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="28dp" android:gravity="center_vertical" android:orientation="horizontal">
+                        <TextView android:layout_width="52dp" android:layout_height="wrap_content" android:text="Letter" android:textColor="#555555" android:textSize="8sp" />
+                        <TextView android:id="@+id/btn_letter_minus" android:layout_width="22dp" android:layout_height="20dp" android:background="#111111" android:gravity="center" android:text="−" android:textColor="#FFFFFF" android:textSize="12sp" />
+                        <SeekBar android:id="@+id/sb_letter_spacing" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="4dp" android:layout_weight="1" android:max="100" android:progress="0" android:progressTint="#111111" android:thumbTint="#111111" />
+                        <TextView android:id="@+id/btn_letter_plus" android:layout_width="22dp" android:layout_height="20dp" android:background="#111111" android:gravity="center" android:text="+" android:textColor="#FFFFFF" android:textSize="12sp" />
+                        <TextView android:id="@+id/tv_letter_val" android:layout_width="28dp" android:layout_height="wrap_content" android:gravity="center" android:text="0" android:textColor="#111111" android:textSize="8sp" />
                     </LinearLayout>
-                    <!--  Padding  -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="2dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="44dp"
-                            android:layout_height="wrap_content"
-                            android:text="Pad"
-                            android:textColor="#2E7D32"
-                            android:textSize="8sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/btn_text_pad_minus"
-                            android:layout_width="28dp"
-                            android:layout_height="18dp"
-                            android:background="#2E7D32"
-                            android:gravity="center"
-                            android:text="−"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp" />
-
-                        <SeekBar
-                            android:id="@+id/seek_text_padding"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="2dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/btn_text_pad_plus"
-                            android:layout_width="28dp"
-                            android:layout_height="18dp"
-                            android:background="#2E7D32"
-                            android:gravity="center"
-                            android:text="+"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/tv_text_padding_label"
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="0px"
-                            android:textColor="#2E7D32"
-                            android:textSize="7sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="28dp" android:gravity="center_vertical" android:orientation="horizontal">
+                        <TextView android:layout_width="52dp" android:layout_height="wrap_content" android:text="Line" android:textColor="#555555" android:textSize="8sp" />
+                        <TextView android:id="@+id/btn_line_minus" android:layout_width="22dp" android:layout_height="20dp" android:background="#111111" android:gravity="center" android:text="−" android:textColor="#FFFFFF" android:textSize="12sp" />
+                        <SeekBar android:id="@+id/sb_line_spacing" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="4dp" android:layout_weight="1" android:max="100" android:progress="50" android:progressTint="#111111" android:thumbTint="#111111" />
+                        <TextView android:id="@+id/btn_line_plus" android:layout_width="22dp" android:layout_height="20dp" android:background="#111111" android:gravity="center" android:text="+" android:textColor="#FFFFFF" android:textSize="12sp" />
+                        <TextView android:id="@+id/tv_line_val" android:layout_width="28dp" android:layout_height="wrap_content" android:gravity="center" android:text="1.0" android:textColor="#111111" android:textSize="8sp" />
                     </LinearLayout>
-                    <!--  Line Spacing  -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="2dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="44dp"
-                            android:layout_height="wrap_content"
-                            android:text="Line"
-                            android:textColor="#E65100"
-                            android:textSize="8sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/btn_line_minus"
-                            android:layout_width="28dp"
-                            android:layout_height="18dp"
-                            android:background="#E65100"
-                            android:gravity="center"
-                            android:text="−"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp" />
-
-                        <SeekBar
-                            android:id="@+id/seek_line_spacing"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="2dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/btn_line_plus"
-                            android:layout_width="28dp"
-                            android:layout_height="18dp"
-                            android:background="#E65100"
-                            android:gravity="center"
-                            android:text="+"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/tv_line_spacing_label"
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="1.0x"
-                            android:textColor="#E65100"
-                            android:textSize="7sp" />
-                    </LinearLayout>
-                    <!--  Letter Spacing  -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="2dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="44dp"
-                            android:layout_height="wrap_content"
-                            android:text="Letter"
-                            android:textColor="#6A1B9A"
-                            android:textSize="8sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/btn_letter_minus"
-                            android:layout_width="28dp"
-                            android:layout_height="18dp"
-                            android:background="#6A1B9A"
-                            android:gravity="center"
-                            android:text="−"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp" />
-
-                        <SeekBar
-                            android:id="@+id/seek_letter_spacing"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="2dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/btn_letter_plus"
-                            android:layout_width="28dp"
-                            android:layout_height="18dp"
-                            android:background="#6A1B9A"
-                            android:gravity="center"
-                            android:text="+"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/tv_letter_spacing_label"
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="0.00"
-                            android:textColor="#6A1B9A"
-                            android:textSize="7sp" />
-                    </LinearLayout>
-                    <!--  Padding X  -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="2dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="44dp"
-                            android:layout_height="wrap_content"
-                            android:text="↔PadX"
-                            android:textColor="#37474F"
-                            android:textSize="8sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/btn_pad_x_minus"
-                            android:layout_width="28dp"
-                            android:layout_height="18dp"
-                            android:background="#37474F"
-                            android:gravity="center"
-                            android:text="−"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp" />
-
-                        <SeekBar
-                            android:id="@+id/seek_padding_x"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="2dp"
-                            android:layout_weight="1"
-                            android:max="80"
-                            android:progress="20" />
-
-                        <TextView
-                            android:id="@+id/btn_pad_x_plus"
-                            android:layout_width="28dp"
-                            android:layout_height="18dp"
-                            android:background="#37474F"
-                            android:gravity="center"
-                            android:text="+"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/tv_padding_x_label"
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="20px"
-                            android:textColor="#37474F"
-                            android:textSize="7sp" />
-                    </LinearLayout>
-                    <!--  Padding Y  -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="44dp"
-                            android:layout_height="wrap_content"
-                            android:text="↕PadY"
-                            android:textColor="#37474F"
-                            android:textSize="8sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/btn_pad_y_minus"
-                            android:layout_width="28dp"
-                            android:layout_height="18dp"
-                            android:background="#37474F"
-                            android:gravity="center"
-                            android:text="−"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp" />
-
-                        <SeekBar
-                            android:id="@+id/seek_padding_y"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="2dp"
-                            android:layout_weight="1"
-                            android:max="80"
-                            android:progress="20" />
-
-                        <TextView
-                            android:id="@+id/btn_pad_y_plus"
-                            android:layout_width="28dp"
-                            android:layout_height="18dp"
-                            android:background="#37474F"
-                            android:gravity="center"
-                            android:text="+"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/tv_padding_y_label"
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="20px"
-                            android:textColor="#37474F"
-                            android:textSize="7sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="28dp" android:gravity="center_vertical" android:orientation="horizontal">
+                        <TextView android:layout_width="52dp" android:layout_height="wrap_content" android:text="Padding" android:textColor="#555555" android:textSize="8sp" />
+                        <TextView android:id="@+id/btn_pad_minus" android:layout_width="22dp" android:layout_height="20dp" android:background="#111111" android:gravity="center" android:text="−" android:textColor="#FFFFFF" android:textSize="12sp" />
+                        <SeekBar android:id="@+id/sb_text_padding" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="4dp" android:layout_weight="1" android:max="60" android:progress="10" android:progressTint="#111111" android:thumbTint="#111111" />
+                        <TextView android:id="@+id/btn_pad_plus" android:layout_width="22dp" android:layout_height="20dp" android:background="#111111" android:gravity="center" android:text="+" android:textColor="#FFFFFF" android:textSize="12sp" />
+                        <TextView android:id="@+id/tv_pad_val" android:layout_width="28dp" android:layout_height="wrap_content" android:gravity="center" android:text="10" android:textColor="#111111" android:textSize="8sp" />
                     </LinearLayout>
                 </LinearLayout>
-                <!--  ══ TAB 3: TRANSFORM ══  -->
-                <LinearLayout
-                    android:id="@+id/panel_tab_transform"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-                    <!--  Rotation  -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="2dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="44dp"
-                            android:layout_height="wrap_content"
-                            android:text="Rotate"
-                            android:textColor="#00695C"
-                            android:textSize="8sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/btn_rotation_minus"
-                            android:layout_width="28dp"
-                            android:layout_height="18dp"
-                            android:background="#00695C"
-                            android:gravity="center"
-                            android:text="↺"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp" />
-
-                        <SeekBar
-                            android:id="@+id/seek_rotation"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="2dp"
-                            android:layout_weight="1"
-                            android:max="360"
-                            android:progress="180" />
-
-                        <TextView
-                            android:id="@+id/btn_rotation_plus"
-                            android:layout_width="28dp"
-                            android:layout_height="18dp"
-                            android:background="#00695C"
-                            android:gravity="center"
-                            android:text="↻"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/tv_rotation_label"
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="0°"
-                            android:textColor="#00695C"
-                            android:textSize="7sp" />
+                <!-- EFFECTS TAB -->
+                <LinearLayout android:id="@+id/panel_tab_effects" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="8dp" android:paddingTop="4dp" android:visibility="gone">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="28dp" android:gravity="center_vertical" android:orientation="horizontal">
+                        <TextView android:layout_width="52dp" android:layout_height="wrap_content" android:text="Shadow" android:textColor="#555555" android:textSize="8sp" />
+                        <SeekBar android:id="@+id/sb_shadow_radius" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="4dp" android:layout_weight="1" android:max="30" android:progress="0" android:progressTint="#111111" android:thumbTint="#111111" />
+                        <TextView android:id="@+id/tv_shadow_val" android:layout_width="28dp" android:layout_height="wrap_content" android:gravity="center" android:text="0" android:textColor="#111111" android:textSize="8sp" />
                     </LinearLayout>
-                    <!--  Opacity  -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="2dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="44dp"
-                            android:layout_height="wrap_content"
-                            android:text="Opacity"
-                            android:textColor="#37474F"
-                            android:textSize="8sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/btn_opacity_minus"
-                            android:layout_width="28dp"
-                            android:layout_height="18dp"
-                            android:background="#37474F"
-                            android:gravity="center"
-                            android:text="−"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp" />
-
-                        <SeekBar
-                            android:id="@+id/seek_opacity"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="2dp"
-                            android:layout_weight="1"
-                            android:max="100"
-                            android:progress="100" />
-
-                        <TextView
-                            android:id="@+id/btn_opacity_plus"
-                            android:layout_width="28dp"
-                            android:layout_height="18dp"
-                            android:background="#37474F"
-                            android:gravity="center"
-                            android:text="+"
-                            android:textColor="#FFFFFF"
-                            android:textSize="12sp" />
-
-                        <TextView
-                            android:id="@+id/tv_opacity_label"
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="100%"
-                            android:textColor="#37474F"
-                            android:textSize="7sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="28dp" android:gravity="center_vertical" android:orientation="horizontal">
+                        <TextView android:layout_width="52dp" android:layout_height="wrap_content" android:text="Shadow C" android:textColor="#555555" android:textSize="8sp" />
+                        <TextView android:id="@+id/btn_shadow_color" android:layout_width="0dp" android:layout_height="22dp" android:layout_weight="1" android:background="#111111" android:gravity="center" android:text="Pick Color" android:textColor="#FFFFFF" android:textSize="8sp" />
                     </LinearLayout>
-                    <!--  Scale X  -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="2dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="44dp"
-                            android:layout_height="wrap_content"
-                            android:text="ScaleX"
-                            android:textColor="#880E4F"
-                            android:textSize="8sp"
-                            android:textStyle="bold" />
-
-                        <SeekBar
-                            android:id="@+id/seek_scale_x"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="2dp"
-                            android:layout_weight="1"
-                            android:max="40"
-                            android:progress="10" />
-
-                        <TextView
-                            android:id="@+id/tv_scale_x_label"
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="1.0"
-                            android:textColor="#880E4F"
-                            android:textSize="7sp" />
-                    </LinearLayout>
-                    <!--  Scale Y  -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="44dp"
-                            android:layout_height="wrap_content"
-                            android:text="ScaleY"
-                            android:textColor="#880E4F"
-                            android:textSize="8sp"
-                            android:textStyle="bold" />
-
-                        <SeekBar
-                            android:id="@+id/seek_scale_y"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="2dp"
-                            android:layout_weight="1"
-                            android:max="40"
-                            android:progress="10" />
-
-                        <TextView
-                            android:id="@+id/tv_scale_y_label"
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="1.0"
-                            android:textColor="#880E4F"
-                            android:textSize="7sp" />
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="28dp" android:gravity="center_vertical" android:orientation="horizontal">
+                        <TextView android:layout_width="52dp" android:layout_height="wrap_content" android:text="Opacity" android:textColor="#555555" android:textSize="8sp" />
+                        <SeekBar android:id="@+id/sb_alpha" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="4dp" android:layout_weight="1" android:max="100" android:progress="100" android:progressTint="#111111" android:thumbTint="#111111" />
+                        <TextView android:id="@+id/tv_alpha_val" android:layout_width="28dp" android:layout_height="wrap_content" android:gravity="center" android:text="100%" android:textColor="#111111" android:textSize="8sp" />
                     </LinearLayout>
                 </LinearLayout>
-                <!--  ══ TAB 4: EFFECTS ══  -->
-                <LinearLayout
-                    android:id="@+id/panel_tab_effects"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="2dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="44dp"
-                            android:layout_height="wrap_content"
-                            android:text="ShadR"
-                            android:textColor="#283593"
-                            android:textSize="8sp"
-                            android:textStyle="bold" />
-
-                        <SeekBar
-                            android:id="@+id/seek_shadow_radius"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="2dp"
-                            android:layout_weight="1"
-                            android:max="30"
-                            android:progress="0" />
-
-                        <TextView
-                            android:id="@+id/tv_shadow_radius_label"
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="0"
-                            android:textColor="#283593"
-                            android:textSize="7sp" />
+                <!-- LAYOUT TAB -->
+                <LinearLayout android:id="@+id/panel_tab_layout" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingHorizontal="8dp" android:paddingTop="4dp" android:visibility="gone">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="28dp" android:gravity="center_vertical" android:orientation="horizontal" android:layout_marginBottom="3dp">
+                        <TextView android:id="@+id/btn_sel_left" android:layout_width="0dp" android:layout_height="22dp" android:layout_marginEnd="2dp" android:layout_weight="1" android:background="#111111" android:gravity="center" android:text="◀" android:textColor="#FFFFFF" android:textSize="11sp" />
+                        <TextView android:id="@+id/btn_sel_up" android:layout_width="0dp" android:layout_height="22dp" android:layout_marginEnd="2dp" android:layout_weight="1" android:background="#111111" android:gravity="center" android:text="▲" android:textColor="#FFFFFF" android:textSize="11sp" />
+                        <TextView android:id="@+id/btn_sel_down" android:layout_width="0dp" android:layout_height="22dp" android:layout_marginEnd="2dp" android:layout_weight="1" android:background="#111111" android:gravity="center" android:text="▼" android:textColor="#FFFFFF" android:textSize="11sp" />
+                        <TextView android:id="@+id/btn_sel_right" android:layout_width="0dp" android:layout_height="22dp" android:layout_weight="1" android:background="#111111" android:gravity="center" android:text="▶" android:textColor="#FFFFFF" android:textSize="11sp" />
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="2dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="44dp"
-                            android:layout_height="wrap_content"
-                            android:text="ShadX"
-                            android:textColor="#283593"
-                            android:textSize="8sp"
-                            android:textStyle="bold" />
-
-                        <SeekBar
-                            android:id="@+id/seek_shadow_dx"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="2dp"
-                            android:layout_weight="1"
-                            android:max="20"
-                            android:progress="5" />
-
-                        <TextView
-                            android:id="@+id/tv_shadow_dx_label"
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="5"
-                            android:textColor="#283593"
-                            android:textSize="7sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="44dp"
-                            android:layout_height="wrap_content"
-                            android:text="ShadY"
-                            android:textColor="#283593"
-                            android:textSize="8sp"
-                            android:textStyle="bold" />
-
-                        <SeekBar
-                            android:id="@+id/seek_shadow_dy"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="2dp"
-                            android:layout_weight="1"
-                            android:max="20"
-                            android:progress="5" />
-
-                        <TextView
-                            android:id="@+id/tv_shadow_dy_label"
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="5"
-                            android:textColor="#283593"
-                            android:textSize="7sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/btn_shadow_color"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="2dp"
-                            android:layout_weight="1"
-                            android:background="#283593"
-                            android:gravity="center"
-                            android:text="🎨 Shadow"
-                            android:textColor="#FFFFFF"
-                            android:textSize="8sp" />
-
-                        <TextView
-                            android:id="@+id/btn_shadow_remove"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_weight="1"
-                            android:background="#C62828"
-                            android:gravity="center"
-                            android:text="✕ Shadow"
-                            android:textColor="#FFFFFF"
-                            android:textSize="8sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="44dp"
-                            android:layout_height="wrap_content"
-                            android:text="Corner"
-                            android:textColor="#1565C0"
-                            android:textSize="8sp"
-                            android:textStyle="bold" />
-
-                        <SeekBar
-                            android:id="@+id/seek_corner_radius"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="2dp"
-                            android:layout_weight="1"
-                            android:max="60"
-                            android:progress="8" />
-
-                        <TextView
-                            android:id="@+id/tv_corner_label"
-                            android:layout_width="24dp"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="8dp"
-                            android:textColor="#1565C0"
-                            android:textSize="7sp" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/btn_highlight_color"
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:background="#FFFF00"
-                        android:gravity="center"
-                        android:text="🖍 Highlight"
-                        android:textColor="#333333"
-                        android:textSize="8sp" />
-                </LinearLayout>
-                <!--  ══ TAB 5: LAYOUT ══  -->
-                <LinearLayout
-                    android:id="@+id/panel_tab_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-                    <!--  Layer  -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/btn_pop_bring_front"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="1dp"
-                            android:layout_weight="1"
-                            android:background="#4A148C"
-                            android:gravity="center"
-                            android:text="⬆F"
-                            android:textColor="#FFFFFF"
-                            android:textSize="8sp" />
-
-                        <TextView
-                            android:id="@+id/btn_pop_layer_up"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="1dp"
-                            android:layout_weight="1"
-                            android:background="#6A1B9A"
-                            android:gravity="center"
-                            android:text="↑Up"
-                            android:textColor="#FFFFFF"
-                            android:textSize="8sp" />
-
-                        <TextView
-                            android:id="@+id/btn_pop_layer_down"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="1dp"
-                            android:layout_weight="1"
-                            android:background="#7B1FA2"
-                            android:gravity="center"
-                            android:text="↓Dn"
-                            android:textColor="#FFFFFF"
-                            android:textSize="8sp" />
-
-                        <TextView
-                            android:id="@+id/btn_pop_send_back"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_weight="1"
-                            android:background="#4A148C"
-                            android:gravity="center"
-                            android:text="⬇B"
-                            android:textColor="#FFFFFF"
-                            android:textSize="8sp" />
-                    </LinearLayout>
-                    <!--  Move  -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/btn_sel_left"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="1dp"
-                            android:layout_weight="1"
-                            android:background="#455A64"
-                            android:gravity="center"
-                            android:text="◀"
-                            android:textColor="#FFFFFF"
-                            android:textSize="11sp" />
-
-                        <TextView
-                            android:id="@+id/btn_sel_up"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="1dp"
-                            android:layout_weight="1"
-                            android:background="#455A64"
-                            android:gravity="center"
-                            android:text="▲"
-                            android:textColor="#FFFFFF"
-                            android:textSize="11sp" />
-
-                        <TextView
-                            android:id="@+id/btn_sel_down"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="1dp"
-                            android:layout_weight="1"
-                            android:background="#455A64"
-                            android:gravity="center"
-                            android:text="▼"
-                            android:textColor="#FFFFFF"
-                            android:textSize="11sp" />
-
-                        <TextView
-                            android:id="@+id/btn_sel_right"
-                            android:layout_width="0dp"
-                            android:layout_height="20dp"
-                            android:layout_weight="1"
-                            android:background="#455A64"
-                            android:gravity="center"
-                            android:text="▶"
-                            android:textColor="#FFFFFF"
-                            android:textSize="11sp" />
-                    </LinearLayout>
-                    <!--  Align  -->
-                    <HorizontalScrollView
-                        android:id="@+id/hsv_align_row"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:scrollbars="none">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/btn_sel_align_left"
-                                android:layout_width="34dp"
-                                android:layout_height="20dp"
-                                android:layout_marginEnd="1dp"
-                                android:background="#1565C0"
-                                android:gravity="center"
-                                android:text="⊢L"
-                                android:textColor="#FFFFFF"
-                                android:textSize="8sp" />
-
-                            <TextView
-                                android:id="@+id/btn_sel_align_center_h"
-                                android:layout_width="34dp"
-                                android:layout_height="20dp"
-                                android:layout_marginEnd="1dp"
-                                android:background="#1565C0"
-                                android:gravity="center"
-                                android:text="⊣⊢"
-                                android:textColor="#FFFFFF"
-                                android:textSize="8sp" />
-
-                            <TextView
-                                android:id="@+id/btn_sel_align_right"
-                                android:layout_width="34dp"
-                                android:layout_height="20dp"
-                                android:layout_marginEnd="1dp"
-                                android:background="#1565C0"
-                                android:gravity="center"
-                                android:text="R⊣"
-                                android:textColor="#FFFFFF"
-                                android:textSize="8sp" />
-
-                            <TextView
-                                android:id="@+id/btn_sel_align_top"
-                                android:layout_width="34dp"
-                                android:layout_height="20dp"
-                                android:layout_marginEnd="1dp"
-                                android:background="#0D47A1"
-                                android:gravity="center"
-                                android:text="⊤T"
-                                android:textColor="#FFFFFF"
-                                android:textSize="8sp" />
-
-                            <TextView
-                                android:id="@+id/btn_sel_align_middle"
-                                android:layout_width="34dp"
-                                android:layout_height="20dp"
-                                android:layout_marginEnd="1dp"
-                                android:background="#0D47A1"
-                                android:gravity="center"
-                                android:text="⊥⊤"
-                                android:textColor="#FFFFFF"
-                                android:textSize="8sp" />
-
-                            <TextView
-                                android:id="@+id/btn_sel_align_bottom"
-                                android:layout_width="34dp"
-                                android:layout_height="20dp"
-                                android:layout_marginEnd="1dp"
-                                android:background="#0D47A1"
-                                android:gravity="center"
-                                android:text="B⊥"
-                                android:textColor="#FFFFFF"
-                                android:textSize="8sp" />
-
-                            <TextView
-                                android:id="@+id/btn_sel_distribute_h"
-                                android:layout_width="34dp"
-                                android:layout_height="20dp"
-                                android:layout_marginEnd="1dp"
-                                android:background="#1976D2"
-                                android:gravity="center"
-                                android:text="||H"
-                                android:textColor="#FFFFFF"
-                                android:textSize="8sp" />
-
-                            <TextView
-                                android:id="@+id/btn_sel_distribute_v"
-                                android:layout_width="34dp"
-                                android:layout_height="20dp"
-                                android:background="#1976D2"
-                                android:gravity="center"
-                                android:text="=V"
-                                android:textColor="#FFFFFF"
-                                android:textSize="8sp" />
+                    <HorizontalScrollView android:id="@+id/hsv_align_row" android:layout_width="match_parent" android:layout_height="wrap_content" android:scrollbars="none">
+                        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal">
+                            <TextView android:id="@+id/btn_sel_align_left" android:layout_width="36dp" android:layout_height="22dp" android:layout_marginEnd="2dp" android:background="#111111" android:gravity="center" android:text="⊢L" android:textColor="#FFFFFF" android:textSize="8sp" />
+                            <TextView android:id="@+id/btn_sel_align_center_h" android:layout_width="36dp" android:layout_height="22dp" android:layout_marginEnd="2dp" android:background="#111111" android:gravity="center" android:text="⊣⊢" android:textColor="#FFFFFF" android:textSize="8sp" />
+                            <TextView android:id="@+id/btn_sel_align_right" android:layout_width="36dp" android:layout_height="22dp" android:layout_marginEnd="2dp" android:background="#111111" android:gravity="center" android:text="R⊣" android:textColor="#FFFFFF" android:textSize="8sp" />
+                            <TextView android:id="@+id/btn_sel_align_top" android:layout_width="36dp" android:layout_height="22dp" android:layout_marginEnd="2dp" android:background="#444444" android:gravity="center" android:text="⊤T" android:textColor="#FFFFFF" android:textSize="8sp" />
+                            <TextView android:id="@+id/btn_sel_align_middle" android:layout_width="36dp" android:layout_height="22dp" android:layout_marginEnd="2dp" android:background="#444444" android:gravity="center" android:text="⊥⊤" android:textColor="#FFFFFF" android:textSize="8sp" />
+                            <TextView android:id="@+id/btn_sel_align_bottom" android:layout_width="36dp" android:layout_height="22dp" android:layout_marginEnd="2dp" android:background="#444444" android:gravity="center" android:text="B⊥" android:textColor="#FFFFFF" android:textSize="8sp" />
+                            <TextView android:id="@+id/btn_sel_distribute_h" android:layout_width="36dp" android:layout_height="22dp" android:layout_marginEnd="2dp" android:background="#666666" android:gravity="center" android:text="||H" android:textColor="#FFFFFF" android:textSize="8sp" />
+                            <TextView android:id="@+id/btn_sel_distribute_v" android:layout_width="36dp" android:layout_height="22dp" android:background="#666666" android:gravity="center" android:text="=V" android:textColor="#FFFFFF" android:textSize="8sp" />
                         </LinearLayout>
                     </HorizontalScrollView>
                 </LinearLayout>
-                <!--  Dummy IDs  -->
-                <LinearLayout
-                    android:id="@+id/row_move_btns"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:visibility="gone" />
 
-                <LinearLayout
-                    android:id="@+id/row_layer_btns"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:visibility="gone" />
+                <!-- TRANSFORM TAB (dummy) -->
+                <LinearLayout android:id="@+id/panel_tab_transform" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/btn_toggle_move"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:visibility="gone" />
+                <!-- Dummy IDs -->
+                <LinearLayout android:id="@+id/row_move_btns" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+                <LinearLayout android:id="@+id/row_layer_btns" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+                <TextView android:id="@+id/btn_toggle_move" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+                <TextView android:id="@+id/btn_toggle_layer" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+                <TextView android:id="@+id/btn_toggle_align" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/btn_toggle_layer"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/btn_toggle_align"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:visibility="gone" />
             </LinearLayout>
         </ScrollView>
-        <!--  ── CLOSE ROW 16dp ──  -->
     </LinearLayout>
 </LinearLayout>
