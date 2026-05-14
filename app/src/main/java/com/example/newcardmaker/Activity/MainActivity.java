@@ -13942,6 +13942,11 @@ public class MainActivity extends AppCompatActivity {
                 case MotionEvent.ACTION_DOWN:
                     lastTX[0] = event.getRawX();
                     lastTY[0] = event.getRawY();
+                    // ✅ Actual popup position thi sync karo
+                    int[] loc = new int[2];
+                    cv.getLocationOnScreen(loc);
+                    popupX[0] = loc[0];
+                    popupY[0] = loc[1];
                     return true;
                 case MotionEvent.ACTION_MOVE:
                     float dx = event.getRawX() - lastTX[0];
@@ -14314,7 +14319,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void showPopupAtSavedPosition(View cv) {
         if (isSelControlsMoved) {
-            selectionControlsPopup.showAtLocation(mainLayout, Gravity.NO_GRAVITY, selControlsLastX, selControlsLastY);
+            selectionControlsPopup.showAtLocation(mainLayout, Gravity.TOP | Gravity.LEFT, selControlsLastX, selControlsLastY);
         } else {
             selectionControlsPopup.showAtLocation(mainLayout, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 25);
             mainLayout.post(() -> {
@@ -15410,7 +15415,7 @@ public class MainActivity extends AppCompatActivity {
 
         // ✅ First time bottom, after move last moved position
         if (isSelControlsMoved) {
-            selectionControlsPopup.showAtLocation(mainLayout, Gravity.NO_GRAVITY, selControlsLastX, selControlsLastY);
+            selectionControlsPopup.showAtLocation(mainLayout, Gravity.TOP | Gravity.LEFT, selControlsLastX, selControlsLastY);
         } else {
             selectionControlsPopup.showAtLocation(mainLayout, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 25);
 
