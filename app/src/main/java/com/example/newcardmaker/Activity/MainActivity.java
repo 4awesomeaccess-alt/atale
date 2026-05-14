@@ -14125,7 +14125,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (btnSzM != null) {
             btnSzM.setOnClickListener(v -> {
-                if (panelArc != null && panelArc.getVisibility() == View.VISIBLE) return; // ✅
                 if (seekSize == null) return;
                 int nv = Math.max(0, seekSize.getProgress() - 2);
                 seekSize.setProgress(nv);
@@ -14142,7 +14141,6 @@ public class MainActivity extends AppCompatActivity {
         }
         if (btnSzP != null) {
             btnSzP.setOnClickListener(v -> {
-                if (panelArc != null && panelArc.getVisibility() == View.VISIBLE) return; // ✅
                 if (seekSize == null) return;
                 int nv = Math.min(100, seekSize.getProgress() + 2);
                 seekSize.setProgress(nv);
