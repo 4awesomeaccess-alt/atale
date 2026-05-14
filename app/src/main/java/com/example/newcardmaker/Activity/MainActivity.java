@@ -16690,6 +16690,19 @@ public class MainActivity extends AppCompatActivity {
                         int borderStyleVal = borderTag instanceof Integer ? (int) borderTag : 0;
                         obj.put("borderStyle", borderStyleVal);
 
+                        // ── Full border info save (width, color, corner)
+                        Object borderInfoTag = tv.getTag(R.id.tv_border_info);
+                        if (borderInfoTag instanceof int[]) {
+                            int[] binfo = (int[]) borderInfoTag;
+                            obj.put("borderWidth",  binfo.length > 0 ? binfo[0] : 0);
+                            obj.put("borderColor",  binfo.length > 1 ? binfo[1] : Color.TRANSPARENT);
+                            obj.put("borderCorner", binfo.length > 2 ? binfo[2] : 0);
+                        } else {
+                            obj.put("borderWidth",  0);
+                            obj.put("borderColor",  Color.TRANSPARENT);
+                            obj.put("borderCorner", 0);
+                        }
+
                         // ── Border Color (background color)
                         int savedBgColor = getStoredBackgroundColor(tv);
                         obj.put("bgColor", savedBgColor);
@@ -17866,9 +17879,27 @@ public class MainActivity extends AppCompatActivity {
         int borderStyle = obj.optInt("borderStyle", 0);
         int bgColor     = obj.optInt("bgColor", Color.TRANSPARENT);
 
+        // ── Full border info load karo
+        int borderWidth  = obj.optInt("borderWidth",  0);
+        int borderColor  = obj.optInt("borderColor",  Color.TRANSPARENT);
+        int borderCorner = obj.optInt("borderCorner", 0);
+
         GradientDrawable gd = new GradientDrawable();
         gd.setColor(bgColor);
-        applyBorderStyle(gd, borderStyle);
+        if (borderWidth > 0) {
+            gd.setCornerRadius(dpToPx(borderCorner));
+            switch (borderStyle) {
+                case 0: gd.setStroke(dpToPx(borderWidth), borderColor); break;
+                case 1: gd.setStroke(dpToPx(borderWidth), borderColor, dpToPx(8), dpToPx(4)); break;
+                case 2: gd.setStroke(dpToPx(borderWidth), borderColor, dpToPx(2), dpToPx(4)); break;
+                case 3: gd.setStroke(dpToPx(borderWidth + 2), borderColor); break;
+                default: applyBorderStyle(gd, borderStyle);
+            }
+            // tv_border_info tag set karo jethi restore thay
+            textView.setTag(R.id.tv_border_info, new int[]{borderWidth, borderColor, borderCorner, borderStyle});
+        } else {
+            applyBorderStyle(gd, borderStyle);
+        }
         textView.setBackground(gd);
         textView.setTag(bgColor);                          // bg color tag
         textView.setTag(R.id.btn_add_sticker, borderStyle); // border style tag
@@ -17894,13 +17925,27 @@ public class MainActivity extends AppCompatActivity {
         final int fBorderStyle = borderStyle;
         final int fBgColor     = bgColor;
         final float fStrokeW   = strokeWidth;
+        final int fBorderWidth  = borderWidth;
+        final int fBorderColor  = borderColor;
+        final int fBorderCorner = borderCorner;
 
         textView.post(() -> {
             // Border apply
-            GradientDrawable gd = new GradientDrawable();
-            gd.setColor(fBgColor);
-            applyBorderStyle(gd, fBorderStyle);
-            textView.setBackground(gd);
+            GradientDrawable gd2 = new GradientDrawable();
+            gd2.setColor(fBgColor);
+            if (fBorderWidth > 0) {
+                gd2.setCornerRadius(dpToPx(fBorderCorner));
+                switch (fBorderStyle) {
+                    case 0: gd2.setStroke(dpToPx(fBorderWidth), fBorderColor); break;
+                    case 1: gd2.setStroke(dpToPx(fBorderWidth), fBorderColor, dpToPx(8), dpToPx(4)); break;
+                    case 2: gd2.setStroke(dpToPx(fBorderWidth), fBorderColor, dpToPx(2), dpToPx(4)); break;
+                    case 3: gd2.setStroke(dpToPx(fBorderWidth + 2), fBorderColor); break;
+                    default: applyBorderStyle(gd2, fBorderStyle);
+                }
+            } else {
+                applyBorderStyle(gd2, fBorderStyle);
+            }
+            textView.setBackground(gd2);
 
             // Padding apply
             int se = (int) Math.ceil(fStrokeW) + 4;
