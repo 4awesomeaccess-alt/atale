@@ -11694,8 +11694,8 @@ public class MainActivity extends AppCompatActivity {
                     TextView btnArcRadiusM = cv.findViewById(R.id.btn_arc_radius_minus);
                     TextView btnArcRadiusP = cv.findViewById(R.id.btn_arc_radius_plus);
 
-// ── Tab row + HorizontalScrollView reference
-                    HorizontalScrollView tabRow = cv.findViewById(R.id.hsv_tab_row); // ✅ tab row hide karva
+// ── Tab row reference
+                    LinearLayout tabRow = cv.findViewById(R.id.hsv_tab_row); // ✅ tab row hide karva
 
 // ── Arc toggle UI
                     Runnable updateArcToggleUI = () -> {
