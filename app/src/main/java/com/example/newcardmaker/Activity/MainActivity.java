@@ -13926,13 +13926,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * Drag handle setup — same for both popups
+     * Drag handle setup — pure delta tracking, no getLocationOnScreen
      */
     private void setupDragHandle(View cv) {
         final float[] lastTX = {0};
         final float[] lastTY = {0};
-        final int[] popupX = {selControlsLastX};
-        final int[] popupY = {selControlsLastY};
+        final boolean[] dragging = {false};
 
         View dragHandle = cv.findViewById(R.id.drag_handle_sel);
         if (dragHandle == null) return;
@@ -13942,27 +13941,26 @@ public class MainActivity extends AppCompatActivity {
                 case MotionEvent.ACTION_DOWN:
                     lastTX[0] = event.getRawX();
                     lastTY[0] = event.getRawY();
-                    // ✅ cv ni actual position — mainLayout offset minus karo
-                    int[] cvLoc = new int[2];
-                    int[] rootLoc = new int[2];
-                    cv.getLocationOnScreen(cvLoc);
-                    mainLayout.getLocationOnScreen(rootLoc);
-                    popupX[0] = cvLoc[0] - rootLoc[0];
-                    popupY[0] = cvLoc[1] - rootLoc[1];
+                    dragging[0] = true;
                     return true;
+
                 case MotionEvent.ACTION_MOVE:
-                    float dx = event.getRawX() - lastTX[0];
-                    float dy = event.getRawY() - lastTY[0];
-                    popupX[0] += (int) dx;
-                    popupY[0] += (int) dy;
+                    if (!dragging[0]) return true;
+                    int dx = (int)(event.getRawX() - lastTX[0]);
+                    int dy = (int)(event.getRawY() - lastTY[0]);
                     lastTX[0] = event.getRawX();
                     lastTY[0] = event.getRawY();
+                    selControlsLastX += dx;
+                    selControlsLastY += dy;
                     if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) {
-                        selectionControlsPopup.update(popupX[0], popupY[0], -1, -1);
+                        selectionControlsPopup.update(selControlsLastX, selControlsLastY, -1, -1);
                     }
-                    selControlsLastX = popupX[0];
-                    selControlsLastY = popupY[0];
                     isSelControlsMoved = true;
+                    return true;
+
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    dragging[0] = false;
                     return true;
             }
             return false;
@@ -14323,15 +14321,13 @@ public class MainActivity extends AppCompatActivity {
         if (isSelControlsMoved) {
             selectionControlsPopup.showAtLocation(mainLayout, Gravity.TOP | Gravity.LEFT, selControlsLastX, selControlsLastY);
         } else {
-            selectionControlsPopup.showAtLocation(mainLayout, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 25);
-            mainLayout.post(() -> {
-                if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) {
-                    int popupW = cv.getWidth();
-                    int popupH = cv.getHeight();
-                    selControlsLastX = (mainLayout.getWidth() - popupW) / 2;
-                    selControlsLastY = mainLayout.getHeight() - popupH - 25;
-                }
-            });
+            // First time — measure karvi pachhi bottom-center ma TOP|LEFT coordinates thi show
+            cv.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            int popupW = cv.getMeasuredWidth();
+            int popupH = cv.getMeasuredHeight();
+            selControlsLastX = Math.max(0, (mainLayout.getWidth() - popupW) / 2);
+            selControlsLastY = Math.max(0, mainLayout.getHeight() - popupH - 25);
+            selectionControlsPopup.showAtLocation(mainLayout, Gravity.TOP | Gravity.LEFT, selControlsLastX, selControlsLastY);
         }
     }
 
@@ -15419,22 +15415,12 @@ public class MainActivity extends AppCompatActivity {
         if (isSelControlsMoved) {
             selectionControlsPopup.showAtLocation(mainLayout, Gravity.TOP | Gravity.LEFT, selControlsLastX, selControlsLastY);
         } else {
-            selectionControlsPopup.showAtLocation(mainLayout, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 25);
-
-            // ✅ bottom position ને saved position માં convert કરવા માટે
-            mainLayout.post(() -> {
-                if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) {
-
-                    int popupW = cv.getWidth();
-                    int popupH = cv.getHeight();
-
-                    selControlsLastX = (mainLayout.getWidth() - popupW) / 2;
-                    selControlsLastY = mainLayout.getHeight() - popupH - 25;
-
-                    popupX[0] = selControlsLastX;
-                    popupY[0] = selControlsLastY;
-                }
-            });
+            cv.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+            int popupW = cv.getMeasuredWidth();
+            int popupH = cv.getMeasuredHeight();
+            selControlsLastX = Math.max(0, (mainLayout.getWidth() - popupW) / 2);
+            selControlsLastY = Math.max(0, mainLayout.getHeight() - popupH - 25);
+            selectionControlsPopup.showAtLocation(mainLayout, Gravity.TOP | Gravity.LEFT, selControlsLastX, selControlsLastY);
         }
     }
 
