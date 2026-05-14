@@ -12902,10 +12902,6 @@ public class MainActivity extends AppCompatActivity {
         if (btnFont != null)
             btnFont.setOnClickListener(v -> showFontPickerDialog(targetView));
 
-        View btnGradient = cv.findViewById(R.id.btn_pop_gradient);
-        if (btnGradient != null)
-            btnGradient.setOnClickListener(v -> showGradientPopupWindow(targetView));
-
         View btnStroke2 = cv.findViewById(R.id.btn_sel_stroke);
         if (btnStroke2 != null)
             btnStroke2.setOnClickListener(v -> showStrokeDialog(targetView));
