@@ -13942,11 +13942,14 @@ public class MainActivity extends AppCompatActivity {
                 case MotionEvent.ACTION_DOWN:
                     lastTX[0] = event.getRawX();
                     lastTY[0] = event.getRawY();
-                    // ✅ Actual popup position thi sync karo
+                    // ✅ Actual popup position — status bar offset minus karo
                     int[] loc = new int[2];
                     cv.getLocationOnScreen(loc);
+                    int statusBarHeight = 0;
+                    int resId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+                    if (resId > 0) statusBarHeight = getResources().getDimensionPixelSize(resId);
                     popupX[0] = loc[0];
-                    popupY[0] = loc[1];
+                    popupY[0] = loc[1] - statusBarHeight;
                     return true;
                 case MotionEvent.ACTION_MOVE:
                     float dx = event.getRawX() - lastTX[0];
