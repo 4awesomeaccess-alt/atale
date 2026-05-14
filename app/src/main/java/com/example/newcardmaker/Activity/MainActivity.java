@@ -13756,23 +13756,38 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        // updatePreview
-        updatePreview[0] = () -> applyGradientToView(preview, color1[0], color2[0], direction[0]);
+        // updatePreview — preview + targetText par real-time
+        updatePreview[0] = () -> {
+            applyGradientToView(preview, color1[0], color2[0], direction[0]);
+            applyGradientToView(targetText, color1[0], color2[0], direction[0]);
+            targetText.setTag(R.id.tv_move_speed, color1[0]+","+color2[0]+","+direction[0]);
+            targetText.invalidate();
+        };
         updatePreview[0].run();
 
         btnH.setOnClickListener(vv -> { direction[0]="HORIZONTAL"; btnH.setBackgroundColor(Color.parseColor("#2A3439")); btnH.setTextColor(Color.WHITE); btnV.setBackgroundColor(Color.parseColor("#D1D5DB")); btnV.setTextColor(Color.parseColor("#374151")); updatePreview[0].run(); });
         btnV.setOnClickListener(vv -> { direction[0]="VERTICAL"; btnV.setBackgroundColor(Color.parseColor("#2A3439")); btnV.setTextColor(Color.WHITE); btnH.setBackgroundColor(Color.parseColor("#D1D5DB")); btnH.setTextColor(Color.parseColor("#374151")); updatePreview[0].run(); });
-        btnClose.setOnClickListener(vv -> gradPopup.dismiss());
+        btnClose.setOnClickListener(vv -> {
+            // Close karva thi gradient remove karo
+            targetText.getPaint().setShader(null);
+            targetText.setTag(R.id.tv_move_speed, null);
+            targetText.invalidate();
+            gradPopup.dismiss();
+        });
         btnApply.setOnClickListener(vv -> {
             applyGradientToView(targetText, color1[0], color2[0], direction[0]);
             targetText.setTag(R.id.tv_move_speed, color1[0]+","+color2[0]+","+direction[0]);
-            targetText.invalidate(); exportToJson();
+            targetText.setStrokeWidth(targetText.getStrokeWidth());
+            targetText.setStrokeColor(targetText.getStrokeColor());
+            targetText.invalidate();
+            exportToJson();
             gradPopup.dismiss();
         });
         btnRemove.setOnClickListener(vv -> {
             targetText.getPaint().setShader(null);
             targetText.setTag(R.id.tv_move_speed, null);
-            targetText.invalidate(); exportToJson();
+            targetText.invalidate();
+            exportToJson();
             gradPopup.dismiss();
         });
     }
