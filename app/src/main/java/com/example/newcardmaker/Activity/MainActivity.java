@@ -12908,7 +12908,7 @@ public class MainActivity extends AppCompatActivity {
 
         View btnGradient = cv.findViewById(R.id.btn_pop_gradient);
         if (btnGradient != null)
-            btnGradient.setOnClickListener(v -> showGradientColorDialog(targetView));
+            btnGradient.setOnClickListener(v -> showInlineGradientPanel(cv, targetView));
 
         View btnBorder2 = cv.findViewById(R.id.btn_sel_border);
         if (btnBorder2 != null)
@@ -13357,6 +13357,209 @@ public class MainActivity extends AppCompatActivity {
 
     private void showTextBorderDialog(StrokeTextView targetView) {
 
+    }
+
+    /**
+     * Gradient panel inline inside text controls popup
+     */
+    private void showInlineGradientPanel(View cv, StrokeTextView targetText) {
+        LinearLayout panelAction   = cv.findViewById(R.id.panel_tab_action);
+        LinearLayout panelSpacing  = cv.findViewById(R.id.panel_tab_spacing);
+        LinearLayout panelTransform= cv.findViewById(R.id.panel_tab_transform);
+        LinearLayout panelEffects  = cv.findViewById(R.id.panel_tab_effects);
+        LinearLayout panelLayout   = cv.findViewById(R.id.panel_tab_layout);
+        LinearLayout panelArc      = cv.findViewById(R.id.panel_arc_controls);
+        HorizontalScrollView tabScroll = cv.findViewById(R.id.main_scroll);
+
+        if (panelAction   != null) panelAction.setVisibility(View.GONE);
+        if (panelSpacing  != null) panelSpacing.setVisibility(View.GONE);
+        if (panelTransform!= null) panelTransform.setVisibility(View.GONE);
+        if (panelEffects  != null) panelEffects.setVisibility(View.GONE);
+        if (panelLayout   != null) panelLayout.setVisibility(View.GONE);
+        if (panelArc      != null) panelArc.setVisibility(View.GONE);
+        if (tabScroll     != null) tabScroll.setVisibility(View.GONE);
+
+        int dp8 = dpToPx(8); int dp4 = dpToPx(4);
+
+        android.widget.ScrollView scrollWrapper = new android.widget.ScrollView(this);
+        scrollWrapper.setBackgroundColor(Color.parseColor("#F3F4F6"));
+        scrollWrapper.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(160)));
+
+        LinearLayout root = new LinearLayout(this);
+        root.setOrientation(LinearLayout.VERTICAL);
+        root.setPadding(dp8, dp4, dp8, dp4);
+        root.setBackgroundColor(Color.parseColor("#F3F4F6"));
+        scrollWrapper.addView(root);
+
+        // Back row
+        LinearLayout backRow = new LinearLayout(this);
+        backRow.setOrientation(LinearLayout.HORIZONTAL);
+        backRow.setGravity(Gravity.CENTER_VERTICAL);
+        backRow.setBackgroundColor(Color.parseColor("#2A3439"));
+        backRow.setPadding(dp8, dp4, dp8, dp4);
+        backRow.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        TextView btnBack = new TextView(this);
+        btnBack.setText("\u2190 Back");
+        btnBack.setTextColor(Color.parseColor("#F3F4F6"));
+        btnBack.setTextSize(9);
+        btnBack.setTypeface(null, android.graphics.Typeface.BOLD);
+        btnBack.setPadding(0, dp4, dp4*3, dp4);
+        backRow.addView(btnBack);
+        TextView gradTitle = new TextView(this);
+        gradTitle.setText("\uD83C\uDF08 Gradient");
+        gradTitle.setTextColor(Color.WHITE);
+        gradTitle.setTextSize(9);
+        gradTitle.setGravity(Gravity.CENTER);
+        gradTitle.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+        backRow.addView(gradTitle);
+        root.addView(backRow);
+
+        // Preview
+        StrokeTextView preview = new StrokeTextView(this);
+        preview.setText(targetText.getText().toString().isEmpty() ? "Preview" : targetText.getText());
+        preview.setTextSize(20);
+        preview.setGravity(Gravity.CENTER);
+        preview.setPadding(dp8, dp8, dp8, dp8);
+        preview.setStrokeWidth(targetText.getStrokeWidth());
+        preview.setStrokeColor(targetText.getStrokeColor());
+        LinearLayout.LayoutParams prevLp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(50));
+        prevLp.setMargins(0, dp4, 0, dp4);
+        preview.setLayoutParams(prevLp);
+        preview.setBackgroundColor(Color.WHITE);
+        root.addView(preview);
+
+        final int[] color1 = {Color.parseColor("#FF6B35")};
+        final int[] color2 = {Color.parseColor("#667eea")};
+        final String[] direction = {"HORIZONTAL"};
+        final Runnable[] updatePreview = {null};
+
+        // Color rows helper
+        GradientDrawable cb1Gd = new GradientDrawable(); cb1Gd.setColor(color1[0]); cb1Gd.setCornerRadius(6f); cb1Gd.setStroke(1, Color.parseColor("#D1D5DB"));
+        GradientDrawable cb2Gd = new GradientDrawable(); cb2Gd.setColor(color2[0]); cb2Gd.setCornerRadius(6f); cb2Gd.setStroke(1, Color.parseColor("#D1D5DB"));
+        View colorBox1 = new View(this); colorBox1.setBackground(cb1Gd);
+        View colorBox2 = new View(this); colorBox2.setBackground(cb2Gd);
+        LinearLayout.LayoutParams cbLp = new LinearLayout.LayoutParams(dpToPx(28), dpToPx(22)); cbLp.setMargins(0, 0, dp8, 0);
+        colorBox1.setLayoutParams(cbLp); colorBox2.setLayoutParams(cbLp);
+
+        LinearLayout.LayoutParams cRowLp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(34));
+        cRowLp.setMargins(0, dpToPx(2), 0, dpToPx(2));
+
+        for (int c = 0; c < 2; c++) {
+            final boolean isC1 = (c == 0);
+            LinearLayout cRow = new LinearLayout(this);
+            cRow.setOrientation(LinearLayout.HORIZONTAL);
+            cRow.setGravity(Gravity.CENTER_VERTICAL);
+            cRow.setBackgroundColor(Color.WHITE);
+            cRow.setPadding(dp8, dp4, dp8, dp4);
+            cRow.setLayoutParams(cRowLp);
+            TextView lbl = new TextView(this);
+            lbl.setText(isC1 ? "Color 1" : "Color 2");
+            lbl.setTextSize(8); lbl.setTextColor(Color.parseColor("#6B7280"));
+            lbl.setTypeface(null, android.graphics.Typeface.BOLD);
+            lbl.setLayoutParams(new LinearLayout.LayoutParams(dpToPx(44), LinearLayout.LayoutParams.WRAP_CONTENT));
+            cRow.addView(lbl);
+            cRow.addView(isC1 ? colorBox1 : colorBox2);
+            TextView btnPick = new TextView(this);
+            btnPick.setText("Pick");
+            btnPick.setTextSize(8); btnPick.setTextColor(Color.WHITE);
+            btnPick.setGravity(Gravity.CENTER);
+            btnPick.setBackgroundColor(Color.parseColor("#607D8B"));
+            btnPick.setPadding(dp8, dp4, dp8, dp4);
+            btnPick.setOnClickListener(vv -> new AmbilWarnaDialog(this, isC1 ? color1[0] : color2[0], new AmbilWarnaDialog.OnAmbilWarnaListener() {
+                public void onCancel(AmbilWarnaDialog d) {}
+                public void onOk(AmbilWarnaDialog d, int color) {
+                    if (isC1) { color1[0] = color; cb1Gd.setColor(color); }
+                    else       { color2[0] = color; cb2Gd.setColor(color); }
+                    if (updatePreview[0] != null) updatePreview[0].run();
+                }
+            }).show());
+            cRow.addView(btnPick);
+            root.addView(cRow);
+        }
+
+        // Direction row
+        LinearLayout dirRow = new LinearLayout(this);
+        dirRow.setOrientation(LinearLayout.HORIZONTAL);
+        dirRow.setGravity(Gravity.CENTER_VERTICAL);
+        dirRow.setBackgroundColor(Color.WHITE);
+        dirRow.setPadding(dp8, dp4, dp8, dp4);
+        LinearLayout.LayoutParams drLp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(32));
+        drLp.setMargins(0, dpToPx(2), 0, dpToPx(2));
+        dirRow.setLayoutParams(drLp);
+        TextView lblDir = new TextView(this); lblDir.setText("Dir"); lblDir.setTextSize(8); lblDir.setTextColor(Color.parseColor("#6B7280")); lblDir.setTypeface(null, android.graphics.Typeface.BOLD);
+        lblDir.setLayoutParams(new LinearLayout.LayoutParams(dpToPx(44), LinearLayout.LayoutParams.WRAP_CONTENT));
+        dirRow.addView(lblDir);
+        TextView btnH = new TextView(this); btnH.setText("\u2194 H"); btnH.setTextSize(8); btnH.setTextColor(Color.WHITE); btnH.setGravity(Gravity.CENTER); btnH.setBackgroundColor(Color.parseColor("#2A3439")); btnH.setPadding(dp8, dp4, dp8, dp4);
+        LinearLayout.LayoutParams hLp = new LinearLayout.LayoutParams(0, dpToPx(22), 1f); hLp.setMargins(0, 0, dp4, 0); btnH.setLayoutParams(hLp);
+        dirRow.addView(btnH);
+        TextView btnV = new TextView(this); btnV.setText("\u2195 V"); btnV.setTextSize(8); btnV.setTextColor(Color.parseColor("#374151")); btnV.setGravity(Gravity.CENTER); btnV.setBackgroundColor(Color.parseColor("#D1D5DB")); btnV.setPadding(dp8, dp4, dp8, dp4);
+        btnV.setLayoutParams(new LinearLayout.LayoutParams(0, dpToPx(22), 1f));
+        dirRow.addView(btnV);
+        root.addView(dirRow);
+
+        // Preset row
+        LinearLayout presetRow = new LinearLayout(this);
+        presetRow.setOrientation(LinearLayout.HORIZONTAL);
+        presetRow.setPadding(dp8, dp4, dp8, dp4);
+        presetRow.setBackgroundColor(Color.WHITE);
+        LinearLayout.LayoutParams prLp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(36));
+        prLp.setMargins(0, dpToPx(2), 0, dpToPx(2));
+        presetRow.setLayoutParams(prLp);
+        int[][] presets = {{Color.parseColor("#FF6B35"), Color.parseColor("#F7C59F")},{Color.parseColor("#667eea"), Color.parseColor("#764ba2")},{Color.parseColor("#11998e"), Color.parseColor("#38ef7d")},{Color.parseColor("#F7971E"), Color.parseColor("#FFD200")},{Color.parseColor("#FF416C"), Color.parseColor("#FF4B2B")},{Color.parseColor("#4facfe"), Color.parseColor("#00f2fe")}};
+        for (int[] p : presets) {
+            GradientDrawable swBg = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{p[0], p[1]}); swBg.setCornerRadius(6f);
+            View swatch = new View(this); swatch.setBackground(swBg);
+            LinearLayout.LayoutParams swLp2 = new LinearLayout.LayoutParams(0, dpToPx(24), 1f); swLp2.setMargins(dpToPx(2), 0, dpToPx(2), 0); swatch.setLayoutParams(swLp2);
+            final int pc1 = p[0], pc2 = p[1];
+            swatch.setOnClickListener(vv -> { color1[0] = pc1; color2[0] = pc2; cb1Gd.setColor(pc1); cb2Gd.setColor(pc2); if (updatePreview[0] != null) updatePreview[0].run(); });
+            presetRow.addView(swatch);
+        }
+        root.addView(presetRow);
+
+        // Apply / Remove row
+        LinearLayout actRow = new LinearLayout(this);
+        actRow.setOrientation(LinearLayout.HORIZONTAL);
+        actRow.setPadding(dp8, dp4, dp8, dp4);
+        LinearLayout.LayoutParams arLp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(34));
+        arLp.setMargins(0, dpToPx(2), 0, 0);
+        actRow.setLayoutParams(arLp);
+        TextView btnApply = new TextView(this); btnApply.setText("\u2705 Apply"); btnApply.setTextSize(9); btnApply.setTextColor(Color.WHITE); btnApply.setGravity(Gravity.CENTER); btnApply.setBackgroundColor(Color.parseColor("#2A3439"));
+        LinearLayout.LayoutParams apLp = new LinearLayout.LayoutParams(0, dpToPx(26), 1f); apLp.setMargins(0, 0, dp4, 0); btnApply.setLayoutParams(apLp);
+        actRow.addView(btnApply);
+        TextView btnRemove = new TextView(this); btnRemove.setText("\u2715 Remove"); btnRemove.setTextSize(9); btnRemove.setTextColor(Color.parseColor("#374151")); btnRemove.setGravity(Gravity.CENTER); btnRemove.setBackgroundColor(Color.parseColor("#D1D5DB"));
+        btnRemove.setLayoutParams(new LinearLayout.LayoutParams(0, dpToPx(26), 1f));
+        actRow.addView(btnRemove);
+        root.addView(actRow);
+
+        // Add to popup
+        LinearLayout scrollParent = cv.findViewById(R.id.panel_main_content);
+        if (scrollParent != null) scrollParent.addView(scrollWrapper);
+
+        updatePreview[0] = () -> applyGradientToView(preview, color1[0], color2[0], direction[0]);
+        updatePreview[0].run();
+
+        btnH.setOnClickListener(vv -> { direction[0] = "HORIZONTAL"; btnH.setBackgroundColor(Color.parseColor("#2A3439")); btnH.setTextColor(Color.WHITE); btnV.setBackgroundColor(Color.parseColor("#D1D5DB")); btnV.setTextColor(Color.parseColor("#374151")); updatePreview[0].run(); });
+        btnV.setOnClickListener(vv -> { direction[0] = "VERTICAL"; btnV.setBackgroundColor(Color.parseColor("#2A3439")); btnV.setTextColor(Color.WHITE); btnH.setBackgroundColor(Color.parseColor("#D1D5DB")); btnH.setTextColor(Color.parseColor("#374151")); updatePreview[0].run(); });
+
+        Runnable backAction = () -> {
+            if (scrollParent != null) scrollParent.removeView(scrollWrapper);
+            if (panelAction != null) panelAction.setVisibility(View.VISIBLE);
+            if (tabScroll   != null) tabScroll.setVisibility(View.VISIBLE);
+        };
+        btnBack.setOnClickListener(vv -> backAction.run());
+        btnApply.setOnClickListener(vv -> {
+            applyGradientToView(targetText, color1[0], color2[0], direction[0]);
+            targetText.setTag(R.id.tv_move_speed, color1[0] + "," + color2[0] + "," + direction[0]);
+            targetText.invalidate(); exportToJson();
+            backAction.run();
+        });
+        btnRemove.setOnClickListener(vv -> {
+            targetText.getPaint().setShader(null);
+            targetText.setTag(R.id.tv_move_speed, null);
+            targetText.invalidate(); exportToJson();
+            backAction.run();
+        });
     }
 
     private void showGradientColorDialog(final StrokeTextView targetText) {
