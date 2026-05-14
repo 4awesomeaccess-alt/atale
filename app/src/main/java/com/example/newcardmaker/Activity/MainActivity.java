@@ -18496,7 +18496,7 @@ public class MainActivity extends AppCompatActivity {
                         if (tv.isArcMode()) {
                             showArcTextPopup(tv);
                         } else {
-                            showFloatingToolbar(tv);
+                            
                             showSelectionControlsForText(tv);
                         }
                     }
@@ -18551,7 +18551,7 @@ public class MainActivity extends AppCompatActivity {
                                     if (tv.isArcMode()) {
                                         showArcTextPopup(tv);      // ✅ Arc text click = Arc popup
                                     } else {
-                                        /* showFloatingToolbar(tv);   // ✅ Normal text click = old popup*/
+                                        /*    // ✅ Normal text click = old popup*/
                                         showSelectionControlsForText(tv);
                                     }
                                 } else {
@@ -18633,7 +18633,7 @@ public class MainActivity extends AppCompatActivity {
                                     if (tv.isArcMode()) {
                                         showArcTextPopup(tv);      // ✅ Arc text click = Arc popup
                                     } else {
-                                        showFloatingToolbar(tv);
+                                        
                                         showSelectionControlsForText(tv);  // ✅ Normal text click = old popup
                                     }
                                 } else {
@@ -18659,7 +18659,7 @@ public class MainActivity extends AppCompatActivity {
                             } else {
                                 // ✅ Normal mode
 
-                                showFloatingToolbar((StrokeTextView) view);
+                                
                                 showSelectionControlsForText((StrokeTextView) view);
                             }
                         }
