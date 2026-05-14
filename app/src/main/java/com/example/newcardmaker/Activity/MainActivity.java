@@ -13247,6 +13247,63 @@ public class MainActivity extends AppCompatActivity {
                             }).show());
         }
 
+        // ── Delete Text
+        View btnDeleteText = cv.findViewById(R.id.btn_sel_delete_text);
+        if (btnDeleteText != null) {
+            btnDeleteText.setOnClickListener(v -> {
+                new androidx.appcompat.app.AlertDialog.Builder(this)
+                        .setTitle("Delete Text?")
+                        .setMessage("Aa text delete karvu che?")
+                        .setPositiveButton("Ha, Delete", (d, w) -> {
+                            dismissSelectionControls();
+                            mainLayout.removeView(targetView);
+                            exportToJson();
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
+            });
+        }
+
+        // ── Lock / Unlock Text
+        View btnLockText  = cv.findViewById(R.id.btn_sel_lock_text);
+        TextView tvLockIcon  = cv.findViewById(R.id.tv_lock_icon);
+        TextView tvLockLabel = cv.findViewById(R.id.tv_lock_label);
+
+        boolean isCurrentlyLocked = lockedViews.contains(targetView);
+        if (tvLockIcon  != null) tvLockIcon.setText(isCurrentlyLocked  ? "🔒" : "🔓");
+        if (tvLockLabel != null) tvLockLabel.setText(isCurrentlyLocked ? "Unlock" : "Lock");
+        if (btnLockText != null) {
+            btnLockText.setBackgroundColor(isCurrentlyLocked
+                    ? android.graphics.Color.parseColor("#FFF3E0")
+                    : android.graphics.Color.parseColor("#E8EAF6"));
+            btnLockText.setOnClickListener(v -> {
+                boolean locked = lockedViews.contains(targetView);
+                if (locked) {
+                    lockedViews.remove(targetView);
+                    applyTouchListener(targetView);
+                    if (tvLockIcon  != null) tvLockIcon.setText("🔓");
+                    if (tvLockLabel != null) tvLockLabel.setText("Lock");
+                    btnLockText.setBackgroundColor(android.graphics.Color.parseColor("#E8EAF6"));
+                    updateLockIcon(targetView);
+                    Toast.makeText(this, "Text unlock thayu", Toast.LENGTH_SHORT).show();
+                } else {
+                    lockedViews.add(targetView);
+                    targetView.setOnTouchListener((tv2, ev) -> {
+                        if (ev.getAction() == MotionEvent.ACTION_UP) {
+                            showLockPopup(targetView);
+                        }
+                        return true;
+                    });
+                    if (tvLockIcon  != null) tvLockIcon.setText("🔒");
+                    if (tvLockLabel != null) tvLockLabel.setText("Unlock");
+                    btnLockText.setBackgroundColor(android.graphics.Color.parseColor("#FFF3E0"));
+                    updateLockIcon(targetView);
+                    Toast.makeText(this, "Text lock thayu", Toast.LENGTH_SHORT).show();
+                }
+                exportToJson();
+            });
+        }
+
         showPopupAtSavedPosition(cv);
     }
 
