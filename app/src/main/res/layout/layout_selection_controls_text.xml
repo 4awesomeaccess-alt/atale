@@ -819,10 +819,73 @@
                     </HorizontalScrollView>
                 </LinearLayout>
 
-                <!-- TRANSFORM TAB (dummy) -->
+                <!-- TRANSFORM TAB -->
                 <LinearLayout android:id="@+id/panel_tab_transform"
                     android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:orientation="vertical" android:visibility="gone" />
+                    android:orientation="vertical"
+                    android:layout_marginHorizontal="6dp"
+                    android:background="#FFFFFF"
+                    android:paddingHorizontal="10dp" android:paddingVertical="4dp"
+                    android:visibility="gone">
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="30dp" android:gravity="center_vertical" android:orientation="horizontal">
+                        <TextView android:id="@+id/tv_rotation_label" android:layout_width="52dp" android:layout_height="wrap_content" android:text="Rotate" android:textColor="#6B7280" android:textSize="8sp" android:textStyle="bold" />
+                        <TextView android:id="@+id/btn_rotation_minus" android:layout_width="22dp" android:layout_height="20dp" android:background="#374151" android:gravity="center" android:text="−" android:textColor="#F3F4F6" android:textSize="13sp" />
+                        <SeekBar android:id="@+id/seek_rotation" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="4dp" android:layout_weight="1" android:max="360" android:progress="180" android:progressTint="#607D8B" android:thumbTint="#2A3439" />
+                        <TextView android:id="@+id/btn_rotation_plus" android:layout_width="22dp" android:layout_height="20dp" android:background="#374151" android:gravity="center" android:text="+" android:textColor="#F3F4F6" android:textSize="13sp" />
+                        <TextView android:id="@+id/tv_rotation_val" android:layout_width="28dp" android:layout_height="wrap_content" android:gravity="center" android:text="0°" android:textColor="#374151" android:textSize="8sp" android:textStyle="bold" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="0.5dp" android:background="#D1D5DB" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="30dp" android:gravity="center_vertical" android:orientation="horizontal">
+                        <TextView android:id="@+id/tv_opacity_label" android:layout_width="52dp" android:layout_height="wrap_content" android:text="Opacity" android:textColor="#6B7280" android:textSize="8sp" android:textStyle="bold" />
+                        <TextView android:id="@+id/btn_opacity_minus" android:layout_width="22dp" android:layout_height="20dp" android:background="#374151" android:gravity="center" android:text="−" android:textColor="#F3F4F6" android:textSize="13sp" />
+                        <SeekBar android:id="@+id/seek_opacity" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="4dp" android:layout_weight="1" android:max="100" android:progress="100" android:progressTint="#607D8B" android:thumbTint="#2A3439" />
+                        <TextView android:id="@+id/btn_opacity_plus" android:layout_width="22dp" android:layout_height="20dp" android:background="#374151" android:gravity="center" android:text="+" android:textColor="#F3F4F6" android:textSize="13sp" />
+                        <TextView android:id="@+id/tv_opacity_val" android:layout_width="30dp" android:layout_height="wrap_content" android:gravity="center" android:text="100%" android:textColor="#374151" android:textSize="8sp" android:textStyle="bold" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="0.5dp" android:background="#D1D5DB" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="30dp" android:gravity="center_vertical" android:orientation="horizontal">
+                        <TextView android:id="@+id/tv_scale_x_label" android:layout_width="52dp" android:layout_height="wrap_content" android:text="Scale X" android:textColor="#6B7280" android:textSize="8sp" android:textStyle="bold" />
+                        <SeekBar android:id="@+id/seek_scale_x" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="4dp" android:layout_weight="1" android:max="200" android:progress="100" android:progressTint="#607D8B" android:thumbTint="#2A3439" />
+                        <TextView android:id="@+id/tv_scale_x_val" android:layout_width="30dp" android:layout_height="wrap_content" android:gravity="center" android:text="1.0x" android:textColor="#374151" android:textSize="8sp" android:textStyle="bold" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="0.5dp" android:background="#D1D5DB" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="30dp" android:gravity="center_vertical" android:orientation="horizontal">
+                        <TextView android:id="@+id/tv_scale_y_label" android:layout_width="52dp" android:layout_height="wrap_content" android:text="Scale Y" android:textColor="#6B7280" android:textSize="8sp" android:textStyle="bold" />
+                        <SeekBar android:id="@+id/seek_scale_y" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="4dp" android:layout_weight="1" android:max="200" android:progress="100" android:progressTint="#607D8B" android:thumbTint="#2A3439" />
+                        <TextView android:id="@+id/tv_scale_y_val" android:layout_width="30dp" android:layout_height="wrap_content" android:gravity="center" android:text="1.0x" android:textColor="#374151" android:textSize="8sp" android:textStyle="bold" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="0.5dp" android:background="#D1D5DB" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="30dp" android:gravity="center_vertical" android:orientation="horizontal">
+                        <TextView android:layout_width="52dp" android:layout_height="wrap_content" android:text="Shadow X" android:textColor="#6B7280" android:textSize="8sp" android:textStyle="bold" />
+                        <SeekBar android:id="@+id/seek_shadow_dx" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="4dp" android:layout_weight="1" android:max="50" android:progress="25" android:progressTint="#607D8B" android:thumbTint="#2A3439" />
+                        <TextView android:id="@+id/tv_shadow_dx_val" android:layout_width="28dp" android:layout_height="wrap_content" android:gravity="center" android:text="0" android:textColor="#374151" android:textSize="8sp" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="0.5dp" android:background="#D1D5DB" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="30dp" android:gravity="center_vertical" android:orientation="horizontal">
+                        <TextView android:layout_width="52dp" android:layout_height="wrap_content" android:text="Shadow Y" android:textColor="#6B7280" android:textSize="8sp" android:textStyle="bold" />
+                        <SeekBar android:id="@+id/seek_shadow_dy" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="4dp" android:layout_weight="1" android:max="50" android:progress="25" android:progressTint="#607D8B" android:thumbTint="#2A3439" />
+                        <TextView android:id="@+id/tv_shadow_dy_val" android:layout_width="28dp" android:layout_height="wrap_content" android:gravity="center" android:text="0" android:textColor="#374151" android:textSize="8sp" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="0.5dp" android:background="#D1D5DB" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="30dp" android:gravity="center_vertical" android:orientation="horizontal">
+                        <TextView android:id="@+id/tv_corner_label" android:layout_width="52dp" android:layout_height="wrap_content" android:text="Corner" android:textColor="#6B7280" android:textSize="8sp" android:textStyle="bold" />
+                        <SeekBar android:id="@+id/seek_corner_radius" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="4dp" android:layout_weight="1" android:max="60" android:progress="0" android:progressTint="#607D8B" android:thumbTint="#2A3439" />
+                        <TextView android:id="@+id/tv_corner_val" android:layout_width="28dp" android:layout_height="wrap_content" android:gravity="center" android:text="0" android:textColor="#374151" android:textSize="8sp" />
+                    </LinearLayout>
+                    <View android:layout_width="match_parent" android:layout_height="0.5dp" android:background="#D1D5DB" />
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="30dp" android:gravity="center_vertical" android:orientation="horizontal">
+                        <TextView android:layout_width="52dp" android:layout_height="wrap_content" android:text="Highlight" android:textColor="#6B7280" android:textSize="8sp" android:textStyle="bold" />
+                        <TextView android:id="@+id/btn_highlight_color" android:layout_width="0dp" android:layout_height="22dp" android:layout_weight="1" android:background="#607D8B" android:gravity="center" android:text="Pick Highlight Color" android:textColor="#FFFFFF" android:textSize="8sp" />
+                    </LinearLayout>
+                </LinearLayout>
 
                 <!-- Dummy IDs for Java references -->
                 <LinearLayout android:id="@+id/row_move_btns" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
