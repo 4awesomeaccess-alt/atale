@@ -1,4 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="tv_border_info" type="id" />
+
+    <!-- Missing IDs from layout redesign -->
+    <item name="seek_padding_x" type="id" />
+    <item name="tv_padding_x_label" type="id" />
+    <item name="btn_pad_x_minus" type="id" />
+    <item name="btn_pad_x_plus" type="id" />
+    <item name="seek_padding_y" type="id" />
+    <item name="tv_padding_y_label" type="id" />
+    <item name="btn_pad_y_minus" type="id" />
+    <item name="btn_pad_y_plus" type="id" />
+    <item name="btn_text_align_left" type="id" />
+    <item name="btn_text_align_center" type="id" />
+    <item name="btn_text_align_right" type="id" />
+    <item name="tv_text_padding_label" type="id" />
+    <item name="seek_text_padding" type="id" />
+    <item name="btn_text_pad_minus" type="id" />
+    <item name="btn_text_pad_plus" type="id" />
+    <item name="tv_line_spacing_label" type="id" />
+    <item name="seek_line_spacing" type="id" />
+    <item name="tv_letter_spacing_label" type="id" />
+    <item name="seek_letter_spacing" type="id" />
+    <item name="tv_rotation_label" type="id" />
+    <item name="btn_rotation_minus" type="id" />
+    <item name="btn_rotation_plus" type="id" />
+    <item name="tv_opacity_label" type="id" />
+    <item name="seek_opacity" type="id" />
+    <item name="btn_opacity_minus" type="id" />
+    <item name="btn_opacity_plus" type="id" />
+    <item name="seek_scale_x" type="id" />
+    <item name="seek_scale_y" type="id" />
+    <item name="tv_scale_x_label" type="id" />
+    <item name="tv_scale_y_label" type="id" />
+    <item name="seek_shadow_radius" type="id" />
+    <item name="seek_shadow_dx" type="id" />
+    <item name="seek_shadow_dy" type="id" />
+    <item name="btn_shadow_remove" type="id" />
+    <item name="seek_corner_radius" type="id" />
+    <item name="tv_corner_label" type="id" />
+    <item name="btn_highlight_color" type="id" />
 </resources>
