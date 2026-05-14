@@ -12996,17 +12996,8 @@ public class MainActivity extends AppCompatActivity {
                 TextView btnStyleDot = borderPopupView.findViewById(R.id.btn_border_dot);
                 TextView btnStyleDouble = borderPopupView.findViewById(R.id.btn_border_double);
 
-                // ── Current values
-                final int[] borderColorArr = {Color.BLACK};
-                final int[] borderStyleArr = {0}; // 0=solid, 1=dash, 2=dot, 3=double
-
-                // Existing background thi values read karo
-                android.graphics.drawable.Drawable bg = targetView.getBackground();
-                int currentWidth = 2;
-                int currentCorner = 8;
-                if (bg instanceof GradientDrawable) {
-                    // default values use karo
-                }
+                // ── Current values already set above from tv_border_info tag
+                // Existing background thi values read karo (already done above)
 
                 if (sbBorderWidth != null) {
                     sbBorderWidth.setMax(20);
