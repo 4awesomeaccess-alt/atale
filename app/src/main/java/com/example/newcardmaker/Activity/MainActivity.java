@@ -7202,20 +7202,6 @@ public class MainActivity extends AppCompatActivity {
             previewIv.setImageDrawable(targetCell.getDrawable());
         }
         root.addView(previewIv);
-# Project folder માં જાઓ
-        cd /path/to/your/atale
-
-# Status check કરો
-        git status
-
-# Files add કરો
-        git add .
-
-# Commit કરો
-        git commit -m "latest changes"
-
-# Push કરો
-        git push origin main
         // ── 1. New frame picker button
         Button btnPickFrame = new Button(this);
         btnPickFrame.setText("🖼 New Frame/Mask Select");
@@ -13244,19 +13230,7 @@ public class MainActivity extends AppCompatActivity {
         // ── Text Color
         View btnTextColor = cv.findViewById(R.id.btn_sel_text_color);
         if (btnTextColor != null) {
-            btnTextColor.setOnClickListener(v ->
-                    new AmbilWarnaDialog(this, targetView.getCurrentTextColor(),
-                            new AmbilWarnaDialog.OnAmbilWarnaListener() {
-                                @Override
-                                public void onCancel(AmbilWarnaDialog d) {
-                                }
-
-                                @Override
-                                public void onOk(AmbilWarnaDialog d, int color) {
-                                    targetView.setTextColor(color);
-                                    exportToJson();
-                                }
-                            }).show());
+            btnTextColor.setOnClickListener(v -> showTextColorPopup(targetView));
         }
 
         // ── Delete Text
@@ -13366,6 +13340,163 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    private void showTextColorPopup(StrokeTextView targetView) {
+        int[] colors = {
+            Color.BLACK, Color.WHITE, Color.RED, Color.GREEN, Color.BLUE,
+            Color.YELLOW, Color.CYAN, Color.MAGENTA,
+            Color.parseColor("#FF5722"), Color.parseColor("#9C27B0"),
+            Color.parseColor("#009688"), Color.parseColor("#FF9800"),
+            Color.parseColor("#3F51B5"), Color.parseColor("#E91E63"),
+            Color.parseColor("#795548"), Color.parseColor("#607D8B"),
+            Color.parseColor("#FFEB3B"), Color.parseColor("#8BC34A"),
+            Color.parseColor("#00BCD4"), Color.parseColor("#FF6F00"),
+            Color.parseColor("#AD1457"), Color.parseColor("#1B5E20"),
+            Color.parseColor("#880E4F"), Color.parseColor("#0D47A1"),
+        };
+
+        float dp = getResources().getDisplayMetrics().density;
+
+        LinearLayout root = new LinearLayout(this);
+        root.setOrientation(LinearLayout.VERTICAL);
+        root.setPadding(24, 24, 24, 24);
+        root.setBackgroundColor(Color.parseColor("#1E1E1E"));
+
+        TextView title = new TextView(this);
+        title.setText("Text Color");
+        title.setTextColor(Color.WHITE);
+        title.setTextSize(16);
+        title.setTypeface(null, android.graphics.Typeface.BOLD);
+        title.setPadding(0, 0, 0, 12);
+        root.addView(title);
+
+        // Preview
+        TextView preview = new TextView(this);
+        preview.setText(targetView.getText().toString());
+        preview.setTextSize(22);
+        preview.setTextColor(targetView.getCurrentTextColor());
+        preview.setGravity(Gravity.CENTER);
+        preview.setPadding(16, 16, 16, 16);
+        preview.setBackgroundColor(Color.parseColor("#2C2C2C"));
+        LinearLayout.LayoutParams previewParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, (int)(60 * dp));
+        previewParams.setMargins(0, 0, 0, 16);
+        preview.setLayoutParams(previewParams);
+        root.addView(preview);
+
+        // Color Grid
+        int cols = 6;
+        int btnSize = (int)(42 * dp);
+        int gap = (int)(6 * dp);
+        LinearLayout grid = new LinearLayout(this);
+        grid.setOrientation(LinearLayout.VERTICAL);
+
+        for (int row = 0; row < (int) Math.ceil((double) colors.length / cols); row++) {
+            LinearLayout rowLayout = new LinearLayout(this);
+            rowLayout.setOrientation(LinearLayout.HORIZONTAL);
+            LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            rowParams.setMargins(0, 0, 0, gap);
+            rowLayout.setLayoutParams(rowParams);
+
+            for (int col = 0; col < cols; col++) {
+                int index = row * cols + col;
+                if (index >= colors.length) break;
+                final int c = colors[index];
+
+                View colorBtn = new View(this);
+                GradientDrawable gd = new GradientDrawable();
+                gd.setShape(GradientDrawable.OVAL);
+                gd.setColor(c);
+                gd.setStroke(2, Color.parseColor("#555555"));
+                colorBtn.setBackground(gd);
+
+                LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(btnSize, btnSize);
+                bp.setMargins(0, 0, gap, 0);
+                colorBtn.setLayoutParams(bp);
+
+                colorBtn.setOnClickListener(v2 -> {
+                    targetView.setTextColor(c);
+                    preview.setTextColor(c);
+                });
+                rowLayout.addView(colorBtn);
+            }
+            grid.addView(rowLayout);
+        }
+        root.addView(grid);
+
+        // Custom Color
+        TextView btnCustom = new TextView(this);
+        btnCustom.setText("🎨  Custom Color");
+        btnCustom.setTextColor(Color.parseColor("#90CAF9"));
+        btnCustom.setTextSize(13);
+        btnCustom.setPadding(0, 16, 0, 8);
+        root.addView(btnCustom);
+
+        // Buttons Row
+        LinearLayout btnRow = new LinearLayout(this);
+        btnRow.setOrientation(LinearLayout.HORIZONTAL);
+        btnRow.setGravity(Gravity.END);
+        LinearLayout.LayoutParams brp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        brp.setMargins(0, 16, 0, 0);
+        btnRow.setLayoutParams(brp);
+
+        TextView btnCancel = new TextView(this);
+        btnCancel.setText("Cancel");
+        btnCancel.setTextColor(Color.parseColor("#AAAAAA"));
+        btnCancel.setTextSize(14);
+        btnCancel.setPadding(24, 12, 24, 12);
+
+        TextView btnDone = new TextView(this);
+        btnDone.setText("Done ✓");
+        btnDone.setTextColor(Color.WHITE);
+        btnDone.setTextSize(14);
+        btnDone.setPadding(24, 12, 24, 12);
+        GradientDrawable okGd = new GradientDrawable();
+        okGd.setColor(Color.parseColor("#4CAF50"));
+        okGd.setCornerRadius(12f);
+        btnDone.setBackground(okGd);
+
+        btnRow.addView(btnCancel);
+        btnRow.addView(btnDone);
+        root.addView(btnRow);
+
+        int popupWidth = (int)(300 * dp);
+        final PopupWindow popup = new PopupWindow(root,
+                popupWidth, LinearLayout.LayoutParams.WRAP_CONTENT, true);
+        popup.setOutsideTouchable(true);
+        popup.setElevation(16f);
+        GradientDrawable bg = new GradientDrawable();
+        bg.setColor(Color.parseColor("#1E1E1E"));
+        bg.setCornerRadius(20f);
+        popup.setBackgroundDrawable(bg);
+
+        final int originalColor = targetView.getCurrentTextColor();
+
+        btnCustom.setOnClickListener(v2 -> new AmbilWarnaDialog(this, targetView.getCurrentTextColor(),
+                new AmbilWarnaDialog.OnAmbilWarnaListener() {
+                    @Override public void onCancel(AmbilWarnaDialog d) {}
+                    @Override public void onOk(AmbilWarnaDialog d, int color) {
+                        targetView.setTextColor(color);
+                        preview.setTextColor(color);
+                        exportToJson();
+                    }
+                }).show());
+
+        btnCancel.setOnClickListener(v2 -> {
+            targetView.setTextColor(originalColor);
+            popup.dismiss();
+        });
+
+        btnDone.setOnClickListener(v2 -> {
+            exportToJson();
+            popup.dismiss();
+        });
+
+        View anchor = getWindow().getDecorView().getRootView();
+        popup.showAtLocation(anchor, Gravity.CENTER, 0, 0);
+    }
 
     private void showTextBorderDialog(StrokeTextView targetView) {
 
