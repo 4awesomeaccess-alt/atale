@@ -106,7 +106,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -2785,22 +2784,15 @@ public class MainActivity extends AppCompatActivity {
         seekSat.setOnSeekBarChangeListener(colorListener);
 
         btnCustomTint.setOnClickListener(v ->
-                new yuku.ambilwarna.AmbilWarnaDialog(this,
+                showColorPickerPopup(
                         tint[0] == android.graphics.Color.TRANSPARENT
                                 ? android.graphics.Color.RED : tint[0],
-                        new yuku.ambilwarna.AmbilWarnaDialog.OnAmbilWarnaListener() {
-                            @Override
-                            public void onCancel(yuku.ambilwarna.AmbilWarnaDialog d) {
-                            }
-
-                            @Override
-                            public void onOk(yuku.ambilwarna.AmbilWarnaDialog d, int color) {
-                                tint[0] = color;
-                                applyFrameTintColor(targetSticker, maskUrl, topUrl, color);
-                                targetSticker.setTag(R.id.seek_multi_size, color);
-                                exportToJson();
-                            }
-                        }).show());
+                        color -> {
+                            tint[0] = color;
+                            applyFrameTintColor(targetSticker, maskUrl, topUrl, color);
+                            targetSticker.setTag(R.id.seek_multi_size, color);
+                            exportToJson();
+                        }));
 
         btnRemoveTint.setOnClickListener(v -> {
             tint[0] = android.graphics.Color.TRANSPARENT;
@@ -8258,19 +8250,12 @@ public class MainActivity extends AppCompatActivity {
             root.addView(btnNameColor);
             final TextView finalNameTv = nameTv;
             btnNameColor.setOnClickListener(v ->
-                    new AmbilWarnaDialog(this,
-                            finalNameTv.getCurrentTextColor(),
-                            new AmbilWarnaDialog.OnAmbilWarnaListener() {
-                                @Override
-                                public void onCancel(AmbilWarnaDialog d) {
-                                }
-
-                                @Override
-                                public void onOk(AmbilWarnaDialog d, int color) {
-                                    finalNameTv.setTextColor(color);
+                    showColorPickerPopup(
+                        finalNameTv.getCurrentTextColor(),
+                        color -> {
+                            finalNameTv.setTextColor(color);
                                     exportToJson();
-                                }
-                            }).show());
+                        }));
         }
 
         // ── Info color
@@ -8280,19 +8265,12 @@ public class MainActivity extends AppCompatActivity {
             root.addView(btnInfoColor);
             final TextView finalInfoTv = infoTv;
             btnInfoColor.setOnClickListener(v ->
-                    new AmbilWarnaDialog(this,
-                            finalInfoTv.getCurrentTextColor(),
-                            new AmbilWarnaDialog.OnAmbilWarnaListener() {
-                                @Override
-                                public void onCancel(AmbilWarnaDialog d) {
-                                }
-
-                                @Override
-                                public void onOk(AmbilWarnaDialog d, int color) {
-                                    finalInfoTv.setTextColor(color);
+                    showColorPickerPopup(
+                        finalInfoTv.getCurrentTextColor(),
+                        color -> {
+                            finalInfoTv.setTextColor(color);
                                     exportToJson();
-                                }
-                            }).show());
+                        }));
         }
 
         // ── Remove photo
@@ -8485,18 +8463,13 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout.LayoutParams cP = new LinearLayout.LayoutParams(70, 70);
         cP.setMargins(4, 0, 4, 0);
         btnCustom.setLayoutParams(cP);
-        btnCustom.setOnClickListener(v -> new AmbilWarnaDialog(this, pendingFrameOverlayColor == Color.TRANSPARENT ? Color.RED : pendingFrameOverlayColor, new AmbilWarnaDialog.OnAmbilWarnaListener() {
-            @Override
-            public void onCancel(AmbilWarnaDialog d) {
-            }
-
-            @Override
-            public void onOk(AmbilWarnaDialog d, int color) {
-                pendingFrameOverlayColor = color;
+        btnCustom.setOnClickListener(v -> showColorPickerPopup(
+                        pendingFrameOverlayColor == Color.TRANSPARENT ? Color.RED : pendingFrameOverlayColor,
+                        color -> {
+                            pendingFrameOverlayColor = color;
                 colorPreviewBox.setBackgroundColor(color);
                 lblColor.setText("Frame Color: Custom");
-            }
-        }).show());
+                        }));
         colorBtnRow.addView(btnCustom);
 
         colorScroll.addView(colorBtnRow);
@@ -12635,17 +12608,7 @@ public class MainActivity extends AppCompatActivity {
                         ? Color.parseColor("#80000000")
                         : shadowColor[0];
 
-                AmbilWarnaDialog shadowColorDialog = new AmbilWarnaDialog(
-                        this,
-                        currentShadowColor,
-                        new AmbilWarnaDialog.OnAmbilWarnaListener() {
-                            @Override
-                            public void onCancel(AmbilWarnaDialog d) {
-                                // કંઈ નહીં
-                            }
-
-                            @Override
-                            public void onOk(AmbilWarnaDialog d, int color) {
+                showColorPickerPopup(currentShadowColor, color -> {
                                 // ✅ માત્ર shadow color update
                                 shadowColor[0] = color;
                                 btnShadowColor.setBackgroundColor(color);
@@ -12654,18 +12617,13 @@ public class MainActivity extends AppCompatActivity {
                                 if (seekShadowR != null && seekShadowR.getProgress() > 0) {
                                     applyShadow.run();
                                 } else {
-                                    // radius 0 હોય તો 5 set કરો
                                     if (seekShadowR != null) {
                                         seekShadowR.setProgress(5);
                                     }
                                     applyShadow.run();
                                 }
                                 exportToJson();
-                            }
-                        });
-
-                // ✅ Dialog tag set કરો — identify માટે
-                shadowColorDialog.show();
+                });
             });
         }
 
@@ -13109,19 +13067,13 @@ public class MainActivity extends AppCompatActivity {
                 if (btnBorderColor != null) {
                     btnBorderColor.setBackgroundColor(borderColorArr[0]);
                     btnBorderColor.setOnClickListener(bv -> {
-                        new AmbilWarnaDialog(this, borderColorArr[0],
-                                new AmbilWarnaDialog.OnAmbilWarnaListener() {
-                                    @Override
-                                    public void onCancel(AmbilWarnaDialog d) {
-                                    }
-
-                                    @Override
-                                    public void onOk(AmbilWarnaDialog d, int color) {
-                                        borderColorArr[0] = color;
+                        showColorPickerPopup(
+                        borderColorArr[0],
+                        color -> {
+                            borderColorArr[0] = color;
                                         btnBorderColor.setBackgroundColor(color);
                                         applyBorder.run();
-                                    }
-                                }).show();
+                        });
                     });
                 }
 
@@ -13187,15 +13139,10 @@ public class MainActivity extends AppCompatActivity {
         View btnBgColor = cv.findViewById(R.id.btn_sel_bg_color);
         if (btnBgColor != null) {
             btnBgColor.setOnClickListener(v ->
-                    new AmbilWarnaDialog(this, getStoredBackgroundColor(targetView),
-                            new AmbilWarnaDialog.OnAmbilWarnaListener() {
-                                @Override
-                                public void onCancel(AmbilWarnaDialog d) {
-                                }
-
-                                @Override
-                                public void onOk(AmbilWarnaDialog d, int color) {
-                                    GradientDrawable gd = new GradientDrawable();
+                    showColorPickerPopup(
+                        getStoredBackgroundColor(targetView),
+                        color -> {
+                            GradientDrawable gd = new GradientDrawable();
                                     gd.setColor(color);
                                     Object borderTag = targetView.getTag(R.id.btn_add_sticker);
                                     int borderStyle = borderTag instanceof Integer
@@ -13204,8 +13151,7 @@ public class MainActivity extends AppCompatActivity {
                                     targetView.setBackground(gd);
                                     targetView.setTag(color);
                                     exportToJson();
-                                }
-                            }).show());
+                        }));
         }
 
         // ── Close
@@ -13474,15 +13420,13 @@ public class MainActivity extends AppCompatActivity {
 
         final int originalColor = targetView.getCurrentTextColor();
 
-        btnCustom.setOnClickListener(v2 -> new AmbilWarnaDialog(this, targetView.getCurrentTextColor(),
-                new AmbilWarnaDialog.OnAmbilWarnaListener() {
-                    @Override public void onCancel(AmbilWarnaDialog d) {}
-                    @Override public void onOk(AmbilWarnaDialog d, int color) {
-                        targetView.setTextColor(color);
+        btnCustom.setOnClickListener(v2 -> showColorPickerPopup(
+                        targetView.getCurrentTextColor(),
+                        color -> {
+                            targetView.setTextColor(color);
                         preview.setTextColor(color);
                         exportToJson();
-                    }
-                }).show());
+                        }));
 
         btnCancel.setOnClickListener(v2 -> {
             targetView.setTextColor(originalColor);
@@ -13609,14 +13553,13 @@ public class MainActivity extends AppCompatActivity {
             btnPick.setGravity(Gravity.CENTER);
             btnPick.setBackgroundColor(Color.parseColor("#607D8B"));
             btnPick.setPadding(dp8, dp4, dp8, dp4);
-            btnPick.setOnClickListener(vv -> new AmbilWarnaDialog(this, isC1 ? color1[0] : color2[0], new AmbilWarnaDialog.OnAmbilWarnaListener() {
-                public void onCancel(AmbilWarnaDialog d) {}
-                public void onOk(AmbilWarnaDialog d, int color) {
-                    if (isC1) { color1[0] = color; cb1Gd.setColor(color); }
+            btnPick.setOnClickListener(vv -> showColorPickerPopup(
+                        isC1 ? color1[0] : color2[0],
+                        color -> {
+                            if (isC1) { color1[0] = color; cb1Gd.setColor(color); }
                     else       { color2[0] = color; cb2Gd.setColor(color); }
                     if (updatePreview[0] != null) updatePreview[0].run();
-                }
-            }).show());
+                        }));
             cRow.addView(btnPick);
             root.addView(cRow);
         }
@@ -14197,34 +14140,22 @@ public class MainActivity extends AppCompatActivity {
 
         // ── Color picker clicks
         btnColor1.setOnClickListener(v ->
-                new AmbilWarnaDialog(this, color1[0],
-                        new AmbilWarnaDialog.OnAmbilWarnaListener() {
-                            @Override
-                            public void onCancel(AmbilWarnaDialog d) {
-                            }
-
-                            @Override
-                            public void onOk(AmbilWarnaDialog d, int color) {
-                                color1[0] = color;
+                showColorPickerPopup(
+                        color1[0],
+                        color -> {
+                            color1[0] = color;
                                 ((GradientDrawable) colorBox1.getBackground()).setColor(color);
                                 updatePreview[0].run();
-                            }
-                        }).show());
+                        }));
 
         btnColor2.setOnClickListener(v ->
-                new AmbilWarnaDialog(this, color2[0],
-                        new AmbilWarnaDialog.OnAmbilWarnaListener() {
-                            @Override
-                            public void onCancel(AmbilWarnaDialog d) {
-                            }
-
-                            @Override
-                            public void onOk(AmbilWarnaDialog d, int color) {
-                                color2[0] = color;
+                showColorPickerPopup(
+                        color2[0],
+                        color -> {
+                            color2[0] = color;
                                 ((GradientDrawable) colorBox2.getBackground()).setColor(color);
                                 updatePreview[0].run();
-                            }
-                        }).show());
+                        }));
 
         btnH.setOnClickListener(v -> {
             direction[0] = "HORIZONTAL";
@@ -15546,18 +15477,13 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout.LayoutParams cP = new LinearLayout.LayoutParams(80, 80);
         cP.setMargins(4, 0, 4, 0);
         btnCustom.setLayoutParams(cP);
-        btnCustom.setOnClickListener(v -> new AmbilWarnaDialog(this, selectedColor[0] == Color.TRANSPARENT ? Color.RED : selectedColor[0], new AmbilWarnaDialog.OnAmbilWarnaListener() {
-            @Override
-            public void onCancel(AmbilWarnaDialog d) {
-            }
-
-            @Override
-            public void onOk(AmbilWarnaDialog d, int color) {
-                selectedColor[0] = color;
+        btnCustom.setOnClickListener(v -> showColorPickerPopup(
+                        selectedColor[0] == Color.TRANSPARENT ? Color.RED : selectedColor[0],
+                        color -> {
+                            selectedColor[0] = color;
                 colorPreview.setBackgroundColor(color);
                 lblSelected.setText("Selected: Custom");
-            }
-        }).show());
+                        }));
         colorRow.addView(btnCustom);
 
         hScroll.addView(colorRow);
@@ -19999,181 +19925,441 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void showStrokeDialog(final StrokeTextView targetText) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Text Stroke Settings");
 
         final float[] strokeW = {targetText.getStrokeWidth()};
-        final int[] strokeC = {targetText.getStrokeColor()};
+        final int[] strokeC = {targetText.getStrokeColor() == 0 ? android.graphics.Color.BLACK : targetText.getStrokeColor()};
 
-        LinearLayout layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setPadding(40, 30, 40, 30);
+        // ── Root layout
+        android.widget.LinearLayout root = new android.widget.LinearLayout(this);
+        root.setOrientation(android.widget.LinearLayout.VERTICAL);
+        root.setLayoutParams(new android.view.ViewGroup.LayoutParams(
+                dpToPx(320), android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 
+        // ── Drag Handle
+        android.widget.LinearLayout dragHandle = new android.widget.LinearLayout(this);
+        dragHandle.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        dragHandle.setBackgroundColor(0xFF2A3439);
+        dragHandle.setGravity(android.view.Gravity.CENTER_VERTICAL);
+        dragHandle.setPadding(dpToPx(10), 0, dpToPx(6), 0);
+        dragHandle.setLayoutParams(new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(32)));
+
+        android.widget.TextView dragDots = new android.widget.TextView(this);
+        dragDots.setText("⠿");
+        dragDots.setTextColor(0xFF9CA3AF);
+        dragDots.setTextSize(12);
+        dragDots.setGravity(android.view.Gravity.CENTER);
+        dragDots.setLayoutParams(new android.widget.LinearLayout.LayoutParams(dpToPx(16),
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT));
+
+        android.widget.TextView dragTitle = new android.widget.TextView(this);
+        dragTitle.setText("✏ Stroke");
+        dragTitle.setTextColor(0xFFF3F4F6);
+        dragTitle.setTextSize(9);
+        dragTitle.setTypeface(null, android.graphics.Typeface.BOLD);
+        android.widget.LinearLayout.LayoutParams titleLp =
+                new android.widget.LinearLayout.LayoutParams(0,
+                        android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 1f);
+        titleLp.setMarginStart(dpToPx(4));
+        dragTitle.setLayoutParams(titleLp);
+        dragTitle.setGravity(android.view.Gravity.CENTER_VERTICAL);
+
+        android.widget.TextView btnCloseX = new android.widget.TextView(this);
+        btnCloseX.setText("✕");
+        btnCloseX.setTextColor(0xFF9CA3AF);
+        btnCloseX.setTextSize(12);
+        btnCloseX.setGravity(android.view.Gravity.CENTER);
+        btnCloseX.setLayoutParams(new android.widget.LinearLayout.LayoutParams(dpToPx(28), dpToPx(22)));
+        btnCloseX.setBackgroundColor(0xFF374151);
+
+        dragHandle.addView(dragDots);
+        dragHandle.addView(dragTitle);
+        dragHandle.addView(btnCloseX);
+        root.addView(dragHandle);
+
+        // ── Content
+        android.widget.LinearLayout content = new android.widget.LinearLayout(this);
+        content.setOrientation(android.widget.LinearLayout.VERTICAL);
+        content.setBackgroundColor(0xFF455A64);
+        content.setPadding(dpToPx(12), dpToPx(12), dpToPx(12), dpToPx(12));
+        root.addView(content);
+
+        // ── Preview
         StrokeTextView preview = new StrokeTextView(this);
         preview.setText(targetText.getText());
-        preview.setTextSize(24);
+        preview.setTextSize(22);
         preview.setTextColor(targetText.getCurrentTextColor());
         preview.setGravity(Gravity.CENTER);
-        preview.setPadding(20, 20, 20, 20);
+        preview.setBackgroundColor(0xFF37474F);
+        preview.setPadding(dpToPx(12), dpToPx(12), dpToPx(12), dpToPx(12));
         preview.setStrokeColor(strokeC[0]);
         preview.setStrokeWidth(strokeW[0]);
+        android.widget.LinearLayout.LayoutParams prevLp =
+                new android.widget.LinearLayout.LayoutParams(
+                        android.widget.LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(70));
+        prevLp.setMargins(0, 0, 0, dpToPx(10));
+        preview.setLayoutParams(prevLp);
+        content.addView(preview);
 
-        LinearLayout.LayoutParams previewParams =
-                new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, 150);
-        previewParams.setMargins(0, 0, 0, 20);
-        preview.setLayoutParams(previewParams);
-        layout.addView(preview);
+        // ── Stroke Width Label + SeekBar
+        android.widget.LinearLayout widthRow = new android.widget.LinearLayout(this);
+        widthRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        widthRow.setGravity(android.view.Gravity.CENTER_VERTICAL);
+        widthRow.setLayoutParams(new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT));
 
-        TextView lblWidth = new TextView(this);
-        lblWidth.setText("Stroke Width: " + (int) strokeW[0]);
-        lblWidth.setTextSize(14);
-        layout.addView(lblWidth);
+        android.widget.TextView lblWidth = new android.widget.TextView(this);
+        lblWidth.setText("Width");
+        lblWidth.setTextColor(0xFFCFD8DC);
+        lblWidth.setTextSize(11);
+        lblWidth.setTypeface(null, android.graphics.Typeface.BOLD);
+        lblWidth.setLayoutParams(new android.widget.LinearLayout.LayoutParams(dpToPx(40),
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT));
 
-        SeekBar seekWidth = new SeekBar(this);
-        seekWidth.setMax(30);
+        android.widget.SeekBar seekWidth = new android.widget.SeekBar(this);
+        seekWidth.setMax(40);
         seekWidth.setProgress((int) strokeW[0]);
+        android.widget.LinearLayout.LayoutParams swLp =
+                new android.widget.LinearLayout.LayoutParams(0,
+                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+        swLp.setMargins(dpToPx(4), 0, dpToPx(4), 0);
+        seekWidth.setLayoutParams(swLp);
+
+        android.widget.TextView tvWidthVal = new android.widget.TextView(this);
+        tvWidthVal.setText(String.valueOf((int) strokeW[0]));
+        tvWidthVal.setTextColor(0xFFCFD8DC);
+        tvWidthVal.setTextSize(11);
+        tvWidthVal.setLayoutParams(new android.widget.LinearLayout.LayoutParams(dpToPx(24),
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT));
+        tvWidthVal.setGravity(android.view.Gravity.END);
+
+        widthRow.addView(lblWidth);
+        widthRow.addView(seekWidth);
+        widthRow.addView(tvWidthVal);
+        android.widget.LinearLayout.LayoutParams wrLp =
+                new android.widget.LinearLayout.LayoutParams(
+                        android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        wrLp.setMargins(0, 0, 0, dpToPx(10));
+        widthRow.setLayoutParams(wrLp);
+        content.addView(widthRow);
+
         seekWidth.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            @Override public void onStartTrackingTouch(SeekBar s) {}
+            @Override public void onStopTrackingTouch(SeekBar s) {}
+            @Override public void onProgressChanged(SeekBar s, int progress, boolean fromUser) {
                 strokeW[0] = progress;
-                lblWidth.setText("Stroke Width: " + progress);
+                tvWidthVal.setText(String.valueOf(progress));
                 preview.setStrokeWidth(progress);
                 preview.setStrokeColor(strokeC[0]);
                 preview.invalidate();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+                // ✅ Runtime apply
+                targetText.setStrokeWidth(progress);
+                targetText.setStrokeColor(strokeC[0]);
+                targetText.invalidate();
             }
         });
-        layout.addView(seekWidth);
 
-        TextView lblColor = new TextView(this);
-        lblColor.setText("Stroke Color:");
-        lblColor.setTextSize(14);
-        lblColor.setPadding(0, 20, 0, 8);
-        layout.addView(lblColor);
+        // ── Color Label
+        android.widget.TextView lblColor = new android.widget.TextView(this);
+        lblColor.setText("🎨 Stroke Color");
+        lblColor.setTextColor(0xFFCFD8DC);
+        lblColor.setTextSize(11);
+        lblColor.setTypeface(null, android.graphics.Typeface.BOLD);
+        android.widget.LinearLayout.LayoutParams lcLp =
+                new android.widget.LinearLayout.LayoutParams(
+                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
+                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        lcLp.setMargins(0, 0, 0, dpToPx(6));
+        lblColor.setLayoutParams(lcLp);
+        content.addView(lblColor);
 
-        String[] colorNames = {
-                "Black", "White", "Red", "Yellow",
-                "Blue", "Green", "Orange", "Pink"
+        // ── Color rows (Horizontal scroll - 3 rows)
+        final int[][] colorRows = {
+            {0xFF000000, 0xFFFFFFFF, 0xFFFF0000, 0xFFFF4500, 0xFFFF8C00,
+             0xFFFFD700, 0xFFFFFF00, 0xFFADFF2F, 0xFF32CD32, 0xFF00FA9A,
+             0xFF00FFFF, 0xFF00BFFF, 0xFF1E90FF, 0xFF0000FF, 0xFF8A2BE2,
+             0xFFFF00FF, 0xFFFF1493, 0xFFFF69B4, 0xFFFFA500, 0xFFA52A2A},
+            {0xFFF5F5F5, 0xFFE0E0E0, 0xFFC0C0C0, 0xFF9E9E9E, 0xFF757575,
+             0xFF616161, 0xFF424242, 0xFF212121, 0xFFFFCDD2, 0xFFF8BBD0,
+             0xFFE1BEE7, 0xFFD1C4E9, 0xFFC5CAE9, 0xFFBBDEFB, 0xFFB2EBF2,
+             0xFFB2DFDB, 0xFFC8E6C9, 0xFFF0F4C3, 0xFFFFF9C4, 0xFFFFECB3},
+            {0xFFB71C1C, 0xFF880E4F, 0xFF4A148C, 0xFF1A237E, 0xFF0D47A1,
+             0xFF006064, 0xFF1B5E20, 0xFF33691E, 0xFFF57F17, 0xFFE65100,
+             0xFF3E2723, 0xFF263238, 0xFF37474F, 0xFF546E7A, 0xFF78909C,
+             0xFF4DB6AC, 0xFF81C784, 0xFFDCE775, 0xFFFFD54F, 0xFFFFB74D},
         };
+        String[] rowLabels = {"🌈 Basic", "⬜ Soft", "🎨 Dark"};
 
-        int[] colors = {
-                Color.BLACK,
-                Color.WHITE,
-                Color.RED,
-                Color.YELLOW,
-                Color.BLUE,
-                Color.GREEN,
-                Color.rgb(255, 165, 0),
-                Color.rgb(255, 105, 180)
-        };
+        for (int r = 0; r < colorRows.length; r++) {
+            android.widget.TextView rowLbl = new android.widget.TextView(this);
+            rowLbl.setText(rowLabels[r]);
+            rowLbl.setTextColor(0xFFB0BEC5);
+            rowLbl.setTextSize(9);
+            rowLbl.setTypeface(null, android.graphics.Typeface.BOLD);
+            android.widget.LinearLayout.LayoutParams rlLp =
+                    new android.widget.LinearLayout.LayoutParams(
+                            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
+                            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+            rlLp.setMargins(0, dpToPx(2), 0, dpToPx(2));
+            rowLbl.setLayoutParams(rlLp);
+            content.addView(rowLbl);
 
-        LinearLayout colorRow = new LinearLayout(this);
-        colorRow.setOrientation(LinearLayout.HORIZONTAL);
+            android.widget.HorizontalScrollView hsv = new android.widget.HorizontalScrollView(this);
+            hsv.setHorizontalScrollBarEnabled(false);
+            android.widget.LinearLayout.LayoutParams hsvLp =
+                    new android.widget.LinearLayout.LayoutParams(
+                            android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+            hsvLp.setMargins(0, 0, 0, dpToPx(2));
+            hsv.setLayoutParams(hsvLp);
 
-        for (int i = 0; i < colors.length; i++) {
-            final int selectedColor = colors[i];
-            final String colorName = colorNames[i];
+            android.widget.LinearLayout row = new android.widget.LinearLayout(this);
+            row.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+            row.setPadding(0, dpToPx(2), 0, dpToPx(2));
 
-            TextView colorBtn = new TextView(this);
-
-            GradientDrawable btnGd = new GradientDrawable();
-            btnGd.setColor(selectedColor);
-            btnGd.setStroke(3, Color.GRAY);
-            btnGd.setCornerRadius(8f);
-            colorBtn.setBackground(btnGd);
-
-            LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(80, 80);
-            cp.setMargins(6, 0, 6, 0);
-            colorBtn.setLayoutParams(cp);
-
-            colorBtn.setOnClickListener(v -> {
-                strokeC[0] = selectedColor;
-
-                preview.setStrokeColor(strokeC[0]);
-                preview.setStrokeWidth(strokeW[0]);
-                preview.invalidate();
-
-                lblColor.setText("Stroke Color: " + colorName);
-            });
-
-            colorRow.addView(colorBtn);
+            for (int c : colorRows[r]) {
+                final int fc = c;
+                android.view.View btn = new android.view.View(this);
+                android.widget.LinearLayout.LayoutParams btnLp =
+                        new android.widget.LinearLayout.LayoutParams(dpToPx(34), dpToPx(34));
+                btnLp.setMargins(dpToPx(2), 0, dpToPx(2), 0);
+                btn.setLayoutParams(btnLp);
+                android.graphics.drawable.GradientDrawable btnBg =
+                        new android.graphics.drawable.GradientDrawable();
+                btnBg.setColor(fc);
+                btnBg.setCornerRadius(dpToPx(4));
+                btnBg.setStroke(dpToPx(1), 0xFF607D8B);
+                btn.setBackground(btnBg);
+                btn.setOnClickListener(v -> {
+                    strokeC[0] = fc;
+                    preview.setStrokeColor(fc);
+                    preview.setStrokeWidth(strokeW[0]);
+                    preview.invalidate();
+                    // ✅ Runtime apply
+                    targetText.setStrokeColor(fc);
+                    targetText.setStrokeWidth(strokeW[0]);
+                    targetText.invalidate();
+                });
+                row.addView(btn);
+            }
+            hsv.addView(row);
+            content.addView(hsv);
         }
 
-        layout.addView(colorRow);
+        // ── RGB Sliders
+        android.widget.TextView rgbTitle = new android.widget.TextView(this);
+        rgbTitle.setText("RGB Custom");
+        rgbTitle.setTextColor(0xFFCFD8DC);
+        rgbTitle.setTextSize(10);
+        rgbTitle.setTypeface(null, android.graphics.Typeface.BOLD);
+        android.widget.LinearLayout.LayoutParams rgbTlp =
+                new android.widget.LinearLayout.LayoutParams(
+                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
+                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        rgbTlp.setMargins(0, dpToPx(8), 0, dpToPx(4));
+        rgbTitle.setLayoutParams(rgbTlp);
+        content.addView(rgbTitle);
 
-        Button btnCustomColor = new Button(this);
-        btnCustomColor.setText("Custom Color...");
-        LinearLayout.LayoutParams btnP =
-                new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT);
-        btnP.setMargins(0, 12, 0, 0);
-        btnCustomColor.setLayoutParams(btnP);
+        String[] sliderLabels = {"R", "G", "B"};
+        int[] sliderColors2 = {0xFFEF5350, 0xFF66BB6A, 0xFF42A5F5};
+        android.widget.SeekBar[] rgbBars = new android.widget.SeekBar[3];
+        android.widget.TextView[] rgbVals = new android.widget.TextView[3];
 
-        btnCustomColor.setOnClickListener(v -> {
-            new AmbilWarnaDialog(
-                    this,
-                    strokeC[0],
-                    new AmbilWarnaDialog.OnAmbilWarnaListener() {
-                        @Override
-                        public void onCancel(AmbilWarnaDialog dialog) {
-                        }
+        for (int si = 0; si < 3; si++) {
+            final int idx = si;
+            android.widget.LinearLayout sliderRow = new android.widget.LinearLayout(this);
+            sliderRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+            sliderRow.setGravity(android.view.Gravity.CENTER_VERTICAL);
+            android.widget.LinearLayout.LayoutParams slrLp =
+                    new android.widget.LinearLayout.LayoutParams(
+                            android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+            slrLp.setMargins(0, dpToPx(2), 0, dpToPx(2));
+            sliderRow.setLayoutParams(slrLp);
 
-                        @Override
-                        public void onOk(AmbilWarnaDialog dialog, int color) {
-                            strokeC[0] = color;
+            android.widget.TextView lbl = new android.widget.TextView(this);
+            lbl.setText(sliderLabels[si]);
+            lbl.setTextColor(sliderColors2[si]);
+            lbl.setTextSize(11);
+            lbl.setTypeface(null, android.graphics.Typeface.BOLD);
+            lbl.setLayoutParams(new android.widget.LinearLayout.LayoutParams(dpToPx(16),
+                    android.widget.LinearLayout.LayoutParams.WRAP_CONTENT));
 
-                            preview.setStrokeColor(strokeC[0]);
-                            preview.setStrokeWidth(strokeW[0]);
-                            preview.invalidate();
+            android.widget.SeekBar sb = new android.widget.SeekBar(this);
+            sb.setMax(255);
+            int initVal = si == 0 ? android.graphics.Color.red(strokeC[0])
+                        : si == 1 ? android.graphics.Color.green(strokeC[0])
+                        : android.graphics.Color.blue(strokeC[0]);
+            sb.setProgress(initVal);
+            android.widget.LinearLayout.LayoutParams sbLp =
+                    new android.widget.LinearLayout.LayoutParams(0,
+                            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+            sbLp.setMargins(dpToPx(4), 0, dpToPx(4), 0);
+            sb.setLayoutParams(sbLp);
+            sb.getProgressDrawable().setColorFilter(sliderColors2[si], android.graphics.PorterDuff.Mode.SRC_IN);
+            sb.getThumb().setColorFilter(sliderColors2[si], android.graphics.PorterDuff.Mode.SRC_IN);
 
-                            lblColor.setText("Stroke Color: Custom");
-                        }
-                    }
-            ).show();
+            android.widget.TextView val = new android.widget.TextView(this);
+            val.setText(String.valueOf(initVal));
+            val.setTextColor(0xFFCFD8DC);
+            val.setTextSize(10);
+            val.setLayoutParams(new android.widget.LinearLayout.LayoutParams(dpToPx(28),
+                    android.widget.LinearLayout.LayoutParams.WRAP_CONTENT));
+            val.setGravity(android.view.Gravity.END);
+
+            rgbBars[idx] = sb;
+            rgbVals[idx] = val;
+
+            sliderRow.addView(lbl);
+            sliderRow.addView(sb);
+            sliderRow.addView(val);
+            content.addView(sliderRow);
+        }
+
+        for (int si = 0; si < 3; si++) {
+            final int idx = si;
+            rgbBars[si].setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override public void onStartTrackingTouch(SeekBar s) {}
+                @Override public void onStopTrackingTouch(SeekBar s) {}
+                @Override public void onProgressChanged(SeekBar s, int progress, boolean fromUser) {
+                    if (!fromUser) return;
+                    rgbVals[idx].setText(String.valueOf(progress));
+                    int newColor = android.graphics.Color.rgb(
+                            rgbBars[0].getProgress(),
+                            rgbBars[1].getProgress(),
+                            rgbBars[2].getProgress());
+                    strokeC[0] = newColor;
+                    preview.setStrokeColor(newColor);
+                    preview.setStrokeWidth(strokeW[0]);
+                    preview.invalidate();
+                    // ✅ Runtime apply
+                    targetText.setStrokeColor(newColor);
+                    targetText.setStrokeWidth(strokeW[0]);
+                    targetText.invalidate();
+                }
+            });
+        }
+
+        // ── Action buttons row
+        android.widget.LinearLayout actionRow = new android.widget.LinearLayout(this);
+        actionRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        android.widget.LinearLayout.LayoutParams arLp =
+                new android.widget.LinearLayout.LayoutParams(
+                        android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        arLp.setMargins(0, dpToPx(10), 0, 0);
+        actionRow.setLayoutParams(arLp);
+
+        android.widget.Button btnRemove = new android.widget.Button(this);
+        btnRemove.setText("Remove");
+        btnRemove.setTextColor(0xFFFFFFFF);
+        btnRemove.setTextSize(11);
+        btnRemove.setBackgroundColor(0xFFB71C1C);
+        btnRemove.setStateListAnimator(null);
+        android.widget.LinearLayout.LayoutParams removeLp =
+                new android.widget.LinearLayout.LayoutParams(0,
+                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+        removeLp.setMargins(0, 0, dpToPx(3), 0);
+        btnRemove.setLayoutParams(removeLp);
+
+        android.widget.Button btnCancel = new android.widget.Button(this);
+        btnCancel.setText("Cancel");
+        btnCancel.setTextColor(0xFFFFFFFF);
+        btnCancel.setTextSize(11);
+        btnCancel.setBackgroundColor(0xFF6B7280);
+        btnCancel.setStateListAnimator(null);
+        android.widget.LinearLayout.LayoutParams cancelLp =
+                new android.widget.LinearLayout.LayoutParams(0,
+                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+        cancelLp.setMargins(dpToPx(3), 0, dpToPx(3), 0);
+        btnCancel.setLayoutParams(cancelLp);
+
+        android.widget.Button btnApply = new android.widget.Button(this);
+        btnApply.setText("✅ Apply");
+        btnApply.setTextColor(0xFFFFFFFF);
+        btnApply.setTextSize(11);
+        btnApply.setBackgroundColor(0xFF1565C0);
+        btnApply.setStateListAnimator(null);
+        android.widget.LinearLayout.LayoutParams applyLp =
+                new android.widget.LinearLayout.LayoutParams(0,
+                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+        applyLp.setMargins(dpToPx(3), 0, 0, 0);
+        btnApply.setLayoutParams(applyLp);
+
+        actionRow.addView(btnRemove);
+        actionRow.addView(btnCancel);
+        actionRow.addView(btnApply);
+        content.addView(actionRow);
+
+        // ── PopupWindow
+        android.widget.PopupWindow popup = new android.widget.PopupWindow(
+                root,
+                android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+                android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+                true);
+        popup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(
+                android.graphics.Color.TRANSPARENT));
+        popup.setElevation(16f);
+        popup.setOutsideTouchable(false);
+
+        android.view.View rootView = getWindow().getDecorView().getRootView();
+        popup.showAtLocation(rootView, android.view.Gravity.CENTER, 0, 0);
+
+        // ── Drag
+        final int[] lastXY = {0, 0};
+        dragHandle.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case android.view.MotionEvent.ACTION_DOWN:
+                    lastXY[0] = (int) event.getRawX();
+                    lastXY[1] = (int) event.getRawY();
+                    break;
+                case android.view.MotionEvent.ACTION_MOVE:
+                    int dx = (int) event.getRawX() - lastXY[0];
+                    int dy = (int) event.getRawY() - lastXY[1];
+                    int[] loc = new int[2];
+                    root.getLocationOnScreen(loc);
+                    popup.update(loc[0] + dx, loc[1] + dy, -1, -1);
+                    lastXY[0] = (int) event.getRawX();
+                    lastXY[1] = (int) event.getRawY();
+                    break;
+            }
+            return true;
         });
 
-        layout.addView(btnCustomColor);
-
-        builder.setView(layout);
-
-        builder.setPositiveButton("✅ Apply", (Gdialog, which) -> {
-            // ✅ Gradient clear — stroke apply thay tyare
-            targetText.setTextGradient(null);
-            targetText.setTag(R.id.tv_move_speed, null);
-            targetText.getPaint().setShader(null);
-
+        btnCloseX.setOnClickListener(v -> {
+            // Cancel — restore original
             targetText.setStrokeColor(strokeC[0]);
             targetText.setStrokeWidth(strokeW[0]);
-
             targetText.invalidate();
-            targetText.requestLayout();
-
-            saveCurrentPage();
-            exportToJson();
-
-            Toast.makeText(this, "✅ Stroke Apply", Toast.LENGTH_SHORT).show();
+            popup.dismiss();
         });
 
-        builder.setNeutralButton("Remove Stroke", (dialog, which) -> {
+        btnCancel.setOnClickListener(v -> popup.dismiss());
+
+        btnRemove.setOnClickListener(v -> {
             targetText.setStrokeWidth(0f);
             targetText.invalidate();
             targetText.requestLayout();
-
             saveCurrentPage();
             exportToJson();
+            popup.dismiss();
         });
 
-        builder.setNegativeButton("Cancel", null);
-        builder.show();
+        btnApply.setOnClickListener(v -> {
+            targetText.setTextGradient(null);
+            targetText.setTag(R.id.tv_move_speed, null);
+            targetText.getPaint().setShader(null);
+            targetText.setStrokeColor(strokeC[0]);
+            targetText.setStrokeWidth(strokeW[0]);
+            targetText.invalidate();
+            targetText.requestLayout();
+            saveCurrentPage();
+            exportToJson();
+            Toast.makeText(this, "✅ Stroke Apply", Toast.LENGTH_SHORT).show();
+            popup.dismiss();
+        });
     }
 
 
@@ -21265,4 +21451,390 @@ public class MainActivity extends AppCompatActivity {
             currentlySelectedView = null;
         }
     }
+    // ══════════════════════════════════════════════════════════
+    // Color Picker Popup — Movable, Horizontal Color Scroll
+    // ══════════════════════════════════════════════════════════
+    private void showColorPickerPopup(int initialColor, java.util.function.Consumer<Integer> onColorSelected) {
+
+        final int[] selectedColor = {initialColor};
+
+        // ── Root layout
+        android.widget.LinearLayout root = new android.widget.LinearLayout(this);
+        root.setOrientation(android.widget.LinearLayout.VERTICAL);
+        root.setLayoutParams(new android.view.ViewGroup.LayoutParams(
+                dpToPx(300), android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        // ── Drag Handle
+        android.widget.LinearLayout dragHandle = new android.widget.LinearLayout(this);
+        dragHandle.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        dragHandle.setBackgroundColor(0xFF2A3439);
+        dragHandle.setGravity(android.view.Gravity.CENTER_VERTICAL);
+        dragHandle.setPadding(dpToPx(10), 0, dpToPx(6), 0);
+        dragHandle.setLayoutParams(new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(32)));
+
+        android.widget.TextView dragDots = new android.widget.TextView(this);
+        dragDots.setText("⠿");
+        dragDots.setTextColor(0xFF9CA3AF);
+        dragDots.setTextSize(12);
+        dragDots.setGravity(android.view.Gravity.CENTER);
+        dragDots.setLayoutParams(new android.widget.LinearLayout.LayoutParams(
+                dpToPx(16), android.widget.LinearLayout.LayoutParams.MATCH_PARENT));
+
+        android.widget.TextView dragTitle = new android.widget.TextView(this);
+        dragTitle.setText("🎨 Color");
+        dragTitle.setTextColor(0xFFF3F4F6);
+        dragTitle.setTextSize(9);
+        dragTitle.setTypeface(null, android.graphics.Typeface.BOLD);
+        android.widget.LinearLayout.LayoutParams titleLp =
+                new android.widget.LinearLayout.LayoutParams(0,
+                        android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 1f);
+        titleLp.setMarginStart(dpToPx(4));
+        dragTitle.setLayoutParams(titleLp);
+        dragTitle.setGravity(android.view.Gravity.CENTER_VERTICAL);
+
+        android.widget.TextView btnClose = new android.widget.TextView(this);
+        btnClose.setText("✕");
+        btnClose.setTextColor(0xFF9CA3AF);
+        btnClose.setTextSize(12);
+        btnClose.setGravity(android.view.Gravity.CENTER);
+        btnClose.setLayoutParams(new android.widget.LinearLayout.LayoutParams(dpToPx(28), dpToPx(22)));
+        btnClose.setBackgroundColor(0xFF374151);
+
+        dragHandle.addView(dragDots);
+        dragHandle.addView(dragTitle);
+        dragHandle.addView(btnClose);
+        root.addView(dragHandle);
+
+        // ── Content
+        android.widget.LinearLayout content = new android.widget.LinearLayout(this);
+        content.setOrientation(android.widget.LinearLayout.VERTICAL);
+        content.setBackgroundColor(0xFF455A64);
+        content.setPadding(dpToPx(10), dpToPx(10), dpToPx(10), dpToPx(10));
+        root.addView(content);
+
+        // ── Color preview
+        android.graphics.drawable.GradientDrawable previewBg = new android.graphics.drawable.GradientDrawable();
+        previewBg.setColor(initialColor);
+        previewBg.setCornerRadius(dpToPx(6));
+        previewBg.setStroke(dpToPx(1), 0xFFD1D5DB);
+        android.view.View colorPreview = new android.view.View(this);
+        android.widget.LinearLayout.LayoutParams previewLp =
+                new android.widget.LinearLayout.LayoutParams(
+                        android.widget.LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(36));
+        previewLp.setMargins(0, 0, 0, dpToPx(8));
+        colorPreview.setLayoutParams(previewLp);
+        colorPreview.setBackground(previewBg);
+        content.addView(colorPreview);
+
+        // ── Horizontal color scroll
+        final int[][] colorRows = {
+            // Row 1 - Basic
+            {0xFFFF0000, 0xFFFF4500, 0xFFFF8C00, 0xFFFFD700, 0xFFFFFF00,
+             0xFFADFF2F, 0xFF32CD32, 0xFF00FA9A, 0xFF00FFFF, 0xFF00BFFF,
+             0xFF1E90FF, 0xFF0000FF, 0xFF8A2BE2, 0xFFFF00FF, 0xFFFF1493},
+            // Row 2 - Light
+            {0xFFFFFFFF, 0xFFF5F5F5, 0xFFE0E0E0, 0xFFC0C0C0, 0xFF9E9E9E,
+             0xFF757575, 0xFF616161, 0xFF424242, 0xFF212121, 0xFF000000,
+             0xFFFFCDD2, 0xFFF8BBD0, 0xFFE1BEE7, 0xFFD1C4E9, 0xFFC5CAE9},
+            // Row 3 - Dark/Material
+            {0xFFB71C1C, 0xFF880E4F, 0xFF4A148C, 0xFF1A237E, 0xFF0D47A1,
+             0xFF006064, 0xFF1B5E20, 0xFF33691E, 0xFFF57F17, 0xFFE65100,
+             0xFF3E2723, 0xFF263238, 0xFF37474F, 0xFF546E7A, 0xFF78909C},
+        };
+
+        String[] rowLabels = {"🌈 Basic", "⬜ Light/Dark", "🎨 Material"};
+
+        for (int r = 0; r < colorRows.length; r++) {
+            // Row label
+            android.widget.TextView rowLabel = new android.widget.TextView(this);
+            rowLabel.setText(rowLabels[r]);
+            rowLabel.setTextColor(0xFFCFD8DC);
+            rowLabel.setTextSize(10);
+            rowLabel.setTypeface(null, android.graphics.Typeface.BOLD);
+            android.widget.LinearLayout.LayoutParams lblLp =
+                    new android.widget.LinearLayout.LayoutParams(
+                            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
+                            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+            lblLp.setMargins(0, dpToPx(4), 0, dpToPx(2));
+            rowLabel.setLayoutParams(lblLp);
+            content.addView(rowLabel);
+
+            // Horizontal ScrollView
+            android.widget.HorizontalScrollView hsv = new android.widget.HorizontalScrollView(this);
+            hsv.setHorizontalScrollBarEnabled(false);
+            android.widget.LinearLayout.LayoutParams hsvLp =
+                    new android.widget.LinearLayout.LayoutParams(
+                            android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+            hsvLp.setMargins(0, 0, 0, dpToPx(2));
+            hsv.setLayoutParams(hsvLp);
+
+            android.widget.LinearLayout row = new android.widget.LinearLayout(this);
+            row.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+            row.setPadding(0, dpToPx(2), 0, dpToPx(2));
+
+            for (int c : colorRows[r]) {
+                final int fc = c;
+                android.view.View btn = new android.view.View(this);
+                android.widget.LinearLayout.LayoutParams btnLp =
+                        new android.widget.LinearLayout.LayoutParams(dpToPx(36), dpToPx(36));
+                btnLp.setMargins(dpToPx(2), 0, dpToPx(2), 0);
+                btn.setLayoutParams(btnLp);
+
+                android.graphics.drawable.GradientDrawable btnBg =
+                        new android.graphics.drawable.GradientDrawable();
+                btnBg.setColor(fc);
+                btnBg.setCornerRadius(dpToPx(4));
+                btnBg.setStroke(dpToPx(1), 0xFFD1D5DB);
+                btn.setBackground(btnBg);
+
+                btn.setOnClickListener(v -> {
+                    selectedColor[0] = fc;
+                    previewBg.setColor(fc);
+                    colorPreview.setBackground(previewBg);
+                    // hex update
+                });
+                row.addView(btn);
+            }
+            hsv.addView(row);
+            content.addView(hsv);
+        }
+
+        // ── HEX input row
+        android.widget.LinearLayout hexRow = new android.widget.LinearLayout(this);
+        hexRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        hexRow.setGravity(android.view.Gravity.CENTER_VERTICAL);
+        android.widget.LinearLayout.LayoutParams hexRowLp =
+                new android.widget.LinearLayout.LayoutParams(
+                        android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        hexRowLp.setMargins(0, dpToPx(8), 0, dpToPx(8));
+        hexRow.setLayoutParams(hexRowLp);
+
+        android.widget.TextView hexLabel = new android.widget.TextView(this);
+        hexLabel.setText("HEX");
+        hexLabel.setTextColor(0xFFCFD8DC);
+        hexLabel.setTextSize(11);
+        hexLabel.setTypeface(null, android.graphics.Typeface.BOLD);
+        hexLabel.setPadding(0, 0, dpToPx(8), 0);
+
+        android.widget.EditText etHex = new android.widget.EditText(this);
+        etHex.setText(String.format("#%06X", (0xFFFFFF & initialColor)));
+        etHex.setTextColor(0xFF111827);
+        etHex.setTextSize(12);
+        etHex.setBackgroundColor(0xFF546E7A);
+        etHex.setPadding(dpToPx(8), dpToPx(6), dpToPx(8), dpToPx(6));
+        etHex.setLayoutParams(new android.widget.LinearLayout.LayoutParams(0,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+
+        hexRow.addView(hexLabel);
+        hexRow.addView(etHex);
+        content.addView(hexRow);
+
+        // ── RGB Sliders
+        String[] sliderLabels = {"R", "G", "B"};
+        int[] sliderColors = {0xFFEF5350, 0xFF66BB6A, 0xFF42A5F5};
+        android.widget.SeekBar[] rgbBars = new android.widget.SeekBar[3];
+        android.widget.TextView[] rgbVals = new android.widget.TextView[3];
+
+        for (int si = 0; si < 3; si++) {
+            final int idx = si;
+
+            android.widget.LinearLayout sliderRow = new android.widget.LinearLayout(this);
+            sliderRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+            sliderRow.setGravity(android.view.Gravity.CENTER_VERTICAL);
+            android.widget.LinearLayout.LayoutParams slrLp =
+                    new android.widget.LinearLayout.LayoutParams(
+                            android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+            slrLp.setMargins(0, dpToPx(3), 0, dpToPx(3));
+            sliderRow.setLayoutParams(slrLp);
+
+            android.widget.TextView lbl = new android.widget.TextView(this);
+            lbl.setText(sliderLabels[si]);
+            lbl.setTextColor(sliderColors[si]);
+            lbl.setTextSize(11);
+            lbl.setTypeface(null, android.graphics.Typeface.BOLD);
+            lbl.setLayoutParams(new android.widget.LinearLayout.LayoutParams(dpToPx(18),
+                    android.widget.LinearLayout.LayoutParams.WRAP_CONTENT));
+
+            android.widget.SeekBar sb = new android.widget.SeekBar(this);
+            sb.setMax(255);
+            int initVal = si == 0 ? android.graphics.Color.red(initialColor)
+                        : si == 1 ? android.graphics.Color.green(initialColor)
+                        : android.graphics.Color.blue(initialColor);
+            sb.setProgress(initVal);
+            android.widget.LinearLayout.LayoutParams sbLp =
+                    new android.widget.LinearLayout.LayoutParams(0,
+                            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+            sbLp.setMargins(dpToPx(4), 0, dpToPx(4), 0);
+            sb.setLayoutParams(sbLp);
+            sb.getProgressDrawable().setColorFilter(
+                    sliderColors[si], android.graphics.PorterDuff.Mode.SRC_IN);
+            sb.getThumb().setColorFilter(
+                    sliderColors[si], android.graphics.PorterDuff.Mode.SRC_IN);
+
+            android.widget.TextView val = new android.widget.TextView(this);
+            val.setText(String.valueOf(initVal));
+            val.setTextColor(0xFFCFD8DC);
+            val.setTextSize(10);
+            val.setLayoutParams(new android.widget.LinearLayout.LayoutParams(dpToPx(28),
+                    android.widget.LinearLayout.LayoutParams.WRAP_CONTENT));
+            val.setGravity(android.view.Gravity.END);
+
+            rgbBars[idx] = sb;
+            rgbVals[idx] = val;
+
+            sliderRow.addView(lbl);
+            sliderRow.addView(sb);
+            sliderRow.addView(val);
+            content.addView(sliderRow);
+        }
+
+        // RGB SeekBar listeners
+        for (int si = 0; si < 3; si++) {
+            final int idx = si;
+            rgbBars[si].setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+                @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+                @Override public void onStopTrackingTouch(android.widget.SeekBar s) {}
+                @Override public void onProgressChanged(android.widget.SeekBar s, int progress, boolean fromUser) {
+                    if (!fromUser) return;
+                    rgbVals[idx].setText(String.valueOf(progress));
+                    int r = rgbBars[0].getProgress();
+                    int g = rgbBars[1].getProgress();
+                    int b2 = rgbBars[2].getProgress();
+                    int newColor = android.graphics.Color.rgb(r, g, b2);
+                    selectedColor[0] = newColor;
+                    previewBg.setColor(newColor);
+                    colorPreview.setBackground(previewBg);
+                    // hex update
+                    // etHex not in scope here - update via tag
+                }
+            });
+        }
+
+        etHex.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int st, int c2, int a) {}
+            @Override public void onTextChanged(CharSequence s, int st, int b2, int c2) {
+                try {
+                    String hex = s.toString().trim();
+                    if (!hex.startsWith("#")) hex = "#" + hex;
+                    if (hex.length() == 7) {
+                        int parsed = android.graphics.Color.parseColor(hex);
+                        selectedColor[0] = parsed;
+                        previewBg.setColor(parsed);
+                        colorPreview.setBackground(previewBg);
+                        // Update RGB sliders
+                        rgbBars[0].setProgress(android.graphics.Color.red(parsed));
+                        rgbBars[1].setProgress(android.graphics.Color.green(parsed));
+                        rgbBars[2].setProgress(android.graphics.Color.blue(parsed));
+                        rgbVals[0].setText(String.valueOf(android.graphics.Color.red(parsed)));
+                        rgbVals[1].setText(String.valueOf(android.graphics.Color.green(parsed)));
+                        rgbVals[2].setText(String.valueOf(android.graphics.Color.blue(parsed)));
+                    }
+                } catch (Exception ignored) {}
+            }
+            @Override public void afterTextChanged(android.text.Editable s) {}
+        });
+
+        // Update hex from RGB sliders
+        for (int si = 0; si < 3; si++) {
+            final int idx = si;
+            rgbBars[si].setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+                @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+                @Override public void onStopTrackingTouch(android.widget.SeekBar s) {}
+                @Override public void onProgressChanged(android.widget.SeekBar s, int progress, boolean fromUser) {
+                    if (!fromUser) return;
+                    rgbVals[idx].setText(String.valueOf(progress));
+                    int r = rgbBars[0].getProgress();
+                    int g = rgbBars[1].getProgress();
+                    int b2 = rgbBars[2].getProgress();
+                    int newColor = android.graphics.Color.rgb(r, g, b2);
+                    selectedColor[0] = newColor;
+                    previewBg.setColor(newColor);
+                    colorPreview.setBackground(previewBg);
+                    etHex.removeTextChangedListener(etHex.getTag() instanceof android.text.TextWatcher
+                            ? (android.text.TextWatcher) etHex.getTag() : null);
+                    etHex.setText(String.format("#%06X", (0xFFFFFF & newColor)));
+                }
+            });
+        }
+
+        // ── OK / Cancel
+        android.widget.LinearLayout btnRow = new android.widget.LinearLayout(this);
+        btnRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        btnRow.setLayoutParams(new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT));
+
+        android.widget.Button btnCancel = new android.widget.Button(this);
+        btnCancel.setText("Cancel");
+        btnCancel.setTextColor(0xFFFFFFFF);
+        btnCancel.setTextSize(12);
+        btnCancel.setBackgroundColor(0xFF6B7280);
+        btnCancel.setStateListAnimator(null);
+        android.widget.LinearLayout.LayoutParams cancelLp =
+                new android.widget.LinearLayout.LayoutParams(0,
+                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+        cancelLp.setMargins(0, 0, dpToPx(4), 0);
+        btnCancel.setLayoutParams(cancelLp);
+
+        android.widget.Button btnOk = new android.widget.Button(this);
+        btnOk.setText("✅ OK");
+        btnOk.setTextColor(0xFFFFFFFF);
+        btnOk.setTextSize(12);
+        btnOk.setBackgroundColor(0xFF607D8B);
+        btnOk.setStateListAnimator(null);
+        btnOk.setLayoutParams(new android.widget.LinearLayout.LayoutParams(0,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+
+        btnRow.addView(btnCancel);
+        btnRow.addView(btnOk);
+        content.addView(btnRow);
+
+        // ── PopupWindow
+        android.widget.PopupWindow popup = new android.widget.PopupWindow(
+                root,
+                android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+                android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+                true);
+        popup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(
+                android.graphics.Color.TRANSPARENT));
+        popup.setElevation(16f);
+        popup.setOutsideTouchable(true);
+
+        android.view.View rootView = getWindow().getDecorView().getRootView();
+        popup.showAtLocation(rootView, android.view.Gravity.CENTER, 0, 0);
+
+        // ── Drag logic
+        final int[] lastXY = {0, 0};
+        dragHandle.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case android.view.MotionEvent.ACTION_DOWN:
+                    lastXY[0] = (int) event.getRawX();
+                    lastXY[1] = (int) event.getRawY();
+                    break;
+                case android.view.MotionEvent.ACTION_MOVE:
+                    int dx = (int) event.getRawX() - lastXY[0];
+                    int dy = (int) event.getRawY() - lastXY[1];
+                    int[] loc = new int[2];
+                    root.getLocationOnScreen(loc);
+                    popup.update(loc[0] + dx, loc[1] + dy, -1, -1);
+                    lastXY[0] = (int) event.getRawX();
+                    lastXY[1] = (int) event.getRawY();
+                    break;
+            }
+            return true;
+        });
+
+        btnClose.setOnClickListener(v -> popup.dismiss());
+        btnCancel.setOnClickListener(v -> popup.dismiss());
+        btnOk.setOnClickListener(v -> {
+            onColorSelected.accept(selectedColor[0]);
+            popup.dismiss();
+        });
+    }
+
+
 }
