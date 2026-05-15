@@ -19930,10 +19930,11 @@ public class MainActivity extends AppCompatActivity {
         final int[] strokeC = {targetText.getStrokeColor() == 0 ? android.graphics.Color.BLACK : targetText.getStrokeColor()};
 
         // ── Root layout
+        int screenW = getResources().getDisplayMetrics().widthPixels;
         android.widget.LinearLayout root = new android.widget.LinearLayout(this);
         root.setOrientation(android.widget.LinearLayout.VERTICAL);
         root.setLayoutParams(new android.view.ViewGroup.LayoutParams(
-                dpToPx(320), android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+                screenW, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 
         // ── Drag Handle
         android.widget.LinearLayout dragHandle = new android.widget.LinearLayout(this);
@@ -20296,7 +20297,7 @@ public class MainActivity extends AppCompatActivity {
         // ── PopupWindow
         android.widget.PopupWindow popup = new android.widget.PopupWindow(
                 root,
-                android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+                android.view.ViewGroup.LayoutParams.MATCH_PARENT,
                 android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
                 true);
         popup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(
@@ -20307,22 +20308,41 @@ public class MainActivity extends AppCompatActivity {
         android.view.View rootView = getWindow().getDecorView().getRootView();
         popup.showAtLocation(rootView, android.view.Gravity.CENTER, 0, 0);
 
-        // ── Drag
+        // ── Status bar height — drag offset fix
+        int statusBarH = 0;
+        int resId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resId > 0) statusBarH = getResources().getDimensionPixelSize(resId);
+        final int statusBarHeight = statusBarH;
+
+        // ── Drag — proper position tracking
+        final int[] popXY = {0, 0};
         final int[] lastXY = {0, 0};
+        final boolean[] isDragging = {false};
+
         dragHandle.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case android.view.MotionEvent.ACTION_DOWN:
+                    isDragging[0] = true;
+                    lastXY[0] = (int) event.getRawX();
+                    lastXY[1] = (int) event.getRawY();
+                    int[] loc2 = new int[2];
+                    root.getLocationOnScreen(loc2);
+                    popXY[0] = loc2[0];
+                    popXY[1] = loc2[1] - statusBarHeight;
+                    break;
+                case android.view.MotionEvent.ACTION_MOVE:
+                    if (!isDragging[0]) break;
+                    int dx = (int) event.getRawX() - lastXY[0];
+                    int dy = (int) event.getRawY() - lastXY[1];
+                    popXY[0] += dx;
+                    popXY[1] += dy;
+                    popup.update(popXY[0], popXY[1], -1, -1);
                     lastXY[0] = (int) event.getRawX();
                     lastXY[1] = (int) event.getRawY();
                     break;
-                case android.view.MotionEvent.ACTION_MOVE:
-                    int dx = (int) event.getRawX() - lastXY[0];
-                    int dy = (int) event.getRawY() - lastXY[1];
-                    int[] loc = new int[2];
-                    root.getLocationOnScreen(loc);
-                    popup.update(loc[0] + dx, loc[1] + dy, -1, -1);
-                    lastXY[0] = (int) event.getRawX();
-                    lastXY[1] = (int) event.getRawY();
+                case android.view.MotionEvent.ACTION_UP:
+                case android.view.MotionEvent.ACTION_CANCEL:
+                    isDragging[0] = false;
                     break;
             }
             return true;
