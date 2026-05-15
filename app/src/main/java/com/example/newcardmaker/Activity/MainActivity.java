@@ -7202,7 +7202,20 @@ public class MainActivity extends AppCompatActivity {
             previewIv.setImageDrawable(targetCell.getDrawable());
         }
         root.addView(previewIv);
+# Project folder માં જાઓ
+        cd /path/to/your/atale
 
+# Status check કરો
+        git status
+
+# Files add કરો
+        git add .
+
+# Commit કરો
+        git commit -m "latest changes"
+
+# Push કરો
+        git push origin main
         // ── 1. New frame picker button
         Button btnPickFrame = new Button(this);
         btnPickFrame.setText("🖼 New Frame/Mask Select");
