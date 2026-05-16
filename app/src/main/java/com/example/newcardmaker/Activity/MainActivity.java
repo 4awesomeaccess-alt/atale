@@ -13289,16 +13289,27 @@ public class MainActivity extends AppCompatActivity {
 
     private void showTextColorPopup(StrokeTextView targetView) {
         int[] colors = {
-            Color.BLACK, Color.WHITE, Color.RED, Color.GREEN, Color.BLUE,
-            Color.YELLOW, Color.CYAN, Color.MAGENTA,
-            Color.parseColor("#FF5722"), Color.parseColor("#9C27B0"),
-            Color.parseColor("#009688"), Color.parseColor("#FF9800"),
-            Color.parseColor("#3F51B5"), Color.parseColor("#E91E63"),
-            Color.parseColor("#795548"), Color.parseColor("#607D8B"),
-            Color.parseColor("#FFEB3B"), Color.parseColor("#8BC34A"),
-            Color.parseColor("#00BCD4"), Color.parseColor("#FF6F00"),
-            Color.parseColor("#AD1457"), Color.parseColor("#1B5E20"),
-            Color.parseColor("#880E4F"), Color.parseColor("#0D47A1"),
+            getColor(R.color.md_black),
+            getColor(R.color.md_white),
+            getColor(R.color.md_red),
+            getColor(R.color.md_pink),
+            getColor(R.color.md_purple),
+            getColor(R.color.md_deep_purple),
+            getColor(R.color.md_indigo),
+            getColor(R.color.md_blue),
+            getColor(R.color.md_light_blue),
+            getColor(R.color.md_cyan),
+            getColor(R.color.md_teal),
+            getColor(R.color.md_green),
+            getColor(R.color.md_light_green),
+            getColor(R.color.md_lime),
+            getColor(R.color.md_yellow),
+            getColor(R.color.md_amber),
+            getColor(R.color.md_orange),
+            getColor(R.color.md_deep_orange),
+            getColor(R.color.md_brown),
+            getColor(R.color.md_grey),
+            getColor(R.color.md_blue_grey),
         };
 
         // ── XML Inflate ──
