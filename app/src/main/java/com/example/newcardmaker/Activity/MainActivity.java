@@ -15126,18 +15126,19 @@ public class MainActivity extends AppCompatActivity {
                         int borderStyle = borderTag instanceof Integer ? (int) borderTag : 0;
 
                         if (borderStyle > 0) {
-                            // Border + BG image both show
                             GradientDrawable border = new GradientDrawable();
                             border.setColor(Color.TRANSPARENT);
                             applyBorderStyle(border, borderStyle);
-
                             android.graphics.drawable.LayerDrawable layered = new android.graphics.drawable.LayerDrawable(new android.graphics.drawable.Drawable[]{bitmapDrawable, border});
                             targetView.setBackground(layered);
                         } else {
                             targetView.setBackground(bitmapDrawable);
                         }
 
-                        // ── URI tag store — save/load/remove
+                        // ✅ Tint restore — new drawable पर
+                        reapplyTint(targetView);
+
+                        // ── URI tag store
                         targetView.setTag(R.id.btn_sticker_gallery, imageUri.toString());
 
                         exportToJson();
