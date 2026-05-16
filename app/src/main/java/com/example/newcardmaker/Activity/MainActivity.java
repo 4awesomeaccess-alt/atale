@@ -13430,12 +13430,11 @@ public class MainActivity extends AppCompatActivity {
 
         // ── Screen Color Picker ──
         btnScreenPick.setOnClickListener(v2 -> {
-            popup.dismiss();
+            popup.dismiss(); // dismiss = onDismissListener = controls show થશે
             new com.example.newcardmaker.ScreenColorPickerOverlay(this,
                 new com.example.newcardmaker.ScreenColorPickerOverlay.OnColorPickedListener() {
                     @Override
                     public void onColorPreview(int color) {
-                        // Drag કરતા real-time text color change
                         targetView.setTextColor(color);
                     }
                     @Override
@@ -13447,7 +13446,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onCancelled() {
                         targetView.setTextColor(originalColor);
-                        showTextColorPopup(targetView);
+                        // controls already show થઈ ગયા છે dismiss listener થી
                     }
                 }).show();
         });
@@ -13467,11 +13466,18 @@ public class MainActivity extends AppCompatActivity {
             popup.dismiss();
         });
 
+        // ── Text Controls hide ──
+        if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) {
+            selectionControlsPopup.dismiss();
+        }
+
         View anchor = getWindow().getDecorView().getRootView();
         int screenHeight = getResources().getDisplayMetrics().heightPixels;
         int yOffset = (screenHeight - popupHeight) / 2;
         popup.showAtLocation(anchor, Gravity.TOP | Gravity.START, 0, yOffset);
-    }
+
+        // ── Text Controls restore when color popup closes ──
+        popup.setOnDismissListener(() -> showSelectionControlsForText(targetView));
 
     private void showTextBorderDialog(StrokeTextView targetView) {
 
