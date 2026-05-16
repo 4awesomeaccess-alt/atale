@@ -13306,7 +13306,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setPadding(24, 24, 24, 24);
-        root.setBackgroundColor(Color.parseColor("#1E1E1E"));
+        root.setBackgroundColor(Color.parseColor("#808080"));
 
         TextView title = new TextView(this);
         title.setText("Text Color");
@@ -13323,7 +13323,7 @@ public class MainActivity extends AppCompatActivity {
         preview.setTextColor(targetView.getCurrentTextColor());
         preview.setGravity(Gravity.CENTER);
         preview.setPadding(16, 16, 16, 16);
-        preview.setBackgroundColor(Color.parseColor("#2C2C2C"));
+        preview.setBackgroundColor(Color.parseColor("#9E9E9E"));
         LinearLayout.LayoutParams previewParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, (int)(60 * dp));
         previewParams.setMargins(0, 0, 0, 16);
@@ -13414,9 +13414,32 @@ public class MainActivity extends AppCompatActivity {
         popup.setOutsideTouchable(true);
         popup.setElevation(16f);
         GradientDrawable bg = new GradientDrawable();
-        bg.setColor(Color.parseColor("#1E1E1E"));
+        bg.setColor(Color.parseColor("#808080"));
         bg.setCornerRadius(20f);
         popup.setBackgroundDrawable(bg);
+
+        // ── Movable Popup ──
+        final int[] lastX = {0};
+        final int[] lastY = {0};
+        root.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    lastX[0] = (int) event.getRawX();
+                    lastY[0] = (int) event.getRawY();
+                    return true;
+                case MotionEvent.ACTION_MOVE:
+                    int dx = (int) event.getRawX() - lastX[0];
+                    int dy = (int) event.getRawY() - lastY[0];
+                    // popup ની current location મળે
+                    int[] loc = new int[2];
+                    root.getLocationOnScreen(loc);
+                    popup.update(loc[0] + dx, loc[1] + dy, -1, -1);
+                    lastX[0] = (int) event.getRawX();
+                    lastY[0] = (int) event.getRawY();
+                    return true;
+            }
+            return false;
+        });
 
         final int originalColor = targetView.getCurrentTextColor();
 
