@@ -13995,6 +13995,17 @@ public class MainActivity extends AppCompatActivity {
                                         } else {
                                             targetView.setBackground(bd);
                                         }
+
+                                        // ✅ Tint reset
+                                        tintColor[0] = Color.TRANSPARENT;
+                                        tintPreview.setBackgroundColor(Color.TRANSPARENT);
+                                        targetView.setTag(R.id.btn_sel_text_color, null);
+
+                                        // ✅ Opacity 255
+                                        tintAlpha[0] = 255;
+                                        tintOpacity.setProgress(255);
+                                        tintOpacityVal.setText("255");
+
                                         exportToJson();
                                     });
                                 }
