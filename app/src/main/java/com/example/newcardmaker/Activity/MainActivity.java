@@ -13553,17 +13553,35 @@ public class MainActivity extends AppCompatActivity {
                 case 2:  orient = GradientDrawable.Orientation.TL_BR; break;
                 default: orient = GradientDrawable.Orientation.LEFT_RIGHT; break;
             }
+            GradientDrawable gradGd;
             if (gradDirection[0] == 3) {
-                android.graphics.drawable.GradientDrawable radGd = new android.graphics.drawable.GradientDrawable(
+                gradGd = new GradientDrawable(
                     GradientDrawable.Orientation.LEFT_RIGHT,
                     new int[]{gradColor1[0], gradColor2[0]});
-                radGd.setGradientType(GradientDrawable.RADIAL_GRADIENT);
-                radGd.setGradientRadius(300f);
-                gradPreview.setBackground(radGd);
+                gradGd.setGradientType(GradientDrawable.RADIAL_GRADIENT);
+                gradGd.setGradientRadius(500f);
             } else {
-                gradPreview.setBackground(new GradientDrawable(orient,
-                    new int[]{gradColor1[0], gradColor2[0]}));
+                gradGd = new GradientDrawable(orient,
+                    new int[]{gradColor1[0], gradColor2[0]});
             }
+            // Preview box update
+            gradPreview.setBackground(gradGd);
+            // ✅ Real-time text background apply
+            Object borderTag = targetView.getTag(R.id.btn_add_sticker);
+            int borderStyle = borderTag instanceof Integer ? (int) borderTag : 0;
+            GradientDrawable applyGd;
+            if (gradDirection[0] == 3) {
+                applyGd = new GradientDrawable(
+                    GradientDrawable.Orientation.LEFT_RIGHT,
+                    new int[]{gradColor1[0], gradColor2[0]});
+                applyGd.setGradientType(GradientDrawable.RADIAL_GRADIENT);
+                applyGd.setGradientRadius(500f);
+            } else {
+                applyGd = new GradientDrawable(orient,
+                    new int[]{gradColor1[0], gradColor2[0]});
+            }
+            applyBorderStyle(applyGd, borderStyle);
+            targetView.setBackground(applyGd);
         };
 
         // Add color buttons to solid rows
