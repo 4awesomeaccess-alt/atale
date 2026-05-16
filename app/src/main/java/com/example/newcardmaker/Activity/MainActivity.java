@@ -13307,6 +13307,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout colorRow = root.findViewById(R.id.color_row);
         TextView btnCancel    = root.findViewById(R.id.btn_color_cancel);
         TextView btnDone      = root.findViewById(R.id.btn_color_done);
+        TextView btnClose     = root.findViewById(R.id.btn_color_close);
 
         // ── Views from XML ──
         com.example.newcardmaker.ColorWheelView colorWheel = root.findViewById(R.id.color_wheel);
@@ -13414,6 +13415,11 @@ public class MainActivity extends AppCompatActivity {
 
         // ── Cancel / Done ──
         final int originalColor = targetView.getCurrentTextColor();
+
+        btnClose.setOnClickListener(v2 -> {
+            targetView.setTextColor(originalColor);
+            popup.dismiss();
+        });
 
         btnCancel.setOnClickListener(v2 -> {
             targetView.setTextColor(originalColor);

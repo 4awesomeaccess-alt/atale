@@ -41,6 +41,17 @@
             android:textColor="#6B7280"
             android:textSize="8sp" />
 
+        <TextView
+            android:id="@+id/btn_color_close"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:text="✕"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:gravity="center"
+            android:background="#607D8B"
+            android:layout_marginStart="8dp" />
+
     </LinearLayout>
 
     <!-- ── Content (150dp = 180 - 30 title) ── -->
