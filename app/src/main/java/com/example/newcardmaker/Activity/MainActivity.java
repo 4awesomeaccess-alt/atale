@@ -13522,16 +13522,19 @@ public class MainActivity extends AppCompatActivity {
             overlayC2Box.setBackgroundColor(c);
         }));
 
-        // Apply gradient overlay on top of image
+        // Apply gradient overlay on top of image — imgPreview પર
         btnOverlay.setOnClickListener(v -> {
-            android.graphics.drawable.Drawable currentBg = targetView.getBackground();
-            if (currentBg == null) return;
+            android.graphics.drawable.Drawable imgDraw = imgPreview.getDrawable();
+            if (imgDraw == null) return;
             GradientDrawable gradOverlay = new GradientDrawable(
                 GradientDrawable.Orientation.LEFT_RIGHT,
                 new int[]{overlayC1[0], overlayC2[0]});
             android.graphics.drawable.LayerDrawable layered =
                 new android.graphics.drawable.LayerDrawable(
-                    new android.graphics.drawable.Drawable[]{currentBg, gradOverlay});
+                    new android.graphics.drawable.Drawable[]{imgDraw.mutate(), gradOverlay});
+            // imgPreview update
+            imgPreview.setImageDrawable(layered);
+            // targetView background update
             targetView.setBackground(layered);
             targetView.setTag(R.id.btn_sel_bg_color, layered);
             exportToJson();
@@ -13539,13 +13542,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Remove overlay
         btnOverlayNone.setOnClickListener(v -> {
-            android.graphics.drawable.Drawable currentBg = targetView.getBackground();
-            if (currentBg instanceof android.graphics.drawable.LayerDrawable) {
-                android.graphics.drawable.LayerDrawable ld =
-                    (android.graphics.drawable.LayerDrawable) currentBg;
-                if (ld.getNumberOfLayers() > 0) {
-                    targetView.setBackground(ld.getDrawable(0));
-                }
+            android.graphics.drawable.Drawable currentDraw = imgPreview.getDrawable();
+            if (currentDraw instanceof android.graphics.drawable.LayerDrawable) {
+                android.graphics.drawable.Drawable base =
+                    ((android.graphics.drawable.LayerDrawable) currentDraw).getDrawable(0);
+                imgPreview.setImageDrawable(base);
+                targetView.setBackground(base);
+                targetView.setTag(R.id.btn_sel_bg_color, null);
             }
             exportToJson();
         });
@@ -13554,21 +13557,25 @@ public class MainActivity extends AppCompatActivity {
         final int[] tintColor  = {Color.TRANSPARENT};
         final int[] tintAlpha  = {100};
 
-        // ── Tint apply helper ──
+        // ── Tint apply helper — imgPreview drawable પર ──
         Runnable applyTint = () -> {
-            android.graphics.drawable.Drawable bg = targetView.getBackground();
-            if (bg == null) return;
+            android.graphics.drawable.Drawable imgDraw = imgPreview.getDrawable();
+            if (imgDraw == null) return;
             if (tintColor[0] == Color.TRANSPARENT) {
-                bg.clearColorFilter();
+                imgDraw.clearColorFilter();
+                targetView.getBackground().clearColorFilter();
                 targetView.setTag(R.id.btn_sel_text_color, null);
             } else {
                 int alpha = tintAlpha[0];
                 int tint = Color.argb(alpha, Color.red(tintColor[0]),
                     Color.green(tintColor[0]), Color.blue(tintColor[0]));
-                bg.setColorFilter(tint, android.graphics.PorterDuff.Mode.SRC_ATOP);
-                // ✅ Tag ma save — restore mate
+                imgDraw.setColorFilter(tint, android.graphics.PorterDuff.Mode.SRC_ATOP);
+                // targetView background પર પણ apply
+                android.graphics.drawable.Drawable bg = targetView.getBackground();
+                if (bg != null) bg.setColorFilter(tint, android.graphics.PorterDuff.Mode.SRC_ATOP);
                 targetView.setTag(R.id.btn_sel_text_color, new int[]{tintColor[0], tintAlpha[0]});
             }
+            imgPreview.invalidate();
             targetView.invalidate();
         };
 
@@ -13600,8 +13607,12 @@ public class MainActivity extends AppCompatActivity {
         btnTintNone.setOnClickListener(v -> {
             tintColor[0] = Color.TRANSPARENT;
             tintPreview.setBackgroundColor(Color.TRANSPARENT);
+            android.graphics.drawable.Drawable imgDraw = imgPreview.getDrawable();
+            if (imgDraw != null) imgDraw.clearColorFilter();
             android.graphics.drawable.Drawable bg = targetView.getBackground();
             if (bg != null) bg.clearColorFilter();
+            targetView.setTag(R.id.btn_sel_text_color, null);
+            imgPreview.invalidate();
             targetView.invalidate();
         });
 
