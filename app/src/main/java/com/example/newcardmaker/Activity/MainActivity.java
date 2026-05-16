@@ -13658,12 +13658,6 @@ public class MainActivity extends AppCompatActivity {
         // ── Solid panel views ──
         android.view.View solidHexPreview     = root.findViewById(R.id.gp_solid_hex_preview);
         android.widget.TextView solidPickBtn  = root.findViewById(R.id.gp_solid_pick_btn);
-        android.widget.SeekBar seekR = root.findViewById(R.id.gp_solid_seek_r);
-        android.widget.SeekBar seekG = root.findViewById(R.id.gp_solid_seek_g);
-        android.widget.SeekBar seekB = root.findViewById(R.id.gp_solid_seek_b);
-        android.widget.TextView valR = root.findViewById(R.id.gp_solid_val_r);
-        android.widget.TextView valG = root.findViewById(R.id.gp_solid_val_g);
-        android.widget.TextView valB = root.findViewById(R.id.gp_solid_val_b);
 
         // ── Gradient panel views ──
         android.view.View gradPreview       = root.findViewById(R.id.gp_gradient_preview);
@@ -13686,12 +13680,6 @@ public class MainActivity extends AppCompatActivity {
 
         // ── Solid initial ──
         solidHexPreview.setBackgroundColor(initColor);
-        seekR.setProgress(Color.red(initColor));
-        seekG.setProgress(Color.green(initColor));
-        seekB.setProgress(Color.blue(initColor));
-        valR.setText(String.valueOf(Color.red(initColor)));
-        valG.setText(String.valueOf(Color.green(initColor)));
-        valB.setText(String.valueOf(Color.blue(initColor)));
 
         // ── Solid apply helper ──
         Runnable applySolid = () -> {
@@ -13729,12 +13717,6 @@ public class MainActivity extends AppCompatActivity {
                 solidHexPreview.setBackgroundColor(c);
                 hexPrev.setBackgroundColor(c);
                 etHex.setText(String.format("%06X", 0xFFFFFF & c));
-                seekR.setProgress(Color.red(c));
-                seekG.setProgress(Color.green(c));
-                seekB.setProgress(Color.blue(c));
-                valR.setText(String.valueOf(Color.red(c)));
-                valG.setText(String.valueOf(Color.green(c)));
-                valB.setText(String.valueOf(Color.blue(c)));
                 applySolid.run();
             });
 
@@ -13757,12 +13739,6 @@ public class MainActivity extends AppCompatActivity {
                     solidHexPreview.setBackgroundColor(fc);
                     hexPrev.setBackgroundColor(fc);
                     etHex.setText(String.format("%06X", 0xFFFFFF & fc));
-                    seekR.setProgress(Color.red(fc));
-                    seekG.setProgress(Color.green(fc));
-                    seekB.setProgress(Color.blue(fc));
-                    valR.setText(String.valueOf(Color.red(fc)));
-                    valG.setText(String.valueOf(Color.green(fc)));
-                    valB.setText(String.valueOf(Color.blue(fc)));
                     applySolid.run();
                 });
                 colorRow.addView(cb);
@@ -13774,12 +13750,6 @@ public class MainActivity extends AppCompatActivity {
                     solidColor[0] = parsed;
                     wheel.setColor(parsed);
                     solidHexPreview.setBackgroundColor(parsed);
-                    seekR.setProgress(Color.red(parsed));
-                    seekG.setProgress(Color.green(parsed));
-                    seekB.setProgress(Color.blue(parsed));
-                    valR.setText(String.valueOf(Color.red(parsed)));
-                    valG.setText(String.valueOf(Color.green(parsed)));
-                    valB.setText(String.valueOf(Color.blue(parsed)));
                     applySolid.run();
                 } catch (Exception e) { etHex.setError("Invalid"); }
             });
@@ -13814,24 +13784,7 @@ public class MainActivity extends AppCompatActivity {
             wDone.setOnClickListener(vv -> { exportToJson(); wp.dismiss(); });
         });
 
-        // RGB sliders
-        android.widget.SeekBar[] seeks = {seekR, seekG, seekB};
-        android.widget.TextView[] vals = {valR, valG, valB};
-        for (int i = 0; i < 3; i++) {
-            final int idx = i;
-            seeks[i].setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
-                @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
-                @Override public void onStopTrackingTouch(android.widget.SeekBar s) {}
-                @Override public void onProgressChanged(android.widget.SeekBar s, int progress, boolean fromUser) {
-                    if (!fromUser) return;
-                    vals[idx].setText(String.valueOf(progress));
-                    int nc = Color.rgb(seekR.getProgress(), seekG.getProgress(), seekB.getProgress());
-                    solidColor[0] = nc;
-                    solidHexPreview.setBackgroundColor(nc);
-                    applySolid.run();
-                }
-            });
-        }
+
         // ── Gradient preview helper ──
         Runnable updateGradPreview = () -> {
             GradientDrawable.Orientation orient;

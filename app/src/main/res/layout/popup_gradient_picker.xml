@@ -110,59 +110,29 @@
         android:padding="8dp"
         android:visibility="visible">
 
-        <!-- Left: Selected color preview + Pick button -->
+        <!-- Color preview + Pick button — centered -->
         <LinearLayout
-            android:layout_width="100dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:gravity="center"
-            android:paddingEnd="8dp">
+            android:gravity="center">
 
             <View
                 android:id="@+id/gp_solid_hex_preview"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:background="#FF0000"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="10dp" />
 
             <TextView
                 android:id="@+id/gp_solid_pick_btn"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_width="160dp"
+                android:layout_height="36dp"
                 android:text="🎨 Pick Color"
                 android:textColor="#FFFFFF"
-                android:textSize="11sp"
+                android:textSize="13sp"
                 android:gravity="center"
                 android:background="#1565C0" />
-
-        </LinearLayout>
-
-        <!-- Right: RGB Sliders -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center_vertical">
-
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="8dp">
-                <TextView android:layout_width="14dp" android:layout_height="wrap_content" android:text="R" android:textColor="#EF5350" android:textSize="10sp" android:textStyle="bold" />
-                <SeekBar android:id="@+id/gp_solid_seek_r" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:max="255" android:progressTint="#EF5350" android:thumbTint="#EF5350" android:layout_marginHorizontal="4dp" />
-                <TextView android:id="@+id/gp_solid_val_r" android:layout_width="24dp" android:layout_height="wrap_content" android:text="255" android:textColor="#CFD8DC" android:textSize="9sp" android:gravity="end" />
-            </LinearLayout>
-
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="8dp">
-                <TextView android:layout_width="14dp" android:layout_height="wrap_content" android:text="G" android:textColor="#66BB6A" android:textSize="10sp" android:textStyle="bold" />
-                <SeekBar android:id="@+id/gp_solid_seek_g" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:max="255" android:progressTint="#66BB6A" android:thumbTint="#66BB6A" android:layout_marginHorizontal="4dp" />
-                <TextView android:id="@+id/gp_solid_val_g" android:layout_width="24dp" android:layout_height="wrap_content" android:text="0" android:textColor="#CFD8DC" android:textSize="9sp" android:gravity="end" />
-            </LinearLayout>
-
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
-                <TextView android:layout_width="14dp" android:layout_height="wrap_content" android:text="B" android:textColor="#42A5F5" android:textSize="10sp" android:textStyle="bold" />
-                <SeekBar android:id="@+id/gp_solid_seek_b" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:max="255" android:progressTint="#42A5F5" android:thumbTint="#42A5F5" android:layout_marginHorizontal="4dp" />
-                <TextView android:id="@+id/gp_solid_val_b" android:layout_width="24dp" android:layout_height="wrap_content" android:text="0" android:textColor="#CFD8DC" android:textSize="9sp" android:gravity="end" />
-            </LinearLayout>
 
         </LinearLayout>
 
