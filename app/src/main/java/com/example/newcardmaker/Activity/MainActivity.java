@@ -21852,9 +21852,10 @@ public class MainActivity extends AppCompatActivity {
         content.addView(btnRow);
 
         // ── PopupWindow
+        int screenW = getResources().getDisplayMetrics().widthPixels;
         android.widget.PopupWindow popup = new android.widget.PopupWindow(
                 root,
-                android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+                screenW,
                 android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
                 true);
         popup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(
@@ -21878,7 +21879,7 @@ public class MainActivity extends AppCompatActivity {
                     int dy = (int) event.getRawY() - lastXY[1];
                     int[] loc = new int[2];
                     root.getLocationOnScreen(loc);
-                    popup.update(loc[0] + dx, loc[1] + dy, -1, -1);
+                    popup.update(loc[0] + dx, loc[1] + dy, screenW, -1);
                     lastXY[0] = (int) event.getRawX();
                     lastXY[1] = (int) event.getRawY();
                     break;
