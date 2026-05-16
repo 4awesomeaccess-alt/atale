@@ -13797,7 +13797,6 @@ public class MainActivity extends AppCompatActivity {
                     Glide.with(MainActivity.this).load(url).into(iv);
 
                     holder.itemView.setOnClickListener(vv -> {
-                        String url = urls.get(pos);
                         // Tag set
                         targetView.setTag(R.id.btn_sticker_gallery, url);
                         targetView.setTag(R.id.btn_sel_bg_color, null);
