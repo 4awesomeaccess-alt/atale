@@ -192,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private static final int REQUEST_TEXT_BG_IMAGE1 = 700;
+    private static final int REQUEST_BG_IMAGE_LIST  = 702;
 
 
     // ── Selection controls last position
@@ -9472,10 +9473,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (requestCode == REQUEST_TEXT_BG_IMAGE1 && resultCode == RESULT_OK && data != null) {
-
             Uri selectedUri = data.getData();
             if (selectedUri != null && pendingTextBgTarget != null) {
                 applyTextBgImage(selectedUri, pendingTextBgTarget);
+            }
+            pendingTextBgTarget = null;
+        }
+
+        if (requestCode == REQUEST_BG_IMAGE_LIST && resultCode == RESULT_OK && data != null) {
+            String filePath = data.getStringExtra(ImageListActivity.RESULT_IMAGE_PATH);
+            if (filePath != null && pendingTextBgTarget != null) {
+                Uri fileUri = Uri.fromFile(new java.io.File(filePath));
+                applyTextBgImage(fileUri, pendingTextBgTarget);
+                // Preview update
+                pendingTextBgTarget.setTag(R.id.btn_sticker_gallery, fileUri.toString());
+                exportToJson();
             }
             pendingTextBgTarget = null;
         }
@@ -13746,11 +13758,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         btnImagePick.setOnClickListener(v -> {
-            // Gallery open — pendingTextBgTarget set
             pendingTextBgTarget = targetView;
-            Intent intent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(intent, 9999);
+            Intent intent = new Intent(this, ImageListActivity.class);
+            intent.putExtra(ImageListActivity.EXTRA_PICK_MODE, true);
+            startActivityForResult(intent, REQUEST_BG_IMAGE_LIST);
         });
 
         btnImageRemove.setOnClickListener(v -> {

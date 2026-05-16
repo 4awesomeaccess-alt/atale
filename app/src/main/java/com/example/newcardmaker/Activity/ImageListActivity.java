@@ -33,10 +33,14 @@ import java.util.Locale;
 
 public class ImageListActivity extends AppCompatActivity {
 
+    public static final String EXTRA_PICK_MODE   = "pick_mode";
+    public static final String RESULT_IMAGE_PATH = "image_path";
+
     private RecyclerView recyclerView;
     private TextView     tvEmpty;
     private List<ImageFileManager.ImageItem> imageList;
     private ImageAdapter adapter;
+    private boolean isPickMode = false;
 
     // ── View mode toggle
     private boolean isGridMode = true;
@@ -44,6 +48,9 @@ public class ImageListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // ── Pick mode check
+        isPickMode = getIntent().getBooleanExtra(EXTRA_PICK_MODE, false);
 
         // ── Root
         LinearLayout root = new LinearLayout(this);
@@ -67,7 +74,7 @@ public class ImageListActivity extends AppCompatActivity {
 
         // Title
         TextView tvTitle = new TextView(this);
-        tvTitle.setText("Saved Images");
+        tvTitle.setText(isPickMode ? "Select Image" : "Saved Images");
         tvTitle.setTextSize(18);
         tvTitle.setTextColor(Color.WHITE);
         tvTitle.setTypeface(Typeface.DEFAULT_BOLD);
@@ -282,8 +289,17 @@ public class ImageListActivity extends AppCompatActivity {
             holder.tvDate.setText(date);
 
             // ── Open full image on click
-            holder.itemView.setOnClickListener(v ->
-                    showFullImageDialog(item));
+            holder.itemView.setOnClickListener(v -> {
+                if (isPickMode) {
+                    // Pick mode — result return
+                    Intent result = new Intent();
+                    result.putExtra(RESULT_IMAGE_PATH, item.filePath);
+                    setResult(RESULT_OK, result);
+                    finish();
+                } else {
+                    showFullImageDialog(item);
+                }
+            });
 
             // ── Share
             holder.btnShare.setOnClickListener(v ->
