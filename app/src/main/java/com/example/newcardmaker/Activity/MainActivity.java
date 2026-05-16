@@ -13996,6 +13996,11 @@ public class MainActivity extends AppCompatActivity {
                                         tintOpacity.setProgress(255);
                                         tintOpacityVal.setText("255");
 
+                                        // ✅ Selected હોય તો selection border reapply
+                                        if (selectedViews.contains(targetView)) {
+                                            applySelectionBorder(targetView);
+                                        }
+
                                         exportToJson();
                                     });
                                 }
@@ -15141,6 +15146,11 @@ public class MainActivity extends AppCompatActivity {
 
                         // ✅ Tint restore — new drawable पर
                         reapplyTint(targetView);
+
+                        // ✅ Selected હોય તો foreground border reapply
+                        if (selectedViews.contains(targetView)) {
+                            applySelectionBorder(targetView);
+                        }
 
                         // ── URI tag store
                         targetView.setTag(R.id.btn_sticker_gallery, imageUri.toString());
