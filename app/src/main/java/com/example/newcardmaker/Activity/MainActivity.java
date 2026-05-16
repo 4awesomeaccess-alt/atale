@@ -22091,9 +22091,13 @@ public class MainActivity extends AppCompatActivity {
 
             StrokeTextView tv = (StrokeTextView) v;
 
-            if (hasTextBgImage(tv)) {
+            // ✅ Image background check — URL tag OR BitmapDrawable/LayerDrawable
+            boolean hasBgImage = hasTextBgImage(tv)
+                || tv.getBackground() instanceof android.graphics.drawable.BitmapDrawable
+                || (tv.getBackground() instanceof android.graphics.drawable.LayerDrawable);
 
-                // ✅ Background image ને touch ન કરવી
+            if (hasBgImage) {
+                // Background image ને touch ન કરવી — foreground border
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                     GradientDrawable border = new GradientDrawable();
                     border.setColor(Color.TRANSPARENT);
@@ -22101,11 +22105,11 @@ public class MainActivity extends AppCompatActivity {
                     border.setCornerRadius(8f);
                     tv.setForeground(border);
                 }
-
                 tv.setPadding(20, 20, 20, 20);
                 return;
             }
 
+            // ✅ Gradient/Solid background — setBackground safe
             GradientDrawable gd = new GradientDrawable();
             gd.setColor(getStoredBackgroundColor(tv));
             gd.setStroke(6, Color.CYAN);
