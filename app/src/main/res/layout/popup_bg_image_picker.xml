@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#1C2529">
+
+    <!-- ── Title Bar ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:background="#2A3439"
+        android:gravity="center_vertical"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="🖼 Select Background Image"
+            android:textColor="#F3F4F6"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/bip_btn_close"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:text="✕"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:background="#607D8B" />
+
+    </LinearLayout>
+
+    <!-- ── Grid ── -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/bip_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="6dp"
+        android:clipToPadding="false" />
+
+</LinearLayout>

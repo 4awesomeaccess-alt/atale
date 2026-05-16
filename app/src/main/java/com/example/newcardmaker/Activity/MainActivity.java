@@ -13758,10 +13758,59 @@ public class MainActivity extends AppCompatActivity {
         }
 
         btnImagePick.setOnClickListener(v -> {
-            pendingTextBgTarget = targetView;
-            Intent intent = new Intent(this, ImageListActivity.class);
-            intent.putExtra(ImageListActivity.EXTRA_PICK_MODE, true);
-            startActivityForResult(intent, REQUEST_BG_IMAGE_LIST);
+            // ── URL based image picker dialog ──
+            android.app.Dialog dialog = new android.app.Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+            android.view.View dRoot = getLayoutInflater().inflate(R.layout.popup_bg_image_picker, null);
+            dialog.setContentView(dRoot);
+
+            androidx.recyclerview.widget.RecyclerView rv = dRoot.findViewById(R.id.bip_recycler);
+            android.widget.TextView btnCloseDialog = dRoot.findViewById(R.id.bip_btn_close);
+
+            // p1 to p14 URLs
+            String baseUrl = "https://democrecrytonixinvitesan.gardenphoto.in/images/";
+            java.util.List<String> urls = new java.util.ArrayList<>();
+            for (int i = 1; i <= 14; i++) {
+                urls.add(baseUrl + "p" + i + ".png");
+            }
+
+            rv.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 3));
+            rv.setAdapter(new androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
+
+                @Override
+                public int getItemCount() { return urls.size(); }
+
+                @Override
+                public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(
+                        android.view.ViewGroup parent, int viewType) {
+                    android.view.View itemView = getLayoutInflater().inflate(
+                        R.layout.item_bg_image, parent, false);
+                    return new androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {};
+                }
+
+                @Override
+                public void onBindViewHolder(
+                        androidx.recyclerview.widget.RecyclerView.ViewHolder holder, int pos) {
+                    ImageView iv = holder.itemView.findViewById(R.id.iv_bg_thumb);
+                    android.widget.TextView tv = holder.itemView.findViewById(R.id.tv_bg_num);
+                    String url = urls.get(pos);
+                    tv.setText("p" + (pos + 1));
+                    Glide.with(MainActivity.this).load(url).into(iv);
+
+                    holder.itemView.setOnClickListener(vv -> {
+                        // Apply image as background
+                        targetView.setTag(R.id.btn_sticker_gallery, url);
+                        targetView.setTag(R.id.btn_sel_bg_color, null);
+                        applyTextBgImage(Uri.parse(url), targetView);
+                        // Preview update in popup
+                        Glide.with(MainActivity.this).load(url).into(imgPreview);
+                        exportToJson();
+                        dialog.dismiss();
+                    });
+                }
+            });
+
+            btnCloseDialog.setOnClickListener(vv -> dialog.dismiss());
+            dialog.show();
         });
 
         btnImageRemove.setOnClickListener(v -> {
