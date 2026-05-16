@@ -13581,6 +13581,8 @@ public class MainActivity extends AppCompatActivity {
                     new int[]{gradColor1[0], gradColor2[0]});
             }
             applyBorderStyle(applyGd, borderStyle);
+            // ✅ Tag save
+            targetView.setTag(R.id.btn_sel_bg_color, applyGd);
             targetView.setBackground(applyGd);
         };
 
@@ -13726,6 +13728,8 @@ public class MainActivity extends AppCompatActivity {
             Object borderTag = targetView.getTag(R.id.btn_add_sticker);
             int borderStyle = borderTag instanceof Integer ? (int) borderTag : 0;
             applyBorderStyle(gradGd, borderStyle);
+            // ✅ Gradient tag ma save karo - restore mate
+            targetView.setTag(R.id.btn_sel_bg_color, gradGd);
             targetView.setBackground(gradGd);
             exportToJson();
         });
@@ -21306,6 +21310,13 @@ public class MainActivity extends AppCompatActivity {
         if (android.os.Build.VERSION.SDK_INT >=
                 android.os.Build.VERSION_CODES.M) {
             tv.setForeground(null);
+        }
+
+        // ✅ Gradient saved હોય તો restore
+        Object gradTag = tv.getTag(R.id.btn_sel_bg_color);
+        if (gradTag instanceof GradientDrawable) {
+            tv.setBackground((GradientDrawable) gradTag);
+            return;
         }
 
         Object bgImageTag = tv.getTag(R.id.btn_sticker_gallery);
