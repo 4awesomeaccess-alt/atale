@@ -369,48 +369,150 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:gravity="center"
-        android:padding="12dp"
+        android:padding="8dp"
         android:visibility="gone">
 
-        <!-- Current image preview -->
-        <ImageView
-            android:id="@+id/gp_image_preview"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:scaleType="centerCrop"
-            android:background="#374151"
-            android:layout_marginBottom="10dp" />
-
-        <!-- Buttons row -->
+        <!-- Top: Preview + Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center">
+            android:layout_marginBottom="6dp">
 
-            <TextView
-                android:id="@+id/gp_image_pick"
+            <!-- Image preview -->
+            <ImageView
+                android:id="@+id/gp_image_preview"
                 android:layout_width="0dp"
-                android:layout_height="34dp"
+                android:layout_height="56dp"
                 android:layout_weight="1"
-                android:text="📷 Gallery"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp"
-                android:gravity="center"
-                android:background="#1565C0"
+                android:scaleType="centerCrop"
+                android:background="#374151"
                 android:layout_marginEnd="6dp" />
 
+            <!-- Pick + Remove -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="56dp"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/gp_image_pick"
+                    android:layout_width="80dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="📷 Select"
+                    android:textColor="#FFFFFF"
+                    android:textSize="11sp"
+                    android:gravity="center"
+                    android:background="#1565C0"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:id="@+id/gp_image_remove"
+                    android:layout_width="80dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:text="✕ Remove"
+                    android:textColor="#FFFFFF"
+                    android:textSize="11sp"
+                    android:gravity="center"
+                    android:background="#B71C1C" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Tint Color Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="4dp">
+
             <TextView
-                android:id="@+id/gp_image_remove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tint:"
+                android:textColor="#CFD8DC"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="6dp" />
+
+            <!-- Tint color preview box -->
+            <View
+                android:id="@+id/gp_tint_preview"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:background="#00000000"
+                android:layout_marginEnd="4dp" />
+
+            <!-- Tint color quick picks -->
+            <HorizontalScrollView
                 android:layout_width="0dp"
-                android:layout_height="34dp"
+                android:layout_height="26dp"
                 android:layout_weight="1"
-                android:text="✕ Remove"
+                android:scrollbars="none"
+                android:layout_marginEnd="6dp">
+
+                <LinearLayout
+                    android:id="@+id/gp_tint_color_row"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical" />
+
+            </HorizontalScrollView>
+
+            <!-- None tint -->
+            <TextView
+                android:id="@+id/gp_tint_none"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:text="✕"
                 android:textColor="#FFFFFF"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:gravity="center"
-                android:background="#B71C1C" />
+                android:paddingHorizontal="8dp"
+                android:background="#374151" />
+
+        </LinearLayout>
+
+        <!-- Tint Opacity Slider -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Opacity:"
+                android:textColor="#CFD8DC"
+                android:textSize="10sp"
+                android:layout_marginEnd="6dp" />
+
+            <SeekBar
+                android:id="@+id/gp_tint_opacity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:max="255"
+                android:progress="100"
+                android:progressTint="#607D8B"
+                android:thumbTint="#CFD8DC" />
+
+            <TextView
+                android:id="@+id/gp_tint_opacity_val"
+                android:layout_width="28dp"
+                android:layout_height="wrap_content"
+                android:text="100"
+                android:textColor="#CFD8DC"
+                android:textSize="9sp"
+                android:gravity="end"
+                android:layout_marginStart="4dp" />
 
         </LinearLayout>
 

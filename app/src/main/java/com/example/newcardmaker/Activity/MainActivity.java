@@ -13498,6 +13498,75 @@ public class MainActivity extends AppCompatActivity {
         android.widget.ImageView imgPreview  = root.findViewById(R.id.gp_image_preview);
         android.widget.TextView btnImagePick = root.findViewById(R.id.gp_image_pick);
         android.widget.TextView btnImageRemove = root.findViewById(R.id.gp_image_remove);
+        android.view.View tintPreview        = root.findViewById(R.id.gp_tint_preview);
+        android.widget.LinearLayout tintRow  = root.findViewById(R.id.gp_tint_color_row);
+        android.widget.TextView btnTintNone  = root.findViewById(R.id.gp_tint_none);
+        android.widget.SeekBar tintOpacity   = root.findViewById(R.id.gp_tint_opacity);
+        android.widget.TextView tintOpacityVal = root.findViewById(R.id.gp_tint_opacity_val);
+
+        // ── Tint state ──
+        final int[] tintColor  = {Color.TRANSPARENT};
+        final int[] tintAlpha  = {100};
+
+        // ── Tint apply helper ──
+        Runnable applyTint = () -> {
+            android.graphics.drawable.Drawable bg = targetView.getBackground();
+            if (bg == null) return;
+            if (tintColor[0] == Color.TRANSPARENT) {
+                bg.clearColorFilter();
+            } else {
+                int alpha = tintAlpha[0];
+                int tint = Color.argb(alpha, Color.red(tintColor[0]),
+                    Color.green(tintColor[0]), Color.blue(tintColor[0]));
+                bg.setColorFilter(tint, android.graphics.PorterDuff.Mode.SRC_ATOP);
+            }
+            targetView.invalidate();
+        };
+
+        // ── Tint colors ──
+        int[] tintColors = {
+            0xFFFF0000, 0xFFFF9800, 0xFFFFEB3B, 0xFF4CAF50,
+            0xFF2196F3, 0xFF9C27B0, 0xFF000000, 0xFFFFFFFF,
+        };
+        for (int tc : tintColors) {
+            final int ftc = tc;
+            android.view.View tb = new android.view.View(this);
+            LinearLayout.LayoutParams tlp = new LinearLayout.LayoutParams(dpToPx(22), dpToPx(22));
+            tlp.setMargins(0, 0, dpToPx(3), 0);
+            tb.setLayoutParams(tlp);
+            android.graphics.drawable.GradientDrawable tgd = new android.graphics.drawable.GradientDrawable();
+            tgd.setColor(ftc);
+            tgd.setCornerRadius(dpToPx(3));
+            tgd.setStroke(dpToPx(1), 0xFFCCCCCC);
+            tb.setBackground(tgd);
+            tb.setOnClickListener(vt -> {
+                tintColor[0] = ftc;
+                tintPreview.setBackgroundColor(ftc);
+                applyTint.run();
+            });
+            tintRow.addView(tb);
+        }
+
+        // ── Tint None ──
+        btnTintNone.setOnClickListener(v -> {
+            tintColor[0] = Color.TRANSPARENT;
+            tintPreview.setBackgroundColor(Color.TRANSPARENT);
+            android.graphics.drawable.Drawable bg = targetView.getBackground();
+            if (bg != null) bg.clearColorFilter();
+            targetView.invalidate();
+        });
+
+        // ── Tint Opacity slider ──
+        tintOpacity.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onProgressChanged(android.widget.SeekBar s, int progress, boolean fromUser) {
+                if (!fromUser) return;
+                tintAlpha[0] = progress;
+                tintOpacityVal.setText(String.valueOf(progress));
+                applyTint.run();
+            }
+        });
 
         // ── Solid panel views ──
         android.widget.LinearLayout solidRow1 = root.findViewById(R.id.gp_solid_row1);
