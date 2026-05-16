@@ -13706,30 +13706,103 @@ public class MainActivity extends AppCompatActivity {
             targetView.setBackground(applyGd);
         };
 
-        // ── Gradient color pickers ──
-        color1Box.setOnClickListener(v -> showColorPickerPopup(gradColor1[0], c -> {
-            gradColor1[0] = c;
-            color1Box.setBackgroundColor(c);
-            etColor1.setText(String.format("%06X", 0xFFFFFF & c));
-            updateGradPreview.run();
-        }));
+        // ── Gradient color pickers — ColorWheelView popup ──
+        Runnable[] openWheelFor = {null};
 
-        color2Box.setOnClickListener(v -> showColorPickerPopup(gradColor2[0], c -> {
-            gradColor2[0] = c;
-            color2Box.setBackgroundColor(c);
-            etColor2.setText(String.format("%06X", 0xFFFFFF & c));
-            updateGradPreview.run();
-        }));
+        java.util.function.BiConsumer<Integer, Boolean> openGradWheel = (initC, isColor1) -> {
+            android.view.View wr = getLayoutInflater().inflate(R.layout.popup_text_color, null);
+            com.example.newcardmaker.ColorWheelView wh = wr.findViewById(R.id.color_wheel);
+            android.widget.EditText etH   = wr.findViewById(R.id.et_hex_color);
+            android.view.View hPrev       = wr.findViewById(R.id.view_hex_preview);
+            android.widget.TextView hApply = wr.findViewById(R.id.btn_hex_apply);
+            android.widget.TextView wDone  = wr.findViewById(R.id.btn_color_done);
+            android.widget.TextView wClose = wr.findViewById(R.id.btn_color_close);
+            android.view.View wTitle      = wr.findViewById(R.id.tv_color_title);
+            android.widget.LinearLayout cr = wr.findViewById(R.id.color_row);
+
+            wh.setColor(initC);
+            hPrev.setBackgroundColor(initC);
+            etH.setText(String.format("%06X", 0xFFFFFF & initC));
+
+            wh.setOnColorChangedListener(c -> {
+                hPrev.setBackgroundColor(c);
+                String hex = String.format("%06X", 0xFFFFFF & c);
+                if (!etH.getText().toString().equalsIgnoreCase(hex)) {
+                    etH.setText(hex); etH.setSelection(hex.length());
+                }
+                if (isColor1) { gradColor1[0] = c; color1Box.setBackgroundColor(c); etColor1.setText(hex); }
+                else          { gradColor2[0] = c; color2Box.setBackgroundColor(c); etColor2.setText(hex); }
+                updateGradPreview.run();
+            });
+
+            hApply.setOnClickListener(vv -> {
+                try {
+                    int p = Color.parseColor("#" + etH.getText().toString().trim());
+                    wh.setColor(p); hPrev.setBackgroundColor(p);
+                    if (isColor1) { gradColor1[0] = p; color1Box.setBackgroundColor(p); etColor1.setText(String.format("%06X", 0xFFFFFF & p)); }
+                    else          { gradColor2[0] = p; color2Box.setBackgroundColor(p); etColor2.setText(String.format("%06X", 0xFFFFFF & p)); }
+                    updateGradPreview.run();
+                } catch (Exception ignored) {}
+            });
+
+            // Quick colors
+            int[] qc = {0xFFFF0000,0xFFFF9800,0xFFFFFF00,0xFF4CAF50,0xFF2196F3,0xFF9C27B0,0xFF000000,0xFFFFFFFF};
+            for (int fc2 : qc) {
+                final int fc = fc2;
+                android.view.View cb = new android.view.View(this);
+                LinearLayout.LayoutParams lp3 = new LinearLayout.LayoutParams(dpToPx(30), dpToPx(30));
+                lp3.setMargins(0, 0, dpToPx(6), 0);
+                cb.setLayoutParams(lp3);
+                android.graphics.drawable.GradientDrawable gd3 = new android.graphics.drawable.GradientDrawable();
+                gd3.setColor(fc); gd3.setShape(android.graphics.drawable.GradientDrawable.OVAL);
+                gd3.setStroke(dpToPx(1), 0xFFCCCCCC); cb.setBackground(gd3);
+                cb.setOnClickListener(vv -> {
+                    wh.setColor(fc); hPrev.setBackgroundColor(fc);
+                    etH.setText(String.format("%06X", 0xFFFFFF & fc));
+                    if (isColor1) { gradColor1[0] = fc; color1Box.setBackgroundColor(fc); etColor1.setText(String.format("%06X", 0xFFFFFF & fc)); }
+                    else          { gradColor2[0] = fc; color2Box.setBackgroundColor(fc); etColor2.setText(String.format("%06X", 0xFFFFFF & fc)); }
+                    updateGradPreview.run();
+                });
+                cr.addView(cb);
+            }
+
+            int sw = getResources().getDisplayMetrics().widthPixels;
+            int ph = (int)(180 * getResources().getDisplayMetrics().density);
+            android.widget.PopupWindow wp2 = new android.widget.PopupWindow(wr, sw, ph, true);
+            wp2.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+            wp2.setElevation(20f); wp2.setOutsideTouchable(true);
+            int sh = getResources().getDisplayMetrics().heightPixels;
+            wp2.showAtLocation(getWindow().getDecorView().getRootView(), Gravity.TOP | Gravity.START, 0, (sh - ph) / 2);
+
+            final int[] lxy3 = {0, 0};
+            wTitle.setOnTouchListener((vv, ev) -> {
+                switch (ev.getAction()) {
+                    case MotionEvent.ACTION_DOWN: lxy3[0] = (int)ev.getRawX(); lxy3[1] = (int)ev.getRawY(); break;
+                    case MotionEvent.ACTION_MOVE:
+                        int dx = (int)ev.getRawX() - lxy3[0]; int dy = (int)ev.getRawY() - lxy3[1];
+                        int[] loc3 = new int[2]; wr.getLocationOnScreen(loc3);
+                        wp2.update(loc3[0]+dx, loc3[1]+dy, sw, ph);
+                        lxy3[0] = (int)ev.getRawX(); lxy3[1] = (int)ev.getRawY(); break;
+                }
+                return true;
+            });
+            wClose.setOnClickListener(vv -> wp2.dismiss());
+            wDone.setOnClickListener(vv -> { exportToJson(); wp2.dismiss(); });
+        };
+
+        color1Box.setOnClickListener(v -> openGradWheel.accept(gradColor1[0], true));
+        color2Box.setOnClickListener(v -> openGradWheel.accept(gradColor2[0], false));
 
         etColor1.addTextChangedListener(new android.text.TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
             @Override public void afterTextChanged(android.text.Editable s) {}
             @Override public void onTextChanged(CharSequence s, int a, int b, int c) {
                 try {
-                    int parsed = Color.parseColor("#" + s.toString().trim());
-                    gradColor1[0] = parsed;
-                    color1Box.setBackgroundColor(parsed);
-                    updateGradPreview.run();
+                    if (s.toString().trim().length() == 6) {
+                        int parsed = Color.parseColor("#" + s.toString().trim());
+                        gradColor1[0] = parsed; color1Box.setBackgroundColor(parsed);
+                        updateGradPreview.run();
+                    }
                 } catch (Exception ignored) {}
             }
         });
@@ -13739,10 +13812,11 @@ public class MainActivity extends AppCompatActivity {
             @Override public void afterTextChanged(android.text.Editable s) {}
             @Override public void onTextChanged(CharSequence s, int a, int b, int c) {
                 try {
-                    int parsed = Color.parseColor("#" + s.toString().trim());
-                    gradColor2[0] = parsed;
-                    color2Box.setBackgroundColor(parsed);
-                    updateGradPreview.run();
+                    if (s.toString().trim().length() == 6) {
+                        int parsed = Color.parseColor("#" + s.toString().trim());
+                        gradColor2[0] = parsed; color2Box.setBackgroundColor(parsed);
+                        updateGradPreview.run();
+                    }
                 } catch (Exception ignored) {}
             }
         });
