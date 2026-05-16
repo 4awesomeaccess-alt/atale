@@ -13304,19 +13304,52 @@ public class MainActivity extends AppCompatActivity {
         // ── XML Inflate ──
         View root = getLayoutInflater().inflate(R.layout.popup_text_color, null);
 
-        TextView preview    = root.findViewById(R.id.tv_color_preview);
+        TextView preview      = root.findViewById(R.id.tv_color_preview);
         LinearLayout colorRow = root.findViewById(R.id.color_row);
-        TextView btnCustom  = root.findViewById(R.id.btn_custom_color);
-        TextView btnCancel  = root.findViewById(R.id.btn_color_cancel);
-        TextView btnDone    = root.findViewById(R.id.btn_color_done);
+        TextView btnCancel    = root.findViewById(R.id.btn_color_cancel);
+        TextView btnDone      = root.findViewById(R.id.btn_color_done);
+
+        // ── Views from XML ──
+        com.example.newcardmaker.ColorWheelView colorWheel = root.findViewById(R.id.color_wheel);
+        android.widget.EditText etHex = root.findViewById(R.id.et_hex_color);
+        View hexPreview = root.findViewById(R.id.view_hex_preview);
+        TextView btnHexApply = root.findViewById(R.id.btn_hex_apply);
 
         // Preview set
         preview.setText(targetView.getText().toString());
         preview.setTextColor(targetView.getCurrentTextColor());
 
-        // ── Color Buttons dynamically add ──
+        // Color wheel initial color
+        colorWheel.setColor(targetView.getCurrentTextColor());
+
+        // Hex initial value (without #)
+        etHex.setText(String.format("%06X", (0xFFFFFF & targetView.getCurrentTextColor())));
+        hexPreview.setBackgroundColor(targetView.getCurrentTextColor());
+
+        final int[] selectedColor = {targetView.getCurrentTextColor()};
+
+        // Helper: update all views when color changes
+        Runnable updateAll = () -> {
+            int c = selectedColor[0];
+            preview.setTextColor(c);
+            targetView.setTextColor(c);
+            hexPreview.setBackgroundColor(c);
+            String hex = String.format("%06X", (0xFFFFFF & c));
+            if (!etHex.getText().toString().equalsIgnoreCase(hex)) {
+                etHex.setText(hex);
+                etHex.setSelection(hex.length());
+            }
+        };
+
+        // ── Color Wheel listener ──
+        colorWheel.setOnColorChangedListener(c -> {
+            selectedColor[0] = c;
+            updateAll.run();
+        });
+
+        // ── Quick color buttons ──
         float dp = getResources().getDisplayMetrics().density;
-        int btnSize = (int)(42 * dp);
+        int btnSize = (int)(36 * dp);
         int gap     = (int)(8 * dp);
 
         for (int c : colors) {
@@ -13331,11 +13364,26 @@ public class MainActivity extends AppCompatActivity {
             bp.setMargins(0, 0, gap, 0);
             colorBtn.setLayoutParams(bp);
             colorBtn.setOnClickListener(v2 -> {
-                targetView.setTextColor(color);
-                preview.setTextColor(color);
+                selectedColor[0] = color;
+                colorWheel.setColor(color);
+                updateAll.run();
             });
             colorRow.addView(colorBtn);
         }
+
+        // ── Hex Apply button ──
+        btnHexApply.setOnClickListener(v2 -> {
+            try {
+                String hex = etHex.getText().toString().trim();
+                if (!hex.startsWith("#")) hex = "#" + hex;
+                int parsed = Color.parseColor(hex);
+                selectedColor[0] = parsed;
+                colorWheel.setColor(parsed);
+                updateAll.run();
+            } catch (Exception e) {
+                etHex.setError("Invalid color");
+            }
+        });
 
         // ── PopupWindow ──
         final PopupWindow popup = new PopupWindow(root,
@@ -13354,11 +13402,11 @@ public class MainActivity extends AppCompatActivity {
                     lastY[0] = (int) event.getRawY();
                     return true;
                 case MotionEvent.ACTION_MOVE:
-                    int dx = (int) event.getRawX() - lastX[0];
-                    int dy = (int) event.getRawY() - lastY[0];
+                    int dx2 = (int) event.getRawX() - lastX[0];
+                    int dy2 = (int) event.getRawY() - lastY[0];
                     int[] loc = new int[2];
                     root.getLocationOnScreen(loc);
-                    popup.update(loc[0] + dx, loc[1] + dy, -1, -1);
+                    popup.update(loc[0] + dx2, loc[1] + dy2, -1, -1);
                     lastX[0] = (int) event.getRawX();
                     lastY[0] = (int) event.getRawY();
                     return true;
@@ -13366,16 +13414,8 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
 
-        // ── Listeners ──
+        // ── Cancel / Done ──
         final int originalColor = targetView.getCurrentTextColor();
-
-        btnCustom.setOnClickListener(v2 -> showColorPickerPopup(
-                targetView.getCurrentTextColor(),
-                color -> {
-                    targetView.setTextColor(color);
-                    preview.setTextColor(color);
-                    exportToJson();
-                }));
 
         btnCancel.setOnClickListener(v2 -> {
             targetView.setTextColor(originalColor);
