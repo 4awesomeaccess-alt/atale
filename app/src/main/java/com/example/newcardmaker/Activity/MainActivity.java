@@ -21516,336 +21516,144 @@ public class MainActivity extends AppCompatActivity {
 
         final int[] selectedColor = {initialColor};
 
-        // ── Root layout
-        android.widget.LinearLayout root = new android.widget.LinearLayout(this);
-        root.setOrientation(android.widget.LinearLayout.VERTICAL);
-        root.setLayoutParams(new android.view.ViewGroup.LayoutParams(
-                dpToPx(300), android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+        // ── XML Inflate ──
+        android.view.View root = getLayoutInflater().inflate(R.layout.popup_color_picker, null);
 
-        // ── Drag Handle
-        android.widget.LinearLayout dragHandle = new android.widget.LinearLayout(this);
-        dragHandle.setOrientation(android.widget.LinearLayout.HORIZONTAL);
-        dragHandle.setBackgroundColor(0xFF2A3439);
-        dragHandle.setGravity(android.view.Gravity.CENTER_VERTICAL);
-        dragHandle.setPadding(dpToPx(10), 0, dpToPx(6), 0);
-        dragHandle.setLayoutParams(new android.widget.LinearLayout.LayoutParams(
-                android.widget.LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(32)));
+        android.view.View      dragHandle   = root.findViewById(R.id.cp_drag_handle);
+        android.widget.TextView btnClose    = root.findViewById(R.id.cp_btn_close);
+        android.widget.LinearLayout rowBasic    = root.findViewById(R.id.cp_row_basic);
+        android.widget.LinearLayout rowLight    = root.findViewById(R.id.cp_row_light);
+        android.widget.LinearLayout rowMaterial = root.findViewById(R.id.cp_row_material);
+        android.view.View      hexPreviewBox = root.findViewById(R.id.cp_hex_preview);
+        android.widget.EditText etHex       = root.findViewById(R.id.cp_et_hex);
+        android.widget.TextView btnHexApply = root.findViewById(R.id.cp_btn_hex_apply);
+        android.widget.TextView btnCancel   = root.findViewById(R.id.cp_btn_cancel);
+        android.widget.TextView btnOk       = root.findViewById(R.id.cp_btn_ok);
+        android.widget.SeekBar  seekR       = root.findViewById(R.id.cp_seek_r);
+        android.widget.SeekBar  seekG       = root.findViewById(R.id.cp_seek_g);
+        android.widget.SeekBar  seekB       = root.findViewById(R.id.cp_seek_b);
+        android.widget.TextView valR        = root.findViewById(R.id.cp_val_r);
+        android.widget.TextView valG        = root.findViewById(R.id.cp_val_g);
+        android.widget.TextView valB        = root.findViewById(R.id.cp_val_b);
 
-        android.widget.TextView dragDots = new android.widget.TextView(this);
-        dragDots.setText("⠿");
-        dragDots.setTextColor(0xFF9CA3AF);
-        dragDots.setTextSize(12);
-        dragDots.setGravity(android.view.Gravity.CENTER);
-        dragDots.setLayoutParams(new android.widget.LinearLayout.LayoutParams(
-                dpToPx(16), android.widget.LinearLayout.LayoutParams.MATCH_PARENT));
+        // ── Initial values ──
+        etHex.setText(String.format("%06X", (0xFFFFFF & initialColor)));
+        hexPreviewBox.setBackgroundColor(initialColor);
+        seekR.setProgress(android.graphics.Color.red(initialColor));
+        seekG.setProgress(android.graphics.Color.green(initialColor));
+        seekB.setProgress(android.graphics.Color.blue(initialColor));
+        valR.setText(String.valueOf(android.graphics.Color.red(initialColor)));
+        valG.setText(String.valueOf(android.graphics.Color.green(initialColor)));
+        valB.setText(String.valueOf(android.graphics.Color.blue(initialColor)));
 
-        android.widget.TextView dragTitle = new android.widget.TextView(this);
-        dragTitle.setText("🎨 Color");
-        dragTitle.setTextColor(0xFFF3F4F6);
-        dragTitle.setTextSize(9);
-        dragTitle.setTypeface(null, android.graphics.Typeface.BOLD);
-        android.widget.LinearLayout.LayoutParams titleLp =
-                new android.widget.LinearLayout.LayoutParams(0,
-                        android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 1f);
-        titleLp.setMarginStart(dpToPx(4));
-        dragTitle.setLayoutParams(titleLp);
-        dragTitle.setGravity(android.view.Gravity.CENTER_VERTICAL);
+        // ── Helper: update all UI + apply ──
+        Runnable[] updateAll = {null};
+        updateAll[0] = () -> {
+            int c = selectedColor[0];
+            hexPreviewBox.setBackgroundColor(c);
+            String hex = String.format("%06X", (0xFFFFFF & c));
+            if (!etHex.getText().toString().equalsIgnoreCase(hex)) {
+                etHex.setText(hex);
+                etHex.setSelection(hex.length());
+            }
+            seekR.setProgress(android.graphics.Color.red(c));
+            seekG.setProgress(android.graphics.Color.green(c));
+            seekB.setProgress(android.graphics.Color.blue(c));
+            valR.setText(String.valueOf(android.graphics.Color.red(c)));
+            valG.setText(String.valueOf(android.graphics.Color.green(c)));
+            valB.setText(String.valueOf(android.graphics.Color.blue(c)));
+            onColorSelected.accept(c);
+        };
 
-        android.widget.TextView btnClose = new android.widget.TextView(this);
-        btnClose.setText("✕");
-        btnClose.setTextColor(0xFF9CA3AF);
-        btnClose.setTextSize(12);
-        btnClose.setGravity(android.view.Gravity.CENTER);
-        btnClose.setLayoutParams(new android.widget.LinearLayout.LayoutParams(dpToPx(28), dpToPx(22)));
-        btnClose.setBackgroundColor(0xFF374151);
-
-        dragHandle.addView(dragDots);
-        dragHandle.addView(dragTitle);
-        dragHandle.addView(btnClose);
-        root.addView(dragHandle);
-
-        // ── Content
-        android.widget.LinearLayout content = new android.widget.LinearLayout(this);
-        content.setOrientation(android.widget.LinearLayout.VERTICAL);
-        content.setBackgroundColor(0xFF455A64);
-        content.setPadding(dpToPx(10), dpToPx(10), dpToPx(10), dpToPx(10));
-        root.addView(content);
-
-        // ── Color preview
-        android.graphics.drawable.GradientDrawable previewBg = new android.graphics.drawable.GradientDrawable();
-        previewBg.setColor(initialColor);
-        previewBg.setCornerRadius(dpToPx(6));
-        previewBg.setStroke(dpToPx(1), 0xFFD1D5DB);
-        android.view.View colorPreview = new android.view.View(this);
-        android.widget.LinearLayout.LayoutParams previewLp =
-                new android.widget.LinearLayout.LayoutParams(
-                        android.widget.LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(36));
-        previewLp.setMargins(0, 0, 0, dpToPx(8));
-        colorPreview.setLayoutParams(previewLp);
-        colorPreview.setBackground(previewBg);
-        content.addView(colorPreview);
-
-        // ── Horizontal color scroll
+        // ── Color rows ──
         final int[][] colorRows = {
-            // Row 1 - Basic
             {0xFFFF0000, 0xFFFF4500, 0xFFFF8C00, 0xFFFFD700, 0xFFFFFF00,
              0xFFADFF2F, 0xFF32CD32, 0xFF00FA9A, 0xFF00FFFF, 0xFF00BFFF,
              0xFF1E90FF, 0xFF0000FF, 0xFF8A2BE2, 0xFFFF00FF, 0xFFFF1493},
-            // Row 2 - Light
             {0xFFFFFFFF, 0xFFF5F5F5, 0xFFE0E0E0, 0xFFC0C0C0, 0xFF9E9E9E,
              0xFF757575, 0xFF616161, 0xFF424242, 0xFF212121, 0xFF000000,
              0xFFFFCDD2, 0xFFF8BBD0, 0xFFE1BEE7, 0xFFD1C4E9, 0xFFC5CAE9},
-            // Row 3 - Dark/Material
             {0xFFB71C1C, 0xFF880E4F, 0xFF4A148C, 0xFF1A237E, 0xFF0D47A1,
              0xFF006064, 0xFF1B5E20, 0xFF33691E, 0xFFF57F17, 0xFFE65100,
              0xFF3E2723, 0xFF263238, 0xFF37474F, 0xFF546E7A, 0xFF78909C},
         };
+        android.widget.LinearLayout[] rows = {rowBasic, rowLight, rowMaterial};
 
-        String[] rowLabels = {"🌈 Basic", "⬜ Light/Dark", "🎨 Material"};
-
-        for (int r = 0; r < colorRows.length; r++) {
-            // Row label
-            android.widget.TextView rowLabel = new android.widget.TextView(this);
-            rowLabel.setText(rowLabels[r]);
-            rowLabel.setTextColor(0xFFCFD8DC);
-            rowLabel.setTextSize(10);
-            rowLabel.setTypeface(null, android.graphics.Typeface.BOLD);
-            android.widget.LinearLayout.LayoutParams lblLp =
-                    new android.widget.LinearLayout.LayoutParams(
-                            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
-                            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
-            lblLp.setMargins(0, dpToPx(4), 0, dpToPx(2));
-            rowLabel.setLayoutParams(lblLp);
-            content.addView(rowLabel);
-
-            // Horizontal ScrollView
-            android.widget.HorizontalScrollView hsv = new android.widget.HorizontalScrollView(this);
-            hsv.setHorizontalScrollBarEnabled(false);
-            android.widget.LinearLayout.LayoutParams hsvLp =
-                    new android.widget.LinearLayout.LayoutParams(
-                            android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
-                            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
-            hsvLp.setMargins(0, 0, 0, dpToPx(2));
-            hsv.setLayoutParams(hsvLp);
-
-            android.widget.LinearLayout row = new android.widget.LinearLayout(this);
-            row.setOrientation(android.widget.LinearLayout.HORIZONTAL);
-            row.setPadding(0, dpToPx(2), 0, dpToPx(2));
-
+        for (int r = 0; r < 3; r++) {
+            android.widget.LinearLayout rowLayout = rows[r];
             for (int c : colorRows[r]) {
                 final int fc = c;
                 android.view.View btn = new android.view.View(this);
-                android.widget.LinearLayout.LayoutParams btnLp =
-                        new android.widget.LinearLayout.LayoutParams(dpToPx(36), dpToPx(36));
-                btnLp.setMargins(dpToPx(2), 0, dpToPx(2), 0);
-                btn.setLayoutParams(btnLp);
-
-                android.graphics.drawable.GradientDrawable btnBg =
-                        new android.graphics.drawable.GradientDrawable();
-                btnBg.setColor(fc);
-                btnBg.setCornerRadius(dpToPx(4));
-                btnBg.setStroke(dpToPx(1), 0xFFD1D5DB);
-                btn.setBackground(btnBg);
-
+                android.widget.LinearLayout.LayoutParams lp =
+                    new android.widget.LinearLayout.LayoutParams(dpToPx(26), dpToPx(26));
+                lp.setMargins(dpToPx(2), 0, dpToPx(2), 0);
+                btn.setLayoutParams(lp);
+                android.graphics.drawable.GradientDrawable gd =
+                    new android.graphics.drawable.GradientDrawable();
+                gd.setColor(fc);
+                gd.setCornerRadius(dpToPx(3));
+                gd.setStroke(dpToPx(1), 0xFFD1D5DB);
+                btn.setBackground(gd);
                 btn.setOnClickListener(v -> {
                     selectedColor[0] = fc;
-                    previewBg.setColor(fc);
-                    colorPreview.setBackground(previewBg);
-                    onColorSelected.accept(fc); // real-time apply
+                    updateAll[0].run();
                 });
-                row.addView(btn);
+                rowLayout.addView(btn);
             }
-            hsv.addView(row);
-            content.addView(hsv);
         }
 
-        // ── HEX input row
-        android.widget.LinearLayout hexRow = new android.widget.LinearLayout(this);
-        hexRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
-        hexRow.setGravity(android.view.Gravity.CENTER_VERTICAL);
-        android.widget.LinearLayout.LayoutParams hexRowLp =
-                new android.widget.LinearLayout.LayoutParams(
-                        android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
-                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
-        hexRowLp.setMargins(0, dpToPx(8), 0, dpToPx(8));
-        hexRow.setLayoutParams(hexRowLp);
-
-        android.widget.TextView hexLabel = new android.widget.TextView(this);
-        hexLabel.setText("HEX");
-        hexLabel.setTextColor(0xFFCFD8DC);
-        hexLabel.setTextSize(11);
-        hexLabel.setTypeface(null, android.graphics.Typeface.BOLD);
-        hexLabel.setPadding(0, 0, dpToPx(8), 0);
-
-        android.widget.EditText etHex = new android.widget.EditText(this);
-        etHex.setText(String.format("#%06X", (0xFFFFFF & initialColor)));
-        etHex.setTextColor(0xFF111827);
-        etHex.setTextSize(12);
-        etHex.setBackgroundColor(0xFF546E7A);
-        etHex.setPadding(dpToPx(8), dpToPx(6), dpToPx(8), dpToPx(6));
-        etHex.setLayoutParams(new android.widget.LinearLayout.LayoutParams(0,
-                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
-
-        hexRow.addView(hexLabel);
-        hexRow.addView(etHex);
-        content.addView(hexRow);
-
-        // ── RGB Sliders
-        String[] sliderLabels = {"R", "G", "B"};
-        int[] sliderColors = {0xFFEF5350, 0xFF66BB6A, 0xFF42A5F5};
-        android.widget.SeekBar[] rgbBars = new android.widget.SeekBar[3];
-        android.widget.TextView[] rgbVals = new android.widget.TextView[3];
-
-        for (int si = 0; si < 3; si++) {
-            final int idx = si;
-
-            android.widget.LinearLayout sliderRow = new android.widget.LinearLayout(this);
-            sliderRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
-            sliderRow.setGravity(android.view.Gravity.CENTER_VERTICAL);
-            android.widget.LinearLayout.LayoutParams slrLp =
-                    new android.widget.LinearLayout.LayoutParams(
-                            android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
-                            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
-            slrLp.setMargins(0, dpToPx(3), 0, dpToPx(3));
-            sliderRow.setLayoutParams(slrLp);
-
-            android.widget.TextView lbl = new android.widget.TextView(this);
-            lbl.setText(sliderLabels[si]);
-            lbl.setTextColor(sliderColors[si]);
-            lbl.setTextSize(11);
-            lbl.setTypeface(null, android.graphics.Typeface.BOLD);
-            lbl.setLayoutParams(new android.widget.LinearLayout.LayoutParams(dpToPx(18),
-                    android.widget.LinearLayout.LayoutParams.WRAP_CONTENT));
-
-            android.widget.SeekBar sb = new android.widget.SeekBar(this);
-            sb.setMax(255);
-            int initVal = si == 0 ? android.graphics.Color.red(initialColor)
-                        : si == 1 ? android.graphics.Color.green(initialColor)
-                        : android.graphics.Color.blue(initialColor);
-            sb.setProgress(initVal);
-            android.widget.LinearLayout.LayoutParams sbLp =
-                    new android.widget.LinearLayout.LayoutParams(0,
-                            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
-            sbLp.setMargins(dpToPx(4), 0, dpToPx(4), 0);
-            sb.setLayoutParams(sbLp);
-            sb.getProgressDrawable().setColorFilter(
-                    sliderColors[si], android.graphics.PorterDuff.Mode.SRC_IN);
-            sb.getThumb().setColorFilter(
-                    sliderColors[si], android.graphics.PorterDuff.Mode.SRC_IN);
-
-            android.widget.TextView val = new android.widget.TextView(this);
-            val.setText(String.valueOf(initVal));
-            val.setTextColor(0xFFCFD8DC);
-            val.setTextSize(10);
-            val.setLayoutParams(new android.widget.LinearLayout.LayoutParams(dpToPx(28),
-                    android.widget.LinearLayout.LayoutParams.WRAP_CONTENT));
-            val.setGravity(android.view.Gravity.END);
-
-            rgbBars[idx] = sb;
-            rgbVals[idx] = val;
-
-            sliderRow.addView(lbl);
-            sliderRow.addView(sb);
-            sliderRow.addView(val);
-            content.addView(sliderRow);
-        }
-
-        // RGB SeekBar listeners
-        for (int si = 0; si < 3; si++) {
-            final int idx = si;
-            rgbBars[si].setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+        // ── RGB Sliders ──
+        android.widget.SeekBar[] seeks = {seekR, seekG, seekB};
+        android.widget.TextView[] vals = {valR, valG, valB};
+        for (int i = 0; i < 3; i++) {
+            final int idx = i;
+            seeks[i].setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
                 @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
                 @Override public void onStopTrackingTouch(android.widget.SeekBar s) {}
                 @Override public void onProgressChanged(android.widget.SeekBar s, int progress, boolean fromUser) {
                     if (!fromUser) return;
-                    rgbVals[idx].setText(String.valueOf(progress));
-                    int r = rgbBars[0].getProgress();
-                    int g = rgbBars[1].getProgress();
-                    int b2 = rgbBars[2].getProgress();
-                    int newColor = android.graphics.Color.rgb(r, g, b2);
+                    vals[idx].setText(String.valueOf(progress));
+                    int newColor = android.graphics.Color.rgb(
+                        seekR.getProgress(), seekG.getProgress(), seekB.getProgress());
                     selectedColor[0] = newColor;
-                    previewBg.setColor(newColor);
-                    colorPreview.setBackground(previewBg);
-                    onColorSelected.accept(newColor); // real-time apply
+                    hexPreviewBox.setBackgroundColor(newColor);
+                    String hex = String.format("%06X", (0xFFFFFF & newColor));
+                    if (!etHex.getText().toString().equalsIgnoreCase(hex)) {
+                        etHex.setText(hex);
+                    }
+                    onColorSelected.accept(newColor);
                 }
             });
         }
 
-        etHex.addTextChangedListener(new android.text.TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int st, int c2, int a) {}
-            @Override public void onTextChanged(CharSequence s, int st, int b2, int c2) {
-                try {
-                    String hex = s.toString().trim();
-                    if (!hex.startsWith("#")) hex = "#" + hex;
-                    if (hex.length() == 7) {
-                        int parsed = android.graphics.Color.parseColor(hex);
-                        selectedColor[0] = parsed;
-                        previewBg.setColor(parsed);
-                        colorPreview.setBackground(previewBg);
-                        rgbBars[0].setProgress(android.graphics.Color.red(parsed));
-                        rgbBars[1].setProgress(android.graphics.Color.green(parsed));
-                        rgbBars[2].setProgress(android.graphics.Color.blue(parsed));
-                        rgbVals[0].setText(String.valueOf(android.graphics.Color.red(parsed)));
-                        rgbVals[1].setText(String.valueOf(android.graphics.Color.green(parsed)));
-                        rgbVals[2].setText(String.valueOf(android.graphics.Color.blue(parsed)));
-                        onColorSelected.accept(parsed); // real-time apply
-                    }
-                } catch (Exception ignored) {}
+        // ── HEX Apply ──
+        btnHexApply.setOnClickListener(v -> {
+            try {
+                String hex = "#" + etHex.getText().toString().trim();
+                int parsed = android.graphics.Color.parseColor(hex);
+                selectedColor[0] = parsed;
+                updateAll[0].run();
+            } catch (Exception e) {
+                etHex.setError("Invalid");
             }
-            @Override public void afterTextChanged(android.text.Editable s) {}
         });
 
-        // Update hex from RGB sliders (second pass for hex sync)
-        // — removed duplicate listener block —
-
-        // ── OK / Cancel
-        android.widget.LinearLayout btnRow = new android.widget.LinearLayout(this);
-        btnRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
-        btnRow.setLayoutParams(new android.widget.LinearLayout.LayoutParams(
-                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
-                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT));
-
-        android.widget.Button btnCancel = new android.widget.Button(this);
-        btnCancel.setText("Cancel");
-        btnCancel.setTextColor(0xFFFFFFFF);
-        btnCancel.setTextSize(12);
-        btnCancel.setBackgroundColor(0xFF6B7280);
-        btnCancel.setStateListAnimator(null);
-        android.widget.LinearLayout.LayoutParams cancelLp =
-                new android.widget.LinearLayout.LayoutParams(0,
-                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
-        cancelLp.setMargins(0, 0, dpToPx(4), 0);
-        btnCancel.setLayoutParams(cancelLp);
-
-        android.widget.Button btnOk = new android.widget.Button(this);
-        btnOk.setText("✅ OK");
-        btnOk.setTextColor(0xFFFFFFFF);
-        btnOk.setTextSize(12);
-        btnOk.setBackgroundColor(0xFF607D8B);
-        btnOk.setStateListAnimator(null);
-        btnOk.setLayoutParams(new android.widget.LinearLayout.LayoutParams(0,
-                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
-
-        btnRow.addView(btnCancel);
-        btnRow.addView(btnOk);
-        content.addView(btnRow);
-
-        // ── PopupWindow
+        // ── PopupWindow ──
         int screenW = getResources().getDisplayMetrics().widthPixels;
+        int popupH  = (int)(200 * getResources().getDisplayMetrics().density);
         android.widget.PopupWindow popup = new android.widget.PopupWindow(
-                root,
-                screenW,
-                android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-                true);
+                root, screenW, popupH, true);
         popup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(
                 android.graphics.Color.TRANSPARENT));
         popup.setElevation(16f);
         popup.setOutsideTouchable(true);
 
         android.view.View rootView = getWindow().getDecorView().getRootView();
-        popup.showAtLocation(rootView, android.view.Gravity.CENTER, 0, 0);
+        int screenH = getResources().getDisplayMetrics().heightPixels;
+        popup.showAtLocation(rootView, android.view.Gravity.TOP | android.view.Gravity.START,
+                0, (screenH - popupH) / 2);
 
-        // ── Drag logic
+        // ── Drag ──
         final int[] lastXY = {0, 0};
         dragHandle.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
@@ -21858,7 +21666,7 @@ public class MainActivity extends AppCompatActivity {
                     int dy = (int) event.getRawY() - lastXY[1];
                     int[] loc = new int[2];
                     root.getLocationOnScreen(loc);
-                    popup.update(loc[0] + dx, loc[1] + dy, screenW, -1);
+                    popup.update(loc[0] + dx, loc[1] + dy, screenW, popupH);
                     lastXY[0] = (int) event.getRawX();
                     lastXY[1] = (int) event.getRawY();
                     break;
@@ -21866,12 +21674,13 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
+        // ── Listeners ──
         btnClose.setOnClickListener(v -> {
-            onColorSelected.accept(initialColor); // restore original
+            onColorSelected.accept(initialColor);
             popup.dismiss();
         });
         btnCancel.setOnClickListener(v -> {
-            onColorSelected.accept(initialColor); // restore original
+            onColorSelected.accept(initialColor);
             popup.dismiss();
         });
         btnOk.setOnClickListener(v -> {
