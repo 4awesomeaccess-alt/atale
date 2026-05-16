@@ -28,6 +28,7 @@ public class ScreenColorPickerOverlay {
 
     public interface OnColorPickedListener {
         void onColorPicked(int color);
+        void onColorPreview(int color); // real-time drag preview
         void onCancelled();
     }
 
@@ -151,10 +152,13 @@ public class ScreenColorPickerOverlay {
                     int pickedColor = getPixelColor(x, y);
                     String hex = String.format("#%06X", (0xFFFFFF & pickedColor));
 
-                    // Update preview
+                    // Update magnifier preview
                     ((GradientDrawable) colorPreviewBox.getBackground()).setColor(pickedColor);
                     tvHexPreview.setText(hex);
                     tvInstruction.setText("Color: " + hex);
+
+                    // ✅ Real-time text color update
+                    if (listener != null) listener.onColorPreview(pickedColor);
                     return true;
 
                 case MotionEvent.ACTION_UP:

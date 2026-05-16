@@ -13430,21 +13430,22 @@ public class MainActivity extends AppCompatActivity {
 
         // ── Screen Color Picker ──
         btnScreenPick.setOnClickListener(v2 -> {
-            // Popup hide કરો
             popup.dismiss();
-            // Full screen overlay show
             new com.example.newcardmaker.ScreenColorPickerOverlay(this,
                 new com.example.newcardmaker.ScreenColorPickerOverlay.OnColorPickedListener() {
                     @Override
+                    public void onColorPreview(int color) {
+                        // Drag કરતા real-time text color change
+                        targetView.setTextColor(color);
+                    }
+                    @Override
                     public void onColorPicked(int color) {
-                        // Color apply + popup ફરી open
                         targetView.setTextColor(color);
                         exportToJson();
                         showTextColorPopup(targetView);
                     }
                     @Override
                     public void onCancelled() {
-                        // Cancel — popup ફરી open, original color restore
                         targetView.setTextColor(originalColor);
                         showTextColorPopup(targetView);
                     }
