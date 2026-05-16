@@ -13704,19 +13704,30 @@ public class MainActivity extends AppCompatActivity {
         solidWheel.setOnColorChangedListener(c -> {
             solidColor[0] = c;
             solidHexPreview.setBackgroundColor(c);
-            solidEtHex.setText(String.format("%06X", 0xFFFFFF & c));
+            String hex = String.format("%06X", 0xFFFFFF & c);
+            if (!solidEtHex.getText().toString().equalsIgnoreCase(hex)) {
+                solidEtHex.setText(hex);
+                solidEtHex.setSelection(hex.length());
+            }
             applySolid.run();
         });
 
-        solidEtHex.setOnEditorActionListener((v, actionId, event) -> {
-            try {
-                int parsed = Color.parseColor("#" + solidEtHex.getText().toString().trim());
-                solidColor[0] = parsed;
-                solidWheel.setColor(parsed);
-                solidHexPreview.setBackgroundColor(parsed);
-                applySolid.run();
-            } catch (Exception ignored) {}
-            return true;
+        // HEX TextWatcher — type/paste color code → apply
+        solidEtHex.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            @Override public void afterTextChanged(android.text.Editable s) {}
+            @Override public void onTextChanged(CharSequence s, int st, int b, int c) {
+                try {
+                    String hex = s.toString().trim();
+                    if (hex.length() == 6) {
+                        int parsed = Color.parseColor("#" + hex);
+                        solidColor[0] = parsed;
+                        solidHexPreview.setBackgroundColor(parsed);
+                        solidWheel.setColor(parsed);
+                        applySolid.run();
+                    }
+                } catch (Exception ignored) {}
+            }
         });
 
 
