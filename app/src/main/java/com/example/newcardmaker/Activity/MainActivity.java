@@ -13478,6 +13478,7 @@ public class MainActivity extends AppCompatActivity {
 
         // ── Text Controls restore when color popup closes ──
         popup.setOnDismissListener(() -> showSelectionControlsForText(targetView));
+    }
 
     private void showTextBorderDialog(StrokeTextView targetView) {
 
