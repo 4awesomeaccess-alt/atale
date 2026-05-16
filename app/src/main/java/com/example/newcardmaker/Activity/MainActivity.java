@@ -13503,6 +13503,52 @@ public class MainActivity extends AppCompatActivity {
         android.widget.TextView btnTintNone  = root.findViewById(R.id.gp_tint_none);
         android.widget.SeekBar tintOpacity   = root.findViewById(R.id.gp_tint_opacity);
         android.widget.TextView tintOpacityVal = root.findViewById(R.id.gp_tint_opacity_val);
+        android.view.View overlayC1Box       = root.findViewById(R.id.gp_overlay_c1);
+        android.view.View overlayC2Box       = root.findViewById(R.id.gp_overlay_c2);
+        android.widget.TextView btnOverlay   = root.findViewById(R.id.gp_overlay_apply);
+        android.widget.TextView btnOverlayNone = root.findViewById(R.id.gp_overlay_none);
+
+        // ── Overlay state ──
+        final int[] overlayC1 = {0xAAFF0000};
+        final int[] overlayC2 = {0xAA0000FF};
+
+        // Overlay color pickers
+        overlayC1Box.setOnClickListener(v -> showColorPickerPopup(overlayC1[0], c -> {
+            overlayC1[0] = c;
+            overlayC1Box.setBackgroundColor(c);
+        }));
+        overlayC2Box.setOnClickListener(v -> showColorPickerPopup(overlayC2[0], c -> {
+            overlayC2[0] = c;
+            overlayC2Box.setBackgroundColor(c);
+        }));
+
+        // Apply gradient overlay on top of image
+        btnOverlay.setOnClickListener(v -> {
+            android.graphics.drawable.Drawable currentBg = targetView.getBackground();
+            if (currentBg == null) return;
+            GradientDrawable gradOverlay = new GradientDrawable(
+                GradientDrawable.Orientation.LEFT_RIGHT,
+                new int[]{overlayC1[0], overlayC2[0]});
+            android.graphics.drawable.LayerDrawable layered =
+                new android.graphics.drawable.LayerDrawable(
+                    new android.graphics.drawable.Drawable[]{currentBg, gradOverlay});
+            targetView.setBackground(layered);
+            targetView.setTag(R.id.btn_sel_bg_color, layered);
+            exportToJson();
+        });
+
+        // Remove overlay
+        btnOverlayNone.setOnClickListener(v -> {
+            android.graphics.drawable.Drawable currentBg = targetView.getBackground();
+            if (currentBg instanceof android.graphics.drawable.LayerDrawable) {
+                android.graphics.drawable.LayerDrawable ld =
+                    (android.graphics.drawable.LayerDrawable) currentBg;
+                if (ld.getNumberOfLayers() > 0) {
+                    targetView.setBackground(ld.getDrawable(0));
+                }
+            }
+            exportToJson();
+        });
 
         // ── Tint state ──
         final int[] tintColor  = {Color.TRANSPARENT};
@@ -13514,11 +13560,14 @@ public class MainActivity extends AppCompatActivity {
             if (bg == null) return;
             if (tintColor[0] == Color.TRANSPARENT) {
                 bg.clearColorFilter();
+                targetView.setTag(R.id.btn_sel_text_color, null);
             } else {
                 int alpha = tintAlpha[0];
                 int tint = Color.argb(alpha, Color.red(tintColor[0]),
                     Color.green(tintColor[0]), Color.blue(tintColor[0]));
                 bg.setColorFilter(tint, android.graphics.PorterDuff.Mode.SRC_ATOP);
+                // ✅ Tag ma save — restore mate
+                targetView.setTag(R.id.btn_sel_text_color, new int[]{tintColor[0], tintAlpha[0]});
             }
             targetView.invalidate();
         };
@@ -21526,6 +21575,7 @@ public class MainActivity extends AppCompatActivity {
         Object gradTag = tv.getTag(R.id.btn_sel_bg_color);
         if (gradTag instanceof GradientDrawable) {
             tv.setBackground((GradientDrawable) gradTag);
+            reapplyTint(tv);
             return;
         }
 
@@ -21555,16 +21605,16 @@ public class MainActivity extends AppCompatActivity {
         // ── BG Image હોય તો
         if (!bgImageUri.isEmpty()) {
             Drawable currentBg = tv.getBackground();
-            // BitmapDrawable = image already set — just keep it
             if (currentBg instanceof android.graphics.drawable.BitmapDrawable
                     || currentBg instanceof android.graphics.drawable.LayerDrawable) {
                 tv.setBackground(currentBg);
+                reapplyTint(tv);
                 tv.setPadding(finalPadX, finalPadY, finalPadX, finalPadY);
                 return;
             }
-            // Otherwise reload from URI
             Uri uri = Uri.parse(bgImageUri);
             applyTextBgImage(uri, tv);
+            reapplyTint(tv);
             tv.setPadding(finalPadX, finalPadY, finalPadX, finalPadY);
             return;
         }
@@ -21609,9 +21659,26 @@ public class MainActivity extends AppCompatActivity {
             applyBorderStyle(gd, borderStyle);
         }
         tv.setBackground(gd);
+        reapplyTint(tv);
 
         // ✅ User padding restore
         tv.setPadding(finalPadX, finalPadY, finalPadX, finalPadY);
+    }
+
+    // ── Tint reapply helper ──
+    private void reapplyTint(StrokeTextView tv) {
+        Object tintTag = tv.getTag(R.id.btn_sel_text_color);
+        if (!(tintTag instanceof int[])) return;
+        int[] tintData = (int[]) tintTag;
+        if (tintData.length < 2) return;
+        android.graphics.drawable.Drawable bg = tv.getBackground();
+        if (bg == null) return;
+        int tint = Color.argb(tintData[1],
+            Color.red(tintData[0]),
+            Color.green(tintData[0]),
+            Color.blue(tintData[0]));
+        bg.setColorFilter(tint, android.graphics.PorterDuff.Mode.SRC_ATOP);
+        tv.invalidate();
     }
 
 

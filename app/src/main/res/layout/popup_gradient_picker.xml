@@ -516,9 +516,63 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+        <!-- Gradient Overlay Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp">
 
-    <!-- ── Bottom: Cancel/Done (always visible) ── -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Overlay:"
+                android:textColor="#CFD8DC"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="6dp" />
+
+            <View
+                android:id="@+id/gp_overlay_c1"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:background="#FF0000"
+                android:layout_marginEnd="4dp" />
+
+            <View
+                android:id="@+id/gp_overlay_c2"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:background="#0000FF"
+                android:layout_marginEnd="6dp" />
+
+            <TextView
+                android:id="@+id/gp_overlay_apply"
+                android:layout_width="0dp"
+                android:layout_height="26dp"
+                android:layout_weight="1"
+                android:text="🌈 Apply Gradient Overlay"
+                android:textColor="#FFFFFF"
+                android:textSize="10sp"
+                android:gravity="center"
+                android:background="#4A148C"
+                android:layout_marginEnd="4dp" />
+
+            <TextView
+                android:id="@+id/gp_overlay_none"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:text="✕"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:gravity="center"
+                android:paddingHorizontal="8dp"
+                android:background="#374151" />
+
+        </LinearLayout>
+
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="30dp"
