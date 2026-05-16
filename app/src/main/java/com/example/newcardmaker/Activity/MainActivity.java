@@ -21555,18 +21555,24 @@ public class MainActivity extends AppCompatActivity {
         // ── BG Image હોય તો
         if (!bgImageUri.isEmpty()) {
             Drawable currentBg = tv.getBackground();
-            if (currentBg != null &&
-                    !(currentBg instanceof GradientDrawable)) {
+            // BitmapDrawable = image already set — just keep it
+            if (currentBg instanceof android.graphics.drawable.BitmapDrawable
+                    || currentBg instanceof android.graphics.drawable.LayerDrawable) {
                 tv.setBackground(currentBg);
-                // ✅ User padding restore
-                tv.setPadding(finalPadX, finalPadY,
-                        finalPadX, finalPadY);
+                tv.setPadding(finalPadX, finalPadY, finalPadX, finalPadY);
                 return;
             }
+            // Otherwise reload from URI
             Uri uri = Uri.parse(bgImageUri);
             applyTextBgImage(uri, tv);
-            tv.setPadding(finalPadX, finalPadY,
-                    finalPadX, finalPadY);
+            tv.setPadding(finalPadX, finalPadY, finalPadX, finalPadY);
+            return;
+        }
+
+        // ── Solid color — transparent હોય તો background set ન કરો
+        if (originalBg == Color.TRANSPARENT) {
+            tv.setBackground(null);
+            tv.setPadding(finalPadX, finalPadY, finalPadX, finalPadY);
             return;
         }
 
