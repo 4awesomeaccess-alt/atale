@@ -493,11 +493,43 @@
                             <!-- Text Color -->
                             <LinearLayout android:id="@+id/btn_sel_text_color"
                                 android:layout_width="52dp" android:layout_height="50dp"
-                                android:layout_marginEnd="4dp" android:background="#FFFFFF"
+                                android:layout_marginEnd="4dp"
+                                android:background="#F0F4FF"
                                 android:gravity="center" android:orientation="vertical"
-                                android:padding="4dp">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="A" android:textColor="#111827" android:textSize="17sp" android:textStyle="bold" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Color" android:textColor="#6B7280" android:textSize="6sp" android:layout_marginTop="2dp" />
+                                android:padding="4dp"
+                                android:elevation="2dp">
+
+                                <!-- A with color bar below -->
+                                <RelativeLayout
+                                    android:layout_width="26dp"
+                                    android:layout_height="26dp">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerInParent="true"
+                                        android:text="A"
+                                        android:textColor="#1A237E"
+                                        android:textSize="18sp"
+                                        android:textStyle="bold" />
+
+                                    <!-- Color rainbow bar under A -->
+                                    <View
+                                        android:layout_width="22dp"
+                                        android:layout_height="3dp"
+                                        android:layout_alignParentBottom="true"
+                                        android:layout_centerHorizontal="true"
+                                        android:background="@drawable/color_bar_gradient" />
+                                </RelativeLayout>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="3dp"
+                                    android:text="Color"
+                                    android:textColor="#3949AB"
+                                    android:textSize="6sp"
+                                    android:textStyle="bold" />
                             </LinearLayout>
 
                             <!-- BG Color -->
