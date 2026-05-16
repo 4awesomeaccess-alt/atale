@@ -351,7 +351,7 @@
 
         </LinearLayout>
 
-        <!-- RIGHT: Tint controls only -->
+        <!-- RIGHT: Tint — Color Wheel + Opacity -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -359,72 +359,79 @@
             android:orientation="vertical"
             android:padding="4dp">
 
-            <!-- Tint label -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="🎨 Tint Color"
-                android:textColor="#CFD8DC"
-                android:textSize="10sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="6dp" />
-
-            <!-- Color picker button + preview -->
+            <!-- Tint preview + HEX + Remove -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
+                android:layout_marginBottom="4dp">
 
-                <!-- Selected tint color preview -->
                 <View
                     android:id="@+id/gp_tint_preview"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:background="#00000000"
-                    android:layout_marginEnd="8dp" />
+                    android:layout_marginEnd="4dp" />
 
-                <!-- Open color picker -->
                 <TextView
-                    android:id="@+id/gp_tint_pick_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="#"
+                    android:textColor="#9CA3AF"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/gp_tint_et_hex"
                     android:layout_width="0dp"
-                    android:layout_height="32dp"
+                    android:layout_height="26dp"
                     android:layout_weight="1"
-                    android:text="🎨 Pick Color"
+                    android:hint="FF0000"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#6B7280"
+                    android:textSize="10sp"
+                    android:background="#374151"
+                    android:paddingHorizontal="4dp"
+                    android:inputType="text"
+                    android:maxLength="6"
+                    android:singleLine="true" />
+
+                <TextView
+                    android:id="@+id/gp_tint_none"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:text="✕"
                     android:textColor="#FFFFFF"
                     android:textSize="11sp"
                     android:gravity="center"
-                    android:background="#1565C0"
-                    android:layout_marginEnd="6dp" />
-
-                <!-- Remove tint -->
-                <TextView
-                    android:id="@+id/gp_tint_none"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:text="✕"
-                    android:textColor="#FFFFFF"
-                    android:textSize="12sp"
-                    android:gravity="center"
-                    android:background="#B71C1C" />
+                    android:background="#B71C1C"
+                    android:layout_marginStart="4dp" />
 
             </LinearLayout>
 
-            <!-- Tint Opacity -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Opacity"
-                android:textColor="#9CA3AF"
-                android:textSize="9sp"
+            <!-- Color Wheel -->
+            <com.example.newcardmaker.ColorWheelView
+                android:id="@+id/gp_tint_wheel"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:layout_marginBottom="4dp" />
 
+            <!-- Opacity -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Opacity:"
+                    android:textColor="#9CA3AF"
+                    android:textSize="9sp"
+                    android:layout_marginEnd="4dp" />
 
                 <SeekBar
                     android:id="@+id/gp_tint_opacity"
@@ -432,7 +439,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:max="255"
-                    android:progress="100"
+                    android:progress="255"
                     android:progressTint="#607D8B"
                     android:thumbTint="#CFD8DC" />
 
@@ -440,11 +447,11 @@
                     android:id="@+id/gp_tint_opacity_val"
                     android:layout_width="28dp"
                     android:layout_height="wrap_content"
-                    android:text="100"
+                    android:text="255"
                     android:textColor="#CFD8DC"
                     android:textSize="9sp"
                     android:gravity="end"
-                    android:layout_marginStart="4dp" />
+                    android:layout_marginStart="3dp" />
 
             </LinearLayout>
 

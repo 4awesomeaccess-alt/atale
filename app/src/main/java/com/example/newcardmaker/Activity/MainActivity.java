@@ -13498,16 +13498,16 @@ public class MainActivity extends AppCompatActivity {
         android.widget.ImageView imgPreview  = root.findViewById(R.id.gp_image_preview);
         android.widget.TextView btnImagePick = root.findViewById(R.id.gp_image_pick);
         android.widget.TextView btnImageRemove = root.findViewById(R.id.gp_image_remove);
-        android.view.View tintPreview        = root.findViewById(R.id.gp_tint_preview);
-        android.widget.LinearLayout tintRow  = null; // removed
-        android.widget.TextView btnTintNone  = root.findViewById(R.id.gp_tint_none);
-        android.widget.SeekBar tintOpacity   = root.findViewById(R.id.gp_tint_opacity);
-        android.widget.TextView tintOpacityVal = root.findViewById(R.id.gp_tint_opacity_val);
-        android.widget.TextView btnTintPickColor = root.findViewById(R.id.gp_tint_pick_color);
+        android.view.View tintPreview           = root.findViewById(R.id.gp_tint_preview);
+        android.widget.TextView btnTintNone     = root.findViewById(R.id.gp_tint_none);
+        android.widget.SeekBar tintOpacity      = root.findViewById(R.id.gp_tint_opacity);
+        android.widget.TextView tintOpacityVal  = root.findViewById(R.id.gp_tint_opacity_val);
+        android.widget.EditText tintEtHex       = root.findViewById(R.id.gp_tint_et_hex);
+        com.example.newcardmaker.ColorWheelView tintWheel = root.findViewById(R.id.gp_tint_wheel);
 
         // ── Tint state ──
-        final int[] tintColor  = {Color.TRANSPARENT};
-        final int[] tintAlpha  = {100};
+        final int[] tintColor = {Color.TRANSPARENT};
+        final int[] tintAlpha = {255};
 
         // ── Tint apply helper ──
         Runnable applyTint = () -> {
@@ -13519,9 +13519,10 @@ public class MainActivity extends AppCompatActivity {
                 if (bg != null) bg.clearColorFilter();
                 targetView.setTag(R.id.btn_sel_text_color, null);
             } else {
-                int alpha = tintAlpha[0];
-                int tint = Color.argb(alpha, Color.red(tintColor[0]),
-                    Color.green(tintColor[0]), Color.blue(tintColor[0]));
+                int tint = Color.argb(tintAlpha[0],
+                    Color.red(tintColor[0]),
+                    Color.green(tintColor[0]),
+                    Color.blue(tintColor[0]));
                 imgDraw.setColorFilter(tint, android.graphics.PorterDuff.Mode.SRC_ATOP);
                 android.graphics.drawable.Drawable bg = targetView.getBackground();
                 if (bg != null) bg.setColorFilter(tint, android.graphics.PorterDuff.Mode.SRC_ATOP);
@@ -13531,109 +13532,40 @@ public class MainActivity extends AppCompatActivity {
             targetView.invalidate();
         };
 
-        // ── Tint Pick Color — ColorWheelView popup ──
-        btnTintPickColor.setOnClickListener(v -> {
-            // Small popup with just the color wheel
-            android.view.View wheelRoot = getLayoutInflater().inflate(R.layout.popup_text_color, null);
-
-            com.example.newcardmaker.ColorWheelView wheel = wheelRoot.findViewById(R.id.color_wheel);
-            android.widget.EditText etHex     = wheelRoot.findViewById(R.id.et_hex_color);
-            android.view.View hexPrev         = wheelRoot.findViewById(R.id.view_hex_preview);
-            android.widget.TextView hexApply  = wheelRoot.findViewById(R.id.btn_hex_apply);
-            android.widget.TextView wDone     = wheelRoot.findViewById(R.id.btn_color_done);
-            android.widget.TextView wCancel   = wheelRoot.findViewById(R.id.btn_color_cancel);
-            android.widget.TextView wClose    = wheelRoot.findViewById(R.id.btn_color_close);
-            android.view.View wTitle          = wheelRoot.findViewById(R.id.tv_color_title);
-            android.widget.LinearLayout colorRow = wheelRoot.findViewById(R.id.color_row);
-
-            int initTint = tintColor[0] == Color.TRANSPARENT ? Color.RED : tintColor[0];
-            wheel.setColor(initTint);
-            hexPrev.setBackgroundColor(initTint);
-            etHex.setText(String.format("%06X", 0xFFFFFF & initTint));
-
-            // Wheel listener
-            wheel.setOnColorChangedListener(c -> {
-                tintColor[0] = c;
-                tintPreview.setBackgroundColor(c);
-                hexPrev.setBackgroundColor(c);
-                etHex.setText(String.format("%06X", 0xFFFFFF & c));
-                applyTint.run();
-            });
-
-            // Quick color buttons
-            int[] qColors = {0xFFFF0000,0xFFFF9800,0xFFFFFF00,0xFF4CAF50,
-                             0xFF2196F3,0xFF9C27B0,0xFF000000,0xFFFFFFFF};
-            for (int qc : qColors) {
-                final int fc = qc;
-                android.view.View cb = new android.view.View(this);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(dpToPx(30), dpToPx(30));
-                lp.setMargins(0, 0, dpToPx(6), 0);
-                cb.setLayoutParams(lp);
-                android.graphics.drawable.GradientDrawable gd2 = new android.graphics.drawable.GradientDrawable();
-                gd2.setColor(fc); gd2.setShape(android.graphics.drawable.GradientDrawable.OVAL);
-                gd2.setStroke(dpToPx(1), 0xFFCCCCCC);
-                cb.setBackground(gd2);
-                cb.setOnClickListener(vv -> {
-                    tintColor[0] = fc;
-                    wheel.setColor(fc);
-                    tintPreview.setBackgroundColor(fc);
-                    hexPrev.setBackgroundColor(fc);
-                    etHex.setText(String.format("%06X", 0xFFFFFF & fc));
-                    applyTint.run();
-                });
-                colorRow.addView(cb);
+        // ── Tint Wheel listener ──
+        tintWheel.setOnColorChangedListener(c -> {
+            tintColor[0] = c;
+            tintPreview.setBackgroundColor(c);
+            String hex = String.format("%06X", 0xFFFFFF & c);
+            if (!tintEtHex.getText().toString().equalsIgnoreCase(hex)) {
+                tintEtHex.setText(hex);
+                tintEtHex.setSelection(hex.length());
             }
+            applyTint.run();
+        });
 
-            // Hex apply
-            hexApply.setOnClickListener(vv -> {
+        // ── Tint HEX TextWatcher ──
+        tintEtHex.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            @Override public void afterTextChanged(android.text.Editable s) {}
+            @Override public void onTextChanged(CharSequence s, int st, int b, int c) {
                 try {
-                    int parsed = Color.parseColor("#" + etHex.getText().toString().trim());
-                    tintColor[0] = parsed;
-                    wheel.setColor(parsed);
-                    tintPreview.setBackgroundColor(parsed);
-                    hexPrev.setBackgroundColor(parsed);
-                    applyTint.run();
-                } catch (Exception e) { etHex.setError("Invalid"); }
-            });
-
-            int screenW = getResources().getDisplayMetrics().widthPixels;
-            int popupH2 = (int)(180 * getResources().getDisplayMetrics().density);
-            android.widget.PopupWindow wheelPopup = new android.widget.PopupWindow(
-                wheelRoot, screenW, popupH2, true);
-            wheelPopup.setBackgroundDrawable(
-                new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
-            wheelPopup.setElevation(20f);
-            wheelPopup.setOutsideTouchable(true);
-
-            int screenH = getResources().getDisplayMetrics().heightPixels;
-            wheelPopup.showAtLocation(getWindow().getDecorView().getRootView(),
-                Gravity.TOP | Gravity.START, 0, (screenH - popupH2) / 2);
-
-            // Drag via title
-            final int[] lxy = {0, 0};
-            wTitle.setOnTouchListener((vv, ev) -> {
-                switch (ev.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        lxy[0] = (int) ev.getRawX(); lxy[1] = (int) ev.getRawY(); break;
-                    case MotionEvent.ACTION_MOVE:
-                        int dx = (int) ev.getRawX() - lxy[0];
-                        int dy = (int) ev.getRawY() - lxy[1];
-                        int[] loc = new int[2]; wheelRoot.getLocationOnScreen(loc);
-                        wheelPopup.update(loc[0]+dx, loc[1]+dy, screenW, popupH2);
-                        lxy[0] = (int) ev.getRawX(); lxy[1] = (int) ev.getRawY(); break;
-                }
-                return true;
-            });
-
-            wClose.setOnClickListener(vv -> wheelPopup.dismiss());
-            wCancel.setOnClickListener(vv -> wheelPopup.dismiss());
-            wDone.setOnClickListener(vv -> { exportToJson(); wheelPopup.dismiss(); });
+                    if (s.toString().trim().length() == 6) {
+                        int parsed = Color.parseColor("#" + s.toString().trim());
+                        tintColor[0] = parsed;
+                        tintPreview.setBackgroundColor(parsed);
+                        tintWheel.setColor(parsed);
+                        applyTint.run();
+                    }
+                } catch (Exception ignored) {}
+            }
         });
 
         // ── Tint None ──
         btnTintNone.setOnClickListener(v -> {
             tintColor[0] = Color.TRANSPARENT;
             tintPreview.setBackgroundColor(Color.TRANSPARENT);
+            tintEtHex.setText("");
             android.graphics.drawable.Drawable imgDraw = imgPreview.getDrawable();
             if (imgDraw != null) imgDraw.clearColorFilter();
             android.graphics.drawable.Drawable bg = targetView.getBackground();
@@ -13643,7 +13575,7 @@ public class MainActivity extends AppCompatActivity {
             targetView.invalidate();
         });
 
-        // ── Tint Opacity slider ──
+        // ── Tint Opacity ──
         tintOpacity.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
             @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
             @Override public void onStopTrackingTouch(android.widget.SeekBar s) {}
