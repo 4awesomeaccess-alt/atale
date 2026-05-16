@@ -21651,7 +21651,7 @@ public class MainActivity extends AppCompatActivity {
                     selectedColor[0] = fc;
                     previewBg.setColor(fc);
                     colorPreview.setBackground(previewBg);
-                    // hex update
+                    onColorSelected.accept(fc); // real-time apply
                 });
                 row.addView(btn);
             }
@@ -21766,8 +21766,7 @@ public class MainActivity extends AppCompatActivity {
                     selectedColor[0] = newColor;
                     previewBg.setColor(newColor);
                     colorPreview.setBackground(previewBg);
-                    // hex update
-                    // etHex not in scope here - update via tag
+                    onColorSelected.accept(newColor); // real-time apply
                 }
             });
         }
@@ -21783,41 +21782,21 @@ public class MainActivity extends AppCompatActivity {
                         selectedColor[0] = parsed;
                         previewBg.setColor(parsed);
                         colorPreview.setBackground(previewBg);
-                        // Update RGB sliders
                         rgbBars[0].setProgress(android.graphics.Color.red(parsed));
                         rgbBars[1].setProgress(android.graphics.Color.green(parsed));
                         rgbBars[2].setProgress(android.graphics.Color.blue(parsed));
                         rgbVals[0].setText(String.valueOf(android.graphics.Color.red(parsed)));
                         rgbVals[1].setText(String.valueOf(android.graphics.Color.green(parsed)));
                         rgbVals[2].setText(String.valueOf(android.graphics.Color.blue(parsed)));
+                        onColorSelected.accept(parsed); // real-time apply
                     }
                 } catch (Exception ignored) {}
             }
             @Override public void afterTextChanged(android.text.Editable s) {}
         });
 
-        // Update hex from RGB sliders
-        for (int si = 0; si < 3; si++) {
-            final int idx = si;
-            rgbBars[si].setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
-                @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
-                @Override public void onStopTrackingTouch(android.widget.SeekBar s) {}
-                @Override public void onProgressChanged(android.widget.SeekBar s, int progress, boolean fromUser) {
-                    if (!fromUser) return;
-                    rgbVals[idx].setText(String.valueOf(progress));
-                    int r = rgbBars[0].getProgress();
-                    int g = rgbBars[1].getProgress();
-                    int b2 = rgbBars[2].getProgress();
-                    int newColor = android.graphics.Color.rgb(r, g, b2);
-                    selectedColor[0] = newColor;
-                    previewBg.setColor(newColor);
-                    colorPreview.setBackground(previewBg);
-                    etHex.removeTextChangedListener(etHex.getTag() instanceof android.text.TextWatcher
-                            ? (android.text.TextWatcher) etHex.getTag() : null);
-                    etHex.setText(String.format("#%06X", (0xFFFFFF & newColor)));
-                }
-            });
-        }
+        // Update hex from RGB sliders (second pass for hex sync)
+        // — removed duplicate listener block —
 
         // ── OK / Cancel
         android.widget.LinearLayout btnRow = new android.widget.LinearLayout(this);
@@ -21887,8 +21866,14 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        btnClose.setOnClickListener(v -> popup.dismiss());
-        btnCancel.setOnClickListener(v -> popup.dismiss());
+        btnClose.setOnClickListener(v -> {
+            onColorSelected.accept(initialColor); // restore original
+            popup.dismiss();
+        });
+        btnCancel.setOnClickListener(v -> {
+            onColorSelected.accept(initialColor); // restore original
+            popup.dismiss();
+        });
         btnOk.setOnClickListener(v -> {
             onColorSelected.accept(selectedColor[0]);
             popup.dismiss();
