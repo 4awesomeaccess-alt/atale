@@ -13330,46 +13330,45 @@ public class MainActivity extends AppCompatActivity {
         preview.setLayoutParams(previewParams);
         root.addView(preview);
 
-        // Color Grid
-        int cols = 6;
+        // Color Row — HorizontalScrollView માં બધા colors એક line માં
         int btnSize = (int)(42 * dp);
-        int gap = (int)(6 * dp);
-        LinearLayout grid = new LinearLayout(this);
-        grid.setOrientation(LinearLayout.VERTICAL);
+        int gap = (int)(8 * dp);
 
-        for (int row = 0; row < (int) Math.ceil((double) colors.length / cols); row++) {
-            LinearLayout rowLayout = new LinearLayout(this);
-            rowLayout.setOrientation(LinearLayout.HORIZONTAL);
-            LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            rowParams.setMargins(0, 0, 0, gap);
-            rowLayout.setLayoutParams(rowParams);
+        HorizontalScrollView colorScrollView = new HorizontalScrollView(this);
+        colorScrollView.setHorizontalScrollBarEnabled(false);
+        LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        scrollParams.setMargins(0, 0, 0, (int)(8 * dp));
+        colorScrollView.setLayoutParams(scrollParams);
 
-            for (int col = 0; col < cols; col++) {
-                int index = row * cols + col;
-                if (index >= colors.length) break;
-                final int c = colors[index];
+        LinearLayout colorRow = new LinearLayout(this);
+        colorRow.setOrientation(LinearLayout.HORIZONTAL);
+        colorRow.setPadding((int)(4 * dp), (int)(4 * dp), (int)(4 * dp), (int)(4 * dp));
+        colorRow.setGravity(Gravity.CENTER_VERTICAL);
 
-                View colorBtn = new View(this);
-                GradientDrawable gd = new GradientDrawable();
-                gd.setShape(GradientDrawable.OVAL);
-                gd.setColor(c);
-                gd.setStroke(2, Color.parseColor("#555555"));
-                colorBtn.setBackground(gd);
+        for (int i = 0; i < colors.length; i++) {
+            final int c = colors[i];
 
-                LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(btnSize, btnSize);
-                bp.setMargins(0, 0, gap, 0);
-                colorBtn.setLayoutParams(bp);
+            View colorBtn = new View(this);
+            GradientDrawable gd = new GradientDrawable();
+            gd.setShape(GradientDrawable.OVAL);
+            gd.setColor(c);
+            gd.setStroke(2, Color.parseColor("#CCCCCC"));
+            colorBtn.setBackground(gd);
 
-                colorBtn.setOnClickListener(v2 -> {
-                    targetView.setTextColor(c);
-                    preview.setTextColor(c);
-                });
-                rowLayout.addView(colorBtn);
-            }
-            grid.addView(rowLayout);
+            LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(btnSize, btnSize);
+            bp.setMargins(0, 0, gap, 0);
+            colorBtn.setLayoutParams(bp);
+
+            colorBtn.setOnClickListener(v2 -> {
+                targetView.setTextColor(c);
+                preview.setTextColor(c);
+            });
+            colorRow.addView(colorBtn);
         }
-        root.addView(grid);
+
+        colorScrollView.addView(colorRow);
+        root.addView(colorScrollView);
 
         // Custom Color
         TextView btnCustom = new TextView(this);
