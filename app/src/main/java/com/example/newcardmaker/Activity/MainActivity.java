@@ -13385,17 +13385,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // ── PopupWindow ──
+        // ── PopupWindow — screen width જેટલી width ──
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;
         final PopupWindow popup = new PopupWindow(root,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
+                screenWidth,
                 LinearLayout.LayoutParams.WRAP_CONTENT, true);
         popup.setOutsideTouchable(true);
         popup.setElevation(16f);
 
-        // ── Movable ──
+        // ── Movable — title bar drag handle પર ──
+        View titleBar = root.findViewById(R.id.tv_color_title);
         final int[] lastX = {0};
         final int[] lastY = {0};
-        root.setOnTouchListener((v, event) -> {
+        titleBar.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     lastX[0] = (int) event.getRawX();
