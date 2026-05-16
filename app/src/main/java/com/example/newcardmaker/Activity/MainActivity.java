@@ -13304,7 +13304,6 @@ public class MainActivity extends AppCompatActivity {
         // ── XML Inflate ──
         View root = getLayoutInflater().inflate(R.layout.popup_text_color, null);
 
-        TextView preview      = root.findViewById(R.id.tv_color_preview);
         LinearLayout colorRow = root.findViewById(R.id.color_row);
         TextView btnCancel    = root.findViewById(R.id.btn_color_cancel);
         TextView btnDone      = root.findViewById(R.id.btn_color_done);
@@ -13314,10 +13313,6 @@ public class MainActivity extends AppCompatActivity {
         android.widget.EditText etHex = root.findViewById(R.id.et_hex_color);
         View hexPreview = root.findViewById(R.id.view_hex_preview);
         TextView btnHexApply = root.findViewById(R.id.btn_hex_apply);
-
-        // Preview set
-        preview.setText(targetView.getText().toString());
-        preview.setTextColor(targetView.getCurrentTextColor());
 
         // Color wheel initial color
         colorWheel.setColor(targetView.getCurrentTextColor());
@@ -13331,7 +13326,6 @@ public class MainActivity extends AppCompatActivity {
         // Helper: update all views when color changes
         Runnable updateAll = () -> {
             int c = selectedColor[0];
-            preview.setTextColor(c);
             targetView.setTextColor(c);
             hexPreview.setBackgroundColor(c);
             String hex = String.format("%06X", (0xFFFFFF & c));
