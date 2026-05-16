@@ -13870,7 +13870,11 @@ public class MainActivity extends AppCompatActivity {
                 updateGradPreview.run();
             });
         }
-        updateGradPreview.run();
+        // ── Initial: ফক্ত preview box update, targetView background touch નહીં
+        GradientDrawable initPreviewGd = new GradientDrawable(
+            GradientDrawable.Orientation.LEFT_RIGHT,
+            new int[]{gradColor1[0], gradColor2[0]});
+        gradPreview.setBackground(initPreviewGd);
 
         // Apply Gradient
         btnApplyGrad.setOnClickListener(v -> {
