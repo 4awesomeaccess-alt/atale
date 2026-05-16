@@ -18032,6 +18032,16 @@ public class MainActivity extends AppCompatActivity {
                                     bgImgTag.toString());
                         }
 
+                        // ── Tint save
+                        Object tintTag = tv.getTag(R.id.btn_sel_text_color);
+                        if (tintTag instanceof int[]) {
+                            int[] tintData = (int[]) tintTag;
+                            if (tintData.length >= 2) {
+                                obj.put("bgTintColor", tintData[0]);
+                                obj.put("bgTintAlpha", tintData[1]);
+                            }
+                        }
+
                         // Gradient save
                         Object gradTag = tv.getTag(R.id.tv_move_speed);
                         if (gradTag != null && !gradTag.toString().isEmpty()) {
@@ -19569,6 +19579,12 @@ public class MainActivity extends AppCompatActivity {
         String bgImageUri = obj.optString("bgImageUri", "");
         if (!bgImageUri.isEmpty()) {
             textView.setTag(R.id.btn_sticker_gallery, bgImageUri);
+            // ── Tint tag restore first — applyTextBgImage ← reapplyTint call
+            int bgTintColor = obj.optInt("bgTintColor", 0);
+            int bgTintAlpha = obj.optInt("bgTintAlpha", 0);
+            if (bgTintColor != 0 && bgTintAlpha > 0) {
+                textView.setTag(R.id.btn_sel_text_color, new int[]{bgTintColor, bgTintAlpha});
+            }
             mainLayout.post(() -> applyTextBgImage(
                     Uri.parse(bgImageUri), textView));
         }
