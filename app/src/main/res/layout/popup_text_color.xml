@@ -41,6 +41,19 @@
             android:textColor="#6B7280"
             android:textSize="8sp" />
 
+        <!-- Screen Color Picker button -->
+        <TextView
+            android:id="@+id/btn_screen_pick"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:text="🖱 Select"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            android:gravity="center"
+            android:paddingHorizontal="8dp"
+            android:background="#3F51B5"
+            android:layout_marginStart="6dp" />
+
         <TextView
             android:id="@+id/btn_color_close"
             android:layout_width="26dp"

@@ -13319,6 +13319,7 @@ public class MainActivity extends AppCompatActivity {
         TextView btnCancel    = root.findViewById(R.id.btn_color_cancel);
         TextView btnDone      = root.findViewById(R.id.btn_color_done);
         TextView btnClose     = root.findViewById(R.id.btn_color_close);
+        TextView btnScreenPick = root.findViewById(R.id.btn_screen_pick);
 
         // ── Views from XML ──
         com.example.newcardmaker.ColorWheelView colorWheel = root.findViewById(R.id.color_wheel);
@@ -13426,6 +13427,29 @@ public class MainActivity extends AppCompatActivity {
 
         // ── Cancel / Done ──
         final int originalColor = targetView.getCurrentTextColor();
+
+        // ── Screen Color Picker ──
+        btnScreenPick.setOnClickListener(v2 -> {
+            // Popup hide કરો
+            popup.dismiss();
+            // Full screen overlay show
+            new com.example.newcardmaker.ScreenColorPickerOverlay(this,
+                new com.example.newcardmaker.ScreenColorPickerOverlay.OnColorPickedListener() {
+                    @Override
+                    public void onColorPicked(int color) {
+                        // Color apply + popup ફરી open
+                        targetView.setTextColor(color);
+                        exportToJson();
+                        showTextColorPopup(targetView);
+                    }
+                    @Override
+                    public void onCancelled() {
+                        // Cancel — popup ફરી open, original color restore
+                        targetView.setTextColor(originalColor);
+                        showTextColorPopup(targetView);
+                    }
+                }).show();
+        });
 
         btnClose.setOnClickListener(v2 -> {
             targetView.setTextColor(originalColor);
