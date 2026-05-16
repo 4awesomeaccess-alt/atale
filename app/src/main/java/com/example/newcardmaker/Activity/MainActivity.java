@@ -14102,7 +14102,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnClose.setOnClickListener(v -> popup.dismiss());
-        btnCancel.setOnClickListener(v -> popup.dismiss());
         btnDone.setOnClickListener(v -> { exportToJson(); popup.dismiss(); });
     }
 
