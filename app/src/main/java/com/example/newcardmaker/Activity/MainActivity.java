@@ -21648,10 +21648,25 @@ public class MainActivity extends AppCompatActivity {
         popup.setElevation(16f);
         popup.setOutsideTouchable(true);
 
+        // ── Text Controls hide ──
+        if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) {
+            selectionControlsPopup.dismiss();
+        }
+
         android.view.View rootView = getWindow().getDecorView().getRootView();
         int screenH = getResources().getDisplayMetrics().heightPixels;
         popup.showAtLocation(rootView, android.view.Gravity.TOP | android.view.Gravity.START,
                 0, (screenH - popupH) / 2);
+
+        // ── Text Controls restore on dismiss ──
+        popup.setOnDismissListener(() -> {
+            if (selectionControlsPopup != null && !selectionControlsPopup.isShowing()) {
+                selectionControlsPopup.showAtLocation(
+                    mainLayout,
+                    Gravity.TOP | Gravity.LEFT,
+                    selControlsLastX, selControlsLastY);
+            }
+        });
 
         // ── Drag ──
         final int[] lastXY = {0, 0};
