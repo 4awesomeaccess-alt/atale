@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/gp_root"
     android:layout_width="match_parent"
-    android:layout_height="220dp"
+    android:layout_height="230dp"
     android:orientation="vertical"
     android:background="#2A3439"
     android:elevation="16dp">
@@ -71,6 +71,17 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="🌈 Gradient"
+            android:textColor="#9CA3AF"
+            android:textSize="11sp"
+            android:gravity="center"
+            android:background="#2A3439" />
+
+        <TextView
+            android:id="@+id/gp_tab_image"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="🖼 Image"
             android:textColor="#9CA3AF"
             android:textSize="11sp"
             android:gravity="center"
@@ -348,6 +359,60 @@
             android:textSize="12sp"
             android:gravity="center"
             android:background="#4CAF50" />
+
+    </LinearLayout>
+
+    <!-- ── Image Panel ── -->
+    <LinearLayout
+        android:id="@+id/gp_panel_image"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="12dp"
+        android:visibility="gone">
+
+        <!-- Current image preview -->
+        <ImageView
+            android:id="@+id/gp_image_preview"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"
+            android:background="#374151"
+            android:layout_marginBottom="10dp" />
+
+        <!-- Buttons row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/gp_image_pick"
+                android:layout_width="0dp"
+                android:layout_height="34dp"
+                android:layout_weight="1"
+                android:text="📷 Gallery"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:background="#1565C0"
+                android:layout_marginEnd="6dp" />
+
+            <TextView
+                android:id="@+id/gp_image_remove"
+                android:layout_width="0dp"
+                android:layout_height="34dp"
+                android:layout_weight="1"
+                android:text="✕ Remove"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:background="#B71C1C" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -13481,6 +13481,11 @@ public class MainActivity extends AppCompatActivity {
         android.widget.LinearLayout panelGradient = root.findViewById(R.id.gp_panel_gradient);
         android.widget.TextView btnCancel   = root.findViewById(R.id.gp_btn_cancel);
         android.widget.TextView btnDone     = root.findViewById(R.id.gp_btn_done);
+        android.widget.TextView tabImage    = root.findViewById(R.id.gp_tab_image);
+        android.widget.LinearLayout panelImage    = root.findViewById(R.id.gp_panel_image);
+        android.widget.ImageView imgPreview  = root.findViewById(R.id.gp_image_preview);
+        android.widget.TextView btnImagePick = root.findViewById(R.id.gp_image_pick);
+        android.widget.TextView btnImageRemove = root.findViewById(R.id.gp_image_remove);
 
         // ── Solid panel views ──
         android.widget.LinearLayout solidRow1 = root.findViewById(R.id.gp_solid_row1);
@@ -13734,30 +13739,70 @@ public class MainActivity extends AppCompatActivity {
             exportToJson();
         });
 
+        // ── Image Tab: existing preview ──
+        Object existingBgTag = targetView.getTag(R.id.btn_sticker_gallery);
+        if (existingBgTag != null && !existingBgTag.toString().isEmpty()) {
+            Glide.with(this).load(existingBgTag.toString()).into(imgPreview);
+        }
+
+        btnImagePick.setOnClickListener(v -> {
+            // Gallery open — pendingTextBgTarget set
+            pendingTextBgTarget = targetView;
+            Intent intent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, 9999);
+        });
+
+        btnImageRemove.setOnClickListener(v -> {
+            targetView.setTag(R.id.btn_sticker_gallery, "");
+            targetView.setTag(R.id.btn_sel_bg_color, null);
+            GradientDrawable clear = new GradientDrawable();
+            clear.setColor(Color.TRANSPARENT);
+            targetView.setBackground(clear);
+            imgPreview.setImageDrawable(null);
+            imgPreview.setBackgroundColor(Color.parseColor("#374151"));
+            exportToJson();
+        });
+
         // ── Tab switching ──
         tabSolid.setOnClickListener(v -> {
             panelSolid.setVisibility(android.view.View.VISIBLE);
             panelGradient.setVisibility(android.view.View.GONE);
-            tabSolid.setBackgroundColor(0xFF607D8B); tabSolid.setTextColor(0xFFFFFFFF);
+            panelImage.setVisibility(android.view.View.GONE);
+            tabSolid.setBackgroundColor(0xFF607D8B);    tabSolid.setTextColor(0xFFFFFFFF);
             tabGradient.setBackgroundColor(0xFF2A3439); tabGradient.setTextColor(0xFF9CA3AF);
-            tabNone.setBackgroundColor(0xFF2A3439); tabNone.setTextColor(0xFF9CA3AF);
+            tabImage.setBackgroundColor(0xFF2A3439);    tabImage.setTextColor(0xFF9CA3AF);
+            tabNone.setBackgroundColor(0xFF2A3439);     tabNone.setTextColor(0xFF9CA3AF);
         });
         tabGradient.setOnClickListener(v -> {
             panelSolid.setVisibility(android.view.View.GONE);
             panelGradient.setVisibility(android.view.View.VISIBLE);
+            panelImage.setVisibility(android.view.View.GONE);
             tabGradient.setBackgroundColor(0xFF607D8B); tabGradient.setTextColor(0xFFFFFFFF);
-            tabSolid.setBackgroundColor(0xFF2A3439); tabSolid.setTextColor(0xFF9CA3AF);
-            tabNone.setBackgroundColor(0xFF2A3439); tabNone.setTextColor(0xFF9CA3AF);
+            tabSolid.setBackgroundColor(0xFF2A3439);    tabSolid.setTextColor(0xFF9CA3AF);
+            tabImage.setBackgroundColor(0xFF2A3439);    tabImage.setTextColor(0xFF9CA3AF);
+            tabNone.setBackgroundColor(0xFF2A3439);     tabNone.setTextColor(0xFF9CA3AF);
+        });
+        tabImage.setOnClickListener(v -> {
+            panelSolid.setVisibility(android.view.View.GONE);
+            panelGradient.setVisibility(android.view.View.GONE);
+            panelImage.setVisibility(android.view.View.VISIBLE);
+            tabImage.setBackgroundColor(0xFF607D8B);    tabImage.setTextColor(0xFFFFFFFF);
+            tabSolid.setBackgroundColor(0xFF2A3439);    tabSolid.setTextColor(0xFF9CA3AF);
+            tabGradient.setBackgroundColor(0xFF2A3439); tabGradient.setTextColor(0xFF9CA3AF);
+            tabNone.setBackgroundColor(0xFF2A3439);     tabNone.setTextColor(0xFF9CA3AF);
         });
         tabNone.setOnClickListener(v -> {
             targetView.setBackground(null);
             targetView.setTag(Color.TRANSPARENT);
+            targetView.setTag(R.id.btn_sel_bg_color, null);
+            targetView.setTag(R.id.btn_sticker_gallery, "");
             exportToJson();
         });
 
         // ── PopupWindow ──
         int screenW = getResources().getDisplayMetrics().widthPixels;
-        int popupH  = (int)(220 * getResources().getDisplayMetrics().density);
+        int popupH  = (int)(230 * getResources().getDisplayMetrics().density);
         android.widget.PopupWindow popup = new android.widget.PopupWindow(
                 root, screenW, popupH, true);
         popup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
