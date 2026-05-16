@@ -13301,123 +13301,50 @@ public class MainActivity extends AppCompatActivity {
             Color.parseColor("#880E4F"), Color.parseColor("#0D47A1"),
         };
 
-        float dp = getResources().getDisplayMetrics().density;
+        // ── XML Inflate ──
+        View root = getLayoutInflater().inflate(R.layout.popup_text_color, null);
 
-        LinearLayout root = new LinearLayout(this);
-        root.setOrientation(LinearLayout.VERTICAL);
-        root.setPadding(24, 24, 24, 24);
-        root.setBackgroundColor(Color.parseColor("#808080"));
+        TextView preview    = root.findViewById(R.id.tv_color_preview);
+        LinearLayout colorRow = root.findViewById(R.id.color_row);
+        TextView btnCustom  = root.findViewById(R.id.btn_custom_color);
+        TextView btnCancel  = root.findViewById(R.id.btn_color_cancel);
+        TextView btnDone    = root.findViewById(R.id.btn_color_done);
 
-        TextView title = new TextView(this);
-        title.setText("Text Color");
-        title.setTextColor(Color.WHITE);
-        title.setTextSize(16);
-        title.setTypeface(null, android.graphics.Typeface.BOLD);
-        title.setPadding(0, 0, 0, 12);
-        root.addView(title);
-
-        // Preview
-        TextView preview = new TextView(this);
+        // Preview set
         preview.setText(targetView.getText().toString());
-        preview.setTextSize(22);
         preview.setTextColor(targetView.getCurrentTextColor());
-        preview.setGravity(Gravity.CENTER);
-        preview.setPadding(16, 16, 16, 16);
-        preview.setBackgroundColor(Color.parseColor("#9E9E9E"));
-        LinearLayout.LayoutParams previewParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, (int)(60 * dp));
-        previewParams.setMargins(0, 0, 0, 16);
-        preview.setLayoutParams(previewParams);
-        root.addView(preview);
 
-        // Color Row — HorizontalScrollView માં બધા colors એક line માં
+        // ── Color Buttons dynamically add ──
+        float dp = getResources().getDisplayMetrics().density;
         int btnSize = (int)(42 * dp);
-        int gap = (int)(8 * dp);
+        int gap     = (int)(8 * dp);
 
-        HorizontalScrollView colorScrollView = new HorizontalScrollView(this);
-        colorScrollView.setHorizontalScrollBarEnabled(false);
-        LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        scrollParams.setMargins(0, 0, 0, (int)(8 * dp));
-        colorScrollView.setLayoutParams(scrollParams);
-
-        LinearLayout colorRow = new LinearLayout(this);
-        colorRow.setOrientation(LinearLayout.HORIZONTAL);
-        colorRow.setPadding((int)(4 * dp), (int)(4 * dp), (int)(4 * dp), (int)(4 * dp));
-        colorRow.setGravity(Gravity.CENTER_VERTICAL);
-
-        for (int i = 0; i < colors.length; i++) {
-            final int c = colors[i];
-
+        for (int c : colors) {
+            final int color = c;
             View colorBtn = new View(this);
             GradientDrawable gd = new GradientDrawable();
             gd.setShape(GradientDrawable.OVAL);
-            gd.setColor(c);
+            gd.setColor(color);
             gd.setStroke(2, Color.parseColor("#CCCCCC"));
             colorBtn.setBackground(gd);
-
             LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(btnSize, btnSize);
             bp.setMargins(0, 0, gap, 0);
             colorBtn.setLayoutParams(bp);
-
             colorBtn.setOnClickListener(v2 -> {
-                targetView.setTextColor(c);
-                preview.setTextColor(c);
+                targetView.setTextColor(color);
+                preview.setTextColor(color);
             });
             colorRow.addView(colorBtn);
         }
 
-        colorScrollView.addView(colorRow);
-        root.addView(colorScrollView);
-
-        // Custom Color
-        TextView btnCustom = new TextView(this);
-        btnCustom.setText("🎨  Custom Color");
-        btnCustom.setTextColor(Color.parseColor("#90CAF9"));
-        btnCustom.setTextSize(13);
-        btnCustom.setPadding(0, 16, 0, 8);
-        root.addView(btnCustom);
-
-        // Buttons Row
-        LinearLayout btnRow = new LinearLayout(this);
-        btnRow.setOrientation(LinearLayout.HORIZONTAL);
-        btnRow.setGravity(Gravity.END);
-        LinearLayout.LayoutParams brp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        brp.setMargins(0, 16, 0, 0);
-        btnRow.setLayoutParams(brp);
-
-        TextView btnCancel = new TextView(this);
-        btnCancel.setText("Cancel");
-        btnCancel.setTextColor(Color.parseColor("#AAAAAA"));
-        btnCancel.setTextSize(14);
-        btnCancel.setPadding(24, 12, 24, 12);
-
-        TextView btnDone = new TextView(this);
-        btnDone.setText("Done ✓");
-        btnDone.setTextColor(Color.WHITE);
-        btnDone.setTextSize(14);
-        btnDone.setPadding(24, 12, 24, 12);
-        GradientDrawable okGd = new GradientDrawable();
-        okGd.setColor(Color.parseColor("#4CAF50"));
-        okGd.setCornerRadius(12f);
-        btnDone.setBackground(okGd);
-
-        btnRow.addView(btnCancel);
-        btnRow.addView(btnDone);
-        root.addView(btnRow);
-
-        int popupWidth = (int)(300 * dp);
+        // ── PopupWindow ──
         final PopupWindow popup = new PopupWindow(root,
-                popupWidth, LinearLayout.LayoutParams.WRAP_CONTENT, true);
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT, true);
         popup.setOutsideTouchable(true);
         popup.setElevation(16f);
-        GradientDrawable bg = new GradientDrawable();
-        bg.setColor(Color.parseColor("#808080"));
-        bg.setCornerRadius(20f);
-        popup.setBackgroundDrawable(bg);
 
-        // ── Movable Popup ──
+        // ── Movable ──
         final int[] lastX = {0};
         final int[] lastY = {0};
         root.setOnTouchListener((v, event) -> {
@@ -13429,7 +13356,6 @@ public class MainActivity extends AppCompatActivity {
                 case MotionEvent.ACTION_MOVE:
                     int dx = (int) event.getRawX() - lastX[0];
                     int dy = (int) event.getRawY() - lastY[0];
-                    // popup ની current location મળે
                     int[] loc = new int[2];
                     root.getLocationOnScreen(loc);
                     popup.update(loc[0] + dx, loc[1] + dy, -1, -1);
@@ -13440,15 +13366,16 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
 
+        // ── Listeners ──
         final int originalColor = targetView.getCurrentTextColor();
 
         btnCustom.setOnClickListener(v2 -> showColorPickerPopup(
-                        targetView.getCurrentTextColor(),
-                        color -> {
-                            targetView.setTextColor(color);
-                        preview.setTextColor(color);
-                        exportToJson();
-                        }));
+                targetView.getCurrentTextColor(),
+                color -> {
+                    targetView.setTextColor(color);
+                    preview.setTextColor(color);
+                    exportToJson();
+                }));
 
         btnCancel.setOnClickListener(v2 -> {
             targetView.setTextColor(originalColor);

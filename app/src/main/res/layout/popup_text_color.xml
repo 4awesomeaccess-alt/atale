@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/popup_root"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#808080"
+    android:padding="16dp"
+    android:elevation="16dp">
+
+    <!-- ── Title ── -->
+    <TextView
+        android:id="@+id/tv_color_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Text Color"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp" />
+
+    <!-- ── Preview ── -->
+    <TextView
+        android:id="@+id/tv_color_preview"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:background="#9E9E9E"
+        android:layout_marginBottom="12dp" />
+
+    <!-- ── Color Scroll Row ── -->
+    <HorizontalScrollView
+        android:id="@+id/color_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:layout_marginBottom="8dp">
+
+        <!-- Colors dynamically add થશે Java માં -->
+        <LinearLayout
+            android:id="@+id/color_row"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingVertical="4dp" />
+
+    </HorizontalScrollView>
+
+    <!-- ── Custom Color Button ── -->
+    <TextView
+        android:id="@+id/btn_custom_color"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🎨  Custom Color"
+        android:textColor="#90CAF9"
+        android:textSize="13sp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp" />
+
+    <!-- ── Cancel / Done Row ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:layout_marginTop="12dp">
+
+        <TextView
+            android:id="@+id/btn_color_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:textColor="#DDDDDD"
+            android:textSize="14sp"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp" />
+
+        <TextView
+            android:id="@+id/btn_color_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Done ✓"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:background="#4CAF50"
+            android:layout_marginStart="8dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
