@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/gp_root"
+    android:layout_width="match_parent"
+    android:layout_height="220dp"
+    android:orientation="vertical"
+    android:background="#2A3439"
+    android:elevation="16dp">
+
+    <!-- ── Drag Handle ── -->
+    <LinearLayout
+        android:id="@+id/gp_drag_handle"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#1C2529"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingEnd="6dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⠿ "
+            android:textColor="#9CA3AF"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="🎨 Background Color"
+            android:textColor="#F3F4F6"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/gp_btn_close"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:text="✕"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:gravity="center"
+            android:background="#374151" />
+
+    </LinearLayout>
+
+    <!-- ── Tab Row: Solid / Gradient ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:background="#1C2529">
+
+        <TextView
+            android:id="@+id/gp_tab_solid"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="⬛ Solid"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:background="#607D8B" />
+
+        <TextView
+            android:id="@+id/gp_tab_gradient"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="🌈 Gradient"
+            android:textColor="#9CA3AF"
+            android:textSize="11sp"
+            android:gravity="center"
+            android:background="#2A3439" />
+
+        <TextView
+            android:id="@+id/gp_tab_none"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="✕ None"
+            android:textColor="#9CA3AF"
+            android:textSize="11sp"
+            android:gravity="center"
+            android:background="#2A3439" />
+
+    </LinearLayout>
+
+    <!-- ── Solid Panel ── -->
+    <LinearLayout
+        android:id="@+id/gp_panel_solid"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:visibility="visible">
+
+        <!-- Left: Color rows + HEX -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingEnd="6dp">
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="26dp"
+                android:scrollbars="none"
+                android:layout_marginBottom="4dp">
+                <LinearLayout
+                    android:id="@+id/gp_solid_row1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical" />
+            </HorizontalScrollView>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="26dp"
+                android:scrollbars="none"
+                android:layout_marginBottom="4dp">
+                <LinearLayout
+                    android:id="@+id/gp_solid_row2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical" />
+            </HorizontalScrollView>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="26dp"
+                android:scrollbars="none"
+                android:layout_marginBottom="6dp">
+                <LinearLayout
+                    android:id="@+id/gp_solid_row3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical" />
+            </HorizontalScrollView>
+
+            <!-- HEX Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="26dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <View
+                    android:id="@+id/gp_solid_hex_preview"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:background="#FF0000"
+                    android:layout_marginEnd="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="#"
+                    android:textColor="#9CA3AF"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="2dp" />
+
+                <EditText
+                    android:id="@+id/gp_solid_et_hex"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="FF0000"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#6B7280"
+                    android:textSize="11sp"
+                    android:background="#374151"
+                    android:paddingHorizontal="6dp"
+                    android:inputType="text"
+                    android:maxLength="6"
+                    android:singleLine="true" />
+
+                <TextView
+                    android:id="@+id/gp_solid_hex_apply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="OK"
+                    android:textColor="#FFFFFF"
+                    android:textSize="11sp"
+                    android:gravity="center"
+                    android:paddingHorizontal="8dp"
+                    android:background="#607D8B"
+                    android:layout_marginStart="4dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Right: RGB Sliders -->
+        <LinearLayout
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="6dp">
+                <TextView android:layout_width="14dp" android:layout_height="wrap_content" android:text="R" android:textColor="#EF5350" android:textSize="10sp" android:textStyle="bold" />
+                <SeekBar android:id="@+id/gp_solid_seek_r" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:max="255" android:progressTint="#EF5350" android:thumbTint="#EF5350" android:layout_marginHorizontal="4dp" />
+                <TextView android:id="@+id/gp_solid_val_r" android:layout_width="24dp" android:layout_height="wrap_content" android:text="255" android:textColor="#CFD8DC" android:textSize="9sp" android:gravity="end" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="6dp">
+                <TextView android:layout_width="14dp" android:layout_height="wrap_content" android:text="G" android:textColor="#66BB6A" android:textSize="10sp" android:textStyle="bold" />
+                <SeekBar android:id="@+id/gp_solid_seek_g" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:max="255" android:progressTint="#66BB6A" android:thumbTint="#66BB6A" android:layout_marginHorizontal="4dp" />
+                <TextView android:id="@+id/gp_solid_val_g" android:layout_width="24dp" android:layout_height="wrap_content" android:text="0" android:textColor="#CFD8DC" android:textSize="9sp" android:gravity="end" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                <TextView android:layout_width="14dp" android:layout_height="wrap_content" android:text="B" android:textColor="#42A5F5" android:textSize="10sp" android:textStyle="bold" />
+                <SeekBar android:id="@+id/gp_solid_seek_b" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:max="255" android:progressTint="#42A5F5" android:thumbTint="#42A5F5" android:layout_marginHorizontal="4dp" />
+                <TextView android:id="@+id/gp_solid_val_b" android:layout_width="24dp" android:layout_height="wrap_content" android:text="0" android:textColor="#CFD8DC" android:textSize="9sp" android:gravity="end" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- ── Gradient Panel ── -->
+    <LinearLayout
+        android:id="@+id/gp_panel_gradient"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:visibility="gone">
+
+        <!-- Gradient Preview -->
+        <View
+            android:id="@+id/gp_gradient_preview"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginBottom="6dp" />
+
+        <!-- Color 1 + Color 2 Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Color 1:"
+                android:textColor="#CFD8DC"
+                android:textSize="10sp"
+                android:layout_marginEnd="4dp" />
+
+            <View
+                android:id="@+id/gp_color1_box"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:background="#FF0000"
+                android:layout_marginEnd="6dp" />
+
+            <EditText
+                android:id="@+id/gp_color1_hex"
+                android:layout_width="0dp"
+                android:layout_height="28dp"
+                android:layout_weight="1"
+                android:text="FF0000"
+                android:textColor="#FFFFFF"
+                android:textSize="10sp"
+                android:background="#374151"
+                android:paddingHorizontal="4dp"
+                android:inputType="text"
+                android:maxLength="6"
+                android:singleLine="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Color 2:"
+                android:textColor="#CFD8DC"
+                android:textSize="10sp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="4dp" />
+
+            <View
+                android:id="@+id/gp_color2_box"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:background="#0000FF"
+                android:layout_marginEnd="6dp" />
+
+            <EditText
+                android:id="@+id/gp_color2_hex"
+                android:layout_width="0dp"
+                android:layout_height="28dp"
+                android:layout_weight="1"
+                android:text="0000FF"
+                android:textColor="#FFFFFF"
+                android:textSize="10sp"
+                android:background="#374151"
+                android:paddingHorizontal="4dp"
+                android:inputType="text"
+                android:maxLength="6"
+                android:singleLine="true" />
+
+        </LinearLayout>
+
+        <!-- Direction Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Direction:"
+                android:textColor="#CFD8DC"
+                android:textSize="10sp"
+                android:layout_marginEnd="6dp" />
+
+            <TextView android:id="@+id/gp_dir_lr" android:layout_width="wrap_content" android:layout_height="26dp" android:text="→" android:textColor="#FFFFFF" android:textSize="13sp" android:gravity="center" android:paddingHorizontal="8dp" android:background="#607D8B" android:layout_marginEnd="4dp" />
+            <TextView android:id="@+id/gp_dir_tb" android:layout_width="wrap_content" android:layout_height="26dp" android:text="↓" android:textColor="#9CA3AF" android:textSize="13sp" android:gravity="center" android:paddingHorizontal="8dp" android:background="#374151" android:layout_marginEnd="4dp" />
+            <TextView android:id="@+id/gp_dir_diag" android:layout_width="wrap_content" android:layout_height="26dp" android:text="↘" android:textColor="#9CA3AF" android:textSize="13sp" android:gravity="center" android:paddingHorizontal="8dp" android:background="#374151" android:layout_marginEnd="4dp" />
+            <TextView android:id="@+id/gp_dir_rad" android:layout_width="wrap_content" android:layout_height="26dp" android:text="◎" android:textColor="#9CA3AF" android:textSize="13sp" android:gravity="center" android:paddingHorizontal="8dp" android:background="#374151" />
+
+        </LinearLayout>
+
+        <!-- Apply gradient button -->
+        <TextView
+            android:id="@+id/gp_gradient_apply"
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:text="✅ Apply Gradient"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:background="#4CAF50" />
+
+    </LinearLayout>
+
+    <!-- ── Bottom: Cancel/Done (always visible) ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:background="#1C2529"
+        android:paddingEnd="8dp">
+
+        <TextView
+            android:id="@+id/gp_btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Cancel"
+            android:textColor="#9CA3AF"
+            android:textSize="11sp"
+            android:gravity="center"
+            android:paddingHorizontal="12dp" />
+
+        <TextView
+            android:id="@+id/gp_btn_done"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Done ✓"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:gravity="center"
+            android:paddingHorizontal="12dp"
+            android:background="#4CAF50"
+            android:layout_marginStart="6dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -13138,20 +13138,7 @@ public class MainActivity extends AppCompatActivity {
         // ── BG Color
         View btnBgColor = cv.findViewById(R.id.btn_sel_bg_color);
         if (btnBgColor != null) {
-            btnBgColor.setOnClickListener(v ->
-                    showColorPickerPopup(
-                        getStoredBackgroundColor(targetView),
-                        color -> {
-                            GradientDrawable gd = new GradientDrawable();
-                                    gd.setColor(color);
-                                    Object borderTag = targetView.getTag(R.id.btn_add_sticker);
-                                    int borderStyle = borderTag instanceof Integer
-                                            ? (int) borderTag : 0;
-                                    applyBorderStyle(gd, borderStyle);
-                                    targetView.setBackground(gd);
-                                    targetView.setTag(color);
-                                    exportToJson();
-                        }));
+            btnBgColor.setOnClickListener(v -> showBgColorGradientPopup(targetView));
         }
 
         // ── Close
@@ -13478,6 +13465,319 @@ public class MainActivity extends AppCompatActivity {
 
         // ── Text Controls restore when color popup closes ──
         popup.setOnDismissListener(() -> showSelectionControlsForText(targetView));
+    }
+
+    private void showBgColorGradientPopup(StrokeTextView targetView) {
+
+        android.view.View root = getLayoutInflater().inflate(R.layout.popup_gradient_picker, null);
+
+        // ── Views ──
+        android.view.View dragHandle        = root.findViewById(R.id.gp_drag_handle);
+        android.widget.TextView btnClose    = root.findViewById(R.id.gp_btn_close);
+        android.widget.TextView tabSolid    = root.findViewById(R.id.gp_tab_solid);
+        android.widget.TextView tabGradient = root.findViewById(R.id.gp_tab_gradient);
+        android.widget.TextView tabNone     = root.findViewById(R.id.gp_tab_none);
+        android.widget.LinearLayout panelSolid    = root.findViewById(R.id.gp_panel_solid);
+        android.widget.LinearLayout panelGradient = root.findViewById(R.id.gp_panel_gradient);
+        android.widget.TextView btnCancel   = root.findViewById(R.id.gp_btn_cancel);
+        android.widget.TextView btnDone     = root.findViewById(R.id.gp_btn_done);
+
+        // ── Solid panel views ──
+        android.widget.LinearLayout solidRow1 = root.findViewById(R.id.gp_solid_row1);
+        android.widget.LinearLayout solidRow2 = root.findViewById(R.id.gp_solid_row2);
+        android.widget.LinearLayout solidRow3 = root.findViewById(R.id.gp_solid_row3);
+        android.view.View solidHexPreview     = root.findViewById(R.id.gp_solid_hex_preview);
+        android.widget.EditText solidEtHex    = root.findViewById(R.id.gp_solid_et_hex);
+        android.widget.TextView solidHexApply = root.findViewById(R.id.gp_solid_hex_apply);
+        android.widget.SeekBar seekR = root.findViewById(R.id.gp_solid_seek_r);
+        android.widget.SeekBar seekG = root.findViewById(R.id.gp_solid_seek_g);
+        android.widget.SeekBar seekB = root.findViewById(R.id.gp_solid_seek_b);
+        android.widget.TextView valR = root.findViewById(R.id.gp_solid_val_r);
+        android.widget.TextView valG = root.findViewById(R.id.gp_solid_val_g);
+        android.widget.TextView valB = root.findViewById(R.id.gp_solid_val_b);
+
+        // ── Gradient panel views ──
+        android.view.View gradPreview       = root.findViewById(R.id.gp_gradient_preview);
+        android.view.View color1Box         = root.findViewById(R.id.gp_color1_box);
+        android.view.View color2Box         = root.findViewById(R.id.gp_color2_box);
+        android.widget.EditText etColor1    = root.findViewById(R.id.gp_color1_hex);
+        android.widget.EditText etColor2    = root.findViewById(R.id.gp_color2_hex);
+        android.widget.TextView dirLR       = root.findViewById(R.id.gp_dir_lr);
+        android.widget.TextView dirTB       = root.findViewById(R.id.gp_dir_tb);
+        android.widget.TextView dirDiag     = root.findViewById(R.id.gp_dir_diag);
+        android.widget.TextView dirRad      = root.findViewById(R.id.gp_dir_rad);
+        android.widget.TextView btnApplyGrad = root.findViewById(R.id.gp_gradient_apply);
+
+        // ── State ──
+        int initColor = getStoredBackgroundColor(targetView);
+        final int[] solidColor   = {initColor};
+        final int[] gradColor1   = {0xFFFF0000};
+        final int[] gradColor2   = {0xFF0000FF};
+        final int[] gradDirection = {0}; // 0=LR, 1=TB, 2=Diag, 3=Radial
+
+        // ── Solid initial ──
+        solidHexPreview.setBackgroundColor(initColor);
+        solidEtHex.setText(String.format("%06X", 0xFFFFFF & initColor));
+        seekR.setProgress(Color.red(initColor));
+        seekG.setProgress(Color.green(initColor));
+        seekB.setProgress(Color.blue(initColor));
+        valR.setText(String.valueOf(Color.red(initColor)));
+        valG.setText(String.valueOf(Color.green(initColor)));
+        valB.setText(String.valueOf(Color.blue(initColor)));
+
+        // ── Color rows ──
+        int[][] colorRows = {
+            {0xFFFF0000,0xFFFF4500,0xFFFF8C00,0xFFFFD700,0xFFFFFF00,0xFFADFF2F,0xFF32CD32,0xFF00FA9A,0xFF00FFFF,0xFF00BFFF,0xFF1E90FF,0xFF0000FF,0xFF8A2BE2,0xFFFF00FF,0xFFFF1493},
+            {0xFFFFFFFF,0xFFF5F5F5,0xFFE0E0E0,0xFFC0C0C0,0xFF9E9E9E,0xFF757575,0xFF616161,0xFF424242,0xFF212121,0xFF000000,0xFFFFCDD2,0xFFF8BBD0,0xFFE1BEE7,0xFFD1C4E9,0xFFC5CAE9},
+            {0xFFB71C1C,0xFF880E4F,0xFF4A148C,0xFF1A237E,0xFF0D47A1,0xFF006064,0xFF1B5E20,0xFF33691E,0xFFF57F17,0xFFE65100,0xFF3E2723,0xFF263238,0xFF37474F,0xFF546E7A,0xFF78909C},
+        };
+        android.widget.LinearLayout[] solidRows = {solidRow1, solidRow2, solidRow3};
+
+        // ── Solid apply helper ──
+        Runnable applySolid = () -> {
+            int c = solidColor[0];
+            GradientDrawable gd = new GradientDrawable();
+            gd.setColor(c);
+            Object borderTag = targetView.getTag(R.id.btn_add_sticker);
+            int borderStyle = borderTag instanceof Integer ? (int) borderTag : 0;
+            applyBorderStyle(gd, borderStyle);
+            targetView.setBackground(gd);
+            targetView.setTag(c);
+        };
+
+        // ── Gradient preview helper ──
+        Runnable updateGradPreview = () -> {
+            GradientDrawable.Orientation orient;
+            switch (gradDirection[0]) {
+                case 1:  orient = GradientDrawable.Orientation.TOP_BOTTOM; break;
+                case 2:  orient = GradientDrawable.Orientation.TL_BR; break;
+                default: orient = GradientDrawable.Orientation.LEFT_RIGHT; break;
+            }
+            if (gradDirection[0] == 3) {
+                android.graphics.drawable.GradientDrawable radGd = new android.graphics.drawable.GradientDrawable(
+                    GradientDrawable.Orientation.LEFT_RIGHT,
+                    new int[]{gradColor1[0], gradColor2[0]});
+                radGd.setGradientType(GradientDrawable.RADIAL_GRADIENT);
+                radGd.setGradientRadius(300f);
+                gradPreview.setBackground(radGd);
+            } else {
+                gradPreview.setBackground(new GradientDrawable(orient,
+                    new int[]{gradColor1[0], gradColor2[0]}));
+            }
+        };
+
+        // Add color buttons to solid rows
+        for (int r = 0; r < 3; r++) {
+            for (int c : colorRows[r]) {
+                final int fc = c;
+                android.view.View btn = new android.view.View(this);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(dpToPx(24), dpToPx(24));
+                lp.setMargins(dpToPx(2), 0, dpToPx(2), 0);
+                btn.setLayoutParams(lp);
+                GradientDrawable gd = new GradientDrawable();
+                gd.setColor(fc);
+                gd.setCornerRadius(dpToPx(3));
+                gd.setStroke(dpToPx(1), 0xFFD1D5DB);
+                btn.setBackground(gd);
+                btn.setOnClickListener(v -> {
+                    solidColor[0] = fc;
+                    solidHexPreview.setBackgroundColor(fc);
+                    solidEtHex.setText(String.format("%06X", 0xFFFFFF & fc));
+                    seekR.setProgress(Color.red(fc));
+                    seekG.setProgress(Color.green(fc));
+                    seekB.setProgress(Color.blue(fc));
+                    valR.setText(String.valueOf(Color.red(fc)));
+                    valG.setText(String.valueOf(Color.green(fc)));
+                    valB.setText(String.valueOf(Color.blue(fc)));
+                    applySolid.run();
+                });
+                solidRows[r].addView(btn);
+            }
+        }
+
+        // RGB sliders
+        android.widget.SeekBar[] seeks = {seekR, seekG, seekB};
+        android.widget.TextView[] vals = {valR, valG, valB};
+        for (int i = 0; i < 3; i++) {
+            final int idx = i;
+            seeks[i].setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+                @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+                @Override public void onStopTrackingTouch(android.widget.SeekBar s) {}
+                @Override public void onProgressChanged(android.widget.SeekBar s, int progress, boolean fromUser) {
+                    if (!fromUser) return;
+                    vals[idx].setText(String.valueOf(progress));
+                    int nc = Color.rgb(seekR.getProgress(), seekG.getProgress(), seekB.getProgress());
+                    solidColor[0] = nc;
+                    solidHexPreview.setBackgroundColor(nc);
+                    solidEtHex.setText(String.format("%06X", 0xFFFFFF & nc));
+                    applySolid.run();
+                }
+            });
+        }
+
+        solidHexApply.setOnClickListener(v -> {
+            try {
+                int parsed = Color.parseColor("#" + solidEtHex.getText().toString().trim());
+                solidColor[0] = parsed;
+                solidHexPreview.setBackgroundColor(parsed);
+                seekR.setProgress(Color.red(parsed));
+                seekG.setProgress(Color.green(parsed));
+                seekB.setProgress(Color.blue(parsed));
+                valR.setText(String.valueOf(Color.red(parsed)));
+                valG.setText(String.valueOf(Color.green(parsed)));
+                valB.setText(String.valueOf(Color.blue(parsed)));
+                applySolid.run();
+            } catch (Exception e) { solidEtHex.setError("Invalid"); }
+        });
+
+        // ── Gradient color pickers ──
+        color1Box.setOnClickListener(v -> showColorPickerPopup(gradColor1[0], c -> {
+            gradColor1[0] = c;
+            color1Box.setBackgroundColor(c);
+            etColor1.setText(String.format("%06X", 0xFFFFFF & c));
+            updateGradPreview.run();
+        }));
+
+        color2Box.setOnClickListener(v -> showColorPickerPopup(gradColor2[0], c -> {
+            gradColor2[0] = c;
+            color2Box.setBackgroundColor(c);
+            etColor2.setText(String.format("%06X", 0xFFFFFF & c));
+            updateGradPreview.run();
+        }));
+
+        etColor1.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
+            @Override public void afterTextChanged(android.text.Editable s) {}
+            @Override public void onTextChanged(CharSequence s, int a, int b, int c) {
+                try {
+                    int parsed = Color.parseColor("#" + s.toString().trim());
+                    gradColor1[0] = parsed;
+                    color1Box.setBackgroundColor(parsed);
+                    updateGradPreview.run();
+                } catch (Exception ignored) {}
+            }
+        });
+
+        etColor2.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
+            @Override public void afterTextChanged(android.text.Editable s) {}
+            @Override public void onTextChanged(CharSequence s, int a, int b, int c) {
+                try {
+                    int parsed = Color.parseColor("#" + s.toString().trim());
+                    gradColor2[0] = parsed;
+                    color2Box.setBackgroundColor(parsed);
+                    updateGradPreview.run();
+                } catch (Exception ignored) {}
+            }
+        });
+
+        // Direction buttons
+        android.widget.TextView[] dirBtns = {dirLR, dirTB, dirDiag, dirRad};
+        for (int i = 0; i < dirBtns.length; i++) {
+            final int idx = i;
+            dirBtns[i].setOnClickListener(v -> {
+                gradDirection[0] = idx;
+                for (android.widget.TextView db : dirBtns) {
+                    db.setBackgroundColor(0xFF374151);
+                    db.setTextColor(0xFF9CA3AF);
+                }
+                dirBtns[idx].setBackgroundColor(0xFF607D8B);
+                dirBtns[idx].setTextColor(0xFFFFFFFF);
+                updateGradPreview.run();
+            });
+        }
+        updateGradPreview.run();
+
+        // Apply Gradient
+        btnApplyGrad.setOnClickListener(v -> {
+            GradientDrawable.Orientation orient;
+            switch (gradDirection[0]) {
+                case 1:  orient = GradientDrawable.Orientation.TOP_BOTTOM; break;
+                case 2:  orient = GradientDrawable.Orientation.TL_BR; break;
+                default: orient = GradientDrawable.Orientation.LEFT_RIGHT; break;
+            }
+            GradientDrawable gradGd;
+            if (gradDirection[0] == 3) {
+                gradGd = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT,
+                    new int[]{gradColor1[0], gradColor2[0]});
+                gradGd.setGradientType(GradientDrawable.RADIAL_GRADIENT);
+                gradGd.setGradientRadius(500f);
+            } else {
+                gradGd = new GradientDrawable(orient, new int[]{gradColor1[0], gradColor2[0]});
+            }
+            Object borderTag = targetView.getTag(R.id.btn_add_sticker);
+            int borderStyle = borderTag instanceof Integer ? (int) borderTag : 0;
+            applyBorderStyle(gradGd, borderStyle);
+            targetView.setBackground(gradGd);
+            exportToJson();
+        });
+
+        // ── Tab switching ──
+        tabSolid.setOnClickListener(v -> {
+            panelSolid.setVisibility(android.view.View.VISIBLE);
+            panelGradient.setVisibility(android.view.View.GONE);
+            tabSolid.setBackgroundColor(0xFF607D8B); tabSolid.setTextColor(0xFFFFFFFF);
+            tabGradient.setBackgroundColor(0xFF2A3439); tabGradient.setTextColor(0xFF9CA3AF);
+            tabNone.setBackgroundColor(0xFF2A3439); tabNone.setTextColor(0xFF9CA3AF);
+        });
+        tabGradient.setOnClickListener(v -> {
+            panelSolid.setVisibility(android.view.View.GONE);
+            panelGradient.setVisibility(android.view.View.VISIBLE);
+            tabGradient.setBackgroundColor(0xFF607D8B); tabGradient.setTextColor(0xFFFFFFFF);
+            tabSolid.setBackgroundColor(0xFF2A3439); tabSolid.setTextColor(0xFF9CA3AF);
+            tabNone.setBackgroundColor(0xFF2A3439); tabNone.setTextColor(0xFF9CA3AF);
+        });
+        tabNone.setOnClickListener(v -> {
+            targetView.setBackground(null);
+            targetView.setTag(Color.TRANSPARENT);
+            exportToJson();
+        });
+
+        // ── PopupWindow ──
+        int screenW = getResources().getDisplayMetrics().widthPixels;
+        int popupH  = (int)(220 * getResources().getDisplayMetrics().density);
+        android.widget.PopupWindow popup = new android.widget.PopupWindow(
+                root, screenW, popupH, true);
+        popup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+        popup.setElevation(16f);
+        popup.setOutsideTouchable(true);
+
+        // Text Controls hide
+        if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) {
+            selectionControlsPopup.dismiss();
+        }
+
+        int screenH = getResources().getDisplayMetrics().heightPixels;
+        popup.showAtLocation(getWindow().getDecorView().getRootView(),
+            Gravity.TOP | Gravity.START, 0, (screenH - popupH) / 2);
+
+        // Text Controls restore
+        popup.setOnDismissListener(() -> {
+            if (selectionControlsPopup != null && !selectionControlsPopup.isShowing()) {
+                selectionControlsPopup.showAtLocation(mainLayout,
+                    Gravity.TOP | Gravity.LEFT, selControlsLastX, selControlsLastY);
+            }
+        });
+
+        // Drag
+        final int[] lastXY = {0, 0};
+        dragHandle.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    lastXY[0] = (int) event.getRawX(); lastXY[1] = (int) event.getRawY(); break;
+                case MotionEvent.ACTION_MOVE:
+                    int dx = (int) event.getRawX() - lastXY[0];
+                    int dy = (int) event.getRawY() - lastXY[1];
+                    int[] loc = new int[2]; root.getLocationOnScreen(loc);
+                    popup.update(loc[0] + dx, loc[1] + dy, screenW, popupH);
+                    lastXY[0] = (int) event.getRawX(); lastXY[1] = (int) event.getRawY(); break;
+            }
+            return true;
+        });
+
+        btnClose.setOnClickListener(v -> popup.dismiss());
+        btnCancel.setOnClickListener(v -> popup.dismiss());
+        btnDone.setOnClickListener(v -> { exportToJson(); popup.dismiss(); });
     }
 
     private void showTextBorderDialog(StrokeTextView targetView) {
