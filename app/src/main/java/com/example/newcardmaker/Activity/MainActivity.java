@@ -13455,11 +13455,6 @@ public class MainActivity extends AppCompatActivity {
             popup.dismiss();
         });
 
-        btnCancel.setOnClickListener(v2 -> {
-            targetView.setTextColor(originalColor);
-            popup.dismiss();
-        });
-
         btnDone.setOnClickListener(v2 -> {
             exportToJson();
             popup.dismiss();
@@ -13491,7 +13486,6 @@ public class MainActivity extends AppCompatActivity {
         android.widget.TextView tabNone     = root.findViewById(R.id.gp_tab_none);
         android.widget.LinearLayout panelSolid    = root.findViewById(R.id.gp_panel_solid);
         android.widget.LinearLayout panelGradient = root.findViewById(R.id.gp_panel_gradient);
-        android.widget.TextView btnCancel   = root.findViewById(R.id.gp_btn_cancel);
         android.widget.TextView btnDone     = root.findViewById(R.id.gp_btn_done);
         android.widget.TextView tabImage    = root.findViewById(R.id.gp_tab_image);
         android.widget.LinearLayout panelImage    = root.findViewById(R.id.gp_panel_image);
