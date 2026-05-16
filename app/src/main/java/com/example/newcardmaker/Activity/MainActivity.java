@@ -13797,13 +13797,50 @@ public class MainActivity extends AppCompatActivity {
                     Glide.with(MainActivity.this).load(url).into(iv);
 
                     holder.itemView.setOnClickListener(vv -> {
-                        // Apply image as background
+                        String url = urls.get(pos);
+                        // Tag set
                         targetView.setTag(R.id.btn_sticker_gallery, url);
                         targetView.setTag(R.id.btn_sel_bg_color, null);
-                        applyTextBgImage(Uri.parse(url), targetView);
                         // Preview update in popup
                         Glide.with(MainActivity.this).load(url).into(imgPreview);
-                        exportToJson();
+
+                        // Glide bitmap load — apply directly
+                        Glide.with(MainActivity.this)
+                            .asBitmap()
+                            .load(url)
+                            .into(new com.bumptech.glide.request.target.CustomTarget<android.graphics.Bitmap>() {
+                                @Override
+                                public void onResourceReady(
+                                        @androidx.annotation.NonNull android.graphics.Bitmap bitmap,
+                                        @androidx.annotation.Nullable com.bumptech.glide.request.transition.Transition<? super android.graphics.Bitmap> transition) {
+                                    runOnUiThread(() -> {
+                                        int vw = targetView.getWidth() > 0 ? targetView.getWidth() : 300;
+                                        int vh = targetView.getHeight() > 0 ? targetView.getHeight() : 100;
+                                        android.graphics.Bitmap scaled = android.graphics.Bitmap.createScaledBitmap(bitmap, vw, vh, true);
+                                        android.graphics.drawable.BitmapDrawable bd =
+                                            new android.graphics.drawable.BitmapDrawable(getResources(), scaled);
+                                        Object borderTag = targetView.getTag(R.id.btn_add_sticker);
+                                        int borderStyle = borderTag instanceof Integer ? (int) borderTag : 0;
+                                        if (borderStyle > 0) {
+                                            GradientDrawable border = new GradientDrawable();
+                                            border.setColor(Color.TRANSPARENT);
+                                            applyBorderStyle(border, borderStyle);
+                                            targetView.setBackground(new android.graphics.drawable.LayerDrawable(
+                                                new android.graphics.drawable.Drawable[]{bd, border}));
+                                        } else {
+                                            targetView.setBackground(bd);
+                                        }
+                                        exportToJson();
+                                    });
+                                }
+                                @Override
+                                public void onLoadCleared(@androidx.annotation.Nullable android.graphics.drawable.Drawable placeholder) {}
+                                @Override
+                                public void onLoadFailed(@androidx.annotation.Nullable android.graphics.drawable.Drawable errorDrawable) {
+                                    Toast.makeText(MainActivity.this, "Image load failed", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
                         dialog.dismiss();
                     });
                 }
