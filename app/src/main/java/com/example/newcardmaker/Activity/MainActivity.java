@@ -13676,8 +13676,12 @@ public class MainActivity extends AppCompatActivity {
             Object borderTag = targetView.getTag(R.id.btn_add_sticker);
             int borderStyle = borderTag instanceof Integer ? (int) borderTag : 0;
             applyBorderStyle(gd, borderStyle);
+            // ✅ Image tag clear — solid color apply
+            targetView.setTag(R.id.btn_sticker_gallery, "");
+            // ✅ Gradient tag clear
+            targetView.setTag(R.id.btn_sel_bg_color, null);
+            targetView.setTag(c); // integer tag for getStoredBackgroundColor
             targetView.setBackground(gd);
-            targetView.setTag(c);
         };
 
         // ── Gradient preview helper ──
@@ -13716,6 +13720,8 @@ public class MainActivity extends AppCompatActivity {
                     new int[]{gradColor1[0], gradColor2[0]});
             }
             applyBorderStyle(applyGd, borderStyle);
+            // ✅ Image tag clear — gradient apply
+            targetView.setTag(R.id.btn_sticker_gallery, "");
             // ✅ Tag save
             targetView.setTag(R.id.btn_sel_bg_color, applyGd);
             targetView.setBackground(applyGd);
@@ -13863,6 +13869,8 @@ public class MainActivity extends AppCompatActivity {
             Object borderTag = targetView.getTag(R.id.btn_add_sticker);
             int borderStyle = borderTag instanceof Integer ? (int) borderTag : 0;
             applyBorderStyle(gradGd, borderStyle);
+            // ✅ Image tag clear
+            targetView.setTag(R.id.btn_sticker_gallery, "");
             // ✅ Gradient tag ma save karo - restore mate
             targetView.setTag(R.id.btn_sel_bg_color, gradGd);
             targetView.setBackground(gradGd);
@@ -13917,7 +13925,9 @@ public class MainActivity extends AppCompatActivity {
                     holder.itemView.setOnClickListener(vv -> {
                         // Tag set
                         targetView.setTag(R.id.btn_sticker_gallery, url);
+                        // ✅ Solid/gradient tags clear
                         targetView.setTag(R.id.btn_sel_bg_color, null);
+                        targetView.setTag(Color.TRANSPARENT);
                         // Preview update in popup
                         Glide.with(MainActivity.this).load(url).into(imgPreview);
 
@@ -21571,10 +21581,15 @@ public class MainActivity extends AppCompatActivity {
             tv.setForeground(null);
         }
 
-        // ✅ Gradient saved હોય તો restore
+        // ✅ Gradient/LayerDrawable saved હોય તો restore
         Object gradTag = tv.getTag(R.id.btn_sel_bg_color);
         if (gradTag instanceof GradientDrawable) {
             tv.setBackground((GradientDrawable) gradTag);
+            reapplyTint(tv);
+            return;
+        }
+        if (gradTag instanceof android.graphics.drawable.LayerDrawable) {
+            tv.setBackground((android.graphics.drawable.LayerDrawable) gradTag);
             reapplyTint(tv);
             return;
         }
