@@ -13589,7 +13589,11 @@ public class MainActivity extends AppCompatActivity {
         // ── Solid panel views ──
         android.view.View solidHexPreview     = root.findViewById(R.id.gp_solid_hex_preview);
         android.widget.EditText solidEtHex    = root.findViewById(R.id.gp_solid_et_hex);
+        android.widget.SeekBar solidOpacity   = root.findViewById(R.id.gp_solid_opacity);
+        android.widget.TextView solidOpacityVal = root.findViewById(R.id.gp_solid_opacity_val);
         com.example.newcardmaker.ColorWheelView solidWheel = root.findViewById(R.id.gp_solid_wheel);
+
+        final int[] solidAlpha = {255};
 
         // ── Gradient panel views ──
         android.view.View gradPreview       = root.findViewById(R.id.gp_gradient_preview);
@@ -13602,6 +13606,9 @@ public class MainActivity extends AppCompatActivity {
         android.widget.TextView dirDiag     = root.findViewById(R.id.gp_dir_diag);
         android.widget.TextView dirRad      = root.findViewById(R.id.gp_dir_rad);
         android.widget.TextView btnApplyGrad = root.findViewById(R.id.gp_gradient_apply);
+        android.widget.SeekBar gradOpacity   = root.findViewById(R.id.gp_grad_opacity);
+        android.widget.TextView gradOpacityVal = root.findViewById(R.id.gp_grad_opacity_val);
+        final int[] gradAlpha = {255};
 
         // ── State ──
         int initColor = getStoredBackgroundColor(targetView);
@@ -13616,14 +13623,16 @@ public class MainActivity extends AppCompatActivity {
         // ── Solid apply helper ──
         Runnable applySolid = () -> {
             int c = solidColor[0];
+            int colorWithAlpha = Color.argb(solidAlpha[0],
+                Color.red(c), Color.green(c), Color.blue(c));
             GradientDrawable gd = new GradientDrawable();
-            gd.setColor(c);
+            gd.setColor(colorWithAlpha);
             Object borderTag = targetView.getTag(R.id.btn_add_sticker);
             int borderStyle = borderTag instanceof Integer ? (int) borderTag : 0;
             applyBorderStyle(gd, borderStyle);
             targetView.setTag(R.id.btn_sticker_gallery, "");
             targetView.setTag(R.id.btn_sel_bg_color, null);
-            targetView.setTag(c);
+            targetView.setTag(colorWithAlpha);
             targetView.setBackground(gd);
         };
 
@@ -13658,6 +13667,18 @@ public class MainActivity extends AppCompatActivity {
                         applySolid.run();
                     }
                 } catch (Exception ignored) {}
+            }
+        });
+
+        // ── Solid Opacity slider ──
+        solidOpacity.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onProgressChanged(android.widget.SeekBar s, int progress, boolean fromUser) {
+                if (!fromUser) return;
+                solidAlpha[0] = progress;
+                solidOpacityVal.setText(String.valueOf(progress));
+                applySolid.run();
             }
         });
 
@@ -13698,12 +13719,26 @@ public class MainActivity extends AppCompatActivity {
                     new int[]{gradColor1[0], gradColor2[0]});
             }
             applyBorderStyle(applyGd, borderStyle);
+            // Alpha apply
+            applyGd.setAlpha(gradAlpha[0]);
             // ✅ Image tag clear — gradient apply
             targetView.setTag(R.id.btn_sticker_gallery, "");
             // ✅ Tag save
             targetView.setTag(R.id.btn_sel_bg_color, applyGd);
             targetView.setBackground(applyGd);
         };
+
+        // ── Gradient Opacity slider ──
+        gradOpacity.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onProgressChanged(android.widget.SeekBar s, int progress, boolean fromUser) {
+                if (!fromUser) return;
+                gradAlpha[0] = progress;
+                gradOpacityVal.setText(String.valueOf(progress));
+                updateGradPreview.run();
+            }
+        });
 
         // ── Gradient color pickers — ColorWheelView popup ──
         Runnable[] openWheelFor = {null};
@@ -13857,6 +13892,7 @@ public class MainActivity extends AppCompatActivity {
             Object borderTag = targetView.getTag(R.id.btn_add_sticker);
             int borderStyle = borderTag instanceof Integer ? (int) borderTag : 0;
             applyBorderStyle(gradGd, borderStyle);
+            gradGd.setAlpha(gradAlpha[0]);
             // ✅ Image tag clear
             targetView.setTag(R.id.btn_sticker_gallery, "");
             // ✅ Gradient tag ma save karo - restore mate
