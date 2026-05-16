@@ -13657,7 +13657,8 @@ public class MainActivity extends AppCompatActivity {
 
         // ── Solid panel views ──
         android.view.View solidHexPreview     = root.findViewById(R.id.gp_solid_hex_preview);
-        android.widget.TextView solidPickBtn  = root.findViewById(R.id.gp_solid_pick_btn);
+        android.widget.EditText solidEtHex    = root.findViewById(R.id.gp_solid_et_hex);
+        com.example.newcardmaker.ColorWheelView solidWheel = root.findViewById(R.id.gp_solid_wheel);
 
         // ── Gradient panel views ──
         android.view.View gradPreview       = root.findViewById(R.id.gp_gradient_preview);
@@ -13696,92 +13697,26 @@ public class MainActivity extends AppCompatActivity {
         };
 
         // ── Pick Color — ColorWheelView popup ──
-        solidPickBtn.setOnClickListener(v -> {
-            android.view.View wheelRoot = getLayoutInflater().inflate(R.layout.popup_text_color, null);
-            com.example.newcardmaker.ColorWheelView wheel = wheelRoot.findViewById(R.id.color_wheel);
-            android.widget.EditText etHex    = wheelRoot.findViewById(R.id.et_hex_color);
-            android.view.View hexPrev        = wheelRoot.findViewById(R.id.view_hex_preview);
-            android.widget.TextView hexApply = wheelRoot.findViewById(R.id.btn_hex_apply);
-            android.widget.TextView wDone    = wheelRoot.findViewById(R.id.btn_color_done);
-            android.widget.TextView wCancel  = wheelRoot.findViewById(R.id.btn_color_cancel);
-            android.widget.TextView wClose   = wheelRoot.findViewById(R.id.btn_color_close);
-            android.view.View wTitle         = wheelRoot.findViewById(R.id.tv_color_title);
-            android.widget.LinearLayout colorRow = wheelRoot.findViewById(R.id.color_row);
+        // ── Solid Wheel: initial + listeners ──
+        solidWheel.setColor(solidColor[0]);
+        solidEtHex.setText(String.format("%06X", 0xFFFFFF & solidColor[0]));
 
-            wheel.setColor(solidColor[0]);
-            hexPrev.setBackgroundColor(solidColor[0]);
-            etHex.setText(String.format("%06X", 0xFFFFFF & solidColor[0]));
+        solidWheel.setOnColorChangedListener(c -> {
+            solidColor[0] = c;
+            solidHexPreview.setBackgroundColor(c);
+            solidEtHex.setText(String.format("%06X", 0xFFFFFF & c));
+            applySolid.run();
+        });
 
-            wheel.setOnColorChangedListener(c -> {
-                solidColor[0] = c;
-                solidHexPreview.setBackgroundColor(c);
-                hexPrev.setBackgroundColor(c);
-                etHex.setText(String.format("%06X", 0xFFFFFF & c));
+        solidEtHex.setOnEditorActionListener((v, actionId, event) -> {
+            try {
+                int parsed = Color.parseColor("#" + solidEtHex.getText().toString().trim());
+                solidColor[0] = parsed;
+                solidWheel.setColor(parsed);
+                solidHexPreview.setBackgroundColor(parsed);
                 applySolid.run();
-            });
-
-            // Quick colors
-            int[] qc = {0xFFFF0000,0xFFFF9800,0xFFFFFF00,0xFF4CAF50,
-                        0xFF2196F3,0xFF9C27B0,0xFF000000,0xFFFFFFFF};
-            for (int fc2 : qc) {
-                final int fc = fc2;
-                android.view.View cb = new android.view.View(this);
-                LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(dpToPx(30), dpToPx(30));
-                lp2.setMargins(0, 0, dpToPx(6), 0);
-                cb.setLayoutParams(lp2);
-                android.graphics.drawable.GradientDrawable gd2 = new android.graphics.drawable.GradientDrawable();
-                gd2.setColor(fc); gd2.setShape(android.graphics.drawable.GradientDrawable.OVAL);
-                gd2.setStroke(dpToPx(1), 0xFFCCCCCC);
-                cb.setBackground(gd2);
-                cb.setOnClickListener(vv -> {
-                    solidColor[0] = fc;
-                    wheel.setColor(fc);
-                    solidHexPreview.setBackgroundColor(fc);
-                    hexPrev.setBackgroundColor(fc);
-                    etHex.setText(String.format("%06X", 0xFFFFFF & fc));
-                    applySolid.run();
-                });
-                colorRow.addView(cb);
-            }
-
-            hexApply.setOnClickListener(vv -> {
-                try {
-                    int parsed = Color.parseColor("#" + etHex.getText().toString().trim());
-                    solidColor[0] = parsed;
-                    wheel.setColor(parsed);
-                    solidHexPreview.setBackgroundColor(parsed);
-                    applySolid.run();
-                } catch (Exception e) { etHex.setError("Invalid"); }
-            });
-
-            int screenW2 = getResources().getDisplayMetrics().widthPixels;
-            int popH2 = (int)(180 * getResources().getDisplayMetrics().density);
-            android.widget.PopupWindow wp = new android.widget.PopupWindow(
-                wheelRoot, screenW2, popH2, true);
-            wp.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
-            wp.setElevation(20f);
-            wp.setOutsideTouchable(true);
-            int screenH2 = getResources().getDisplayMetrics().heightPixels;
-            wp.showAtLocation(getWindow().getDecorView().getRootView(),
-                Gravity.TOP | Gravity.START, 0, (screenH2 - popH2) / 2);
-
-            final int[] lxy2 = {0, 0};
-            wTitle.setOnTouchListener((vv, ev) -> {
-                switch (ev.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        lxy2[0] = (int) ev.getRawX(); lxy2[1] = (int) ev.getRawY(); break;
-                    case MotionEvent.ACTION_MOVE:
-                        int dx = (int) ev.getRawX() - lxy2[0];
-                        int dy = (int) ev.getRawY() - lxy2[1];
-                        int[] loc2 = new int[2]; wheelRoot.getLocationOnScreen(loc2);
-                        wp.update(loc2[0]+dx, loc2[1]+dy, screenW2, popH2);
-                        lxy2[0] = (int) ev.getRawX(); lxy2[1] = (int) ev.getRawY(); break;
-                }
-                return true;
-            });
-            wClose.setOnClickListener(vv -> wp.dismiss());
-            wCancel.setOnClickListener(vv -> wp.dismiss());
-            wDone.setOnClickListener(vv -> { exportToJson(); wp.dismiss(); });
+            } catch (Exception ignored) {}
+            return true;
         });
 
 
