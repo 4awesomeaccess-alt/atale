@@ -13499,78 +13499,30 @@ public class MainActivity extends AppCompatActivity {
         android.widget.TextView btnImagePick = root.findViewById(R.id.gp_image_pick);
         android.widget.TextView btnImageRemove = root.findViewById(R.id.gp_image_remove);
         android.view.View tintPreview        = root.findViewById(R.id.gp_tint_preview);
-        android.widget.LinearLayout tintRow  = root.findViewById(R.id.gp_tint_color_row);
+        android.widget.LinearLayout tintRow  = null; // removed
         android.widget.TextView btnTintNone  = root.findViewById(R.id.gp_tint_none);
         android.widget.SeekBar tintOpacity   = root.findViewById(R.id.gp_tint_opacity);
         android.widget.TextView tintOpacityVal = root.findViewById(R.id.gp_tint_opacity_val);
-        android.view.View overlayC1Box       = root.findViewById(R.id.gp_overlay_c1);
-        android.view.View overlayC2Box       = root.findViewById(R.id.gp_overlay_c2);
-        android.widget.TextView btnOverlay   = root.findViewById(R.id.gp_overlay_apply);
-        android.widget.TextView btnOverlayNone = root.findViewById(R.id.gp_overlay_none);
-
-        // ── Overlay state ──
-        final int[] overlayC1 = {0xAAFF0000};
-        final int[] overlayC2 = {0xAA0000FF};
-
-        // Overlay color pickers
-        overlayC1Box.setOnClickListener(v -> showColorPickerPopup(overlayC1[0], c -> {
-            overlayC1[0] = c;
-            overlayC1Box.setBackgroundColor(c);
-        }));
-        overlayC2Box.setOnClickListener(v -> showColorPickerPopup(overlayC2[0], c -> {
-            overlayC2[0] = c;
-            overlayC2Box.setBackgroundColor(c);
-        }));
-
-        // Apply gradient overlay on top of image — imgPreview પર
-        btnOverlay.setOnClickListener(v -> {
-            android.graphics.drawable.Drawable imgDraw = imgPreview.getDrawable();
-            if (imgDraw == null) return;
-            GradientDrawable gradOverlay = new GradientDrawable(
-                GradientDrawable.Orientation.LEFT_RIGHT,
-                new int[]{overlayC1[0], overlayC2[0]});
-            android.graphics.drawable.LayerDrawable layered =
-                new android.graphics.drawable.LayerDrawable(
-                    new android.graphics.drawable.Drawable[]{imgDraw.mutate(), gradOverlay});
-            // imgPreview update
-            imgPreview.setImageDrawable(layered);
-            // targetView background update
-            targetView.setBackground(layered);
-            targetView.setTag(R.id.btn_sel_bg_color, layered);
-            exportToJson();
-        });
-
-        // Remove overlay
-        btnOverlayNone.setOnClickListener(v -> {
-            android.graphics.drawable.Drawable currentDraw = imgPreview.getDrawable();
-            if (currentDraw instanceof android.graphics.drawable.LayerDrawable) {
-                android.graphics.drawable.Drawable base =
-                    ((android.graphics.drawable.LayerDrawable) currentDraw).getDrawable(0);
-                imgPreview.setImageDrawable(base);
-                targetView.setBackground(base);
-                targetView.setTag(R.id.btn_sel_bg_color, null);
-            }
-            exportToJson();
-        });
+        android.widget.TextView btnTintPickColor = root.findViewById(R.id.gp_tint_pick_color);
 
         // ── Tint state ──
         final int[] tintColor  = {Color.TRANSPARENT};
         final int[] tintAlpha  = {100};
 
-        // ── Tint apply helper — imgPreview drawable પર ──
+        // ── Tint apply helper ──
         Runnable applyTint = () -> {
             android.graphics.drawable.Drawable imgDraw = imgPreview.getDrawable();
             if (imgDraw == null) return;
             if (tintColor[0] == Color.TRANSPARENT) {
                 imgDraw.clearColorFilter();
-                targetView.getBackground().clearColorFilter();
+                android.graphics.drawable.Drawable bg = targetView.getBackground();
+                if (bg != null) bg.clearColorFilter();
                 targetView.setTag(R.id.btn_sel_text_color, null);
             } else {
                 int alpha = tintAlpha[0];
                 int tint = Color.argb(alpha, Color.red(tintColor[0]),
                     Color.green(tintColor[0]), Color.blue(tintColor[0]));
                 imgDraw.setColorFilter(tint, android.graphics.PorterDuff.Mode.SRC_ATOP);
-                // targetView background પર પણ apply
                 android.graphics.drawable.Drawable bg = targetView.getBackground();
                 if (bg != null) bg.setColorFilter(tint, android.graphics.PorterDuff.Mode.SRC_ATOP);
                 targetView.setTag(R.id.btn_sel_text_color, new int[]{tintColor[0], tintAlpha[0]});
@@ -13579,29 +13531,14 @@ public class MainActivity extends AppCompatActivity {
             targetView.invalidate();
         };
 
-        // ── Tint colors ──
-        int[] tintColors = {
-            0xFFFF0000, 0xFFFF9800, 0xFFFFEB3B, 0xFF4CAF50,
-            0xFF2196F3, 0xFF9C27B0, 0xFF000000, 0xFFFFFFFF,
-        };
-        for (int tc : tintColors) {
-            final int ftc = tc;
-            android.view.View tb = new android.view.View(this);
-            LinearLayout.LayoutParams tlp = new LinearLayout.LayoutParams(dpToPx(22), dpToPx(22));
-            tlp.setMargins(0, 0, dpToPx(3), 0);
-            tb.setLayoutParams(tlp);
-            android.graphics.drawable.GradientDrawable tgd = new android.graphics.drawable.GradientDrawable();
-            tgd.setColor(ftc);
-            tgd.setCornerRadius(dpToPx(3));
-            tgd.setStroke(dpToPx(1), 0xFFCCCCCC);
-            tb.setBackground(tgd);
-            tb.setOnClickListener(vt -> {
-                tintColor[0] = ftc;
-                tintPreview.setBackgroundColor(ftc);
+        // ── Tint Pick Color button ──
+        btnTintPickColor.setOnClickListener(v -> {
+            showColorPickerPopup(tintColor[0] == Color.TRANSPARENT ? Color.RED : tintColor[0], c -> {
+                tintColor[0] = c;
+                tintPreview.setBackgroundColor(c);
                 applyTint.run();
             });
-            tintRow.addView(tb);
-        }
+        });
 
         // ── Tint None ──
         btnTintNone.setOnClickListener(v -> {
