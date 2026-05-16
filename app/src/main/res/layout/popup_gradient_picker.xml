@@ -110,121 +110,49 @@
         android:padding="8dp"
         android:visibility="visible">
 
-        <!-- Left: Color rows + HEX -->
+        <!-- Left: Selected color preview + Pick button -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:orientation="vertical"
-            android:paddingEnd="6dp">
+            android:gravity="center"
+            android:paddingEnd="8dp">
 
-            <HorizontalScrollView
+            <View
+                android:id="@+id/gp_solid_hex_preview"
                 android:layout_width="match_parent"
-                android:layout_height="26dp"
-                android:scrollbars="none"
-                android:layout_marginBottom="4dp">
-                <LinearLayout
-                    android:id="@+id/gp_solid_row1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical" />
-            </HorizontalScrollView>
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="#FF0000"
+                android:layout_marginBottom="6dp" />
 
-            <HorizontalScrollView
+            <TextView
+                android:id="@+id/gp_solid_pick_btn"
                 android:layout_width="match_parent"
-                android:layout_height="26dp"
-                android:scrollbars="none"
-                android:layout_marginBottom="4dp">
-                <LinearLayout
-                    android:id="@+id/gp_solid_row2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical" />
-            </HorizontalScrollView>
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="26dp"
-                android:scrollbars="none"
-                android:layout_marginBottom="6dp">
-                <LinearLayout
-                    android:id="@+id/gp_solid_row3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical" />
-            </HorizontalScrollView>
-
-            <!-- HEX Row -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="26dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <View
-                    android:id="@+id/gp_solid_hex_preview"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:background="#FF0000"
-                    android:layout_marginEnd="4dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="#"
-                    android:textColor="#9CA3AF"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:layout_marginEnd="2dp" />
-
-                <EditText
-                    android:id="@+id/gp_solid_et_hex"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:hint="FF0000"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#6B7280"
-                    android:textSize="11sp"
-                    android:background="#374151"
-                    android:paddingHorizontal="6dp"
-                    android:inputType="text"
-                    android:maxLength="6"
-                    android:singleLine="true" />
-
-                <TextView
-                    android:id="@+id/gp_solid_hex_apply"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="OK"
-                    android:textColor="#FFFFFF"
-                    android:textSize="11sp"
-                    android:gravity="center"
-                    android:paddingHorizontal="8dp"
-                    android:background="#607D8B"
-                    android:layout_marginStart="4dp" />
-
-            </LinearLayout>
+                android:layout_height="30dp"
+                android:text="🎨 Pick Color"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:gravity="center"
+                android:background="#1565C0" />
 
         </LinearLayout>
 
         <!-- Right: RGB Sliders -->
         <LinearLayout
-            android:layout_width="130dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center_vertical">
 
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="6dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="8dp">
                 <TextView android:layout_width="14dp" android:layout_height="wrap_content" android:text="R" android:textColor="#EF5350" android:textSize="10sp" android:textStyle="bold" />
                 <SeekBar android:id="@+id/gp_solid_seek_r" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:max="255" android:progressTint="#EF5350" android:thumbTint="#EF5350" android:layout_marginHorizontal="4dp" />
                 <TextView android:id="@+id/gp_solid_val_r" android:layout_width="24dp" android:layout_height="wrap_content" android:text="255" android:textColor="#CFD8DC" android:textSize="9sp" android:gravity="end" />
             </LinearLayout>
 
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="6dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="8dp">
                 <TextView android:layout_width="14dp" android:layout_height="wrap_content" android:text="G" android:textColor="#66BB6A" android:textSize="10sp" android:textStyle="bold" />
                 <SeekBar android:id="@+id/gp_solid_seek_g" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:max="255" android:progressTint="#66BB6A" android:thumbTint="#66BB6A" android:layout_marginHorizontal="4dp" />
                 <TextView android:id="@+id/gp_solid_val_g" android:layout_width="24dp" android:layout_height="wrap_content" android:text="0" android:textColor="#CFD8DC" android:textSize="9sp" android:gravity="end" />

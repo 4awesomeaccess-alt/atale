@@ -13656,12 +13656,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // ── Solid panel views ──
-        android.widget.LinearLayout solidRow1 = root.findViewById(R.id.gp_solid_row1);
-        android.widget.LinearLayout solidRow2 = root.findViewById(R.id.gp_solid_row2);
-        android.widget.LinearLayout solidRow3 = root.findViewById(R.id.gp_solid_row3);
         android.view.View solidHexPreview     = root.findViewById(R.id.gp_solid_hex_preview);
-        android.widget.EditText solidEtHex    = root.findViewById(R.id.gp_solid_et_hex);
-        android.widget.TextView solidHexApply = root.findViewById(R.id.gp_solid_hex_apply);
+        android.widget.TextView solidPickBtn  = root.findViewById(R.id.gp_solid_pick_btn);
         android.widget.SeekBar seekR = root.findViewById(R.id.gp_solid_seek_r);
         android.widget.SeekBar seekG = root.findViewById(R.id.gp_solid_seek_g);
         android.widget.SeekBar seekB = root.findViewById(R.id.gp_solid_seek_b);
@@ -13686,25 +13682,16 @@ public class MainActivity extends AppCompatActivity {
         final int[] solidColor   = {initColor};
         final int[] gradColor1   = {0xFFFF0000};
         final int[] gradColor2   = {0xFF0000FF};
-        final int[] gradDirection = {0}; // 0=LR, 1=TB, 2=Diag, 3=Radial
+        final int[] gradDirection = {0};
 
         // ── Solid initial ──
         solidHexPreview.setBackgroundColor(initColor);
-        solidEtHex.setText(String.format("%06X", 0xFFFFFF & initColor));
         seekR.setProgress(Color.red(initColor));
         seekG.setProgress(Color.green(initColor));
         seekB.setProgress(Color.blue(initColor));
         valR.setText(String.valueOf(Color.red(initColor)));
         valG.setText(String.valueOf(Color.green(initColor)));
         valB.setText(String.valueOf(Color.blue(initColor)));
-
-        // ── Color rows ──
-        int[][] colorRows = {
-            {0xFFFF0000,0xFFFF4500,0xFFFF8C00,0xFFFFD700,0xFFFFFF00,0xFFADFF2F,0xFF32CD32,0xFF00FA9A,0xFF00FFFF,0xFF00BFFF,0xFF1E90FF,0xFF0000FF,0xFF8A2BE2,0xFFFF00FF,0xFFFF1493},
-            {0xFFFFFFFF,0xFFF5F5F5,0xFFE0E0E0,0xFFC0C0C0,0xFF9E9E9E,0xFF757575,0xFF616161,0xFF424242,0xFF212121,0xFF000000,0xFFFFCDD2,0xFFF8BBD0,0xFFE1BEE7,0xFFD1C4E9,0xFFC5CAE9},
-            {0xFFB71C1C,0xFF880E4F,0xFF4A148C,0xFF1A237E,0xFF0D47A1,0xFF006064,0xFF1B5E20,0xFF33691E,0xFFF57F17,0xFFE65100,0xFF3E2723,0xFF263238,0xFF37474F,0xFF546E7A,0xFF78909C},
-        };
-        android.widget.LinearLayout[] solidRows = {solidRow1, solidRow2, solidRow3};
 
         // ── Solid apply helper ──
         Runnable applySolid = () -> {
@@ -13714,14 +13701,137 @@ public class MainActivity extends AppCompatActivity {
             Object borderTag = targetView.getTag(R.id.btn_add_sticker);
             int borderStyle = borderTag instanceof Integer ? (int) borderTag : 0;
             applyBorderStyle(gd, borderStyle);
-            // ✅ Image tag clear — solid color apply
             targetView.setTag(R.id.btn_sticker_gallery, "");
-            // ✅ Gradient tag clear
             targetView.setTag(R.id.btn_sel_bg_color, null);
-            targetView.setTag(c); // integer tag for getStoredBackgroundColor
+            targetView.setTag(c);
             targetView.setBackground(gd);
         };
 
+        // ── Pick Color — ColorWheelView popup ──
+        solidPickBtn.setOnClickListener(v -> {
+            android.view.View wheelRoot = getLayoutInflater().inflate(R.layout.popup_text_color, null);
+            com.example.newcardmaker.ColorWheelView wheel = wheelRoot.findViewById(R.id.color_wheel);
+            android.widget.EditText etHex    = wheelRoot.findViewById(R.id.et_hex_color);
+            android.view.View hexPrev        = wheelRoot.findViewById(R.id.view_hex_preview);
+            android.widget.TextView hexApply = wheelRoot.findViewById(R.id.btn_hex_apply);
+            android.widget.TextView wDone    = wheelRoot.findViewById(R.id.btn_color_done);
+            android.widget.TextView wCancel  = wheelRoot.findViewById(R.id.btn_color_cancel);
+            android.widget.TextView wClose   = wheelRoot.findViewById(R.id.btn_color_close);
+            android.view.View wTitle         = wheelRoot.findViewById(R.id.tv_color_title);
+            android.widget.LinearLayout colorRow = wheelRoot.findViewById(R.id.color_row);
+
+            wheel.setColor(solidColor[0]);
+            hexPrev.setBackgroundColor(solidColor[0]);
+            etHex.setText(String.format("%06X", 0xFFFFFF & solidColor[0]));
+
+            wheel.setOnColorChangedListener(c -> {
+                solidColor[0] = c;
+                solidHexPreview.setBackgroundColor(c);
+                hexPrev.setBackgroundColor(c);
+                etHex.setText(String.format("%06X", 0xFFFFFF & c));
+                seekR.setProgress(Color.red(c));
+                seekG.setProgress(Color.green(c));
+                seekB.setProgress(Color.blue(c));
+                valR.setText(String.valueOf(Color.red(c)));
+                valG.setText(String.valueOf(Color.green(c)));
+                valB.setText(String.valueOf(Color.blue(c)));
+                applySolid.run();
+            });
+
+            // Quick colors
+            int[] qc = {0xFFFF0000,0xFFFF9800,0xFFFFFF00,0xFF4CAF50,
+                        0xFF2196F3,0xFF9C27B0,0xFF000000,0xFFFFFFFF};
+            for (int fc2 : qc) {
+                final int fc = fc2;
+                android.view.View cb = new android.view.View(this);
+                LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(dpToPx(30), dpToPx(30));
+                lp2.setMargins(0, 0, dpToPx(6), 0);
+                cb.setLayoutParams(lp2);
+                android.graphics.drawable.GradientDrawable gd2 = new android.graphics.drawable.GradientDrawable();
+                gd2.setColor(fc); gd2.setShape(android.graphics.drawable.GradientDrawable.OVAL);
+                gd2.setStroke(dpToPx(1), 0xFFCCCCCC);
+                cb.setBackground(gd2);
+                cb.setOnClickListener(vv -> {
+                    solidColor[0] = fc;
+                    wheel.setColor(fc);
+                    solidHexPreview.setBackgroundColor(fc);
+                    hexPrev.setBackgroundColor(fc);
+                    etHex.setText(String.format("%06X", 0xFFFFFF & fc));
+                    seekR.setProgress(Color.red(fc));
+                    seekG.setProgress(Color.green(fc));
+                    seekB.setProgress(Color.blue(fc));
+                    valR.setText(String.valueOf(Color.red(fc)));
+                    valG.setText(String.valueOf(Color.green(fc)));
+                    valB.setText(String.valueOf(Color.blue(fc)));
+                    applySolid.run();
+                });
+                colorRow.addView(cb);
+            }
+
+            hexApply.setOnClickListener(vv -> {
+                try {
+                    int parsed = Color.parseColor("#" + etHex.getText().toString().trim());
+                    solidColor[0] = parsed;
+                    wheel.setColor(parsed);
+                    solidHexPreview.setBackgroundColor(parsed);
+                    seekR.setProgress(Color.red(parsed));
+                    seekG.setProgress(Color.green(parsed));
+                    seekB.setProgress(Color.blue(parsed));
+                    valR.setText(String.valueOf(Color.red(parsed)));
+                    valG.setText(String.valueOf(Color.green(parsed)));
+                    valB.setText(String.valueOf(Color.blue(parsed)));
+                    applySolid.run();
+                } catch (Exception e) { etHex.setError("Invalid"); }
+            });
+
+            int screenW2 = getResources().getDisplayMetrics().widthPixels;
+            int popH2 = (int)(180 * getResources().getDisplayMetrics().density);
+            android.widget.PopupWindow wp = new android.widget.PopupWindow(
+                wheelRoot, screenW2, popH2, true);
+            wp.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+            wp.setElevation(20f);
+            wp.setOutsideTouchable(true);
+            int screenH2 = getResources().getDisplayMetrics().heightPixels;
+            wp.showAtLocation(getWindow().getDecorView().getRootView(),
+                Gravity.TOP | Gravity.START, 0, (screenH2 - popH2) / 2);
+
+            final int[] lxy2 = {0, 0};
+            wTitle.setOnTouchListener((vv, ev) -> {
+                switch (ev.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        lxy2[0] = (int) ev.getRawX(); lxy2[1] = (int) ev.getRawY(); break;
+                    case MotionEvent.ACTION_MOVE:
+                        int dx = (int) ev.getRawX() - lxy2[0];
+                        int dy = (int) ev.getRawY() - lxy2[1];
+                        int[] loc2 = new int[2]; wheelRoot.getLocationOnScreen(loc2);
+                        wp.update(loc2[0]+dx, loc2[1]+dy, screenW2, popH2);
+                        lxy2[0] = (int) ev.getRawX(); lxy2[1] = (int) ev.getRawY(); break;
+                }
+                return true;
+            });
+            wClose.setOnClickListener(vv -> wp.dismiss());
+            wCancel.setOnClickListener(vv -> wp.dismiss());
+            wDone.setOnClickListener(vv -> { exportToJson(); wp.dismiss(); });
+        });
+
+        // RGB sliders
+        android.widget.SeekBar[] seeks = {seekR, seekG, seekB};
+        android.widget.TextView[] vals = {valR, valG, valB};
+        for (int i = 0; i < 3; i++) {
+            final int idx = i;
+            seeks[i].setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+                @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+                @Override public void onStopTrackingTouch(android.widget.SeekBar s) {}
+                @Override public void onProgressChanged(android.widget.SeekBar s, int progress, boolean fromUser) {
+                    if (!fromUser) return;
+                    vals[idx].setText(String.valueOf(progress));
+                    int nc = Color.rgb(seekR.getProgress(), seekG.getProgress(), seekB.getProgress());
+                    solidColor[0] = nc;
+                    solidHexPreview.setBackgroundColor(nc);
+                    applySolid.run();
+                }
+            });
+        }
         // ── Gradient preview helper ──
         Runnable updateGradPreview = () -> {
             GradientDrawable.Orientation orient;
@@ -13764,70 +13874,6 @@ public class MainActivity extends AppCompatActivity {
             targetView.setTag(R.id.btn_sel_bg_color, applyGd);
             targetView.setBackground(applyGd);
         };
-
-        // Add color buttons to solid rows
-        for (int r = 0; r < 3; r++) {
-            for (int c : colorRows[r]) {
-                final int fc = c;
-                android.view.View btn = new android.view.View(this);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(dpToPx(24), dpToPx(24));
-                lp.setMargins(dpToPx(2), 0, dpToPx(2), 0);
-                btn.setLayoutParams(lp);
-                GradientDrawable gd = new GradientDrawable();
-                gd.setColor(fc);
-                gd.setCornerRadius(dpToPx(3));
-                gd.setStroke(dpToPx(1), 0xFFD1D5DB);
-                btn.setBackground(gd);
-                btn.setOnClickListener(v -> {
-                    solidColor[0] = fc;
-                    solidHexPreview.setBackgroundColor(fc);
-                    solidEtHex.setText(String.format("%06X", 0xFFFFFF & fc));
-                    seekR.setProgress(Color.red(fc));
-                    seekG.setProgress(Color.green(fc));
-                    seekB.setProgress(Color.blue(fc));
-                    valR.setText(String.valueOf(Color.red(fc)));
-                    valG.setText(String.valueOf(Color.green(fc)));
-                    valB.setText(String.valueOf(Color.blue(fc)));
-                    applySolid.run();
-                });
-                solidRows[r].addView(btn);
-            }
-        }
-
-        // RGB sliders
-        android.widget.SeekBar[] seeks = {seekR, seekG, seekB};
-        android.widget.TextView[] vals = {valR, valG, valB};
-        for (int i = 0; i < 3; i++) {
-            final int idx = i;
-            seeks[i].setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
-                @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
-                @Override public void onStopTrackingTouch(android.widget.SeekBar s) {}
-                @Override public void onProgressChanged(android.widget.SeekBar s, int progress, boolean fromUser) {
-                    if (!fromUser) return;
-                    vals[idx].setText(String.valueOf(progress));
-                    int nc = Color.rgb(seekR.getProgress(), seekG.getProgress(), seekB.getProgress());
-                    solidColor[0] = nc;
-                    solidHexPreview.setBackgroundColor(nc);
-                    solidEtHex.setText(String.format("%06X", 0xFFFFFF & nc));
-                    applySolid.run();
-                }
-            });
-        }
-
-        solidHexApply.setOnClickListener(v -> {
-            try {
-                int parsed = Color.parseColor("#" + solidEtHex.getText().toString().trim());
-                solidColor[0] = parsed;
-                solidHexPreview.setBackgroundColor(parsed);
-                seekR.setProgress(Color.red(parsed));
-                seekG.setProgress(Color.green(parsed));
-                seekB.setProgress(Color.blue(parsed));
-                valR.setText(String.valueOf(Color.red(parsed)));
-                valG.setText(String.valueOf(Color.green(parsed)));
-                valB.setText(String.valueOf(Color.blue(parsed)));
-                applySolid.run();
-            } catch (Exception e) { solidEtHex.setError("Invalid"); }
-        });
 
         // ── Gradient color pickers ──
         color1Box.setOnClickListener(v -> showColorPickerPopup(gradColor1[0], c -> {
