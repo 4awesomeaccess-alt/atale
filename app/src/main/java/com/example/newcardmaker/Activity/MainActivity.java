@@ -21563,12 +21563,25 @@ public class MainActivity extends AppCompatActivity {
         currentlySelectedTextView = textView;
         currentlySelectedView = textView;
 
-        // Selection border
-        GradientDrawable gd = new GradientDrawable();
-        gd.setColor(getStoredBackgroundColor(textView));
-        gd.setStroke(3, Color.MAGENTA);
-        gd.setCornerRadius(8f);
-        textView.setBackground(gd);
+        // ✅ Image background હોય તો foreground border, background touch નહીં
+        if (hasTextBgImage(textView)
+                || textView.getBackground() instanceof android.graphics.drawable.BitmapDrawable
+                || textView.getBackground() instanceof android.graphics.drawable.LayerDrawable) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                GradientDrawable border = new GradientDrawable();
+                border.setColor(Color.TRANSPARENT);
+                border.setStroke(3, Color.MAGENTA);
+                border.setCornerRadius(8f);
+                textView.setForeground(border);
+            }
+        } else {
+            // Solid/Gradient — setBackground safe
+            GradientDrawable gd = new GradientDrawable();
+            gd.setColor(getStoredBackgroundColor(textView));
+            gd.setStroke(3, Color.MAGENTA);
+            gd.setCornerRadius(8f);
+            textView.setBackground(gd);
+        }
     }
 
 
