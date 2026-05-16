@@ -13385,15 +13385,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // ── PopupWindow — screen width જેટલી width ──
+        // ── PopupWindow — display width જેટલી ──
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
         final PopupWindow popup = new PopupWindow(root,
                 screenWidth,
                 LinearLayout.LayoutParams.WRAP_CONTENT, true);
         popup.setOutsideTouchable(true);
         popup.setElevation(16f);
+        popup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        // ── Movable — title bar drag handle પર ──
+        // ── Movable — title bar drag ──
         View titleBar = root.findViewById(R.id.tv_color_title);
         final int[] lastX = {0};
         final int[] lastY = {0};
@@ -13408,7 +13409,7 @@ public class MainActivity extends AppCompatActivity {
                     int dy2 = (int) event.getRawY() - lastY[0];
                     int[] loc = new int[2];
                     root.getLocationOnScreen(loc);
-                    popup.update(loc[0] + dx2, loc[1] + dy2, -1, -1);
+                    popup.update(loc[0] + dx2, loc[1] + dy2, screenWidth, -1);
                     lastX[0] = (int) event.getRawX();
                     lastY[0] = (int) event.getRawY();
                     return true;
@@ -13430,7 +13431,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
         View anchor = getWindow().getDecorView().getRootView();
-        popup.showAtLocation(anchor, Gravity.CENTER, 0, 0);
+        int screenHeight = getResources().getDisplayMetrics().heightPixels;
+        // Root measure કરીને center calculate
+        root.measure(
+            android.view.View.MeasureSpec.makeMeasureSpec(screenWidth, android.view.View.MeasureSpec.EXACTLY),
+            android.view.View.MeasureSpec.makeMeasureSpec(0, android.view.View.MeasureSpec.UNSPECIFIED)
+        );
+        int popupHeight = root.getMeasuredHeight();
+        int yOffset = -(screenHeight / 2) - (popupHeight / 2);
+        popup.showAtLocation(anchor, Gravity.BOTTOM | Gravity.START, 0, yOffset);
     }
 
     private void showTextBorderDialog(StrokeTextView targetView) {
