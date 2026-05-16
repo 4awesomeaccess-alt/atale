@@ -13534,6 +13534,10 @@ public class MainActivity extends AppCompatActivity {
 
         // ── Tint Wheel listener ──
         tintWheel.setOnColorChangedListener(c -> {
+            if (imgPreview.getDrawable() == null) {
+                Toast.makeText(this, "પહેલા Image Select કરો", Toast.LENGTH_SHORT).show();
+                return;
+            }
             tintColor[0] = c;
             tintPreview.setBackgroundColor(c);
             String hex = String.format("%06X", 0xFFFFFF & c);
@@ -13549,6 +13553,7 @@ public class MainActivity extends AppCompatActivity {
             @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
             @Override public void afterTextChanged(android.text.Editable s) {}
             @Override public void onTextChanged(CharSequence s, int st, int b, int c) {
+                if (imgPreview.getDrawable() == null) return;
                 try {
                     if (s.toString().trim().length() == 6) {
                         int parsed = Color.parseColor("#" + s.toString().trim());
