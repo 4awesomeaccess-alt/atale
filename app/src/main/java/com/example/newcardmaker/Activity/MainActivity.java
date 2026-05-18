@@ -13062,6 +13062,114 @@ public class MainActivity extends AppCompatActivity {
         TextView btnClose     = root.findViewById(R.id.btn_color_close);
         TextView btnScreenPick = root.findViewById(R.id.btn_screen_pick);
 
+        // ── Tab views ──
+        TextView tcTabSolid    = root.findViewById(R.id.tc_tab_solid);
+        TextView tcTabGradient = root.findViewById(R.id.tc_tab_gradient);
+        LinearLayout tcPanelSolid    = root.findViewById(R.id.tc_panel_solid);
+        LinearLayout tcPanelGradient = root.findViewById(R.id.tc_panel_gradient);
+
+        // ── Gradient views ──
+        View tcGradPreview    = root.findViewById(R.id.tc_grad_preview);
+        View tcGradC1Box      = root.findViewById(R.id.tc_grad_c1_box);
+        View tcGradC2Box      = root.findViewById(R.id.tc_grad_c2_box);
+        android.widget.EditText tcGradC1Hex = root.findViewById(R.id.tc_grad_c1_hex);
+        android.widget.EditText tcGradC2Hex = root.findViewById(R.id.tc_grad_c2_hex);
+        TextView tcDirLR      = root.findViewById(R.id.tc_dir_lr);
+        TextView tcDirTB      = root.findViewById(R.id.tc_dir_tb);
+        TextView tcDirDiag    = root.findViewById(R.id.tc_dir_diag);
+        TextView tcGradApply  = root.findViewById(R.id.tc_grad_apply);
+
+        // ── Gradient state ──
+        final int[] gradC1 = {0xFFFF0000};
+        final int[] gradC2 = {0xFF0000FF};
+        final int[] gradDir = {0}; // 0=LR,1=TB,2=Diag
+
+        // Gradient preview update
+        Runnable updateGradPreview = () -> {
+            GradientDrawable.Orientation orient = gradDir[0] == 1
+                ? GradientDrawable.Orientation.TOP_BOTTOM
+                : gradDir[0] == 2
+                ? GradientDrawable.Orientation.TL_BR
+                : GradientDrawable.Orientation.LEFT_RIGHT;
+            tcGradPreview.setBackground(new GradientDrawable(orient,
+                new int[]{gradC1[0], gradC2[0]}));
+        };
+        updateGradPreview.run();
+
+        // Direction buttons
+        TextView[] dirBtns = {tcDirLR, tcDirTB, tcDirDiag};
+        for (int i = 0; i < dirBtns.length; i++) {
+            final int idx = i;
+            dirBtns[i].setOnClickListener(v -> {
+                gradDir[0] = idx;
+                for (TextView d : dirBtns) { d.setBackgroundColor(0xFF374151); d.setTextColor(0xFF9CA3AF); }
+                dirBtns[idx].setBackgroundColor(0xFF607D8B); dirBtns[idx].setTextColor(0xFFFFFFFF);
+                updateGradPreview.run();
+            });
+        }
+
+        // C1/C2 box tap → color picker wheel popup
+        tcGradC1Box.setOnClickListener(v -> showColorPickerPopup(gradC1[0], c -> {
+            gradC1[0] = c; tcGradC1Box.setBackgroundColor(c);
+            tcGradC1Hex.setText(String.format("%06X", 0xFFFFFF & c));
+            updateGradPreview.run();
+        }));
+        tcGradC2Box.setOnClickListener(v -> showColorPickerPopup(gradC2[0], c -> {
+            gradC2[0] = c; tcGradC2Box.setBackgroundColor(c);
+            tcGradC2Hex.setText(String.format("%06X", 0xFFFFFF & c));
+            updateGradPreview.run();
+        }));
+
+        tcGradC1Hex.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
+            @Override public void afterTextChanged(android.text.Editable s) {}
+            @Override public void onTextChanged(CharSequence s, int a, int b, int c) {
+                try { if (s.toString().length()==6) { int p=Color.parseColor("#"+s); gradC1[0]=p; tcGradC1Box.setBackgroundColor(p); updateGradPreview.run(); } } catch(Exception ignored){}
+            }
+        });
+        tcGradC2Hex.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
+            @Override public void afterTextChanged(android.text.Editable s) {}
+            @Override public void onTextChanged(CharSequence s, int a, int b, int c) {
+                try { if (s.toString().length()==6) { int p=Color.parseColor("#"+s); gradC2[0]=p; tcGradC2Box.setBackgroundColor(p); updateGradPreview.run(); } } catch(Exception ignored){}
+            }
+        });
+
+        // Apply gradient to text
+        tcGradApply.setOnClickListener(v -> {
+            GradientDrawable.Orientation orient = gradDir[0] == 1
+                ? GradientDrawable.Orientation.TOP_BOTTOM
+                : gradDir[0] == 2
+                ? GradientDrawable.Orientation.TL_BR
+                : GradientDrawable.Orientation.LEFT_RIGHT;
+            android.graphics.LinearGradient shader = new android.graphics.LinearGradient(
+                0, 0,
+                orient == GradientDrawable.Orientation.TOP_BOTTOM ? 0 : targetView.getWidth(),
+                orient == GradientDrawable.Orientation.TOP_BOTTOM ? targetView.getHeight() : 0,
+                new int[]{gradC1[0], gradC2[0]},
+                null, android.graphics.Shader.TileMode.CLAMP);
+            targetView.getPaint().setShader(shader);
+            targetView.invalidate();
+            exportToJson();
+        });
+
+        // ── Tab switching ──
+        tcTabSolid.setOnClickListener(v -> {
+            tcPanelSolid.setVisibility(View.VISIBLE);
+            tcPanelGradient.setVisibility(View.GONE);
+            tcTabSolid.setBackgroundColor(0xFF607D8B); tcTabSolid.setTextColor(0xFFFFFFFF);
+            tcTabGradient.setBackgroundColor(0xFF2A3439); tcTabGradient.setTextColor(0xFF9CA3AF);
+            // Gradient remove
+            targetView.getPaint().setShader(null);
+            targetView.invalidate();
+        });
+        tcTabGradient.setOnClickListener(v -> {
+            tcPanelSolid.setVisibility(View.GONE);
+            tcPanelGradient.setVisibility(View.VISIBLE);
+            tcTabGradient.setBackgroundColor(0xFF607D8B); tcTabGradient.setTextColor(0xFFFFFFFF);
+            tcTabSolid.setBackgroundColor(0xFF2A3439); tcTabSolid.setTextColor(0xFF9CA3AF);
+        });
+
         // ── Views from XML ──
         com.example.newcardmaker.ColorWheelView colorWheel = root.findViewById(R.id.color_wheel);
         android.widget.EditText etHex = root.findViewById(R.id.et_hex_color);
@@ -13135,7 +13243,7 @@ public class MainActivity extends AppCompatActivity {
 
         // ── PopupWindow — display width, 180dp height ──
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
-        int popupHeight = (int)(180 * getResources().getDisplayMetrics().density);
+        int popupHeight = (int)(210 * getResources().getDisplayMetrics().density);
         final PopupWindow popup = new PopupWindow(root,
                 screenWidth,
                 popupHeight, true);
