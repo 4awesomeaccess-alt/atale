@@ -12869,20 +12869,6 @@ public class MainActivity extends AppCompatActivity {
 
             });
 
-        View btnBgImage1 = cv.findViewById(R.id.btn_sel_bg_image);
-
-        btnBgImage1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bitmap bitmap = BitmapFactory.decodeResource(
-                        getResources(), R.drawable.my_image2
-                );
-                targetView.setImageBitmap(bitmap);
-            }
-        });
-      /*  if (btnBgImage1 != null)
-            btnBgImage1.setOnClickListener(v -> showTextBgImageDialog(targetView));*/
-
         // ── Curve
         View btnCurve = cv.findViewById(R.id.btn_sel_curve);
         if (btnCurve != null) {
