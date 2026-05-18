@@ -21394,20 +21394,34 @@ public class MainActivity extends AppCompatActivity {
         View popupView = LayoutInflater.from(this)
                 .inflate(R.layout.popup_arc_text, null);
 
+        int screenW = getResources().getDisplayMetrics().widthPixels;
+        int popupH  = (int)(200 * getResources().getDisplayMetrics().density);
+
         arcPopupWindow = new PopupWindow(
-                popupView,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                true
-        );
+                popupView, screenW, popupH, true);
         arcPopupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        arcPopupWindow.setElevation(12f);
-        arcPopupWindow.setOutsideTouchable(false);
+        arcPopupWindow.setElevation(16f);
+        arcPopupWindow.setOutsideTouchable(true);
+
+        // Text Controls hide
+        if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) {
+            selectionControlsPopup.dismiss();
+        }
 
         View rootView = getWindow().getDecorView().getRootView();
-        arcPopupWindow.showAtLocation(rootView, Gravity.CENTER, 0, 0);
+        int screenH = getResources().getDisplayMetrics().heightPixels;
+        arcPopupWindow.showAtLocation(rootView,
+            Gravity.TOP | Gravity.START, 0, (screenH - popupH) / 2);
 
-        // ── Drag logic (same as before)
+        // Text Controls restore on dismiss
+        arcPopupWindow.setOnDismissListener(() -> {
+            if (selectionControlsPopup != null && !selectionControlsPopup.isShowing()) {
+                selectionControlsPopup.showAtLocation(mainLayout,
+                    Gravity.TOP | Gravity.LEFT, selControlsLastX, selControlsLastY);
+            }
+        });
+
+        // ── Drag
         View dragHandle = popupView.findViewById(R.id.drag_handle);
         final int[] lastX = {0};
         final int[] lastY = {0};
@@ -21422,7 +21436,7 @@ public class MainActivity extends AppCompatActivity {
                     int dy = (int) event.getRawY() - lastY[0];
                     int[] location = new int[2];
                     popupView.getLocationOnScreen(location);
-                    arcPopupWindow.update(location[0] + dx, location[1] + dy, -1, -1);
+                    arcPopupWindow.update(location[0] + dx, location[1] + dy, screenW, popupH);
                     lastX[0] = (int) event.getRawX();
                     lastY[0] = (int) event.getRawY();
                     break;
