@@ -13108,17 +13108,74 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        // C1/C2 box tap → color picker wheel popup
-        tcGradC1Box.setOnClickListener(v -> showColorPickerPopup(gradC1[0], c -> {
-            gradC1[0] = c; tcGradC1Box.setBackgroundColor(c);
-            tcGradC1Hex.setText(String.format("%06X", 0xFFFFFF & c));
-            updateGradPreview.run();
-        }));
-        tcGradC2Box.setOnClickListener(v -> showColorPickerPopup(gradC2[0], c -> {
-            gradC2[0] = c; tcGradC2Box.setBackgroundColor(c);
-            tcGradC2Hex.setText(String.format("%06X", 0xFFFFFF & c));
-            updateGradPreview.run();
-        }));
+        // C1/C2 box tap → ColorWheelView popup
+        java.util.function.BiConsumer<Integer, Boolean> openGradColorWheel = (initC, isC1) -> {
+            android.view.View wr = getLayoutInflater().inflate(R.layout.popup_text_color, null);
+            com.example.newcardmaker.ColorWheelView wh = wr.findViewById(R.id.color_wheel);
+            android.widget.EditText etH   = wr.findViewById(R.id.et_hex_color);
+            android.view.View hPrev       = wr.findViewById(R.id.view_hex_preview);
+            android.widget.TextView hApply = wr.findViewById(R.id.btn_hex_apply);
+            android.widget.TextView wDone  = wr.findViewById(R.id.btn_color_done);
+            android.widget.TextView wClose = wr.findViewById(R.id.btn_color_close);
+            android.view.View wTitle      = wr.findViewById(R.id.tv_color_title);
+            android.widget.LinearLayout cr = wr.findViewById(R.id.color_row);
+
+            // Hide gradient tab row to avoid confusion
+            android.view.View tabRow = wr.findViewById(R.id.tc_tab_gradient);
+            if (tabRow != null) tabRow.setVisibility(android.view.View.GONE);
+            android.view.View tabSolid = wr.findViewById(R.id.tc_tab_solid);
+            if (tabSolid != null) tabSolid.setVisibility(android.view.View.GONE);
+
+            int init = isC1 ? gradC1[0] : gradC2[0];
+            wh.setColor(init);
+            hPrev.setBackgroundColor(init);
+            etH.setText(String.format("%06X", 0xFFFFFF & init));
+
+            wh.setOnColorChangedListener(c -> {
+                hPrev.setBackgroundColor(c);
+                String hex = String.format("%06X", 0xFFFFFF & c);
+                if (!etH.getText().toString().equalsIgnoreCase(hex)) { etH.setText(hex); etH.setSelection(hex.length()); }
+                if (isC1) { gradC1[0] = c; tcGradC1Box.setBackgroundColor(c); tcGradC1Hex.setText(hex); }
+                else      { gradC2[0] = c; tcGradC2Box.setBackgroundColor(c); tcGradC2Hex.setText(hex); }
+                updateGradPreview.run();
+            });
+
+            hApply.setOnClickListener(vv -> {
+                try {
+                    int p = Color.parseColor("#" + etH.getText().toString().trim());
+                    wh.setColor(p); hPrev.setBackgroundColor(p);
+                    if (isC1) { gradC1[0] = p; tcGradC1Box.setBackgroundColor(p); tcGradC1Hex.setText(String.format("%06X", 0xFFFFFF & p)); }
+                    else      { gradC2[0] = p; tcGradC2Box.setBackgroundColor(p); tcGradC2Hex.setText(String.format("%06X", 0xFFFFFF & p)); }
+                    updateGradPreview.run();
+                } catch (Exception ignored) {}
+            });
+
+            int sw2 = getResources().getDisplayMetrics().widthPixels;
+            int ph2 = (int)(210 * getResources().getDisplayMetrics().density);
+            android.widget.PopupWindow wp2 = new android.widget.PopupWindow(wr, sw2, ph2, true);
+            wp2.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+            wp2.setElevation(20f); wp2.setOutsideTouchable(true);
+            int sh2 = getResources().getDisplayMetrics().heightPixels;
+            wp2.showAtLocation(getWindow().getDecorView().getRootView(), Gravity.TOP | Gravity.START, 0, (sh2 - ph2) / 2);
+
+            final int[] lxy4 = {0, 0};
+            wTitle.setOnTouchListener((vv, ev) -> {
+                switch (ev.getAction()) {
+                    case MotionEvent.ACTION_DOWN: lxy4[0]=(int)ev.getRawX(); lxy4[1]=(int)ev.getRawY(); break;
+                    case MotionEvent.ACTION_MOVE:
+                        int dx=(int)ev.getRawX()-lxy4[0]; int dy=(int)ev.getRawY()-lxy4[1];
+                        int[] l4=new int[2]; wr.getLocationOnScreen(l4);
+                        wp2.update(l4[0]+dx, l4[1]+dy, sw2, ph2);
+                        lxy4[0]=(int)ev.getRawX(); lxy4[1]=(int)ev.getRawY(); break;
+                }
+                return true;
+            });
+            wClose.setOnClickListener(vv -> wp2.dismiss());
+            wDone.setOnClickListener(vv -> { exportToJson(); wp2.dismiss(); });
+        };
+
+        tcGradC1Box.setOnClickListener(v -> openGradColorWheel.accept(gradC1[0], true));
+        tcGradC2Box.setOnClickListener(v -> openGradColorWheel.accept(gradC2[0], false));
 
         tcGradC1Hex.addTextChangedListener(new android.text.TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
@@ -13137,20 +13194,23 @@ public class MainActivity extends AppCompatActivity {
 
         // Apply gradient to text
         tcGradApply.setOnClickListener(v -> {
-            GradientDrawable.Orientation orient = gradDir[0] == 1
-                ? GradientDrawable.Orientation.TOP_BOTTOM
-                : gradDir[0] == 2
-                ? GradientDrawable.Orientation.TL_BR
-                : GradientDrawable.Orientation.LEFT_RIGHT;
-            android.graphics.LinearGradient shader = new android.graphics.LinearGradient(
-                0, 0,
-                orient == GradientDrawable.Orientation.TOP_BOTTOM ? 0 : targetView.getWidth(),
-                orient == GradientDrawable.Orientation.TOP_BOTTOM ? targetView.getHeight() : 0,
-                new int[]{gradC1[0], gradC2[0]},
-                null, android.graphics.Shader.TileMode.CLAMP);
-            targetView.getPaint().setShader(shader);
-            targetView.invalidate();
-            exportToJson();
+            targetView.post(() -> {
+                float w = targetView.getWidth();
+                float h = targetView.getHeight();
+                if (w == 0) w = 300;
+                if (h == 0) h = 100;
+                float endX = gradDir[0] == 1 ? 0 : w;
+                float endY = gradDir[0] == 0 ? 0 : h;
+                float startX = 0, startY = 0;
+                if (gradDir[0] == 2) { startX = 0; startY = 0; endX = w; endY = h; }
+                android.graphics.LinearGradient shader = new android.graphics.LinearGradient(
+                    startX, startY, endX, endY,
+                    new int[]{gradC1[0], gradC2[0]},
+                    null, android.graphics.Shader.TileMode.CLAMP);
+                targetView.getPaint().setShader(shader);
+                targetView.invalidate();
+                exportToJson();
+            });
         });
 
         // ── Tab switching ──
