@@ -12869,12 +12869,6 @@ public class MainActivity extends AppCompatActivity {
 
             });
 
-        // ── Curve
-        View btnCurve = cv.findViewById(R.id.btn_sel_curve);
-        if (btnCurve != null) {
-            btnCurve.setOnClickListener(v -> showCurvePopup(targetView));
-        }
-
         // ── BG Color
         View btnBgColor = cv.findViewById(R.id.btn_sel_bg_color);
         if (btnBgColor != null) {
