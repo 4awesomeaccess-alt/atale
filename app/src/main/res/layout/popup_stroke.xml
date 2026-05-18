@@ -78,12 +78,12 @@
         android:orientation="horizontal"
         android:padding="8dp">
 
-        <!-- Left: Preview + Width -->
+        <!-- Left: Preview + Width — full width -->
         <LinearLayout
-            android:layout_width="110dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingEnd="8dp">
+            android:paddingEnd="0dp">
 
             <!-- Stroke Preview -->
             <com.example.newcardmaker.StrokeTextView
@@ -98,7 +98,7 @@
                 android:background="#37474F"
                 android:layout_marginBottom="6dp" />
 
-            <!-- Width label + Seekbar -->
+            <!-- Width label + Seekbar full width -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -134,62 +134,6 @@
                     android:layout_marginStart="3dp" />
 
             </LinearLayout>
-
-        </LinearLayout>
-
-        <!-- Right: Color Wheel + HEX -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <!-- HEX + preview row -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="26dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="4dp">
-
-                <View
-                    android:id="@+id/stroke_color_preview"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:background="#000000"
-                    android:layout_marginEnd="4dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="#"
-                    android:textColor="#9CA3AF"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/stroke_et_hex"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:hint="000000"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#6B7280"
-                    android:textSize="10sp"
-                    android:background="#374151"
-                    android:paddingHorizontal="4dp"
-                    android:inputType="text"
-                    android:maxLength="6"
-                    android:singleLine="true" />
-
-            </LinearLayout>
-
-            <!-- Color Wheel -->
-            <com.example.newcardmaker.ColorWheelView
-                android:id="@+id/stroke_color_wheel"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
 
         </LinearLayout>
 

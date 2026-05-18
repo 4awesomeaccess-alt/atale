@@ -20645,9 +20645,9 @@ public class MainActivity extends AppCompatActivity {
         preview.setStrokeWidth(strokeW[0]);
         seekWidth.setProgress((int) strokeW[0]);
         widthVal.setText(String.valueOf((int) strokeW[0]));
-        colorPreview.setBackgroundColor(strokeC[0]);
-        etHex.setText(String.format("%06X", 0xFFFFFF & strokeC[0]));
-        wheel.setColor(strokeC[0]);
+        if (colorPreview != null) colorPreview.setBackgroundColor(strokeC[0]);
+        if (etHex != null) etHex.setText(String.format("%06X", 0xFFFFFF & strokeC[0]));
+        if (wheel != null) wheel.setColor(strokeC[0]);
 
         // ── Apply helper ──
         Runnable applyStroke = () -> {
@@ -20672,33 +20672,39 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // ── Color Wheel ──
-        wheel.setOnColorChangedListener(c -> {
-            strokeC[0] = c;
-            colorPreview.setBackgroundColor(c);
-            String hex = String.format("%06X", 0xFFFFFF & c);
-            if (!etHex.getText().toString().equalsIgnoreCase(hex)) {
-                etHex.setText(hex);
-                etHex.setSelection(hex.length());
-            }
-            applyStroke.run();
-        });
+        if (wheel != null) {
+            wheel.setOnColorChangedListener(c -> {
+                strokeC[0] = c;
+                if (colorPreview != null) colorPreview.setBackgroundColor(c);
+                if (etHex != null) {
+                    String hex = String.format("%06X", 0xFFFFFF & c);
+                    if (!etHex.getText().toString().equalsIgnoreCase(hex)) {
+                        etHex.setText(hex);
+                        etHex.setSelection(hex.length());
+                    }
+                }
+                applyStroke.run();
+            });
+        }
 
         // ── HEX TextWatcher ──
-        etHex.addTextChangedListener(new android.text.TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
-            @Override public void afterTextChanged(android.text.Editable s) {}
-            @Override public void onTextChanged(CharSequence s, int a, int b, int c) {
-                try {
-                    if (s.toString().trim().length() == 6) {
-                        int parsed = Color.parseColor("#" + s.toString().trim());
-                        strokeC[0] = parsed;
-                        colorPreview.setBackgroundColor(parsed);
-                        wheel.setColor(parsed);
-                        applyStroke.run();
-                    }
-                } catch (Exception ignored) {}
-            }
-        });
+        if (etHex != null) {
+            etHex.addTextChangedListener(new android.text.TextWatcher() {
+                @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
+                @Override public void afterTextChanged(android.text.Editable s) {}
+                @Override public void onTextChanged(CharSequence s, int a, int b, int c) {
+                    try {
+                        if (s.toString().trim().length() == 6) {
+                            int parsed = Color.parseColor("#" + s.toString().trim());
+                            strokeC[0] = parsed;
+                            if (colorPreview != null) colorPreview.setBackgroundColor(parsed);
+                            if (wheel != null) wheel.setColor(parsed);
+                            applyStroke.run();
+                        }
+                    } catch (Exception ignored) {}
+                }
+            });
+        }
 
         // ── PopupWindow ──
         int screenW = getResources().getDisplayMetrics().widthPixels;
