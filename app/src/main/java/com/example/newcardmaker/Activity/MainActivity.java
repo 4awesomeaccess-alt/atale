@@ -13195,20 +13195,16 @@ public class MainActivity extends AppCompatActivity {
         // Apply gradient to text
         tcGradApply.setOnClickListener(v -> {
             targetView.post(() -> {
-                float w = targetView.getWidth();
-                float h = targetView.getHeight();
-                if (w == 0) w = 300;
-                if (h == 0) h = 100;
-                float endX = gradDir[0] == 1 ? 0 : w;
-                float endY = gradDir[0] == 0 ? 0 : h;
-                float startX = 0, startY = 0;
-                if (gradDir[0] == 2) { startX = 0; startY = 0; endX = w; endY = h; }
+                float w = targetView.getWidth() > 0 ? targetView.getWidth() : 300;
+                float h = targetView.getHeight() > 0 ? targetView.getHeight() : 100;
+                float startX = 0, startY = 0, endX = w, endY = 0;
+                if (gradDir[0] == 1) { endX = 0; endY = h; }
+                else if (gradDir[0] == 2) { endX = w; endY = h; }
                 android.graphics.LinearGradient shader = new android.graphics.LinearGradient(
                     startX, startY, endX, endY,
                     new int[]{gradC1[0], gradC2[0]},
                     null, android.graphics.Shader.TileMode.CLAMP);
-                targetView.getPaint().setShader(shader);
-                targetView.invalidate();
+                targetView.setTextGradient(shader);
                 exportToJson();
             });
         });
@@ -13219,9 +13215,7 @@ public class MainActivity extends AppCompatActivity {
             tcPanelGradient.setVisibility(View.GONE);
             tcTabSolid.setBackgroundColor(0xFF607D8B); tcTabSolid.setTextColor(0xFFFFFFFF);
             tcTabGradient.setBackgroundColor(0xFF2A3439); tcTabGradient.setTextColor(0xFF9CA3AF);
-            // Gradient remove
-            targetView.getPaint().setShader(null);
-            targetView.invalidate();
+            targetView.setTextGradient(null);
         });
         tcTabGradient.setOnClickListener(v -> {
             tcPanelSolid.setVisibility(View.GONE);
