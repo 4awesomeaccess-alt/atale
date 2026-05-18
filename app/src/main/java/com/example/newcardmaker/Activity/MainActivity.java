@@ -20502,6 +20502,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void openWheelPopup(int initColor, java.util.function.Consumer<Integer> onColor) {
+        android.view.View wr = getLayoutInflater().inflate(R.layout.popup_text_color, null);
+        com.example.newcardmaker.ColorWheelView wh = wr.findViewById(R.id.color_wheel);
+        android.widget.TextView wDone = wr.findViewById(R.id.btn_color_done);
+        android.widget.TextView wClose = wr.findViewById(R.id.btn_color_close);
+        android.view.View wTitle = wr.findViewById(R.id.tv_color_title);
+        wh.setColor(initColor);
+        wh.setOnColorChangedListener(c -> onColor.accept(c));
+        int sw = getResources().getDisplayMetrics().widthPixels;
+        int ph = (int)(210 * getResources().getDisplayMetrics().density);
+        android.widget.PopupWindow wp = new android.widget.PopupWindow(wr, sw, ph, true);
+        wp.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+        wp.setElevation(20f); wp.setOutsideTouchable(true);
+        wp.showAtLocation(getWindow().getDecorView().getRootView(), Gravity.TOP | Gravity.START, 0, (getResources().getDisplayMetrics().heightPixels - ph) / 2);
+        wClose.setOnClickListener(v -> wp.dismiss());
+        wDone.setOnClickListener(v -> { exportToJson(); wp.dismiss(); });
+        final int[] lxy = {0, 0};
+        wTitle.setOnTouchListener((v, ev) -> {
+            if (ev.getAction() == MotionEvent.ACTION_DOWN) { lxy[0]=(int)ev.getRawX(); lxy[1]=(int)ev.getRawY(); }
+            else if (ev.getAction() == MotionEvent.ACTION_MOVE) { int[]l=new int[2]; wr.getLocationOnScreen(l); wp.update(l[0]+(int)ev.getRawX()-lxy[0],l[1]+(int)ev.getRawY()-lxy[1],sw,ph); lxy[0]=(int)ev.getRawX(); lxy[1]=(int)ev.getRawY(); }
+            return true;
+        });
+    }
+
     private void showTextPropertiesPopup(final StrokeTextView targetView, int initialTab) {
 
         android.view.View root = getLayoutInflater().inflate(R.layout.popup_text_properties, null);
@@ -20513,13 +20537,17 @@ public class MainActivity extends AppCompatActivity {
         android.widget.TextView tabTransform = root.findViewById(R.id.prop_tab_transform);
         android.widget.TextView tabEffects = root.findViewById(R.id.prop_tab_effects);
         android.widget.TextView tabLayout  = root.findViewById(R.id.prop_tab_layout);
+        android.widget.TextView tabVisual  = root.findViewById(R.id.prop_tab_visual);
+        android.widget.TextView tabTypo    = root.findViewById(R.id.prop_tab_typo);
         android.widget.LinearLayout panelSpacing  = root.findViewById(R.id.prop_panel_spacing);
         android.widget.LinearLayout panelTransform = root.findViewById(R.id.prop_panel_transform);
         android.widget.LinearLayout panelEffects  = root.findViewById(R.id.prop_panel_effects);
         android.widget.LinearLayout panelLayout   = root.findViewById(R.id.prop_panel_layout);
+        android.widget.LinearLayout panelVisual   = root.findViewById(R.id.prop_panel_visual);
+        android.widget.LinearLayout panelTypo     = root.findViewById(R.id.prop_panel_typo);
 
-        android.widget.TextView[] tabs = {tabSpacing, tabTransform, tabEffects, tabLayout};
-        android.widget.LinearLayout[] panels = {panelSpacing, panelTransform, panelEffects, panelLayout};
+        android.widget.TextView[] tabs = {tabSpacing, tabTransform, tabEffects, tabLayout, tabVisual, tabTypo};
+        android.widget.LinearLayout[] panels = {panelSpacing, panelTransform, panelEffects, panelLayout, panelVisual, panelTypo};
 
         // Tab switch helper
         Runnable[] selectTab = {null};
@@ -20794,6 +20822,137 @@ public class MainActivity extends AppCompatActivity {
                 android.graphics.drawable.Drawable bg = targetView.getBackground();
                 if (bg instanceof GradientDrawable) ((GradientDrawable) bg).setCornerRadius(p);
                 tvCorner.setText(String.valueOf(p));
+            }
+        });
+
+        // ── VISUAL ──
+        android.widget.SeekBar sbOutlineW = root.findViewById(R.id.prop_sb_outline_width);
+        android.widget.TextView tvOutlineW = root.findViewById(R.id.prop_tv_outline_width);
+        android.widget.TextView btnOutlineColor = root.findViewById(R.id.prop_btn_outline_color);
+        android.widget.SeekBar sbGlow = root.findViewById(R.id.prop_sb_glow);
+        android.widget.TextView tvGlow = root.findViewById(R.id.prop_tv_glow);
+        android.widget.TextView btnGlowColor = root.findViewById(R.id.prop_btn_glow_color);
+        android.widget.SeekBar sb3D = root.findViewById(R.id.prop_sb_3d_depth);
+        android.widget.TextView tv3D = root.findViewById(R.id.prop_tv_3d_depth);
+        android.widget.SeekBar sbBgOp = root.findViewById(R.id.prop_sb_bg_opacity);
+        android.widget.TextView tvBgOp = root.findViewById(R.id.prop_tv_bg_opacity);
+
+        sbOutlineW.setProgress((int) targetView.getDoubleStrokeWidth());
+        sbOutlineW.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(SeekBar s) {}
+            @Override public void onStopTrackingTouch(SeekBar s) { exportToJson(); }
+            @Override public void onProgressChanged(SeekBar s, int p, boolean fromUser) {
+                if (!fromUser) return;
+                targetView.setDoubleStrokeWidth(p); tvOutlineW.setText(String.valueOf(p));
+            }
+        });
+        btnOutlineColor.setBackgroundColor(targetView.getDoubleStrokeColor());
+        btnOutlineColor.setOnClickListener(v -> openWheelPopup(targetView.getDoubleStrokeColor(), c -> { targetView.setDoubleStrokeColor(c); btnOutlineColor.setBackgroundColor(c); }));
+
+        sbGlow.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(SeekBar s) {}
+            @Override public void onStopTrackingTouch(SeekBar s) { exportToJson(); }
+            @Override public void onProgressChanged(SeekBar s, int p, boolean fromUser) {
+                if (!fromUser) return;
+                targetView.setGlowRadius(p); tvGlow.setText(String.valueOf(p));
+            }
+        });
+        btnGlowColor.setBackgroundColor(targetView.getGlowColor());
+        btnGlowColor.setOnClickListener(v -> openWheelPopup(targetView.getGlowColor(), c -> { targetView.setGlowColor(c); btnGlowColor.setBackgroundColor(c); }));
+
+        sb3D.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(SeekBar s) {}
+            @Override public void onStopTrackingTouch(SeekBar s) { exportToJson(); }
+            @Override public void onProgressChanged(SeekBar s, int p, boolean fromUser) {
+                if (!fromUser) return;
+                targetView.setThreeDDepth(p); tv3D.setText(String.valueOf(p));
+            }
+        });
+        sbBgOp.setProgress((int)(targetView.getBgOpacity() * 100));
+        sbBgOp.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(SeekBar s) {}
+            @Override public void onStopTrackingTouch(SeekBar s) { exportToJson(); }
+            @Override public void onProgressChanged(SeekBar s, int p, boolean fromUser) {
+                if (!fromUser) return;
+                targetView.setBgOpacity(p / 100f); tvBgOp.setText(p + "%");
+            }
+        });
+
+        // ── TYPO ──
+        android.widget.SeekBar sbFontW = root.findViewById(R.id.prop_sb_font_weight);
+        android.widget.TextView tvFontW = root.findViewById(R.id.prop_tv_font_weight);
+        android.widget.TextView btnCaseNormal = root.findViewById(R.id.prop_btn_case_normal);
+        android.widget.TextView btnCaseUpper  = root.findViewById(R.id.prop_btn_case_upper);
+        android.widget.TextView btnCaseLower  = root.findViewById(R.id.prop_btn_case_lower);
+        android.widget.TextView btnCaseTitle  = root.findViewById(R.id.prop_btn_case_title);
+        android.widget.SeekBar sbSkewX = root.findViewById(R.id.prop_sb_skew_x);
+        android.widget.TextView tvSkewX = root.findViewById(R.id.prop_tv_skew_x);
+        android.widget.TextView btnOverline = root.findViewById(R.id.prop_btn_overline);
+        android.widget.TextView btnSuper    = root.findViewById(R.id.prop_btn_super);
+        android.widget.TextView btnSub      = root.findViewById(R.id.prop_btn_sub);
+        android.widget.TextView btnMirrorH2 = root.findViewById(R.id.prop_btn_mirror_h);
+        android.widget.TextView btnMirrorV2 = root.findViewById(R.id.prop_btn_mirror_v);
+        android.widget.TextView btnWave     = root.findViewById(R.id.prop_btn_wave);
+        android.widget.TextView btnAutoFit  = root.findViewById(R.id.prop_btn_auto_fit);
+        android.widget.SeekBar sbWaveAmp = root.findViewById(R.id.prop_sb_wave_amp);
+        android.widget.TextView tvWaveAmp = root.findViewById(R.id.prop_tv_wave_amp);
+
+        int[] weights = {100,200,300,400,500,600,700,800,900};
+        sbFontW.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(SeekBar s) {}
+            @Override public void onStopTrackingTouch(SeekBar s) { exportToJson(); }
+            @Override public void onProgressChanged(SeekBar s, int p, boolean fromUser) {
+                if (!fromUser) return;
+                int w = weights[Math.min(p, 8)];
+                targetView.setFontWeight(w); tvFontW.setText(String.valueOf(w));
+            }
+        });
+
+        android.widget.TextView[] caseBtns = {btnCaseNormal, btnCaseUpper, btnCaseLower, btnCaseTitle};
+        for (int i = 0; i < 4; i++) {
+            final int ci = i;
+            caseBtns[i].setOnClickListener(v -> {
+                targetView.setTextCase(ci);
+                for (android.widget.TextView cb : caseBtns) cb.setBackgroundColor(0xFF374151);
+                caseBtns[ci].setBackgroundColor(0xFF607D8B);
+                exportToJson();
+            });
+        }
+        caseBtns[targetView.getTextCase()].setBackgroundColor(0xFF607D8B);
+
+        sbSkewX.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(SeekBar s) {}
+            @Override public void onStopTrackingTouch(SeekBar s) { exportToJson(); }
+            @Override public void onProgressChanged(SeekBar s, int p, boolean fromUser) {
+                if (!fromUser) return;
+                float sk = (p - 50) / 50f;
+                targetView.setSkewX(sk); tvSkewX.setText(String.format("%.1f", sk));
+            }
+        });
+
+        Runnable updateToggles = () -> {
+            btnOverline.setBackgroundColor(targetView.isOverline()    ? 0xFF607D8B : 0xFF374151);
+            btnSuper.setBackgroundColor(targetView.isSuperscript()    ? 0xFF607D8B : 0xFF374151);
+            btnSub.setBackgroundColor(targetView.isSubscript()        ? 0xFF607D8B : 0xFF374151);
+            btnMirrorH2.setBackgroundColor(targetView.isMirrorH()     ? 0xFF607D8B : 0xFF374151);
+            btnMirrorV2.setBackgroundColor(targetView.isMirrorV()     ? 0xFF607D8B : 0xFF374151);
+            btnWave.setBackgroundColor(targetView.isWaveMode()        ? 0xFF607D8B : 0xFF374151);
+        };
+        updateToggles.run();
+
+        btnOverline.setOnClickListener(v -> { targetView.setOverline(!targetView.isOverline()); updateToggles.run(); exportToJson(); });
+        btnSuper.setOnClickListener(v -> { targetView.setSuperscript(!targetView.isSuperscript()); updateToggles.run(); exportToJson(); });
+        btnSub.setOnClickListener(v -> { targetView.setSubscript(!targetView.isSubscript()); updateToggles.run(); exportToJson(); });
+        btnMirrorH2.setOnClickListener(v -> { targetView.setMirrorH(!targetView.isMirrorH()); updateToggles.run(); exportToJson(); });
+        btnMirrorV2.setOnClickListener(v -> { targetView.setMirrorV(!targetView.isMirrorV()); updateToggles.run(); exportToJson(); });
+        btnWave.setOnClickListener(v -> { targetView.setWaveMode(!targetView.isWaveMode()); updateToggles.run(); exportToJson(); });
+        btnAutoFit.setOnClickListener(v -> { targetView.setAutoFit(true); exportToJson(); });
+        sbWaveAmp.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(SeekBar s) {}
+            @Override public void onStopTrackingTouch(SeekBar s) { exportToJson(); }
+            @Override public void onProgressChanged(SeekBar s, int p, boolean fromUser) {
+                if (!fromUser) return;
+                targetView.setWaveAmplitude(p); tvWaveAmp.setText(String.valueOf(p));
             }
         });
 
