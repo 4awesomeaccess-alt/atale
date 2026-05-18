@@ -20621,11 +20621,155 @@ public class MainActivity extends AppCompatActivity {
     private void showStrokeDialog(final StrokeTextView targetText) {
 
         final float[] strokeW = {targetText.getStrokeWidth()};
-        final int[] strokeC = {targetText.getStrokeColor() == 0 ? android.graphics.Color.BLACK : targetText.getStrokeColor()};
+        final int[] strokeC = {targetText.getStrokeColor() == 0 ?
+                android.graphics.Color.BLACK : targetText.getStrokeColor()};
 
-        // ── Root layout
+        // ── XML Inflate ──
+        android.view.View root = getLayoutInflater().inflate(R.layout.popup_stroke, null);
+
+        android.view.View dragHandle        = root.findViewById(R.id.stroke_drag_handle);
+        android.widget.TextView btnClose    = root.findViewById(R.id.stroke_btn_close);
+        android.widget.TextView btnDone     = root.findViewById(R.id.stroke_btn_done);
+        android.widget.TextView btnRemove   = root.findViewById(R.id.stroke_btn_remove);
+        com.example.newcardmaker.StrokeTextView preview = root.findViewById(R.id.stroke_preview);
+        android.widget.SeekBar seekWidth    = root.findViewById(R.id.stroke_seek_width);
+        android.widget.TextView widthVal    = root.findViewById(R.id.stroke_width_val);
+        android.view.View colorPreview      = root.findViewById(R.id.stroke_color_preview);
+        android.widget.EditText etHex       = root.findViewById(R.id.stroke_et_hex);
+        com.example.newcardmaker.ColorWheelView wheel = root.findViewById(R.id.stroke_color_wheel);
+
+        // ── Initial values ──
+        preview.setText(targetText.getText());
+        preview.setTextColor(targetText.getCurrentTextColor());
+        preview.setStrokeColor(strokeC[0]);
+        preview.setStrokeWidth(strokeW[0]);
+        seekWidth.setProgress((int) strokeW[0]);
+        widthVal.setText(String.valueOf((int) strokeW[0]));
+        colorPreview.setBackgroundColor(strokeC[0]);
+        etHex.setText(String.format("%06X", 0xFFFFFF & strokeC[0]));
+        wheel.setColor(strokeC[0]);
+
+        // ── Apply helper ──
+        Runnable applyStroke = () -> {
+            preview.setStrokeColor(strokeC[0]);
+            preview.setStrokeWidth(strokeW[0]);
+            preview.invalidate();
+            targetText.setStrokeColor(strokeC[0]);
+            targetText.setStrokeWidth(strokeW[0]);
+            targetText.invalidate();
+        };
+
+        // ── Width Seekbar ──
+        seekWidth.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(SeekBar s) {}
+            @Override public void onStopTrackingTouch(SeekBar s) {}
+            @Override public void onProgressChanged(SeekBar s, int progress, boolean fromUser) {
+                if (!fromUser) return;
+                strokeW[0] = progress;
+                widthVal.setText(String.valueOf(progress));
+                applyStroke.run();
+            }
+        });
+
+        // ── Color Wheel ──
+        wheel.setOnColorChangedListener(c -> {
+            strokeC[0] = c;
+            colorPreview.setBackgroundColor(c);
+            String hex = String.format("%06X", 0xFFFFFF & c);
+            if (!etHex.getText().toString().equalsIgnoreCase(hex)) {
+                etHex.setText(hex);
+                etHex.setSelection(hex.length());
+            }
+            applyStroke.run();
+        });
+
+        // ── HEX TextWatcher ──
+        etHex.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
+            @Override public void afterTextChanged(android.text.Editable s) {}
+            @Override public void onTextChanged(CharSequence s, int a, int b, int c) {
+                try {
+                    if (s.toString().trim().length() == 6) {
+                        int parsed = Color.parseColor("#" + s.toString().trim());
+                        strokeC[0] = parsed;
+                        colorPreview.setBackgroundColor(parsed);
+                        wheel.setColor(parsed);
+                        applyStroke.run();
+                    }
+                } catch (Exception ignored) {}
+            }
+        });
+
+        // ── PopupWindow ──
         int screenW = getResources().getDisplayMetrics().widthPixels;
-        android.widget.LinearLayout root = new android.widget.LinearLayout(this);
+        int popupH  = (int)(200 * getResources().getDisplayMetrics().density);
+        android.widget.PopupWindow popup = new android.widget.PopupWindow(
+                root, screenW, popupH, true);
+        popup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(
+                android.graphics.Color.TRANSPARENT));
+        popup.setElevation(16f);
+        popup.setOutsideTouchable(true);
+
+        // Text Controls hide
+        if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) {
+            selectionControlsPopup.dismiss();
+        }
+
+        int screenH = getResources().getDisplayMetrics().heightPixels;
+        popup.showAtLocation(getWindow().getDecorView().getRootView(),
+            Gravity.TOP | Gravity.START, 0, (screenH - popupH) / 2);
+
+        // Text Controls restore
+        popup.setOnDismissListener(() -> {
+            if (selectionControlsPopup != null && !selectionControlsPopup.isShowing()) {
+                selectionControlsPopup.showAtLocation(mainLayout,
+                    Gravity.TOP | Gravity.LEFT, selControlsLastX, selControlsLastY);
+            }
+        });
+
+        // ── Drag ──
+        final int[] lastXY = {0, 0};
+        dragHandle.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    lastXY[0] = (int) event.getRawX();
+                    lastXY[1] = (int) event.getRawY(); break;
+                case MotionEvent.ACTION_MOVE:
+                    int dx = (int) event.getRawX() - lastXY[0];
+                    int dy = (int) event.getRawY() - lastXY[1];
+                    int[] loc = new int[2]; root.getLocationOnScreen(loc);
+                    popup.update(loc[0] + dx, loc[1] + dy, screenW, popupH);
+                    lastXY[0] = (int) event.getRawX();
+                    lastXY[1] = (int) event.getRawY(); break;
+            }
+            return true;
+        });
+
+        // ── Buttons ──
+        btnClose.setOnClickListener(v -> popup.dismiss());
+
+        btnDone.setOnClickListener(v -> {
+            targetText.setTextGradient(null);
+            targetText.setTag(R.id.tv_move_speed, null);
+            targetText.getPaint().setShader(null);
+            targetText.setStrokeColor(strokeC[0]);
+            targetText.setStrokeWidth(strokeW[0]);
+            targetText.invalidate();
+            targetText.requestLayout();
+            saveCurrentPage();
+            exportToJson();
+            popup.dismiss();
+        });
+
+        btnRemove.setOnClickListener(v -> {
+            targetText.setStrokeWidth(0f);
+            targetText.invalidate();
+            targetText.requestLayout();
+            saveCurrentPage();
+            exportToJson();
+            popup.dismiss();
+        });
+    }
         root.setOrientation(android.widget.LinearLayout.VERTICAL);
         root.setLayoutParams(new android.view.ViewGroup.LayoutParams(
                 screenW, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
