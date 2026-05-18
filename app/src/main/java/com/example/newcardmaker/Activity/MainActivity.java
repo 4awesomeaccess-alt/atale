@@ -20691,17 +20691,88 @@ public class MainActivity extends AppCompatActivity {
                 tvSdy.setText(String.valueOf((int) dy));
             }
         });
-        btnShadowColor.setOnClickListener(v -> showColorPickerPopup(shadowColor[0], c -> {
-            shadowColor[0] = c;
-            btnShadowColor.setBackgroundColor(c);
-            float dx = sbShadowDx.getProgress() - 25;
-            float dy = sbShadowDy.getProgress() - 25;
-            targetView.setShadowLayer(sbShadow.getProgress(), dx, dy, c);
-        }));
-        btnHighlight.setOnClickListener(v -> showColorPickerPopup(Color.YELLOW, c -> {
-            targetView.setHighlightColor(c);
-            btnHighlight.setBackgroundColor(c);
-        }));
+        btnShadowColor.setOnClickListener(v -> {
+            android.view.View wr = getLayoutInflater().inflate(R.layout.popup_text_color, null);
+            com.example.newcardmaker.ColorWheelView wh = wr.findViewById(R.id.color_wheel);
+            android.widget.EditText etH = wr.findViewById(R.id.et_hex_color);
+            android.view.View hPrev = wr.findViewById(R.id.view_hex_preview);
+            android.widget.TextView wDone = wr.findViewById(R.id.btn_color_done);
+            android.widget.TextView wClose = wr.findViewById(R.id.btn_color_close);
+            android.view.View wTitle = wr.findViewById(R.id.tv_color_title);
+            wh.setColor(shadowColor[0]);
+            hPrev.setBackgroundColor(shadowColor[0]);
+            etH.setText(String.format("%06X", 0xFFFFFF & shadowColor[0]));
+            wh.setOnColorChangedListener(c -> {
+                shadowColor[0] = c; hPrev.setBackgroundColor(c);
+                btnShadowColor.setBackgroundColor(c);
+                etH.setText(String.format("%06X", 0xFFFFFF & c));
+                float dx = sbShadowDx.getProgress() - 25;
+                float dy = sbShadowDy.getProgress() - 25;
+                targetView.setShadowLayer(sbShadow.getProgress(), dx, dy, c);
+            });
+            int sw = getResources().getDisplayMetrics().widthPixels;
+            int ph = (int)(210 * getResources().getDisplayMetrics().density);
+            android.widget.PopupWindow wp = new android.widget.PopupWindow(wr, sw, ph, true);
+            wp.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+            wp.setElevation(20f); wp.setOutsideTouchable(true);
+            int sh = getResources().getDisplayMetrics().heightPixels;
+            wp.showAtLocation(getWindow().getDecorView().getRootView(), Gravity.TOP | Gravity.START, 0, (sh - ph) / 2);
+            final int[] lxy = {0, 0};
+            wTitle.setOnTouchListener((vv, ev) -> {
+                switch (ev.getAction()) {
+                    case MotionEvent.ACTION_DOWN: lxy[0]=(int)ev.getRawX(); lxy[1]=(int)ev.getRawY(); break;
+                    case MotionEvent.ACTION_MOVE:
+                        int dx=(int)ev.getRawX()-lxy[0]; int dy=(int)ev.getRawY()-lxy[1];
+                        int[] l=new int[2]; wr.getLocationOnScreen(l);
+                        wp.update(l[0]+dx, l[1]+dy, sw, ph);
+                        lxy[0]=(int)ev.getRawX(); lxy[1]=(int)ev.getRawY(); break;
+                }
+                return true;
+            });
+            wClose.setOnClickListener(vv -> wp.dismiss());
+            wDone.setOnClickListener(vv -> { exportToJson(); wp.dismiss(); });
+        });
+
+        final int[] highlightColor = {Color.YELLOW};
+        btnHighlight.setOnClickListener(v -> {
+            android.view.View wr = getLayoutInflater().inflate(R.layout.popup_text_color, null);
+            com.example.newcardmaker.ColorWheelView wh = wr.findViewById(R.id.color_wheel);
+            android.widget.EditText etH = wr.findViewById(R.id.et_hex_color);
+            android.view.View hPrev = wr.findViewById(R.id.view_hex_preview);
+            android.widget.TextView wDone = wr.findViewById(R.id.btn_color_done);
+            android.widget.TextView wClose = wr.findViewById(R.id.btn_color_close);
+            android.view.View wTitle = wr.findViewById(R.id.tv_color_title);
+            wh.setColor(highlightColor[0]);
+            hPrev.setBackgroundColor(highlightColor[0]);
+            etH.setText(String.format("%06X", 0xFFFFFF & highlightColor[0]));
+            wh.setOnColorChangedListener(c -> {
+                highlightColor[0] = c; hPrev.setBackgroundColor(c);
+                btnHighlight.setBackgroundColor(c);
+                etH.setText(String.format("%06X", 0xFFFFFF & c));
+                targetView.setHighlightColor(c);
+            });
+            int sw = getResources().getDisplayMetrics().widthPixels;
+            int ph = (int)(210 * getResources().getDisplayMetrics().density);
+            android.widget.PopupWindow wp = new android.widget.PopupWindow(wr, sw, ph, true);
+            wp.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+            wp.setElevation(20f); wp.setOutsideTouchable(true);
+            int sh = getResources().getDisplayMetrics().heightPixels;
+            wp.showAtLocation(getWindow().getDecorView().getRootView(), Gravity.TOP | Gravity.START, 0, (sh - ph) / 2);
+            final int[] lxy = {0, 0};
+            wTitle.setOnTouchListener((vv, ev) -> {
+                switch (ev.getAction()) {
+                    case MotionEvent.ACTION_DOWN: lxy[0]=(int)ev.getRawX(); lxy[1]=(int)ev.getRawY(); break;
+                    case MotionEvent.ACTION_MOVE:
+                        int dx=(int)ev.getRawX()-lxy[0]; int dy=(int)ev.getRawY()-lxy[1];
+                        int[] l=new int[2]; wr.getLocationOnScreen(l);
+                        wp.update(l[0]+dx, l[1]+dy, sw, ph);
+                        lxy[0]=(int)ev.getRawX(); lxy[1]=(int)ev.getRawY(); break;
+                }
+                return true;
+            });
+            wClose.setOnClickListener(vv -> wp.dismiss());
+            wDone.setOnClickListener(vv -> { exportToJson(); wp.dismiss(); });
+        });
 
         // ── LAYOUT ──
         android.widget.TextView btnL = root.findViewById(R.id.prop_btn_sel_left);
