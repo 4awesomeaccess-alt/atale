@@ -20634,9 +20634,9 @@ public class MainActivity extends AppCompatActivity {
         com.example.newcardmaker.StrokeTextView preview = root.findViewById(R.id.stroke_preview);
         android.widget.SeekBar seekWidth    = root.findViewById(R.id.stroke_seek_width);
         android.widget.TextView widthVal    = root.findViewById(R.id.stroke_width_val);
-        android.view.View colorPreview      = null;
-        android.widget.EditText etHex       = null;
-        com.example.newcardmaker.ColorWheelView wheel = null;
+        android.view.View colorPreview      = root.findViewById(R.id.stroke_color_preview);
+        android.widget.EditText etHex       = root.findViewById(R.id.stroke_et_hex);
+        com.example.newcardmaker.ColorWheelView wheel = root.findViewById(R.id.stroke_color_wheel);
 
         // ── Initial values ──
         preview.setText(targetText.getText());
