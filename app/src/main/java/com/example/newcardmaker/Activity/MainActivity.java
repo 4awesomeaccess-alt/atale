@@ -12678,7 +12678,7 @@ public class MainActivity extends AppCompatActivity {
                                 float dy = event.getRawY() - bLastY[0];
                                 bPopX[0] += (int) dx;
                                 bPopY[0] += (int) dy;
-                                borderPopup.update(bPopX[0], bPopY[0], -1, -1);
+                                borderPopup.update(bPopX[0], bPopY[0], screenWidth, -1);
                                 bLastX[0] = event.getRawX();
                                 bLastY[0] = event.getRawY();
                                 break;
