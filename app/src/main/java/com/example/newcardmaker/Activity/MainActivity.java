@@ -21445,7 +21445,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // ── Views
-        EditText etText = popupView.findViewById(R.id.et_arc_text);
+        EditText etText = popupView.findViewById(R.id.et_arc_text); // null if not in layout
         SeekBar sbAngle = popupView.findViewById(R.id.sb_arc_angle);
         SeekBar sbRadius = popupView.findViewById(R.id.sb_arc_radius);
         TextView tvAngleVal = popupView.findViewById(R.id.tv_angle_value);
@@ -21490,7 +21490,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // ── Current values set (existing arc hoy to preserve karo)
-        etText.setText(arcView.getText().toString());
+        if (etText != null) etText.setText(arcView.getText().toString());
 
         sbAngle.setMax(360);
         sbAngle.setProgress((int) arcView.getArcAngle());
@@ -21505,20 +21505,15 @@ public class MainActivity extends AppCompatActivity {
         btnArcDown.setAlpha(arcView.isArcUp() ? 0.4f : 1f);
 
         // ── Text change
-        etText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int i, int i1, int i2) {
-                arcView.setText(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
+        if (etText != null) {
+            etText.addTextChangedListener(new TextWatcher() {
+                @Override public void beforeTextChanged(CharSequence s, int i, int i1, int i2) {}
+                @Override public void onTextChanged(CharSequence s, int i, int i1, int i2) {
+                    arcView.setText(s.toString());
+                }
+                @Override public void afterTextChanged(Editable s) {}
+            });
+        }
 
         // ── Angle
         sbAngle.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

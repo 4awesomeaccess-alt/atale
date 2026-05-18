@@ -33,18 +33,17 @@
             android:textSize="12sp"
             android:textStyle="bold" />
 
-        <!-- Arc Toggle -->
-        <Button
+        <TextView
             android:id="@+id/btn_toggle_arc"
             android:layout_width="wrap_content"
             android:layout_height="26dp"
             android:text="⌢ Arc ON"
             android:textSize="10sp"
             android:textColor="#FFFFFF"
-            android:backgroundTint="#E65100"
-            android:stateListAnimator="@null"
-            android:layout_marginEnd="4dp"
-            android:paddingHorizontal="8dp" />
+            android:gravity="center"
+            android:background="#E65100"
+            android:paddingHorizontal="8dp"
+            android:layout_marginEnd="4dp" />
 
         <TextView
             android:id="@+id/btn_arc_done"
@@ -76,58 +75,37 @@
         android:orientation="horizontal"
         android:padding="8dp">
 
-        <!-- Left: Text input + Direction -->
+        <!-- Left: Direction buttons -->
         <LinearLayout
-            android:layout_width="110dp"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:gravity="center"
             android:paddingEnd="8dp">
 
-            <!-- Text input -->
-            <EditText
-                android:id="@+id/et_arc_text"
+            <TextView
+                android:id="@+id/btn_arc_up"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:hint="Text..."
-                android:textColor="#FFFFFF"
-                android:textColorHint="#6B7280"
+                android:layout_height="36dp"
+                android:text="⌢  Up"
                 android:textSize="12sp"
-                android:background="#374151"
-                android:paddingHorizontal="8dp"
-                android:layout_marginBottom="6dp" />
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="#E65100"
+                android:layout_marginBottom="8dp" />
 
-            <!-- Direction buttons -->
-            <LinearLayout
+            <TextView
+                android:id="@+id/btn_arc_down"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btn_arc_up"
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="1"
-                    android:text="⌢ Up"
-                    android:textSize="10sp"
-                    android:textColor="#FFFFFF"
-                    android:backgroundTint="#E65100"
-                    android:stateListAnimator="@null"
-                    android:layout_marginEnd="3dp" />
-
-                <Button
-                    android:id="@+id/btn_arc_down"
-                    android:layout_width="0dp"
-                    android:layout_height="30dp"
-                    android:layout_weight="1"
-                    android:text="⌣ Down"
-                    android:textSize="10sp"
-                    android:textColor="#FFFFFF"
-                    android:backgroundTint="#607D8B"
-                    android:stateListAnimator="@null"
-                    android:alpha="0.6" />
-
-            </LinearLayout>
+                android:layout_height="36dp"
+                android:text="⌣  Down"
+                android:textSize="12sp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="#607D8B"
+                android:alpha="0.6" />
 
         </LinearLayout>
 
@@ -145,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:text="Angle"
                 android:textColor="#9CA3AF"
-                android:textSize="9sp"
+                android:textSize="10sp"
                 android:layout_marginBottom="2dp" />
 
             <LinearLayout
@@ -153,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="12dp">
 
                 <SeekBar
                     android:id="@+id/sb_arc_angle"
@@ -167,7 +145,7 @@
 
                 <TextView
                     android:id="@+id/tv_angle_value"
-                    android:layout_width="32dp"
+                    android:layout_width="36dp"
                     android:layout_height="wrap_content"
                     android:text="180°"
                     android:textColor="#CFD8DC"
@@ -183,7 +161,7 @@
                 android:layout_height="wrap_content"
                 android:text="Radius"
                 android:textColor="#9CA3AF"
-                android:textSize="9sp"
+                android:textSize="10sp"
                 android:layout_marginBottom="2dp" />
 
             <LinearLayout
@@ -204,7 +182,7 @@
 
                 <TextView
                     android:id="@+id/tv_radius_value"
-                    android:layout_width="32dp"
+                    android:layout_width="36dp"
                     android:layout_height="wrap_content"
                     android:text="150"
                     android:textColor="#CFD8DC"
