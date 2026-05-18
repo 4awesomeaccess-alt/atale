@@ -99,22 +99,36 @@ public class ColorWheelView extends View {
         centerDotBorderPaint.setColor(Color.WHITE);
         centerDotBorderPaint.setShadowLayer(6f, 0, 0, Color.parseColor("#88000000"));
 
-        // Full smooth hue spectrum
+        // Full smooth hue spectrum — 37 stops
         hueColors = new int[]{
             0xFFFF0000, // Red 0°
-            0xFFFF4000, // Red-Orange
-            0xFFFF8000, // Orange
-            0xFFFFBF00, // Amber
+            0xFFFF2000,
+            0xFFFF4000,
+            0xFFFF6000,
+            0xFFFF8000, // Orange 30°
+            0xFFFFA000,
+            0xFFFFBF00,
+            0xFFFFD400,
             0xFFFFFF00, // Yellow 60°
-            0xFF80FF00, // Yellow-Green
+            0xFFCCFF00,
+            0xFF80FF00,
+            0xFF40FF00,
             0xFF00FF00, // Green 120°
-            0xFF00FF80, // Spring Green
+            0xFF00FF40,
+            0xFF00FF80,
+            0xFF00FFBF,
             0xFF00FFFF, // Cyan 180°
-            0xFF0080FF, // Azure
+            0xFF00BFFF,
+            0xFF0080FF,
+            0xFF0040FF,
             0xFF0000FF, // Blue 240°
-            0xFF8000FF, // Violet
+            0xFF4000FF,
+            0xFF8000FF,
+            0xFFBF00FF,
             0xFFFF00FF, // Magenta 300°
-            0xFFFF0080, // Rose
+            0xFFFF00BF,
+            0xFFFF0080,
+            0xFFFF0040,
             0xFFFF0000  // Red again
         };
     }
