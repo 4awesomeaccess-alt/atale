@@ -11662,7 +11662,7 @@ public class MainActivity extends AppCompatActivity {
                     // ════════════════════════════
 // ARC CONTROLS
 // ════════════════════════════
-                    TextView btn_curve = cv.findViewById(R.id.btn_curve);
+                    View btn_curve = cv.findViewById(R.id.btn_curve);
                     LinearLayout panelArc = cv.findViewById(R.id.panel_arc_controls);
                     SeekBar sbArcAngle = cv.findViewById(R.id.sb_arc_angle);
                     SeekBar sbArcRadius = cv.findViewById(R.id.sb_arc_radius);
