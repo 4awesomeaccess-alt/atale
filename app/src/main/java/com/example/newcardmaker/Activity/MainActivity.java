@@ -11593,10 +11593,10 @@ public class MainActivity extends AppCompatActivity {
         };
 
         if (tabAction != null) tabAction.setOnClickListener(tabClickListener);
-        if (tabSpacing != null) tabSpacing.setOnClickListener(tabClickListener);
-        if (tabTransformTab != null) tabTransformTab.setOnClickListener(tabClickListener);
-        if (tabEffects != null) tabEffects.setOnClickListener(tabClickListener);
-        if (tabLayout != null) tabLayout.setOnClickListener(tabClickListener);
+        if (tabSpacing != null) tabSpacing.setOnClickListener(v -> showTextPropertiesPopup(targetView, 0));
+        if (tabTransformTab != null) tabTransformTab.setOnClickListener(v -> showTextPropertiesPopup(targetView, 1));
+        if (tabEffects != null) tabEffects.setOnClickListener(v -> showTextPropertiesPopup(targetView, 2));
+        if (tabLayout != null) tabLayout.setOnClickListener(v -> showTextPropertiesPopup(targetView, 3));
 
         // ── Undo/Redo history
         final java.util.ArrayDeque<String> undoStack = new java.util.ArrayDeque<>();
@@ -20501,6 +20501,251 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    private void showTextPropertiesPopup(final StrokeTextView targetView, int initialTab) {
+
+        android.view.View root = getLayoutInflater().inflate(R.layout.popup_text_properties, null);
+
+        android.view.View dragHandle       = root.findViewById(R.id.prop_drag_handle);
+        android.widget.TextView btnClose   = root.findViewById(R.id.prop_btn_close);
+        android.widget.TextView btnDone    = root.findViewById(R.id.prop_btn_done);
+        android.widget.TextView tabSpacing = root.findViewById(R.id.prop_tab_spacing);
+        android.widget.TextView tabTransform = root.findViewById(R.id.prop_tab_transform);
+        android.widget.TextView tabEffects = root.findViewById(R.id.prop_tab_effects);
+        android.widget.TextView tabLayout  = root.findViewById(R.id.prop_tab_layout);
+        android.widget.LinearLayout panelSpacing  = root.findViewById(R.id.prop_panel_spacing);
+        android.widget.LinearLayout panelTransform = root.findViewById(R.id.prop_panel_transform);
+        android.widget.LinearLayout panelEffects  = root.findViewById(R.id.prop_panel_effects);
+        android.widget.LinearLayout panelLayout   = root.findViewById(R.id.prop_panel_layout);
+
+        android.widget.TextView[] tabs = {tabSpacing, tabTransform, tabEffects, tabLayout};
+        android.widget.LinearLayout[] panels = {panelSpacing, panelTransform, panelEffects, panelLayout};
+
+        // Tab switch helper
+        Runnable[] selectTab = {null};
+        final int[] curTab = {initialTab};
+        selectTab[0] = () -> {
+            for (int i = 0; i < tabs.length; i++) {
+                tabs[i].setBackgroundColor(i == curTab[0] ? 0xFF607D8B : 0xFFF3F4F6);
+                tabs[i].setTextColor(i == curTab[0] ? 0xFFFFFFFF : 0xFF6B7280);
+                panels[i].setVisibility(i == curTab[0] ? android.view.View.VISIBLE : android.view.View.GONE);
+            }
+        };
+        selectTab[0].run();
+
+        for (int i = 0; i < tabs.length; i++) {
+            final int idx = i;
+            tabs[i].setOnClickListener(v -> { curTab[0] = idx; selectTab[0].run(); });
+        }
+
+        // ── SPACING ──
+        android.widget.SeekBar sbLetter = root.findViewById(R.id.prop_sb_letter_spacing);
+        android.widget.SeekBar sbLine   = root.findViewById(R.id.prop_sb_line_spacing);
+        android.widget.SeekBar sbPad    = root.findViewById(R.id.prop_sb_text_padding);
+        android.widget.TextView tvLetter = root.findViewById(R.id.prop_tv_letter_val);
+        android.widget.TextView tvLine   = root.findViewById(R.id.prop_tv_line_val);
+        android.widget.TextView tvPad    = root.findViewById(R.id.prop_tv_pad_val);
+
+        sbLetter.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(SeekBar s) {}
+            @Override public void onStopTrackingTouch(SeekBar s) { exportToJson(); }
+            @Override public void onProgressChanged(SeekBar s, int p, boolean fromUser) {
+                if (!fromUser) return;
+                float spacing = (p - 50) / 50f;
+                targetView.setLetterSpacing(spacing);
+                tvLetter.setText(String.valueOf(p - 50));
+            }
+        });
+        sbLine.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(SeekBar s) {}
+            @Override public void onStopTrackingTouch(SeekBar s) { exportToJson(); }
+            @Override public void onProgressChanged(SeekBar s, int p, boolean fromUser) {
+                if (!fromUser) return;
+                float mult = 0.5f + p / 50f;
+                targetView.setLineSpacing(0, mult);
+                tvLine.setText(String.format("%.1f", mult));
+            }
+        });
+        sbPad.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(SeekBar s) {}
+            @Override public void onStopTrackingTouch(SeekBar s) { exportToJson(); }
+            @Override public void onProgressChanged(SeekBar s, int p, boolean fromUser) {
+                if (!fromUser) return;
+                targetView.setPadding(p, p, p, p);
+                tvPad.setText(String.valueOf(p));
+            }
+        });
+
+        // ── TRANSFORM ──
+        android.widget.SeekBar seekRot   = root.findViewById(R.id.prop_seek_rotation);
+        android.widget.SeekBar seekSX    = root.findViewById(R.id.prop_seek_scale_x);
+        android.widget.SeekBar seekSY    = root.findViewById(R.id.prop_seek_scale_y);
+        android.widget.SeekBar seekOp    = root.findViewById(R.id.prop_seek_opacity);
+        android.widget.TextView tvRot    = root.findViewById(R.id.prop_tv_rotation_val);
+        android.widget.TextView tvSX     = root.findViewById(R.id.prop_tv_scale_x_val);
+        android.widget.TextView tvSY     = root.findViewById(R.id.prop_tv_scale_y_val);
+        android.widget.TextView tvOp     = root.findViewById(R.id.prop_tv_opacity_val);
+
+        // Initial rotation
+        seekRot.setProgress((int) targetView.getRotation() + 180);
+        seekRot.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(SeekBar s) {}
+            @Override public void onStopTrackingTouch(SeekBar s) { exportToJson(); }
+            @Override public void onProgressChanged(SeekBar s, int p, boolean fromUser) {
+                if (!fromUser) return;
+                float rot = p - 180;
+                targetView.setRotation(rot);
+                tvRot.setText((int) rot + "°");
+            }
+        });
+        seekSX.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(SeekBar s) {}
+            @Override public void onStopTrackingTouch(SeekBar s) { exportToJson(); }
+            @Override public void onProgressChanged(SeekBar s, int p, boolean fromUser) {
+                if (!fromUser) return;
+                float sx = p / 100f;
+                targetView.setScaleX(sx);
+                tvSX.setText(String.format("%.1fx", sx));
+            }
+        });
+        seekSY.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(SeekBar s) {}
+            @Override public void onStopTrackingTouch(SeekBar s) { exportToJson(); }
+            @Override public void onProgressChanged(SeekBar s, int p, boolean fromUser) {
+                if (!fromUser) return;
+                float sy = p / 100f;
+                targetView.setScaleY(sy);
+                tvSY.setText(String.format("%.1fx", sy));
+            }
+        });
+        seekOp.setProgress((int)(targetView.getAlpha() * 100));
+        seekOp.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(SeekBar s) {}
+            @Override public void onStopTrackingTouch(SeekBar s) { exportToJson(); }
+            @Override public void onProgressChanged(SeekBar s, int p, boolean fromUser) {
+                if (!fromUser) return;
+                targetView.setAlpha(p / 100f);
+                tvOp.setText(p + "%");
+            }
+        });
+
+        // ── EFFECTS ──
+        android.widget.SeekBar sbShadow  = root.findViewById(R.id.prop_sb_shadow_radius);
+        android.widget.SeekBar sbShadowDx = root.findViewById(R.id.prop_seek_shadow_dx);
+        android.widget.SeekBar sbShadowDy = root.findViewById(R.id.prop_seek_shadow_dy);
+        android.widget.TextView tvShadow = root.findViewById(R.id.prop_tv_shadow_val);
+        android.widget.TextView tvSdx    = root.findViewById(R.id.prop_tv_shadow_dx_val);
+        android.widget.TextView tvSdy    = root.findViewById(R.id.prop_tv_shadow_dy_val);
+        android.widget.TextView btnShadowColor = root.findViewById(R.id.prop_btn_shadow_color);
+        android.widget.TextView btnHighlight   = root.findViewById(R.id.prop_btn_highlight_color);
+
+        final int[] shadowColor = {Color.parseColor("#80000000")};
+        sbShadow.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(SeekBar s) {}
+            @Override public void onStopTrackingTouch(SeekBar s) { exportToJson(); }
+            @Override public void onProgressChanged(SeekBar s, int p, boolean fromUser) {
+                if (!fromUser) return;
+                float dx = sbShadowDx.getProgress() - 25;
+                float dy = sbShadowDy.getProgress() - 25;
+                targetView.setShadowLayer(p, dx, dy, shadowColor[0]);
+                tvShadow.setText(String.valueOf(p));
+            }
+        });
+        sbShadowDx.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(SeekBar s) {}
+            @Override public void onStopTrackingTouch(SeekBar s) { exportToJson(); }
+            @Override public void onProgressChanged(SeekBar s, int p, boolean fromUser) {
+                if (!fromUser) return;
+                float dx = p - 25;
+                float dy = sbShadowDy.getProgress() - 25;
+                targetView.setShadowLayer(sbShadow.getProgress(), dx, dy, shadowColor[0]);
+                tvSdx.setText(String.valueOf((int) dx));
+            }
+        });
+        sbShadowDy.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(SeekBar s) {}
+            @Override public void onStopTrackingTouch(SeekBar s) { exportToJson(); }
+            @Override public void onProgressChanged(SeekBar s, int p, boolean fromUser) {
+                if (!fromUser) return;
+                float dx = sbShadowDx.getProgress() - 25;
+                float dy = p - 25;
+                targetView.setShadowLayer(sbShadow.getProgress(), dx, dy, shadowColor[0]);
+                tvSdy.setText(String.valueOf((int) dy));
+            }
+        });
+        btnShadowColor.setOnClickListener(v -> showColorPickerPopup(shadowColor[0], c -> {
+            shadowColor[0] = c;
+            btnShadowColor.setBackgroundColor(c);
+            float dx = sbShadowDx.getProgress() - 25;
+            float dy = sbShadowDy.getProgress() - 25;
+            targetView.setShadowLayer(sbShadow.getProgress(), dx, dy, c);
+        }));
+        btnHighlight.setOnClickListener(v -> showColorPickerPopup(Color.YELLOW, c -> {
+            targetView.setHighlightColor(c);
+            btnHighlight.setBackgroundColor(c);
+        }));
+
+        // ── LAYOUT ──
+        android.widget.TextView btnL = root.findViewById(R.id.prop_btn_sel_left);
+        android.widget.TextView btnR = root.findViewById(R.id.prop_btn_sel_right);
+        android.widget.TextView btnU = root.findViewById(R.id.prop_btn_sel_up);
+        android.widget.TextView btnD = root.findViewById(R.id.prop_btn_sel_down);
+        android.widget.SeekBar seekCorner = root.findViewById(R.id.prop_seek_corner_radius);
+        android.widget.TextView tvCorner  = root.findViewById(R.id.prop_tv_corner_val);
+        int step = (int)(2 * getResources().getDisplayMetrics().density);
+        btnL.setOnClickListener(v -> { targetView.setX(targetView.getX() - step); exportToJson(); });
+        btnR.setOnClickListener(v -> { targetView.setX(targetView.getX() + step); exportToJson(); });
+        btnU.setOnClickListener(v -> { targetView.setY(targetView.getY() - step); exportToJson(); });
+        btnD.setOnClickListener(v -> { targetView.setY(targetView.getY() + step); exportToJson(); });
+        seekCorner.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(SeekBar s) {}
+            @Override public void onStopTrackingTouch(SeekBar s) { exportToJson(); }
+            @Override public void onProgressChanged(SeekBar s, int p, boolean fromUser) {
+                if (!fromUser) return;
+                android.graphics.drawable.Drawable bg = targetView.getBackground();
+                if (bg instanceof GradientDrawable) ((GradientDrawable) bg).setCornerRadius(p);
+                tvCorner.setText(String.valueOf(p));
+            }
+        });
+
+        // ── PopupWindow ──
+        int screenW = getResources().getDisplayMetrics().widthPixels;
+        int popupH  = (int)(260 * getResources().getDisplayMetrics().density);
+        android.widget.PopupWindow popup = new android.widget.PopupWindow(
+                root, screenW, popupH, true);
+        popup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+        popup.setElevation(16f);
+        popup.setOutsideTouchable(true);
+
+        if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) {
+            selectionControlsPopup.dismiss();
+        }
+        int screenH = getResources().getDisplayMetrics().heightPixels;
+        popup.showAtLocation(getWindow().getDecorView().getRootView(),
+            Gravity.TOP | Gravity.START, 0, (screenH - popupH) / 2);
+        popup.setOnDismissListener(() -> {
+            if (selectionControlsPopup != null && !selectionControlsPopup.isShowing()) {
+                selectionControlsPopup.showAtLocation(mainLayout,
+                    Gravity.TOP | Gravity.LEFT, selControlsLastX, selControlsLastY);
+            }
+        });
+
+        // Drag
+        final int[] lxy = {0, 0};
+        dragHandle.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN: lxy[0]=(int)event.getRawX(); lxy[1]=(int)event.getRawY(); break;
+                case MotionEvent.ACTION_MOVE:
+                    int dx=(int)event.getRawX()-lxy[0]; int dy=(int)event.getRawY()-lxy[1];
+                    int[] loc=new int[2]; root.getLocationOnScreen(loc);
+                    popup.update(loc[0]+dx, loc[1]+dy, screenW, popupH);
+                    lxy[0]=(int)event.getRawX(); lxy[1]=(int)event.getRawY(); break;
+            }
+            return true;
+        });
+        btnClose.setOnClickListener(v -> popup.dismiss());
+        btnDone.setOnClickListener(v -> { exportToJson(); popup.dismiss(); });
+    }
 
     private void showCurvePopup(final StrokeTextView targetText) {
         showArcTextPopup(targetText);
