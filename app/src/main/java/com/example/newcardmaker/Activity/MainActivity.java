@@ -11606,7 +11606,7 @@ public class MainActivity extends AppCompatActivity {
         // ════════════════════════════
         // QUICK STYLE TOGGLE BUTTONS
         // ════════════════════════════
-        TextView btn_curve = cv.findViewById(R.id.btn_curve);
+        View btn_curve = cv.findViewById(R.id.btn_curve);
         TextView btnBold = cv.findViewById(R.id.btn_quick_bold);
         TextView btnItalic = cv.findViewById(R.id.btn_quick_italic);
         TextView btnUnderline = cv.findViewById(R.id.btn_quick_underline);
