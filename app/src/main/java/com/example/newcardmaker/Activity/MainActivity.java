@@ -20541,10 +20541,15 @@ public class MainActivity extends AppCompatActivity {
         // ── SPACING ──
         android.widget.SeekBar sbLetter = root.findViewById(R.id.prop_sb_letter_spacing);
         android.widget.SeekBar sbLine   = root.findViewById(R.id.prop_sb_line_spacing);
-        android.widget.SeekBar sbPad    = root.findViewById(R.id.prop_sb_text_padding);
+        android.widget.SeekBar sbPadX   = root.findViewById(R.id.prop_sb_pad_x);
+        android.widget.SeekBar sbPadY   = root.findViewById(R.id.prop_sb_pad_y);
         android.widget.TextView tvLetter = root.findViewById(R.id.prop_tv_letter_val);
         android.widget.TextView tvLine   = root.findViewById(R.id.prop_tv_line_val);
-        android.widget.TextView tvPad    = root.findViewById(R.id.prop_tv_pad_val);
+        android.widget.TextView tvPadX   = root.findViewById(R.id.prop_tv_pad_x_val);
+        android.widget.TextView tvPadY   = root.findViewById(R.id.prop_tv_pad_y_val);
+
+        final int[] padX = {targetView.getPaddingLeft()};
+        final int[] padY = {targetView.getPaddingTop()};
 
         sbLetter.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override public void onStartTrackingTouch(SeekBar s) {}
@@ -20566,13 +20571,26 @@ public class MainActivity extends AppCompatActivity {
                 tvLine.setText(String.format("%.1f", mult));
             }
         });
-        sbPad.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        sbPadX.setProgress(padX[0]);
+        sbPadX.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override public void onStartTrackingTouch(SeekBar s) {}
             @Override public void onStopTrackingTouch(SeekBar s) { exportToJson(); }
             @Override public void onProgressChanged(SeekBar s, int p, boolean fromUser) {
                 if (!fromUser) return;
-                targetView.setPadding(p, p, p, p);
-                tvPad.setText(String.valueOf(p));
+                padX[0] = p;
+                targetView.setPadding(p, padY[0], p, padY[0]);
+                tvPadX.setText(String.valueOf(p));
+            }
+        });
+        sbPadY.setProgress(padY[0]);
+        sbPadY.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(SeekBar s) {}
+            @Override public void onStopTrackingTouch(SeekBar s) { exportToJson(); }
+            @Override public void onProgressChanged(SeekBar s, int p, boolean fromUser) {
+                if (!fromUser) return;
+                padY[0] = p;
+                targetView.setPadding(padX[0], p, padX[0], p);
+                tvPadY.setText(String.valueOf(p));
             }
         });
 

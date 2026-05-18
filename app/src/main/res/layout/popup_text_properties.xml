@@ -153,11 +153,21 @@
                 <View android:layout_width="match_parent" android:layout_height="0.5dp" android:background="#D1D5DB" />
 
                 <LinearLayout android:layout_width="match_parent" android:layout_height="30dp" android:gravity="center_vertical" android:orientation="horizontal">
-                    <TextView android:layout_width="48dp" android:layout_height="wrap_content" android:text="Padding" android:textColor="#6B7280" android:textSize="8sp" android:textStyle="bold" />
-                    <TextView android:id="@+id/prop_btn_pad_minus" android:layout_width="22dp" android:layout_height="20dp" android:background="#374151" android:gravity="center" android:text="−" android:textColor="#F3F4F6" android:textSize="13sp" />
-                    <SeekBar android:id="@+id/prop_sb_text_padding" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="4dp" android:layout_weight="1" android:max="60" android:progress="10" android:progressTint="#607D8B" android:thumbTint="#2A3439" />
-                    <TextView android:id="@+id/prop_btn_pad_plus" android:layout_width="22dp" android:layout_height="20dp" android:background="#374151" android:gravity="center" android:text="+" android:textColor="#F3F4F6" android:textSize="13sp" />
-                    <TextView android:id="@+id/prop_tv_pad_val" android:layout_width="28dp" android:layout_height="wrap_content" android:gravity="center" android:text="10" android:textColor="#374151" android:textSize="8sp" android:textStyle="bold" />
+                    <TextView android:layout_width="48dp" android:layout_height="wrap_content" android:text="Pad X" android:textColor="#6B7280" android:textSize="8sp" android:textStyle="bold" />
+                    <TextView android:id="@+id/prop_btn_pad_x_minus" android:layout_width="22dp" android:layout_height="20dp" android:background="#374151" android:gravity="center" android:text="−" android:textColor="#F3F4F6" android:textSize="13sp" />
+                    <SeekBar android:id="@+id/prop_sb_pad_x" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="4dp" android:layout_weight="1" android:max="60" android:progress="10" android:progressTint="#607D8B" android:thumbTint="#2A3439" />
+                    <TextView android:id="@+id/prop_btn_pad_x_plus" android:layout_width="22dp" android:layout_height="20dp" android:background="#374151" android:gravity="center" android:text="+" android:textColor="#F3F4F6" android:textSize="13sp" />
+                    <TextView android:id="@+id/prop_tv_pad_x_val" android:layout_width="28dp" android:layout_height="wrap_content" android:gravity="center" android:text="10" android:textColor="#374151" android:textSize="8sp" android:textStyle="bold" />
+                </LinearLayout>
+
+                <View android:layout_width="match_parent" android:layout_height="0.5dp" android:background="#D1D5DB" />
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="30dp" android:gravity="center_vertical" android:orientation="horizontal">
+                    <TextView android:layout_width="48dp" android:layout_height="wrap_content" android:text="Pad Y" android:textColor="#6B7280" android:textSize="8sp" android:textStyle="bold" />
+                    <TextView android:id="@+id/prop_btn_pad_y_minus" android:layout_width="22dp" android:layout_height="20dp" android:background="#374151" android:gravity="center" android:text="−" android:textColor="#F3F4F6" android:textSize="13sp" />
+                    <SeekBar android:id="@+id/prop_sb_pad_y" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginHorizontal="4dp" android:layout_weight="1" android:max="60" android:progress="10" android:progressTint="#607D8B" android:thumbTint="#2A3439" />
+                    <TextView android:id="@+id/prop_btn_pad_y_plus" android:layout_width="22dp" android:layout_height="20dp" android:background="#374151" android:gravity="center" android:text="+" android:textColor="#F3F4F6" android:textSize="13sp" />
+                    <TextView android:id="@+id/prop_tv_pad_y_val" android:layout_width="28dp" android:layout_height="wrap_content" android:gravity="center" android:text="10" android:textColor="#374151" android:textSize="8sp" android:textStyle="bold" />
                 </LinearLayout>
 
             </LinearLayout>
