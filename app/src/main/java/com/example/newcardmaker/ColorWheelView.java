@@ -7,9 +7,10 @@ import android.view.MotionEvent;
 import android.view.View;
 
 /**
- * Color Wheel View — HSV based circular color picker
- * Center = brightness slider (black to selected hue)
- * Outer ring = hue wheel
+ * Color Wheel View — Redesigned HSV circular color picker
+ * Outer ring = smooth hue spectrum
+ * Inner circle = saturation (X) + brightness (Y)
+ * Thick ring border, glowing selectors, drop shadow
  */
 public class ColorWheelView extends View {
 
@@ -19,8 +20,12 @@ public class ColorWheelView extends View {
 
     private Paint huePaint;
     private Paint centerPaint;
-    private Paint selectorPaint;
+    private Paint selectorRingPaint;
+    private Paint selectorFillPaint;
+    private Paint shadowPaint;
     private Paint borderPaint;
+    private Paint centerDotPaint;
+    private Paint centerDotBorderPaint;
 
     private int[] hueColors;
     private SweepGradient hueShader;
@@ -28,6 +33,7 @@ public class ColorWheelView extends View {
 
     private float centerX, centerY;
     private float outerRadius, innerRadius;
+    private float ringThickness;
 
     private float selectedHue = 0f;
     private float selectedSat = 1f;
@@ -45,32 +51,71 @@ public class ColorWheelView extends View {
     public ColorWheelView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
+        setLayerType(LAYER_TYPE_SOFTWARE, null);
     }
 
     private void init() {
-        huePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        centerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        selectorPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        selectorPaint.setStyle(Paint.Style.STROKE);
-        selectorPaint.setStrokeWidth(3f);
-        selectorPaint.setColor(Color.WHITE);
+        setLayerType(LAYER_TYPE_SOFTWARE, null);
 
+        // Hue ring paint
+        huePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        huePaint.setStyle(Paint.Style.FILL);
+
+        // Center saturation/brightness paint
+        centerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        centerPaint.setStyle(Paint.Style.FILL);
+
+        // Hue selector — outer white ring
+        selectorRingPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        selectorRingPaint.setStyle(Paint.Style.STROKE);
+        selectorRingPaint.setStrokeWidth(3f);
+        selectorRingPaint.setColor(Color.WHITE);
+        selectorRingPaint.setShadowLayer(4f, 0, 0, Color.parseColor("#88000000"));
+
+        // Hue selector — inner color fill
+        selectorFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        selectorFillPaint.setStyle(Paint.Style.FILL);
+
+        // Shadow under wheel
+        shadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        shadowPaint.setStyle(Paint.Style.FILL);
+        shadowPaint.setColor(Color.parseColor("#33000000"));
+        shadowPaint.setShadowLayer(12f, 0, 4f, Color.parseColor("#55000000"));
+
+        // Outer border of ring
         borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         borderPaint.setStyle(Paint.Style.STROKE);
-        borderPaint.setStrokeWidth(2f);
-        borderPaint.setColor(Color.parseColor("#CCCCCC"));
+        borderPaint.setStrokeWidth(1.5f);
+        borderPaint.setColor(Color.parseColor("#33FFFFFF"));
 
-        // Hue wheel colors (full spectrum)
+        // Center dot fill (current color)
+        centerDotPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        centerDotPaint.setStyle(Paint.Style.FILL);
+
+        // Center dot border
+        centerDotBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        centerDotBorderPaint.setStyle(Paint.Style.STROKE);
+        centerDotBorderPaint.setStrokeWidth(2.5f);
+        centerDotBorderPaint.setColor(Color.WHITE);
+        centerDotBorderPaint.setShadowLayer(6f, 0, 0, Color.parseColor("#88000000"));
+
+        // Full smooth hue spectrum
         hueColors = new int[]{
-            0xFFFF0000, // Red
-            0xFFFF7F00, // Orange
-            0xFFFFFF00, // Yellow
-            0xFF00FF00, // Green
-            0xFF00FFFF, // Cyan
-            0xFF0000FF, // Blue
-            0xFF7F00FF, // Violet
-            0xFFFF00FF, // Magenta
-            0xFFFF0000  // Red again (close the circle)
+            0xFFFF0000, // Red 0°
+            0xFFFF4000, // Red-Orange
+            0xFFFF8000, // Orange
+            0xFFFFBF00, // Amber
+            0xFFFFFF00, // Yellow 60°
+            0xFF80FF00, // Yellow-Green
+            0xFF00FF00, // Green 120°
+            0xFF00FF80, // Spring Green
+            0xFF00FFFF, // Cyan 180°
+            0xFF0080FF, // Azure
+            0xFF0000FF, // Blue 240°
+            0xFF8000FF, // Violet
+            0xFFFF00FF, // Magenta 300°
+            0xFFFF0080, // Rose
+            0xFFFF0000  // Red again
         };
     }
 
@@ -79,102 +124,158 @@ public class ColorWheelView extends View {
         super.onSizeChanged(w, h, oldW, oldH);
         centerX = w / 2f;
         centerY = h / 2f;
-        outerRadius = Math.min(w, h) / 2f - 4f;
-        innerRadius = outerRadius * 0.65f;
+        outerRadius = Math.min(w, h) / 2f - 8f;
+        ringThickness = outerRadius * 0.22f; // Thicker ring
+        innerRadius = outerRadius - ringThickness;
 
-        // Hue ring gradient
         hueShader = new SweepGradient(centerX, centerY, hueColors, null);
 
-        // Initial selector position (top = 0° hue)
-        selectorX = centerX;
-        selectorY = centerY - (outerRadius + innerRadius) / 2f;
+        // Initial selector on ring
+        selectorX = centerX + (outerRadius - ringThickness / 2f);
+        selectorY = centerY;
 
-        // Center saturation/brightness radial
         updateCenterGradient();
     }
 
     private void updateCenterGradient() {
         int pureHue = Color.HSVToColor(new float[]{selectedHue, 1f, 1f});
+
+        // Horizontal: white → hue (saturation)
+        // Vertical: top bright → bottom dark (value)
+        // Simulated with two overlapping gradients
         centerShader = new RadialGradient(
-                centerX, centerY, innerRadius - 4f,
-                new int[]{Color.WHITE, pureHue, Color.BLACK},
-                new float[]{0f, 0.5f, 1f},
+                centerX, centerY, innerRadius - 2f,
+                new int[]{
+                    Color.WHITE,
+                    adjustAlpha(pureHue, 200),
+                    Color.BLACK
+                },
+                new float[]{0f, 0.55f, 1f},
                 Shader.TileMode.CLAMP
         );
         centerPaint.setShader(centerShader);
+    }
+
+    private int adjustAlpha(int color, int alpha) {
+        return (color & 0x00FFFFFF) | (alpha << 24);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         if (outerRadius <= 0) return;
 
-        // ── Draw Hue Ring ──
+        // ── Shadow under wheel ──
+        canvas.drawCircle(centerX, centerY + 3f, outerRadius + 2f, shadowPaint);
+
+        // ── Hue Ring ──
         huePaint.setShader(hueShader);
-        huePaint.setStyle(Paint.Style.FILL);
 
         Path ringPath = new Path();
-        RectF outerRect = new RectF(centerX - outerRadius, centerY - outerRadius,
-                centerX + outerRadius, centerY + outerRadius);
-        RectF innerRect = new RectF(centerX - innerRadius, centerY - innerRadius,
-                centerX + innerRadius, centerY + innerRadius);
+        RectF outerRect = new RectF(
+            centerX - outerRadius, centerY - outerRadius,
+            centerX + outerRadius, centerY + outerRadius);
+        RectF innerRect = new RectF(
+            centerX - innerRadius, centerY - innerRadius,
+            centerX + innerRadius, centerY + innerRadius);
+        ringPath.setFillType(Path.FillType.EVEN_ODD);
         ringPath.addOval(outerRect, Path.Direction.CW);
         ringPath.addOval(innerRect, Path.Direction.CCW);
         canvas.drawPath(ringPath, huePaint);
 
-        // ── Draw Center Circle ──
+        // ── Outer border ──
+        canvas.drawCircle(centerX, centerY, outerRadius, borderPaint);
+        canvas.drawCircle(centerX, centerY, innerRadius, borderPaint);
+
+        // ── Center circle ──
         if (centerShader != null) {
-            canvas.drawCircle(centerX, centerY, innerRadius - 4f, centerPaint);
+            canvas.drawCircle(centerX, centerY, innerRadius - 2f, centerPaint);
         }
 
-        // ── Draw Hue Selector ──
-        canvas.drawCircle(selectorX, selectorY, 10f, selectorPaint);
+        // ── Hue Selector (circle on ring) ──
+        float selectorRadius = ringThickness * 0.48f;
 
-        // ── Draw Center color dot ──
-        Paint dotPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        dotPaint.setColor(getCurrentColor());
-        float dotX = centerX + (selectedSat - 0.5f) * 2f * (innerRadius - 12f) * 0.7f;
-        float dotY = centerY - (selectedVal - 0.5f) * 2f * (innerRadius - 12f) * 0.7f;
-        canvas.drawCircle(dotX, dotY, 9f, dotPaint);
-        selectorPaint.setStrokeWidth(2f);
-        canvas.drawCircle(dotX, dotY, 9f, selectorPaint);
+        // Shadow
+        Paint selectorShadow = new Paint(Paint.ANTI_ALIAS_FLAG);
+        selectorShadow.setStyle(Paint.Style.FILL);
+        selectorShadow.setColor(Color.parseColor("#44000000"));
+        selectorShadow.setShadowLayer(8f, 0, 2f, Color.parseColor("#66000000"));
+        canvas.drawCircle(selectorX, selectorY, selectorRadius + 1f, selectorShadow);
+
+        // Fill with hue color
+        selectorFillPaint.setColor(Color.HSVToColor(new float[]{selectedHue, 1f, 1f}));
+        canvas.drawCircle(selectorX, selectorY, selectorRadius, selectorFillPaint);
+
+        // White border
+        canvas.drawCircle(selectorX, selectorY, selectorRadius, selectorRingPaint);
+
+        // ── Center dot (current color) ──
+        float dotX = getCenterDotX();
+        float dotY = getCenterDotY();
+        float dotR = innerRadius * 0.14f;
+
+        // Shadow
+        Paint dotShadow = new Paint(Paint.ANTI_ALIAS_FLAG);
+        dotShadow.setStyle(Paint.Style.FILL);
+        dotShadow.setColor(Color.parseColor("#44000000"));
+        dotShadow.setShadowLayer(6f, 0, 2f, Color.parseColor("#66000000"));
+        canvas.drawCircle(dotX, dotY, dotR + 1f, dotShadow);
+
+        // Dot fill
+        centerDotPaint.setColor(getCurrentColor());
+        canvas.drawCircle(dotX, dotY, dotR, centerDotPaint);
+
+        // Dot white border
+        canvas.drawCircle(dotX, dotY, dotR, centerDotBorderPaint);
+    }
+
+    private float getCenterDotX() {
+        float r = (innerRadius - 4f) * 0.85f;
+        return centerX + (selectedSat * 2f - 1f) * r;
+    }
+
+    private float getCenterDotY() {
+        float r = (innerRadius - 4f) * 0.85f;
+        return centerY - (selectedVal * 2f - 1f) * r;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() != MotionEvent.ACTION_DOWN &&
+            event.getAction() != MotionEvent.ACTION_MOVE) {
+            return super.onTouchEvent(event);
+        }
+
         float x = event.getX();
         float y = event.getY();
         float dx = x - centerX;
         float dy = y - centerY;
         float dist = (float) Math.sqrt(dx * dx + dy * dy);
 
-        if (event.getAction() == MotionEvent.ACTION_DOWN ||
-            event.getAction() == MotionEvent.ACTION_MOVE) {
+        if (dist >= innerRadius && dist <= outerRadius) {
+            // ── Hue ring ──
+            float angle = (float) Math.toDegrees(Math.atan2(dy, dx));
+            if (angle < 0) angle += 360f;
+            selectedHue = angle;
 
-            if (dist >= innerRadius && dist <= outerRadius) {
-                // Hue ring touched
-                float angle = (float) Math.toDegrees(Math.atan2(dy, dx));
-                if (angle < 0) angle += 360f;
-                selectedHue = angle;
+            float midR = (outerRadius + innerRadius) / 2f;
+            selectorX = centerX + midR * (float) Math.cos(Math.toRadians(angle));
+            selectorY = centerY + midR * (float) Math.sin(Math.toRadians(angle));
 
-                selectorX = centerX + ((outerRadius + innerRadius) / 2f) *
-                        (float) Math.cos(Math.toRadians(angle));
-                selectorY = centerY + ((outerRadius + innerRadius) / 2f) *
-                        (float) Math.sin(Math.toRadians(angle));
+            updateCenterGradient();
+            notifyListener();
+            invalidate();
+            return true;
 
-                updateCenterGradient();
-                notifyListener();
-                invalidate();
-                return true;
-
-            } else if (dist < innerRadius - 4f) {
-                // Center circle touched — saturation & brightness
-                selectedSat = Math.max(0f, Math.min(1f, 0.5f + dx / (innerRadius - 12f) / 0.7f / 2f));
-                selectedVal = Math.max(0f, Math.min(1f, 0.5f - dy / (innerRadius - 12f) / 0.7f / 2f));
-                notifyListener();
-                invalidate();
-                return true;
-            }
+        } else if (dist < innerRadius - 2f) {
+            // ── Saturation / Value ──
+            float r = (innerRadius - 4f) * 0.85f;
+            selectedSat = Math.max(0f, Math.min(1f, 0.5f + dx / r / 2f));
+            selectedVal = Math.max(0f, Math.min(1f, 0.5f - dy / r / 2f));
+            notifyListener();
+            invalidate();
+            return true;
         }
+
         return super.onTouchEvent(event);
     }
 
@@ -196,10 +297,9 @@ public class ColorWheelView extends View {
         selectedVal = hsv[2];
 
         if (outerRadius > 0) {
-            selectorX = centerX + ((outerRadius + innerRadius) / 2f) *
-                    (float) Math.cos(Math.toRadians(selectedHue));
-            selectorY = centerY + ((outerRadius + innerRadius) / 2f) *
-                    (float) Math.sin(Math.toRadians(selectedHue));
+            float midR = (outerRadius + innerRadius) / 2f;
+            selectorX = centerX + midR * (float) Math.cos(Math.toRadians(selectedHue));
+            selectorY = centerY + midR * (float) Math.sin(Math.toRadians(selectedHue));
             updateCenterGradient();
         }
         invalidate();
