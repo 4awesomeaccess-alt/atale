@@ -21450,9 +21450,9 @@ public class MainActivity extends AppCompatActivity {
         SeekBar sbRadius = popupView.findViewById(R.id.sb_arc_radius);
         TextView tvAngleVal = popupView.findViewById(R.id.tv_angle_value);
         TextView tvRadiusVal = popupView.findViewById(R.id.tv_radius_value);
-        Button btnArcUp = popupView.findViewById(R.id.btn_arc_up);
-        Button btnArcDown = popupView.findViewById(R.id.btn_arc_down);
-        Button btnDone = popupView.findViewById(R.id.btn_arc_done);
+        TextView btnArcUp = popupView.findViewById(R.id.btn_arc_up);
+        TextView btnArcDown = popupView.findViewById(R.id.btn_arc_down);
+        TextView btnDone = popupView.findViewById(R.id.btn_arc_done);
         ImageView btnClose = popupView.findViewById(R.id.btn_close_popup);
 
         // ✅ KEY FIX: Arc mode ON karo — existing text par curve apply thay
@@ -21465,7 +21465,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // ✅ Toggle button — arc ON/OFF
-        Button btnToggleArc = popupView.findViewById(R.id.btn_toggle_arc);
+        TextView btnToggleArc = popupView.findViewById(R.id.btn_toggle_arc);
         final boolean[] arcEnabled = {arcView.isArcMode()};
 
         // Toggle button UI update helper
