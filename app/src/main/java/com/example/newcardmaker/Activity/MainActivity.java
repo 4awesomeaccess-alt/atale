@@ -21445,7 +21445,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // ── Views
-        EditText etText = popupView.findViewById(R.id.et_arc_text); // null if not in layout
+        EditText etText = null; // removed from layout
         SeekBar sbAngle = popupView.findViewById(R.id.sb_arc_angle);
         SeekBar sbRadius = popupView.findViewById(R.id.sb_arc_radius);
         TextView tvAngleVal = popupView.findViewById(R.id.tv_angle_value);
