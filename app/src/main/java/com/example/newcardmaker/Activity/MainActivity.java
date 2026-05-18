@@ -13147,6 +13147,13 @@ public class MainActivity extends AppCompatActivity {
         });
       /*  if (btnBgImage1 != null)
             btnBgImage1.setOnClickListener(v -> showTextBgImageDialog(targetView));*/
+
+        // ── Curve
+        View btnCurve = cv.findViewById(R.id.btn_sel_curve);
+        if (btnCurve != null) {
+            btnCurve.setOnClickListener(v -> showCurvePopup(targetView));
+        }
+
         // ── BG Color
         View btnBgColor = cv.findViewById(R.id.btn_sel_bg_color);
         if (btnBgColor != null) {
@@ -20617,6 +20624,135 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    private void showCurvePopup(final StrokeTextView targetText) {
+
+        // ── XML Inflate ──
+        android.view.View root = getLayoutInflater().inflate(R.layout.popup_curve, null);
+
+        android.view.View dragHandle       = root.findViewById(R.id.curve_drag_handle);
+        android.widget.TextView btnClose   = root.findViewById(R.id.curve_btn_close);
+        android.widget.TextView btnDone    = root.findViewById(R.id.curve_btn_done);
+        android.widget.TextView btnNone    = root.findViewById(R.id.curve_btn_none);
+        android.widget.TextView btnUp      = root.findViewById(R.id.curve_btn_up);
+        android.widget.TextView btnDown    = root.findViewById(R.id.curve_btn_down);
+        android.widget.TextView btnRemove  = root.findViewById(R.id.curve_btn_remove);
+        android.widget.SeekBar seekRadius  = root.findViewById(R.id.curve_seek_radius);
+        android.widget.TextView radiusVal  = root.findViewById(R.id.curve_radius_val);
+
+        // ── State ──
+        final int[] curveMode   = {0}; // 0=none, 1=up, 2=down
+        final float[] radius    = {800f};
+
+        // ── Tab select helper ──
+        android.widget.TextView[] tabs = {btnNone, btnUp, btnDown};
+        Runnable selectTab = () -> {
+            for (int i = 0; i < tabs.length; i++) {
+                tabs[i].setBackgroundColor(i == curveMode[0] ? 0xFF607D8B : 0xFF374151);
+                tabs[i].setTextColor(i == curveMode[0] ? 0xFFFFFFFF : 0xFF9CA3AF);
+            }
+        };
+
+        // ── Apply helper ──
+        Runnable applyCurve = () -> {
+            if (curveMode[0] == 0) {
+                targetText.setArcMode(false);
+            } else {
+                float r = 200f + (100f - radius[0]) * 12f; // 200–1400, inverted (small radius = tight curve)
+                targetText.setRadius(r);
+                targetText.setArcUp(curveMode[0] == 1);
+                targetText.setArcMode(true);
+            }
+            targetText.invalidate();
+            targetText.requestLayout();
+        };
+
+        // Initial state from view
+        if (targetText.isArcMode()) {
+            curveMode[0] = targetText.isArcUp() ? 1 : 2;
+            float r = targetText.getRadius();
+            radius[0] = Math.min(100, Math.max(0, (1400f - r) / 12f));
+            seekRadius.setProgress((int) radius[0]);
+            radiusVal.setText(String.valueOf((int) radius[0]));
+        }
+        selectTab.run();
+
+        // ── Button listeners ──
+        btnNone.setOnClickListener(v -> {
+            curveMode[0] = 0; selectTab.run(); applyCurve.run();
+        });
+        btnUp.setOnClickListener(v -> {
+            curveMode[0] = 1; selectTab.run(); applyCurve.run();
+        });
+        btnDown.setOnClickListener(v -> {
+            curveMode[0] = 2; selectTab.run(); applyCurve.run();
+        });
+
+        seekRadius.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onProgressChanged(android.widget.SeekBar s, int progress, boolean fromUser) {
+                if (!fromUser) return;
+                radius[0] = progress;
+                radiusVal.setText(String.valueOf(progress));
+                applyCurve.run();
+            }
+        });
+
+        btnRemove.setOnClickListener(v -> {
+            targetText.setArcMode(false);
+            targetText.invalidate();
+            curveMode[0] = 0;
+            selectTab.run();
+        });
+
+        // ── PopupWindow ──
+        int screenW = getResources().getDisplayMetrics().widthPixels;
+        int popupH  = (int)(160 * getResources().getDisplayMetrics().density);
+        android.widget.PopupWindow popup = new android.widget.PopupWindow(
+                root, screenW, popupH, true);
+        popup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+        popup.setElevation(16f);
+        popup.setOutsideTouchable(true);
+
+        // Text Controls hide
+        if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) {
+            selectionControlsPopup.dismiss();
+        }
+
+        int screenH = getResources().getDisplayMetrics().heightPixels;
+        popup.showAtLocation(getWindow().getDecorView().getRootView(),
+            Gravity.TOP | Gravity.START, 0, (screenH - popupH) / 2);
+
+        // Text Controls restore
+        popup.setOnDismissListener(() -> {
+            if (selectionControlsPopup != null && !selectionControlsPopup.isShowing()) {
+                selectionControlsPopup.showAtLocation(mainLayout,
+                    Gravity.TOP | Gravity.LEFT, selControlsLastX, selControlsLastY);
+            }
+        });
+
+        // ── Drag ──
+        final int[] lastXY = {0, 0};
+        dragHandle.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    lastXY[0] = (int) event.getRawX();
+                    lastXY[1] = (int) event.getRawY(); break;
+                case MotionEvent.ACTION_MOVE:
+                    int dx = (int) event.getRawX() - lastXY[0];
+                    int dy = (int) event.getRawY() - lastXY[1];
+                    int[] loc = new int[2]; root.getLocationOnScreen(loc);
+                    popup.update(loc[0] + dx, loc[1] + dy, screenW, popupH);
+                    lastXY[0] = (int) event.getRawX();
+                    lastXY[1] = (int) event.getRawY(); break;
+            }
+            return true;
+        });
+
+        btnClose.setOnClickListener(v -> popup.dismiss());
+        btnDone.setOnClickListener(v -> { exportToJson(); popup.dismiss(); });
+    }
 
     private void showStrokeDialog(final StrokeTextView targetText) {
 
