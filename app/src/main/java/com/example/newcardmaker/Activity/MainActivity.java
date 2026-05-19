@@ -16035,7 +16035,6 @@ public class MainActivity extends AppCompatActivity {
         popupView.findViewById(R.id.btn_same_height).setOnClickListener(alignListener);
         popupView.findViewById(R.id.btn_same_width).setOnClickListener(alignListener);
         popupView.findViewById(R.id.btn_same_size).setOnClickListener(alignListener);
-        popupView.findViewById(R.id.btn_fit_canvas).setOnClickListener(alignListener);
         popupView.findViewById(R.id.btn_flip_h).setOnClickListener(alignListener);
         popupView.findViewById(R.id.btn_flip_v).setOnClickListener(alignListener);
         popupView.findViewById(R.id.btn_rotate_90).setOnClickListener(alignListener);
