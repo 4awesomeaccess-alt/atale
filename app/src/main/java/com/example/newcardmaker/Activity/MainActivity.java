@@ -3938,7 +3938,59 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ImageListActivity.class);
             startActivity(intent);
         } else if (id.getId() == R.id.btn_grid_frame) {
-            showGridFrameDialog();
+            // Direct GridListActivity open — cols/shape dialog
+            android.view.View root = getLayoutInflater().inflate(R.layout.dialog_grid_frame, null);
+            AlertDialog dlg = new AlertDialog.Builder(this).setView(root).create();
+            dlg.getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+            final int[] cols = {3};
+            final String[] shape = {"ROUNDED"};
+            final boolean[] showName = {true}, showInfo = {true};
+
+            TextView tvCol = root.findViewById(R.id.tv_col_count);
+            tvCol.setText("3");
+            root.findViewById(R.id.btn_col_minus).setOnClickListener(v2 -> { if (cols[0] > 1) { cols[0]--; tvCol.setText(String.valueOf(cols[0])); } });
+            root.findViewById(R.id.btn_col_plus).setOnClickListener(v2 -> { if (cols[0] < 6) { cols[0]++; tvCol.setText(String.valueOf(cols[0])); } });
+
+            TextView bC = root.findViewById(R.id.btn_shape_circle);
+            TextView bR = root.findViewById(R.id.btn_shape_rounded);
+            TextView bS = root.findViewById(R.id.btn_shape_square);
+            bR.setBackgroundColor(Color.parseColor("#1565C0")); bR.setTextColor(Color.WHITE);
+            View.OnClickListener sl = v2 -> {
+                for (TextView b : new TextView[]{bC, bR, bS}) { b.setBackgroundColor(Color.parseColor("#E3F2FD")); b.setTextColor(Color.parseColor("#1565C0")); }
+                ((TextView) v2).setBackgroundColor(Color.parseColor("#1565C0")); ((TextView) v2).setTextColor(Color.WHITE);
+                shape[0] = v2 == bC ? "CIRCLE" : v2 == bS ? "SQUARE" : "ROUNDED";
+            };
+            bC.setOnClickListener(sl); bR.setOnClickListener(sl); bS.setOnClickListener(sl);
+
+            TextView btnTN = root.findViewById(R.id.btn_toggle_name);
+            TextView btnTI = root.findViewById(R.id.btn_toggle_info);
+            btnTN.setOnClickListener(v2 -> { showName[0] = !showName[0]; btnTN.setBackgroundColor(showName[0] ? Color.parseColor("#1565C0") : Color.parseColor("#E3F2FD")); btnTN.setTextColor(showName[0] ? Color.WHITE : Color.parseColor("#1565C0")); btnTN.setText(showName[0] ? "✓ Name" : "✕ Name"); });
+            btnTI.setOnClickListener(v2 -> { showInfo[0] = !showInfo[0]; btnTI.setBackgroundColor(showInfo[0] ? Color.parseColor("#1565C0") : Color.parseColor("#E3F2FD")); btnTI.setTextColor(showInfo[0] ? Color.WHITE : Color.parseColor("#1565C0")); btnTI.setText(showInfo[0] ? "✓ %" : "✕ %"); });
+
+            root.findViewById(R.id.btn_grid_cancel).setOnClickListener(v2 -> dlg.dismiss());
+            root.findViewById(R.id.btn_grid_add).setOnClickListener(v2 -> {
+                dlg.dismiss();
+                // Empty cells banao — 1 row thi start
+                int initRows = 1;
+                List<JSONObject> cellDataList = new ArrayList<>();
+                for (int ci = 0; ci < initRows * cols[0]; ci++) {
+                    try { cellDataList.add(new JSONObject()); } catch (Exception e) { e.printStackTrace(); }
+                }
+                // Grid canvas par add karo
+                createGridPhotoFrame(initRows, cols[0], initRows * cols[0], shape[0], 200, showName[0], showInfo[0]);
+                // GridListActivity open karo
+                new android.os.Handler().postDelayed(() -> {
+                    for (int ci = mainLayout.getChildCount() - 1; ci >= 0; ci--) {
+                        View child = mainLayout.getChildAt(ci);
+                        if (child instanceof RelativeLayout && "GRID_FRAME".equals(child.getTag(R.id.btn_set_background))) {
+                            showGridListDialog((RelativeLayout) child);
+                            break;
+                        }
+                    }
+                }, 200);
+            });
+            dlg.show();
         }
     }
 
