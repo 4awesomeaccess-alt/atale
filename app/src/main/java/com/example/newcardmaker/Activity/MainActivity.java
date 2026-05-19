@@ -3900,8 +3900,12 @@ public class MainActivity extends AppCompatActivity {
             saveAllPagesAsImages(); // હવે આ બધા પેજને ફોટા તરીકે સેવ કરશે
         } else if (id.getId() == R.id.btn_download_pdf) {
 
-            exportToJson(); // JSON સેવ કરો
-            //saveAllPagesAsPdf(); // પીડીએફ ડાઉનલોડ શરૂ કરો
+            // ── Premium check
+            if (!SubscriptionManager.getInstance(this).isSubscribed()) {
+                showSubscriptionDialog();
+                return;
+            }
+            exportToJson();
             saveAllPagesAsClickablePdf();
             Toast.makeText(this, "Pdf download thay che ", Toast.LENGTH_SHORT).show();
         } else if (id.getId() == R.id.btn_remove_bg_offline) {
