@@ -4019,6 +4019,31 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    private void setGridContainerTouch(RelativeLayout gridContainer) {
+        final float[] downX = {0}, downY = {0}, startVX = {0}, startVY = {0};
+        gridContainer.setOnTouchListener((view, event) -> {
+            switch (event.getActionMasked()) {
+                case MotionEvent.ACTION_DOWN:
+                    downX[0] = event.getRawX(); downY[0] = event.getRawY();
+                    startVX[0] = view.getX();   startVY[0] = view.getY();
+                    currentlySelectedGrid = (RelativeLayout) view;
+                    selectView(view);
+                    return true;
+                case MotionEvent.ACTION_MOVE:
+                    view.setX(startVX[0] + event.getRawX() - downX[0]);
+                    view.setY(startVY[0] + event.getRawY() - downY[0]);
+                    if (gridEditPopup != null && gridEditPopup.isShowing()) gridEditPopup.dismiss();
+                    return true;
+                case MotionEvent.ACTION_UP:
+                    float dist = (float) Math.sqrt(Math.pow(event.getRawX() - downX[0], 2) + Math.pow(event.getRawY() - downY[0], 2));
+                    if (dist < 10) showGridEditPopup((RelativeLayout) view);
+                    exportToJson();
+                    return true;
+            }
+            return false;
+        });
+    }
+
     private void createDraggableGrid(int cols, String shape, int cellSizePx,
                                      boolean showName, boolean showInfo) {
         int gap   = 8;
@@ -4129,16 +4154,15 @@ public class MainActivity extends AppCompatActivity {
                     exportToJson();
                     // Save grid meta
                     gridContainer.setTag(R.id.btn_grid_frame, new GridMeta(
-                        currentRows[0], cols, shape, cellSizePx, gap, showName, showInfo,
-                        currentGridFrameUrl, currentGridFrameMaskUrl, currentGridFrameTopUrl,
-                        cellDataList));
+                        currentRows[0], cols, shape, cellSizePx,
+                        showName, showInfo, cellDataList));
                     return true;
             }
             return false;
         });
 
         // Touch for move/select
-        applyTouchListenerForSticker(gridContainer);
+        setGridContainerTouch(gridContainer);
         mainLayout.addView(gridContainer);
         selectView(gridContainer);
         exportToJson();
