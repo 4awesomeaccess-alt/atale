@@ -3951,27 +3951,29 @@ public class MainActivity extends AppCompatActivity {
         root.setOrientation(LinearLayout.VERTICAL);
         root.setPadding(24, 20, 24, 16);
 
-        // ── Rows
-        TextView lblRows = new TextView(this);
-        lblRows.setText("Rows:");
-        root.addView(lblRows);
-        final int[] rows = {3};
-        android.widget.NumberPicker npRows = new android.widget.NumberPicker(this);
-        npRows.setMinValue(1);
-        npRows.setMaxValue(10);
-        npRows.setValue(3);
-        npRows.setOnValueChangedListener((p, o, n) -> rows[0] = n);
-        root.addView(npRows);
+        // ── Total Photos
+        TextView lblPhotos = new TextView(this);
+        lblPhotos.setText("Total Photos:");
+        lblPhotos.setPadding(0, 0, 0, 4);
+        root.addView(lblPhotos);
+        final int[] totalPhotos = {10};
+        android.widget.NumberPicker npPhotos = new android.widget.NumberPicker(this);
+        npPhotos.setMinValue(1);
+        npPhotos.setMaxValue(50);
+        npPhotos.setValue(10);
+        npPhotos.setOnValueChangedListener((p, o, n) -> totalPhotos[0] = n);
+        root.addView(npPhotos);
 
         // ── Cols
         TextView lblCols = new TextView(this);
         lblCols.setText("Columns:");
+        lblCols.setPadding(0, 12, 0, 4);
         root.addView(lblCols);
-        final int[] cols = {4};
+        final int[] cols = {3};
         android.widget.NumberPicker npCols = new android.widget.NumberPicker(this);
         npCols.setMinValue(1);
         npCols.setMaxValue(6);
-        npCols.setValue(4);
+        npCols.setValue(3);
         npCols.setOnValueChangedListener((p, o, n) -> cols[0] = n);
         root.addView(npCols);
 
@@ -4027,17 +4029,12 @@ public class MainActivity extends AppCompatActivity {
         seekCell.setProgress(200);
         seekCell.setOnSeekBarChangeListener(
                 new android.widget.SeekBar.OnSeekBarChangeListener() {
-                    public void onProgressChanged(android.widget.SeekBar s,
-                                                  int p, boolean f) {
+                    public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) {
                         cellSize[0] = p;
                         lblSize.setText("Cell Size: " + p + "px");
                     }
-
-                    public void onStartTrackingTouch(android.widget.SeekBar s) {
-                    }
-
-                    public void onStopTrackingTouch(android.widget.SeekBar s) {
-                    }
+                    public void onStartTrackingTouch(android.widget.SeekBar s) {}
+                    public void onStopTrackingTouch(android.widget.SeekBar s) {}
                 });
         root.addView(seekCell);
 
@@ -4051,8 +4048,7 @@ public class MainActivity extends AppCompatActivity {
         btnToggleName.setOnClickListener(v -> {
             showName[0] = !showName[0];
             btnToggleName.setBackgroundColor(showName[0]
-                    ? Color.parseColor("#1565C0")
-                    : Color.parseColor("#90CAF9"));
+                    ? Color.parseColor("#1565C0") : Color.parseColor("#90CAF9"));
             btnToggleName.setText(showName[0] ? "✓ Name Text" : "✕ Name Text");
         });
         root.addView(btnToggleName);
@@ -4064,24 +4060,23 @@ public class MainActivity extends AppCompatActivity {
         btnToggleInfo.setOnClickListener(v -> {
             showInfo[0] = !showInfo[0];
             btnToggleInfo.setBackgroundColor(showInfo[0]
-                    ? Color.parseColor("#1565C0")
-                    : Color.parseColor("#90CAF9"));
+                    ? Color.parseColor("#1565C0") : Color.parseColor("#90CAF9"));
             btnToggleInfo.setText(showInfo[0] ? "✓ Info Text (%)" : "✕ Info Text (%)");
         });
         root.addView(btnToggleInfo);
 
-        builder.setView(new ScrollView(this) {{
-            addView(root);
-        }});
-        builder.setPositiveButton("Create Grid", (d, w) ->
-                createGridPhotoFrame(rows[0], cols[0],
-                        selectedShape[0], cellSize[0],
-                        showName[0], showInfo[0]));
+        builder.setView(new ScrollView(this) {{ addView(root); }});
+        builder.setPositiveButton("Create Grid", (d, w) -> {
+            // ── Auto calculate rows from totalPhotos + cols
+            int autoRows = (int) Math.ceil((double) totalPhotos[0] / cols[0]);
+            createGridPhotoFrame(autoRows, cols[0], totalPhotos[0],
+                    selectedShape[0], cellSize[0], showName[0], showInfo[0]);
+        });
         builder.setNegativeButton("Cancel", null);
         builder.show();
     }
 
-    private void createGridPhotoFrame(int rows, int cols,
+    private void createGridPhotoFrame(int rows, int cols, int totalPhotos,
                                       String shape, int cellSizePx,
                                       boolean showName, boolean showInfo) {
 
@@ -4093,12 +4088,10 @@ public class MainActivity extends AppCompatActivity {
         int totalW = cols * cellSizePx + (cols - 1) * gap;
         int totalH = rows * cellTotalH + (rows - 1) * gap;
 
-        // ── Outer RelativeLayout — mainLayout ના child
         RelativeLayout gridContainer = new RelativeLayout(this);
 
         RelativeLayout.LayoutParams outerLp =
                 new RelativeLayout.LayoutParams(totalW, totalH);
-        // ✅ CENTER — mainLayout center માં
         int cx = (mainLayout.getWidth() - totalW) / 2;
         int cy = (mainLayout.getHeight() - totalH) / 2;
         outerLp.leftMargin = cx > 0 ? cx : 0;
@@ -4111,6 +4104,9 @@ public class MainActivity extends AppCompatActivity {
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 final int cellIdx = r * cols + c;
+
+                // ── totalPhotos thi vahu cells skip karo
+                if (cellIdx >= totalPhotos) break;
 
                 LinearLayout cell = new LinearLayout(this);
                 cell.setOrientation(LinearLayout.VERTICAL);
