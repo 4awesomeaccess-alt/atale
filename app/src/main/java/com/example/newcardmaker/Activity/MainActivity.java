@@ -11148,7 +11148,7 @@ public class MainActivity extends AppCompatActivity {
                                     applySelectionBorder(view);
                                     saveOriginalSize(view);
                                 }
-                                showStickerToolbar(imageView);
+                                showSelectionControlsForImage(imageView);
                                 seekMultiSize.setProgress(50);
                                 tvSizeLabel.setText("+0.0sp");
                                 updateMultiSelectBtnLabel();
@@ -11213,7 +11213,7 @@ public class MainActivity extends AppCompatActivity {
                                     showMultiSelectPopup();
                                 }
                             } else {
-                                showStickerToolbar(imageView);
+                                showSelectionControlsForImage(imageView);
 //                                showSelectionControlsForImage(imageView);
                             }
                         }
@@ -15271,6 +15271,125 @@ public class MainActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     android.widget.Toast.makeText(this, "Duplicate failed: " + e.getMessage(), android.widget.Toast.LENGTH_SHORT).show();
                 }
+            });
+        }
+
+        // ── Lock / Unlock
+        TextView btnLock = cv.findViewById(R.id.btn_pop_lock);
+        if (btnLock != null) {
+            boolean isLocked = lockedViews.contains(targetView);
+            btnLock.setText(isLocked ? "🔒 Locked" : "🔓 Lock");
+            btnLock.setBackgroundColor(isLocked ? android.graphics.Color.parseColor("#FFCDD2") : android.graphics.Color.parseColor("#E8F5E9"));
+            btnLock.setTextColor(android.graphics.Color.parseColor("#37474F"));
+            btnLock.setOnClickListener(v -> {
+                dismissSelectionControls();
+                toggleLock(targetView);
+            });
+        }
+
+        // ── Replace Sticker
+        TextView btnReplace = cv.findViewById(R.id.btn_pop_replace_sticker);
+        if (btnReplace != null) {
+            btnReplace.setOnClickListener(v -> {
+                dismissSelectionControls();
+                Object catTag = targetView.getTag(R.id.btn_add_sticker);
+                String catId = (catTag != null) ? catTag.toString() : "";
+                if (catId.isEmpty()) {
+                    android.widget.Toast.makeText(this, "આ sticker માટે category ID નથી", android.widget.Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                showReplaceStickerDialog(targetView, catId);
+            });
+        }
+
+        // ── Select Photo (FRAMED_IMAGE only)
+        Object uriTag = targetView.getTag(R.id.btn_set_background);
+        boolean isFramedImage = "FRAMED_IMAGE".equals(uriTag);
+
+        TextView btnSelectPhoto = cv.findViewById(R.id.btnSelectPhoto);
+        if (btnSelectPhoto != null) {
+            btnSelectPhoto.setVisibility(isFramedImage ? View.VISIBLE : View.GONE);
+            btnSelectPhoto.setOnClickListener(v -> {
+                dismissSelectionControls();
+                currentFrameTargetSticker = targetView;
+                Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                galleryIntent.setType("image/*");
+                startActivityForResult(Intent.createChooser(galleryIntent, "Photo Select"), REQUEST_FRAME_PHOTO_ADJUST);
+            });
+        }
+
+        // ── Frame Color (FRAMED_IMAGE only)
+        TextView btnFrameColor = cv.findViewById(R.id.btn_pop_frame_color);
+        if (btnFrameColor != null) {
+            btnFrameColor.setVisibility(isFramedImage ? View.VISIBLE : View.GONE);
+            btnFrameColor.setOnClickListener(v -> {
+                dismissSelectionControls();
+                showFrameColorChangeDialog(targetView);
+            });
+        }
+
+        // ── Crop
+        TextView btnCrop = cv.findViewById(R.id.btn_pop_crop);
+        if (btnCrop != null) {
+            btnCrop.setVisibility(isFramedImage ? View.GONE : View.VISIBLE);
+            btnCrop.setOnClickListener(v -> {
+                dismissSelectionControls();
+                showCropOption(targetView);
+            });
+        }
+
+        // ── Freehand Crop
+        TextView btnFreehand = cv.findViewById(R.id.btn_pop_freehand_crop);
+        if (btnFreehand != null) {
+            btnFreehand.setVisibility(isFramedImage ? View.GONE : View.VISIBLE);
+            btnFreehand.setOnClickListener(v -> {
+                dismissSelectionControls();
+                openFreehandCrop(targetView);
+            });
+        }
+
+        // ── Delete
+        TextView btnDelete = cv.findViewById(R.id.btn_pop_delete);
+        if (btnDelete != null) {
+            btnDelete.setOnClickListener(v -> {
+                try {
+                    JSONObject sObj = new JSONObject();
+                    Object delUriTag = targetView.getTag(R.id.btn_set_background);
+                    String delUriStr = delUriTag != null ? delUriTag.toString() : "";
+                    sObj.put("uri", delUriStr);
+                    Object delCatTag = targetView.getTag(R.id.btn_add_sticker);
+                    sObj.put("catid", delCatTag != null ? delCatTag.toString() : "");
+                    Object delLocTag = targetView.getTag(R.id.btn_location);
+                    if (delLocTag != null) sObj.put("mapUrl", delLocTag.toString());
+                    float sw = mainLayout.getWidth();
+                    float sh = mainLayout.getHeight();
+                    sObj.put("xPercent", (targetView.getX() / sw) * 100);
+                    sObj.put("yPercent", (targetView.getY() / sh) * 100);
+                    ViewGroup.LayoutParams dlp = targetView.getLayoutParams();
+                    int dw = dlp != null && dlp.width > 0 ? dlp.width : targetView.getWidth();
+                    int dh = dlp != null && dlp.height > 0 ? dlp.height : targetView.getHeight();
+                    sObj.put("widthPercent", ((float) dw / sw) * 100);
+                    sObj.put("heightPercent", ((float) dh / sh) * 100);
+                    sObj.put("rotation", targetView.getRotation());
+                    sObj.put("scaleX", targetView.getScaleX());
+                    sObj.put("scaleY", targetView.getScaleY());
+                    sObj.put("isFramedImage", "FRAMED_IMAGE".equals(delUriStr));
+                    if ("FRAMED_IMAGE".equals(delUriStr)) {
+                        Object topTag = targetView.getTag(R.id.btn_add_sticker);
+                        Object maskTag = targetView.getTag(R.id.btn_location);
+                        Object colorTag = targetView.getTag(R.id.seek_multi_size);
+                        sObj.put("frameTopUrl", topTag != null ? topTag.toString() : "");
+                        sObj.put("frameMaskUrl", maskTag != null ? maskTag.toString() : "");
+                        sObj.put("frameColor", colorTag instanceof Integer ? (int) colorTag : Color.TRANSPARENT);
+                    }
+                    deletedStickersList.add(sObj);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mainLayout.removeView(targetView);
+                dismissSelectionControls();
+                currentlySelectedView = null;
+                exportToJson();
             });
         }
 

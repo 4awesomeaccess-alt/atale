@@ -33,8 +33,22 @@
             <TextView android:id="@+id/btn_pop_layer_down" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:text="↓Down" android:textSize="9sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#388E3C" android:layout_marginEnd="3dp"/>
             <TextView android:id="@+id/btn_pop_send_back" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:text="⬇Back" android:textSize="9sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#1B5E20"/>
         </LinearLayout>
-        <!--  ── DUPLICATE IMAGE BUTTON ──  -->
-        <TextView android:id="@+id/btn_copy_image" android:layout_width="match_parent" android:layout_height="36dp" android:text="⧉ Duplicate Image" android:textSize="11sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#6A1B9A" android:layout_marginBottom="4dp"/>
+        <!--  ── DIVIDER ──  -->
+        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#A5D6A7" android:layout_marginBottom="4dp"/>
+        <!--  ── ACTION BUTTONS ROW 1: Lock / Replace / Select Photo ──  -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="4dp">
+            <TextView android:id="@+id/btn_pop_lock" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:text="🔓 Lock" android:textSize="9sp" android:textColor="#37474F" android:gravity="center" android:background="#E8F5E9" android:layout_marginEnd="3dp"/>
+            <TextView android:id="@+id/btn_pop_replace_sticker" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:text="🔄 Replace" android:textSize="9sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#F57C00" android:layout_marginEnd="3dp"/>
+            <TextView android:id="@+id/btnSelectPhoto" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:text="📷 Photo" android:textSize="9sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#1565C0" android:layout_marginEnd="3dp"/>
+            <TextView android:id="@+id/btn_pop_frame_color" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:text="🎨 Color" android:textSize="9sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#6A1B9A"/>
+        </LinearLayout>
+        <!--  ── ACTION BUTTONS ROW 2: Crop / Freehand / Duplicate / Delete ──  -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="4dp">
+            <TextView android:id="@+id/btn_pop_crop" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:text="✂ Crop" android:textSize="9sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#00695C" android:layout_marginEnd="3dp"/>
+            <TextView android:id="@+id/btn_pop_freehand_crop" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:text="✏ Free" android:textSize="9sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#00796B" android:layout_marginEnd="3dp"/>
+            <TextView android:id="@+id/btn_copy_image" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:text="⧉ Dup" android:textSize="9sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#4527A0" android:layout_marginEnd="3dp"/>
+            <TextView android:id="@+id/btn_pop_delete" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:text="🗑 Delete" android:textSize="9sp" android:textColor="#FFFFFF" android:gravity="center" android:background="#B71C1C"/>
+        </LinearLayout>
         <!--  ── ALIGN BUTTONS ROW ──  -->
         <HorizontalScrollView android:id="@+id/hsv_align_row" android:layout_width="match_parent" android:layout_height="wrap_content" android:scrollbars="none" android:visibility="gone" android:layout_marginBottom="4dp">
             <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal">
