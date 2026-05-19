@@ -61,4 +61,11 @@
     <item name="btn_sm_down" type="id" />
     <item name="btn_sm_left" type="id" />
     <item name="btn_sm_right" type="id" />
+    <item name="touch_drag_area" type="id" />
+    <item name="drag_handle_layer" type="id" />
+    <item name="btn_layer_close" type="id" />
+    <item name="btn_layer_front" type="id" />
+    <item name="btn_layer_up" type="id" />
+    <item name="btn_layer_down" type="id" />
+    <item name="btn_layer_back" type="id" />
 </resources>

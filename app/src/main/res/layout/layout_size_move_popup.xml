@@ -98,6 +98,23 @@
                 android:gravity="center"/>
         </LinearLayout>
 
+        <!-- FINGER DRAG AREA -->
+        <FrameLayout
+            android:id="@+id/touch_drag_area"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="#CFD8DC"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="✥ Finger thi image move karo"
+                android:textSize="11sp"
+                android:textColor="#546E7A"/>
+        </FrameLayout>
+
         <!-- MOVE BUTTONS ROW -->
         <LinearLayout
             android:layout_width="match_parent"

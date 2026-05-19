@@ -15683,6 +15683,17 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+        if (btnToggleLayer != null) {
+            btnToggleLayer.setOnClickListener(v -> {
+                if (rowMove != null) rowMove.setVisibility(View.GONE);
+                if (rowLayer != null) rowLayer.setVisibility(View.GONE);
+                if (hsvAlign != null) hsvAlign.setVisibility(View.GONE);
+                try { if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) selectionControlsPopup.dismiss(); } catch (Exception ignored) {}
+                try { if (currentStickerToolbarPopup != null && currentStickerToolbarPopup.isShowing()) currentStickerToolbarPopup.dismiss(); } catch (Exception ignored) {}
+                showLayerPopup();
+            });
+        }
+
         if (btnToggleAlign != null) {
             btnToggleAlign.setOnClickListener(v -> {
                 // Old hsv_align_row hide rakho
@@ -15805,12 +15816,98 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+
+        // ── Finger drag area — image ne finger thi move karo
+        View touchDragArea = popupView.findViewById(R.id.touch_drag_area);
+        if (touchDragArea != null) {
+            final float[] lastX = {0};
+            final float[] lastY = {0};
+            touchDragArea.setOnTouchListener((v2, event) -> {
+                switch (event.getActionMasked()) {
+                    case MotionEvent.ACTION_DOWN:
+                        lastX[0] = event.getRawX();
+                        lastY[0] = event.getRawY();
+                        return true;
+                    case MotionEvent.ACTION_MOVE:
+                        float dx = event.getRawX() - lastX[0];
+                        float dy = event.getRawY() - lastY[0];
+                        lastX[0] = event.getRawX();
+                        lastY[0] = event.getRawY();
+                        float newX = targetView.getX() + dx;
+                        float newY = targetView.getY() + dy;
+                        // Canvas boundary check
+                        float minX = main_image_view.getX();
+                        float maxX = main_image_view.getX() + main_image_view.getWidth() - targetView.getWidth();
+                        float minY = main_image_view.getY();
+                        float maxY = main_image_view.getY() + main_image_view.getHeight() - targetView.getHeight();
+                        targetView.setX(Math.max(minX, Math.min(newX, maxX)));
+                        targetView.setY(Math.max(minY, Math.min(newY, maxY)));
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        exportToJson();
+                        return true;
+                }
+                return false;
+            });
+        }
+
         // ── Close
         TextView btnClose = popupView.findViewById(R.id.btn_size_move_close);
         if (btnClose != null) btnClose.setOnClickListener(v -> sizeMovePopupWindow.dismiss());
 
         // ── Show at bottom full width
         sizeMovePopupWindow.showAtLocation(mainLayout, Gravity.BOTTOM | Gravity.START, 0, 0);
+    }
+
+    private PopupWindow layerPopupWindow = null;
+
+    private void showLayerPopup() {
+        try {
+            if (layerPopupWindow != null && layerPopupWindow.isShowing()) {
+                layerPopupWindow.dismiss();
+                return;
+            }
+        } catch (Exception e) { layerPopupWindow = null; }
+
+        View targetView = currentlySelectedView;
+        if (targetView == null) return;
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View popupView = inflater.inflate(R.layout.layout_layer_popup, null);
+
+        layerPopupWindow = new PopupWindow(popupView,
+            android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+            android.view.ViewGroup.LayoutParams.WRAP_CONTENT, false);
+        layerPopupWindow.setOutsideTouchable(true);
+        layerPopupWindow.setTouchable(true);
+        layerPopupWindow.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        // ── Close thay tyare image controls pachu open karo
+        layerPopupWindow.setOnDismissListener(() -> {
+            try {
+                if (currentlySelectedView instanceof ImageView) {
+                    showSelectionControlsForImage((ImageView) currentlySelectedView);
+                }
+            } catch (Exception ignored) {}
+        });
+
+        // ── Layer buttons
+        View btnFront = popupView.findViewById(R.id.btn_layer_front);
+        View btnUp    = popupView.findViewById(R.id.btn_layer_up);
+        View btnDown  = popupView.findViewById(R.id.btn_layer_down);
+        View btnBack  = popupView.findViewById(R.id.btn_layer_back);
+
+        if (btnFront != null) btnFront.setOnClickListener(v -> { bringViewToFront(targetView); exportToJson(); refreshLockedLayersPanel(); });
+        if (btnUp != null)    btnUp.setOnClickListener(v -> { bringViewOneLayerUp(targetView); exportToJson(); refreshLockedLayersPanel(); });
+        if (btnDown != null)  btnDown.setOnClickListener(v -> { sendViewOneLayerDown(targetView); exportToJson(); refreshLockedLayersPanel(); });
+        if (btnBack != null)  btnBack.setOnClickListener(v -> { sendViewToBack(targetView); exportToJson(); refreshLockedLayersPanel(); });
+
+        // ── Close
+        TextView btnClose = popupView.findViewById(R.id.btn_layer_close);
+        if (btnClose != null) btnClose.setOnClickListener(v -> layerPopupWindow.dismiss());
+
+        // ── Show at bottom full width
+        layerPopupWindow.showAtLocation(mainLayout, Gravity.BOTTOM | Gravity.START, 0, 0);
     }
 
     private PopupWindow alignPopupWindow = null;
