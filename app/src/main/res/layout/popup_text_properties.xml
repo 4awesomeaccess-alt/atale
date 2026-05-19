@@ -316,7 +316,6 @@
 
             </LinearLayout>
 
-        </LinearLayout>
             <!-- ── VISUAL PANEL ── -->
             <LinearLayout
                 android:id="@+id/prop_panel_visual"
@@ -429,6 +428,8 @@
                 </LinearLayout>
 
             </LinearLayout>
+
+        </LinearLayout>
 
     </ScrollView>
 
