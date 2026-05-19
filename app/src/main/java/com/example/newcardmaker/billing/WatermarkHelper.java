@@ -1,4 +1,4 @@
-package com.gif.infosys.gifgoodnight.billing;
+package com.example.newcardmaker.billing;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

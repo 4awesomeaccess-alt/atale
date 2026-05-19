@@ -3,7 +3,7 @@ package com.example.newcardmaker.Activity;
 import static android.util.Log.ASSERT;
 import static android.view.View.VISIBLE;
 
-import com.gif.infosys.gifgoodnight.billing.SubscriptionManager;
+import com.example.newcardmaker.billing.SubscriptionManager;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -17563,7 +17563,7 @@ public class MainActivity extends AppCompatActivity {
         // ── Watermark — free user ne add karo
         SubscriptionManager subMgr = SubscriptionManager.getInstance(this);
         if (!subMgr.isSubscribed()) {
-            bitmap = com.gif.infosys.gifgoodnight.billing.WatermarkHelper.addWatermark(bitmap);
+            bitmap = com.example.newcardmaker.billing.WatermarkHelper.addWatermark(bitmap);
         }
 
         String fileName = "Card_Page_" + (currentPageIndex + 1) + "_" + System.currentTimeMillis() + ".jpg";
