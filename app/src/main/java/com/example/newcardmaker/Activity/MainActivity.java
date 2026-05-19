@@ -15817,40 +15817,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        // ── Finger drag area — image ne finger thi move karo
-        View touchDragArea = popupView.findViewById(R.id.touch_drag_area);
-        if (touchDragArea != null) {
-            final float[] lastX = {0};
-            final float[] lastY = {0};
-            touchDragArea.setOnTouchListener((v2, event) -> {
-                switch (event.getActionMasked()) {
-                    case MotionEvent.ACTION_DOWN:
-                        lastX[0] = event.getRawX();
-                        lastY[0] = event.getRawY();
-                        return true;
-                    case MotionEvent.ACTION_MOVE:
-                        float dx = event.getRawX() - lastX[0];
-                        float dy = event.getRawY() - lastY[0];
-                        lastX[0] = event.getRawX();
-                        lastY[0] = event.getRawY();
-                        float newX = targetView.getX() + dx;
-                        float newY = targetView.getY() + dy;
-                        // Canvas boundary check
-                        float minX = main_image_view.getX();
-                        float maxX = main_image_view.getX() + main_image_view.getWidth() - targetView.getWidth();
-                        float minY = main_image_view.getY();
-                        float maxY = main_image_view.getY() + main_image_view.getHeight() - targetView.getHeight();
-                        targetView.setX(Math.max(minX, Math.min(newX, maxX)));
-                        targetView.setY(Math.max(minY, Math.min(newY, maxY)));
-                        return true;
-                    case MotionEvent.ACTION_UP:
-                        exportToJson();
-                        return true;
-                }
-                return false;
-            });
-        }
-
         // ── Close
         TextView btnClose = popupView.findViewById(R.id.btn_size_move_close);
         if (btnClose != null) btnClose.setOnClickListener(v -> sizeMovePopupWindow.dismiss());
