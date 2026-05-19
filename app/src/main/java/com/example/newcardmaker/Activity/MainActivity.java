@@ -3904,8 +3904,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
             startActivityForResult(Intent.createChooser(intent, "Select Image for Offline BG Removal"), 105);
-        } else if (id.getId() == R.id.btn_arc_text) {
-            // showArcTextPopup();
         } else if (id.getId() == R.id.btn_add_page) {
             saveCurrentPage(); // ← current page save (with current background)
 
