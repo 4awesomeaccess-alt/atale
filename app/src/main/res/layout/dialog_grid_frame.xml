@@ -5,78 +5,47 @@
     android:background="#1A1A2E"
     android:padding="16dp">
 
-    <!-- Title -->
     <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
         android:text="⊞ Grid Photo Frame"
         android:textColor="#FFD700" android:textSize="16sp" android:textStyle="bold"
         android:gravity="center" android:layout_marginBottom="16dp"/>
 
-    <!-- Photos + Cols row -->
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:orientation="horizontal" android:layout_marginBottom="12dp">
+    <!-- Columns selector -->
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="Columns" android:textColor="#8888AA" android:textSize="12sp"
+        android:gravity="center" android:layout_marginBottom="8dp"/>
 
-        <!-- Total Photos -->
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-            android:layout_weight="1" android:orientation="vertical" android:gravity="center"
-            android:background="#16213E" android:padding="10dp" android:layout_marginEnd="8dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="Photos" android:textColor="#8888AA" android:textSize="11sp"
-                android:layout_marginBottom="8dp"/>
-            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:orientation="horizontal" android:gravity="center_vertical">
-                <TextView android:id="@+id/btn_photo_minus"
-                    android:layout_width="36dp" android:layout_height="36dp"
-                    android:text="−" android:textSize="20sp" android:textColor="#FFFFFF"
-                    android:gravity="center" android:background="#E94560"/>
-                <TextView android:id="@+id/tv_photo_count"
-                    android:layout_width="52dp" android:layout_height="wrap_content"
-                    android:text="10" android:textSize="22sp" android:textColor="#FFFFFF"
-                    android:textStyle="bold" android:gravity="center"/>
-                <TextView android:id="@+id/btn_photo_plus"
-                    android:layout_width="36dp" android:layout_height="36dp"
-                    android:text="+" android:textSize="20sp" android:textColor="#FFFFFF"
-                    android:gravity="center" android:background="#2E7D32"/>
-            </LinearLayout>
-        </LinearLayout>
+    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:gravity="center"
+        android:layout_gravity="center" android:layout_marginBottom="16dp">
 
-        <!-- Columns -->
-        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-            android:layout_weight="1" android:orientation="vertical" android:gravity="center"
-            android:background="#16213E" android:padding="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="Columns" android:textColor="#8888AA" android:textSize="11sp"
-                android:layout_marginBottom="8dp"/>
-            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:orientation="horizontal" android:gravity="center_vertical">
-                <TextView android:id="@+id/btn_col_minus"
-                    android:layout_width="36dp" android:layout_height="36dp"
-                    android:text="−" android:textSize="20sp" android:textColor="#FFFFFF"
-                    android:gravity="center" android:background="#E94560"/>
-                <TextView android:id="@+id/tv_col_count"
-                    android:layout_width="52dp" android:layout_height="wrap_content"
-                    android:text="3" android:textSize="22sp" android:textColor="#FFFFFF"
-                    android:textStyle="bold" android:gravity="center"/>
-                <TextView android:id="@+id/btn_col_plus"
-                    android:layout_width="36dp" android:layout_height="36dp"
-                    android:text="+" android:textSize="20sp" android:textColor="#FFFFFF"
-                    android:gravity="center" android:background="#2E7D32"/>
-            </LinearLayout>
-        </LinearLayout>
+        <TextView android:id="@+id/btn_col_minus"
+            android:layout_width="48dp" android:layout_height="48dp"
+            android:text="−" android:textSize="24sp" android:textColor="#FFFFFF"
+            android:gravity="center" android:background="#E94560"/>
+        <TextView android:id="@+id/tv_col_count"
+            android:layout_width="72dp" android:layout_height="48dp"
+            android:text="3" android:textSize="28sp" android:textColor="#FFFFFF"
+            android:textStyle="bold" android:gravity="center" android:background="#16213E"/>
+        <TextView android:id="@+id/btn_col_plus"
+            android:layout_width="48dp" android:layout_height="48dp"
+            android:text="+" android:textSize="24sp" android:textColor="#FFFFFF"
+            android:gravity="center" android:background="#2E7D32"/>
     </LinearLayout>
 
     <!-- Shape -->
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:orientation="horizontal" android:layout_marginBottom="10dp">
+        android:orientation="horizontal" android:layout_marginBottom="14dp">
         <TextView android:id="@+id/btn_shape_circle"
-            android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1"
+            android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1"
             android:text="⬤ Circle" android:textSize="12sp" android:textColor="#1565C0"
             android:gravity="center" android:background="#E3F2FD" android:layout_marginEnd="4dp"/>
         <TextView android:id="@+id/btn_shape_rounded"
-            android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1"
+            android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1"
             android:text="▢ Rounded" android:textSize="12sp" android:textColor="#FFFFFF"
             android:gravity="center" android:background="#1565C0" android:layout_marginEnd="4dp"/>
         <TextView android:id="@+id/btn_shape_square"
-            android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1"
+            android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1"
             android:text="■ Square" android:textSize="12sp" android:textColor="#1565C0"
             android:gravity="center" android:background="#E3F2FD"/>
     </LinearLayout>
@@ -106,5 +75,4 @@
             android:text="⊞ Add Grid" android:textSize="15sp" android:textColor="#FFFFFF"
             android:textStyle="bold" android:gravity="center" android:background="#E94560"/>
     </LinearLayout>
-
 </LinearLayout>

@@ -3952,16 +3952,12 @@ public class MainActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(
             new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        final int[] totalPhotos  = {10};
-        final int[] cols         = {3};
+        final int[] cols = {3};
         final String[] selectedShape = {"ROUNDED"};
         final boolean[] showName = {true};
         final boolean[] showInfo = {true};
 
-        TextView tvPhotoCount    = root.findViewById(R.id.tv_photo_count);
         TextView tvColCount      = root.findViewById(R.id.tv_col_count);
-        TextView btnPhotoM       = root.findViewById(R.id.btn_photo_minus);
-        TextView btnPhotoP       = root.findViewById(R.id.btn_photo_plus);
         TextView btnColM         = root.findViewById(R.id.btn_col_minus);
         TextView btnColP         = root.findViewById(R.id.btn_col_plus);
         TextView btnAdd          = root.findViewById(R.id.btn_grid_add);
@@ -3972,18 +3968,8 @@ public class MainActivity extends AppCompatActivity {
         TextView btnToggleName   = root.findViewById(R.id.btn_toggle_name);
         TextView btnToggleInfo   = root.findViewById(R.id.btn_toggle_info);
 
-        tvPhotoCount.setText(String.valueOf(totalPhotos[0]));
         tvColCount.setText(String.valueOf(cols[0]));
 
-        // ── Photo count
-        btnPhotoM.setOnClickListener(v -> {
-            if (totalPhotos[0] > 1) { totalPhotos[0]--; tvPhotoCount.setText(String.valueOf(totalPhotos[0])); }
-        });
-        btnPhotoP.setOnClickListener(v -> {
-            if (totalPhotos[0] < 50) { totalPhotos[0]++; tvPhotoCount.setText(String.valueOf(totalPhotos[0])); }
-        });
-
-        // ── Col count
         btnColM.setOnClickListener(v -> {
             if (cols[0] > 1) { cols[0]--; tvColCount.setText(String.valueOf(cols[0])); }
         });
@@ -3994,11 +3980,11 @@ public class MainActivity extends AppCompatActivity {
         // ── Shape
         btnShapeRounded.setBackgroundColor(Color.parseColor("#1565C0"));
         btnShapeRounded.setTextColor(Color.WHITE);
-
         View.OnClickListener shapeListener = v -> {
-            btnShapeCircle.setBackgroundColor(Color.parseColor("#E3F2FD"));  btnShapeCircle.setTextColor(Color.parseColor("#1565C0"));
-            btnShapeRounded.setBackgroundColor(Color.parseColor("#E3F2FD")); btnShapeRounded.setTextColor(Color.parseColor("#1565C0"));
-            btnShapeSquare.setBackgroundColor(Color.parseColor("#E3F2FD"));  btnShapeSquare.setTextColor(Color.parseColor("#1565C0"));
+            for (TextView b : new TextView[]{btnShapeCircle, btnShapeRounded, btnShapeSquare}) {
+                b.setBackgroundColor(Color.parseColor("#E3F2FD"));
+                b.setTextColor(Color.parseColor("#1565C0"));
+            }
             ((TextView) v).setTextColor(Color.WHITE);
             v.setBackgroundColor(Color.parseColor("#1565C0"));
             if (v == btnShapeCircle) selectedShape[0] = "CIRCLE";
@@ -4009,7 +3995,7 @@ public class MainActivity extends AppCompatActivity {
         btnShapeRounded.setOnClickListener(shapeListener);
         btnShapeSquare.setOnClickListener(shapeListener);
 
-        // ── Name/Info toggle
+        // ── Name/Info
         btnToggleName.setOnClickListener(v -> {
             showName[0] = !showName[0];
             btnToggleName.setBackgroundColor(showName[0] ? Color.parseColor("#1565C0") : Color.parseColor("#E3F2FD"));
@@ -4023,16 +4009,204 @@ public class MainActivity extends AppCompatActivity {
             btnToggleInfo.setText(showInfo[0] ? "✓ %" : "✕ %");
         });
 
-        // ── Add
+        // ── Add — start with 1 row, user drags to add more
         btnAdd.setOnClickListener(v -> {
             dialog.dismiss();
-            int autoRows = (int) Math.ceil((double) totalPhotos[0] / cols[0]);
-            createGridPhotoFrame(autoRows, cols[0], totalPhotos[0],
-                selectedShape[0], 200, showName[0], showInfo[0]);
+            createDraggableGrid(cols[0], selectedShape[0], 200, showName[0], showInfo[0]);
         });
 
         btnCancel.setOnClickListener(v -> dialog.dismiss());
         dialog.show();
+    }
+
+    private void createDraggableGrid(int cols, String shape, int cellSizePx,
+                                     boolean showName, boolean showInfo) {
+        int gap   = 8;
+        int nameH = showName ? 40 : 0;
+        int infoH = showInfo ? 30 : 0;
+        int cellTotalH = cellSizePx + nameH + infoH;
+        int initRows   = 1; // start with 1 row
+
+        int totalW = cols * cellSizePx + (cols - 1) * gap;
+        int totalH = initRows * cellTotalH;
+
+        RelativeLayout gridContainer = new RelativeLayout(this);
+        RelativeLayout.LayoutParams outerLp = new RelativeLayout.LayoutParams(totalW, totalH);
+        int cx = (mainLayout.getWidth() - totalW) / 2;
+        int cy = (mainLayout.getHeight() - totalH) / 2;
+        outerLp.leftMargin = cx > 0 ? cx : 0;
+        outerLp.topMargin  = cy > 0 ? cy : 0;
+        gridContainer.setLayoutParams(outerLp);
+        gridContainer.setTag(R.id.btn_set_background, "GRID_FRAME");
+
+        // ── Drag handle at bottom — green bar
+        View dragHandle = new View(this);
+        dragHandle.setBackgroundColor(Color.parseColor("#4CAF50"));
+        RelativeLayout.LayoutParams dhLp = new RelativeLayout.LayoutParams(totalW, 24);
+        dhLp.topMargin = totalH - 24;
+        dragHandle.setLayoutParams(dhLp);
+        dragHandle.setTag("drag_handle");
+
+        // ── State
+        final int[] currentRows = {initRows};
+        final List<LinearLayout> allCells = new ArrayList<>();
+        final List<JSONObject> cellDataList = new ArrayList<>();
+
+        // ── Function to add a row of cells
+        Runnable addRowCells = new Runnable() {
+            @Override public void run() {
+                int r = currentRows[0] - 1;
+                for (int c = 0; c < cols; c++) {
+                    final int cellIdx = r * cols + c;
+                    LinearLayout cell = buildGridCell(shape, cellSizePx, nameH, infoH,
+                        cellIdx, gridContainer, cellDataList, showName, showInfo);
+                    RelativeLayout.LayoutParams cellLp =
+                        new RelativeLayout.LayoutParams(cellSizePx, cellTotalH);
+                    cellLp.leftMargin = c * (cellSizePx + gap);
+                    cellLp.topMargin  = r * (cellTotalH + gap);
+                    cell.setLayoutParams(cellLp);
+                    gridContainer.addView(cell, gridContainer.getChildCount() - 1); // before drag handle
+                    allCells.add(cell);
+                    try { cellDataList.add(new JSONObject()); } catch (Exception e) { e.printStackTrace(); }
+                }
+            }
+        };
+        addRowCells.run(); // add first row
+
+        gridContainer.addView(dragHandle);
+
+        // ── Drag handle touch — drag down = add row, drag up = remove row
+        final float[] lastDragY = {0};
+        final float[] accDelta  = {0};
+
+        dragHandle.setOnTouchListener((v, event) -> {
+            switch (event.getActionMasked()) {
+                case MotionEvent.ACTION_DOWN:
+                    lastDragY[0] = event.getRawY();
+                    accDelta[0]  = 0;
+                    return true;
+                case MotionEvent.ACTION_MOVE:
+                    float dy = event.getRawY() - lastDragY[0];
+                    lastDragY[0] = event.getRawY();
+                    accDelta[0] += dy;
+
+                    // Add row
+                    if (accDelta[0] > cellTotalH && currentRows[0] < 20) {
+                        currentRows[0]++;
+                        accDelta[0] = 0;
+                        int newH = currentRows[0] * cellTotalH + (currentRows[0] - 1) * gap;
+                        android.view.ViewGroup.LayoutParams glp = gridContainer.getLayoutParams();
+                        glp.height = newH + 24;
+                        gridContainer.setLayoutParams(glp);
+                        // move drag handle
+                        RelativeLayout.LayoutParams dhp = (RelativeLayout.LayoutParams) dragHandle.getLayoutParams();
+                        dhp.topMargin = newH;
+                        dragHandle.setLayoutParams(dhp);
+                        addRowCells.run();
+                    }
+                    // Remove row
+                    else if (accDelta[0] < -cellTotalH && currentRows[0] > 1) {
+                        currentRows[0]--;
+                        accDelta[0] = 0;
+                        // Remove last row cells
+                        for (int c = 0; c < cols; c++) {
+                            if (!allCells.isEmpty()) {
+                                LinearLayout last = allCells.remove(allCells.size() - 1);
+                                gridContainer.removeView(last);
+                                if (!cellDataList.isEmpty()) cellDataList.remove(cellDataList.size() - 1);
+                            }
+                        }
+                        int newH = currentRows[0] * cellTotalH + (currentRows[0] - 1) * gap;
+                        android.view.ViewGroup.LayoutParams glp = gridContainer.getLayoutParams();
+                        glp.height = newH + 24;
+                        gridContainer.setLayoutParams(glp);
+                        RelativeLayout.LayoutParams dhp = (RelativeLayout.LayoutParams) dragHandle.getLayoutParams();
+                        dhp.topMargin = newH;
+                        dragHandle.setLayoutParams(dhp);
+                    }
+                    return true;
+                case MotionEvent.ACTION_UP:
+                    exportToJson();
+                    // Save grid meta
+                    gridContainer.setTag(R.id.btn_grid_frame, new GridMeta(
+                        currentRows[0], cols, shape, cellSizePx, gap, showName, showInfo,
+                        currentGridFrameUrl, currentGridFrameMaskUrl, currentGridFrameTopUrl,
+                        cellDataList));
+                    return true;
+            }
+            return false;
+        });
+
+        // Touch for move/select
+        applyTouchListenerForSticker(gridContainer);
+        mainLayout.addView(gridContainer);
+        selectView(gridContainer);
+        exportToJson();
+    }
+
+    private LinearLayout buildGridCell(String shape, int cellSizePx, int nameH, int infoH,
+                                        int cellIdx, RelativeLayout gridContainer,
+                                        List<JSONObject> cellDataList,
+                                        boolean showName, boolean showInfo) {
+        LinearLayout cell = new LinearLayout(this);
+        cell.setOrientation(LinearLayout.VERTICAL);
+        cell.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        ImageView photoIv = new ImageView(this);
+        LinearLayout.LayoutParams photoLp = new LinearLayout.LayoutParams(cellSizePx, cellSizePx);
+        photoIv.setLayoutParams(photoLp);
+        photoIv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        GradientDrawable photoGd = new GradientDrawable();
+        photoGd.setColor(Color.parseColor("#DDDDDD"));
+        switch (shape) {
+            case "CIRCLE":  photoGd.setShape(GradientDrawable.OVAL); break;
+            case "ROUNDED": photoGd.setCornerRadius(cellSizePx * 0.12f); break;
+        }
+        photoIv.setBackground(photoGd);
+        photoIv.setClipToOutline(true);
+
+        if ("CIRCLE".equals(shape)) {
+            photoIv.setOutlineProvider(new android.view.ViewOutlineProvider() {
+                @Override public void getOutline(View v, android.graphics.Outline o) {
+                    o.setOval(0, 0, v.getWidth(), v.getHeight());
+                }
+            });
+        } else if ("ROUNDED".equals(shape)) {
+            final float rad = cellSizePx * 0.12f;
+            photoIv.setOutlineProvider(new android.view.ViewOutlineProvider() {
+                @Override public void getOutline(View v, android.graphics.Outline o) {
+                    o.setRoundRect(0, 0, v.getWidth(), v.getHeight(), rad);
+                }
+            });
+        }
+
+        photoIv.setTag(R.id.btn_set_background, "GRID_CELL_" + cellIdx);
+        setGridCellPhotoTouch(photoIv, gridContainer, cellIdx, cellDataList, shape, cellSizePx);
+        cell.addView(photoIv);
+
+        if (showName && nameH > 0) {
+            StrokeTextView tvName = new StrokeTextView(this);
+            tvName.setText("નામ");
+            tvName.setTextSize(13);
+            tvName.setTextColor(Color.BLACK);
+            tvName.setGravity(Gravity.CENTER);
+            tvName.setTypeface(null, android.graphics.Typeface.BOLD);
+            LinearLayout.LayoutParams nlp = new LinearLayout.LayoutParams(cellSizePx, nameH);
+            tvName.setLayoutParams(nlp);
+            cell.addView(tvName);
+        }
+        if (showInfo && infoH > 0) {
+            StrokeTextView tvInfo = new StrokeTextView(this);
+            tvInfo.setText("00.00 %");
+            tvInfo.setTextSize(11);
+            tvInfo.setTextColor(Color.DKGRAY);
+            tvInfo.setGravity(Gravity.CENTER);
+            LinearLayout.LayoutParams ilp = new LinearLayout.LayoutParams(cellSizePx, infoH);
+            tvInfo.setLayoutParams(ilp);
+            cell.addView(tvInfo);
+        }
+        return cell;
     }
 
     private void createGridPhotoFrame(int rows, int cols, int totalPhotos,
