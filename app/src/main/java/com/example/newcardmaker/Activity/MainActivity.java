@@ -15705,7 +15705,7 @@ public class MainActivity extends AppCompatActivity {
         View popupView = inflater.inflate(R.layout.layout_align_popup, null);
 
         alignPopupWindow = new PopupWindow(popupView,
-            android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+            android.view.ViewGroup.LayoutParams.MATCH_PARENT,
             android.view.ViewGroup.LayoutParams.WRAP_CONTENT, false);
         alignPopupWindow.setOutsideTouchable(true);
         alignPopupWindow.setTouchable(true);
@@ -15801,11 +15801,8 @@ public class MainActivity extends AppCompatActivity {
         TextView btnClose = popupView.findViewById(R.id.btn_align_close);
         if (btnClose != null) btnClose.setOnClickListener(v -> alignPopupWindow.dismiss());
 
-        // ── Show at center
-        popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        int px = Math.max(0, (mainLayout.getWidth() - popupView.getMeasuredWidth()) / 2);
-        int py = Math.max(0, (mainLayout.getHeight() - popupView.getMeasuredHeight()) / 2);
-        alignPopupWindow.showAtLocation(mainLayout, Gravity.TOP | Gravity.LEFT, px, py);
+        // ── Show at bottom full width
+        alignPopupWindow.showAtLocation(mainLayout, Gravity.BOTTOM | Gravity.START, 0, 0);
     }
 
 
