@@ -15233,36 +15233,43 @@ public class MainActivity extends AppCompatActivity {
         if (btnCopyImage != null) {
             btnCopyImage.setOnClickListener(v -> {
                 try {
-                    // Drawable ma thi bitmap lo
-                    android.graphics.Bitmap bmp = null;
-                    android.graphics.drawable.Drawable drawable = targetView.getDrawable();
-                    if (drawable instanceof android.graphics.drawable.BitmapDrawable) {
-                        bmp = ((android.graphics.drawable.BitmapDrawable) drawable).getBitmap();
-                    } else {
-                        // Fallback: view render karo
-                        targetView.setDrawingCacheEnabled(true);
-                        bmp = android.graphics.Bitmap.createBitmap(targetView.getDrawingCache());
-                        targetView.setDrawingCacheEnabled(false);
-                    }
-                    if (bmp == null) {
-                        android.widget.Toast.makeText(this, "Image not found!", android.widget.Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    // Cache ma save karo
-                    java.io.File file = new java.io.File(getCacheDir(), "copied_image.png");
-                    java.io.FileOutputStream fos = new java.io.FileOutputStream(file);
-                    bmp.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, fos);
-                    fos.close();
-                    // FileProvider thi URI banavo
-                    android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(
-                        this, getPackageName() + ".provider", file);
-                    // Clipboard ma copy karo
-                    android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(android.content.Context.CLIPBOARD_SERVICE);
-                    android.content.ClipData clip = android.content.ClipData.newUri(getContentResolver(), "Image", uri);
-                    if (clipboard != null) clipboard.setPrimaryClip(clip);
-                    android.widget.Toast.makeText(this, "✅ Image copied!", android.widget.Toast.LENGTH_SHORT).show();
+                    // ── Duplicate ImageView banavo
+                    ImageView dupView = new ImageView(this);
+
+                    // Same drawable set karo
+                    dupView.setImageDrawable(targetView.getDrawable());
+
+                    // Same tag (URI) copy karo
+                    Object uriTag = targetView.getTag(R.id.btn_set_background);
+                    if (uriTag != null) dupView.setTag(R.id.btn_set_background, uriTag);
+
+                    // Same size rakho, thodi offset position par
+                    android.view.ViewGroup.LayoutParams oldLp = targetView.getLayoutParams();
+                    int w = (oldLp != null && oldLp.width > 0) ? oldLp.width : targetView.getWidth();
+                    int h = (oldLp != null && oldLp.height > 0) ? oldLp.height : targetView.getHeight();
+                    RelativeLayout.LayoutParams newLp = new RelativeLayout.LayoutParams(w, h);
+                    dupView.setLayoutParams(newLp);
+
+                    // Original ni position + 20px offset
+                    dupView.setX(targetView.getX() + 20);
+                    dupView.setY(targetView.getY() + 20);
+
+                    // Same rotation rakho
+                    dupView.setRotation(targetView.getRotation());
+                    dupView.setScaleX(targetView.getScaleX());
+                    dupView.setScaleY(targetView.getScaleY());
+
+                    // Touch listener lagavo
+                    applyTouchListenerForSticker(dupView);
+
+                    // Layout ma add karo
+                    mainLayout.addView(dupView);
+                    selectView(dupView);
+
+                    exportToJson();
+                    android.widget.Toast.makeText(this, "✅ Image duplicated!", android.widget.Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
-                    android.widget.Toast.makeText(this, "Copy failed: " + e.getMessage(), android.widget.Toast.LENGTH_SHORT).show();
+                    android.widget.Toast.makeText(this, "Duplicate failed: " + e.getMessage(), android.widget.Toast.LENGTH_SHORT).show();
                 }
             });
         }
