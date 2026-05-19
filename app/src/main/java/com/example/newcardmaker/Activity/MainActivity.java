@@ -6847,526 +6847,64 @@ public class MainActivity extends AppCompatActivity {
 
         Object tag = gridContainer.getTag(R.id.btn_grid_frame);
         if (!(tag instanceof GridMeta)) {
-            Toast.makeText(this, "Grid edit data મળ્યો નહીં", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Grid data મળ્યો નહીં", Toast.LENGTH_SHORT).show();
             return;
         }
-
         GridMeta meta = (GridMeta) tag;
 
         if (gridEditPopup != null && gridEditPopup.isShowing()) {
             gridEditPopup.dismiss();
         }
 
-        View popupView = LayoutInflater.from(this)
-                .inflate(R.layout.popup_grid_edit, null);
+        View popupView = LayoutInflater.from(this).inflate(R.layout.popup_grid_simple, null);
 
-        TextView tvInfo = popupView.findViewById(R.id.tv_grid_info);
+        gridEditPopup = new PopupWindow(popupView,
+            android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+            android.view.ViewGroup.LayoutParams.WRAP_CONTENT, false);
+        gridEditPopup.setOutsideTouchable(true);
+        gridEditPopup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
 
-        EditText etDeleteNumber = popupView.findViewById(R.id.et_grid_delete_number);
-        TextView btnDeleteCellNumber = popupView.findViewById(R.id.btn_grid_delete_cell_number);
-        TextView btnCellPhoto = popupView.findViewById(R.id.btn_grid_cell_photo);
-  /*      TextView btnSizeMinus = popupView.findViewById(R.id.btn_grid_size_minus);
-        TextView btnSizePlus = popupView.findViewById(R.id.btn_grid_size_plus);*/
-        TextView btnRowMinus = popupView.findViewById(R.id.btn_grid_row_minus);
-        TextView btnRowPlus = popupView.findViewById(R.id.btn_grid_row_plus);
-        /*TextView btnColMinus = popupView.findViewById(R.id.btn_grid_col_minus);
-        TextView btnColPlus = popupView.findViewById(R.id.btn_grid_col_plus);*/
-        TextView btnFullEdit = popupView.findViewById(R.id.btn_grid_full_edit);
-        TextView btnDeleteGrid = popupView.findViewById(R.id.btn_grid_delete);
-        TextView btnClose = popupView.findViewById(R.id.btn_grid_close);
-        /*TextView btnMultiPhoto = popupView.findViewById(R.id.btn_grid_multi_photo);*/
+        // ── Info
+        TextView tvInfo = popupView.findViewById(R.id.tv_grid_simple_info);
+        if (tvInfo != null) tvInfo.setText("Grid " + meta.rows + "×" + meta.cols);
 
-        // ── btnClose ની ઉપર ઉમેરો
-        TextView btnMoveUp = popupView.findViewById(R.id.btn_grid_move_up);
-        TextView btnMoveDown = popupView.findViewById(R.id.btn_grid_move_down);
-        TextView btnMoveLeft = popupView.findViewById(R.id.btn_grid_move_left);
-        TextView btnMoveRight = popupView.findViewById(R.id.btn_grid_move_right);
-
-        TextView btnTransfer = popupView.findViewById(R.id.btn_grid_transfer);
-
-        TextView btnSwap = popupView.findViewById(R.id.btn_grid_swap);
-
-        TextView btnGridFrame = popupView.findViewById(R.id.btn_grid_cell_frame);
-
-        TextView btnEditCellFrame = popupView.findViewById(R.id.btn_grid_edit_cell_frame);
-
-        // showGridEditPopup() માં ઉમેરો
-        TextView btnListView = popupView.findViewById(
-                R.id.btn_grid_list_view);
-        if (btnListView != null) {
-            btnListView.setOnClickListener(v -> {
-                if (gridEditPopup != null &&
-                        gridEditPopup.isShowing()) {
-                    gridEditPopup.dismiss();
-                }
+        // ── Edit — GridListActivity open
+        TextView btnEdit = popupView.findViewById(R.id.btn_grid_simple_edit);
+        if (btnEdit != null) {
+            btnEdit.setOnClickListener(v -> {
+                gridEditPopup.dismiss();
                 showGridListDialog(gridContainer);
             });
         }
 
-
-        if (btnEditCellFrame != null) {
-            btnEditCellFrame.setOnClickListener(v -> {
-                if (gridEditPopup != null && gridEditPopup.isShowing()) {
-                    gridEditPopup.dismiss();
-                }
-                showGridCellMaskEditDialog(gridContainer);
-            });
-        }
-
-
-        if (btnGridFrame != null) {
-            btnGridFrame.setOnClickListener(v -> {
-                if (gridEditPopup != null && gridEditPopup.isShowing()) {
-                    gridEditPopup.dismiss();
-                }
-                showGridCellFramePicker(gridContainer);
-            });
-        }
-
-        if (btnSwap != null) {
-            btnSwap.setText(isGridSwapMode ? "✅ Swap ON — Cancel" : "⇄ Cell Swap Mode");
-            btnSwap.setBackgroundColor(isGridSwapMode
-                    ? Color.parseColor("#C62828")
-                    : Color.parseColor("#E65100"));
-
-            btnSwap.setOnClickListener(v -> {
-                isGridSwapMode = !isGridSwapMode;
-
-                // Reset any pending selection
-                selectedSwapCell = null;
-                selectedSwapCellIdx = -1;
-                selectedSwapDataList = null;
-                selectedSwapGrid = null;
-
-                if (gridEditPopup != null && gridEditPopup.isShowing()) {
-                    gridEditPopup.dismiss();
-                }
-
-                Toast.makeText(this,
-                        isGridSwapMode
-                                ? "✅ Swap Mode ON — Cell tap = select, ફરી tap = swap"
-                                : "Swap mode OFF",
-                        Toast.LENGTH_LONG).show();
-            });
-        }
-
-        if (btnTransfer != null) {
-            btnTransfer.setOnClickListener(v -> {
-                if (gridEditPopup != null && gridEditPopup.isShowing()) {
-                    gridEditPopup.dismiss();
-                }
-                showGridTransferDialog(gridContainer);
-            });
-        }
-
-        if (btnMoveUp != null) {
-            btnMoveUp.setOnClickListener(v -> {
-                gridContainer.setY(gridContainer.getY() - 20);
-                exportToJson();
-            });
-            btnMoveUp.setOnLongClickListener(v -> {
-                gridContainer.setY(gridContainer.getY() - 80);
-                exportToJson();
-                return true;
-            });
-        }
-        if (btnMoveDown != null) {
-            btnMoveDown.setOnClickListener(v -> {
-                gridContainer.setY(gridContainer.getY() + 20);
-                exportToJson();
-            });
-            btnMoveDown.setOnLongClickListener(v -> {
-                gridContainer.setY(gridContainer.getY() + 80);
-                exportToJson();
-                return true;
-            });
-        }
-        if (btnMoveLeft != null) {
-            btnMoveLeft.setOnClickListener(v -> {
-                gridContainer.setX(gridContainer.getX() - 20);
-                exportToJson();
-            });
-            btnMoveLeft.setOnLongClickListener(v -> {
-                gridContainer.setX(gridContainer.getX() - 80);
-                exportToJson();
-                return true;
-            });
-        }
-        if (btnMoveRight != null) {
-            btnMoveRight.setOnClickListener(v -> {
-                gridContainer.setX(gridContainer.getX() + 20);
-                exportToJson();
-            });
-            btnMoveRight.setOnLongClickListener(v -> {
-                gridContainer.setX(gridContainer.getX() + 80);
-                exportToJson();
-                return true;
-            });
-        }
-
-        tvInfo.setText("Rows: " + meta.rows
-                + "  Cols: " + meta.cols
-                + "  Size: " + meta.cellSizePx);
-
-        gridEditPopup = new PopupWindow(
-                popupView,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                false
-        );
-
-        gridEditPopup.setTouchable(true);
-        gridEditPopup.setOutsideTouchable(false);
-        gridEditPopup.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        btnDeleteCellNumber.setOnClickListener(v -> {
-
-            GridMeta m = (GridMeta) gridContainer.getTag(R.id.btn_grid_frame);
-            if (m == null || m.cellDataList == null) return;
-
-            String numStr = etDeleteNumber.getText().toString().trim();
-
-            if (numStr.isEmpty()) {
-                Toast.makeText(this, "Cell number નાખો", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            int cellNo;
-
-            try {
-                cellNo = Integer.parseInt(numStr);
-            } catch (Exception e) {
-                Toast.makeText(this, "સાચો number નાખો", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            int cellIndex = cellNo - 1;
-            int totalCells = m.rows * m.cols;
-
-            if (cellIndex < 0 || cellIndex >= totalCells) {
-                Toast.makeText(this,
-                        "Cell number 1 થી " + totalCells + " વચ્ચે હોવો જોઈએ",
-                        Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            try {
-                JSONObject obj = m.cellDataList.get(cellIndex);
-                obj.put("photoUri", "");
-                obj.put("name", "");
-                obj.put("info", "");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            // ── Remove trailing empty cells
-            for (int idx = m.cellDataList.size() - 1; idx >= 0; idx--) {
-                JSONObject c = m.cellDataList.get(idx);
-                boolean isEmpty = c.optString("photoUri", "").isEmpty()
-                        && c.optString("photoBitmap", "").isEmpty()
-                        && c.optString("name", "").isEmpty()
-                        && c.optString("info", "").isEmpty();
-                if (isEmpty) {
-                    m.cellDataList.remove(idx);
-                } else {
-                    break;
-                }
-            }
-
-            int newTotal = m.cellDataList.size();
-            int newRows = newTotal == 0 ? 1
-                    : (int) Math.ceil((float) newTotal / m.cols);
-
-            rebuildGridFrame(
-                    gridContainer,
-                    newRows,
-                    m.cols,
-                    m.shape,
-                    m.cellSizePx,
-                    m.showName,
-                    m.showInfo,
-                    m.cellDataList
-            );
-            selectedGridPhotoForPopup = null;
-            selectedGridCellIndexForPopup = -1;
-            selectedGridDataListForPopup = null;
-
-            Toast.makeText(this,
-                    "✅ Cell " + cellNo + " delete થઈ ગયો",
-                    Toast.LENGTH_SHORT).show();
-
-            gridContainer.postDelayed(() -> showGridEditPopup(gridContainer), 80);
-        });
-
-     /*   btnMultiPhoto.setOnClickListener(v -> {
-
-            GridMeta m = (GridMeta) gridContainer.getTag(R.id.btn_grid_frame);
-
-            if (m == null || m.cellDataList == null) {
-                Toast.makeText(this, "Grid data મળ્યો નહીં", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            pendingGridMultiContainer = gridContainer;
-
-            // જો કોઈ cell selected હોય તો ત્યાંથી photos set થશે,
-            // નહિ તો 0 થી શરૂ થશે.
-            if (selectedGridCellIndexForPopup >= 0) {
-                pendingGridMultiStartIdx = selectedGridCellIndexForPopup;
-            } else {
-                pendingGridMultiStartIdx = 0;
-            }
-
-            pendingGridMultiDataList = m.cellDataList;
-            pendingGridMultiShape = m.shape;
-            pendingGridMultiCellSize = m.cellSizePx;
-
-            if (gridEditPopup != null && gridEditPopup.isShowing()) {
+        // ── Delete
+        TextView btnDelete = popupView.findViewById(R.id.btn_grid_simple_delete);
+        if (btnDelete != null) {
+            btnDelete.setOnClickListener(v -> {
                 gridEditPopup.dismiss();
-            }
-
-            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-            intent.setType("image/*");
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
-
-            startActivityForResult(
-                    Intent.createChooser(intent, "Multiple Photos Select"),
-                    REQUEST_GRID_MULTI_PHOTO
-            );
-        });*/
-
-        btnCellPhoto.setOnClickListener(v -> {
-            if (selectedGridPhotoForPopup == null ||
-                    selectedGridCellIndexForPopup < 0 ||
-                    selectedGridDataListForPopup == null) {
-
-                Toast.makeText(this, "પહેલા grid cell select કરો", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            pendingGridCellTarget = selectedGridPhotoForPopup;
-            pendingGridCellIdx = selectedGridCellIndexForPopup;
-            pendingGridCellDataList = selectedGridDataListForPopup;
-            pendingGridShape = selectedGridShapeForPopup;
-            pendingGridCellSize = selectedGridCellSizeForPopup;
-
-            if (gridEditPopup != null && gridEditPopup.isShowing()) {
-                gridEditPopup.dismiss();
-            }
-
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("image/*");
-            startActivityForResult(
-                    Intent.createChooser(intent, "Photo Select"),
-                    REQUEST_GRID_CELL_PHOTO
-            );
-        });
-
-       /* btnSizeMinus.setOnClickListener(v -> {
-            GridMeta m = (GridMeta) gridContainer.getTag(R.id.btn_grid_frame);
-            if (m == null) return;
-
-            int newSize = Math.max(60, m.cellSizePx - 20);
-
-            rebuildGridFrame(
-                    gridContainer,
-                    m.rows,
-                    m.cols,
-                    m.shape,
-                    newSize,
-                    m.showName,
-                    m.showInfo,
-                    m.cellDataList
-            );
-
-            gridContainer.postDelayed(() -> showGridEditPopup(gridContainer), 80);
-        });
-
-        btnSizePlus.setOnClickListener(v -> {
-            GridMeta m = (GridMeta) gridContainer.getTag(R.id.btn_grid_frame);
-            if (m == null) return;
-
-            int newSize = Math.min(1000, m.cellSizePx + 20);
-
-            rebuildGridFrame(
-                    gridContainer,
-                    m.rows,
-                    m.cols,
-                    m.shape,
-                    newSize,
-                    m.showName,
-                    m.showInfo,
-                    m.cellDataList
-            );
-
-            gridContainer.postDelayed(() -> showGridEditPopup(gridContainer), 80);
-        });
-
-        btnRowMinus.setOnClickListener(v -> {
-            GridMeta m = (GridMeta) gridContainer.getTag(R.id.btn_grid_frame);
-            if (m == null) return;
-
-            if (m.rows <= 1) {
-                Toast.makeText(this, "Minimum 1 row જોઈએ", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            rebuildGridFrame(
-                    gridContainer,
-                    m.rows - 1,
-                    m.cols,
-                    m.shape,
-                    m.cellSizePx,
-                    m.showName,
-                    m.showInfo,
-                    m.cellDataList
-            );
-
-            gridContainer.postDelayed(() -> showGridEditPopup(gridContainer), 80);
-        });
-
-        btnRowPlus.setOnClickListener(v -> {
-            GridMeta m = (GridMeta) gridContainer.getTag(R.id.btn_grid_frame);
-            if (m == null) return;
-
-            rebuildGridFrame(
-                    gridContainer,
-                    m.rows + 1,
-                    m.cols,
-                    m.shape,
-                    m.cellSizePx,
-                    m.showName,
-                    m.showInfo,
-                    m.cellDataList
-            );
-
-            gridContainer.postDelayed(() -> showGridEditPopup(gridContainer), 80);
-        });
-
-        btnColMinus.setOnClickListener(v -> {
-            GridMeta m = (GridMeta) gridContainer.getTag(R.id.btn_grid_frame);
-            if (m == null) return;
-
-            if (m.cols <= 1) {
-                Toast.makeText(this, "Minimum 1 column જોઈએ", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            rebuildGridFrame(
-                    gridContainer,
-                    m.rows,
-                    m.cols - 1,
-                    m.shape,
-                    m.cellSizePx,
-                    m.showName,
-                    m.showInfo,
-                    m.cellDataList
-            );
-
-            gridContainer.postDelayed(() -> showGridEditPopup(gridContainer), 80);
-        });
-
-        btnColPlus.setOnClickListener(v -> {
-            GridMeta m = (GridMeta) gridContainer.getTag(R.id.btn_grid_frame);
-            if (m == null) return;
-
-            rebuildGridFrame(
-                    gridContainer,
-                    m.rows,
-                    m.cols + 1,
-                    m.shape,
-                    m.cellSizePx,
-                    m.showName,
-                    m.showInfo,
-                    m.cellDataList
-            );
-
-            gridContainer.postDelayed(() -> showGridEditPopup(gridContainer), 80);
-        });
-*/
-        btnFullEdit.setOnClickListener(v -> {
-            if (gridEditPopup != null && gridEditPopup.isShowing()) {
-                gridEditPopup.dismiss();
-            }
-            showGridFullEditDialog(gridContainer);
-        });
-
-        btnDeleteGrid.setOnClickListener(v -> {
-            new AlertDialog.Builder(this)
-                    .setTitle("Delete Grid")
-                    .setMessage("આ આખી grid delete કરવી છે?")
-                    .setPositiveButton("Delete", (dialog, which) -> {
-
-                        if (gridEditPopup != null && gridEditPopup.isShowing()) {
-                            gridEditPopup.dismiss();
-                        }
-
+                new AlertDialog.Builder(this)
+                    .setTitle("Delete Grid?")
+                    .setMessage("Grid delete kari devo?")
+                    .setPositiveButton("Delete", (d, w) -> {
                         mainLayout.removeView(gridContainer);
-
-                        if (currentlySelectedGrid == gridContainer) {
-                            currentlySelectedGrid = null;
-                        }
-
-                        if (currentlySelectedView == gridContainer) {
-                            currentlySelectedView = null;
-                        }
-
-                        selectedGridPhotoForPopup = null;
-                        selectedGridCellIndexForPopup = -1;
-                        selectedGridDataListForPopup = null;
-
+                        currentlySelectedGrid = null;
                         exportToJson();
-
                         Toast.makeText(this, "✅ Grid delete થઈ ગઈ", Toast.LENGTH_SHORT).show();
                     })
                     .setNegativeButton("Cancel", null)
                     .show();
-        });
-
-        // ── Row + button — navi row add karo
-        if (btnRowPlus != null) {
-            btnRowPlus.setOnClickListener(v -> {
-                int newRows = meta.rows + 1;
-                int newTotal = newRows * meta.cols;
-                gridEditPopup.dismiss();
-                mainLayout.removeView(gridContainer);
-                createGridPhotoFrame(newRows, meta.cols, newTotal,
-                    meta.shape, meta.cellSizePx, meta.showName, meta.showInfo);
-                meta.rows = newRows;
             });
         }
 
-        // ── Row - button — last row remove karo
-        if (btnRowMinus != null) {
-            btnRowMinus.setOnClickListener(v -> {
-                if (meta.rows <= 1) {
-                    Toast.makeText(this, "Minimum 1 row joiye", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                int newRows = meta.rows - 1;
-                int newTotal = newRows * meta.cols;
-                gridEditPopup.dismiss();
-                mainLayout.removeView(gridContainer);
-                createGridPhotoFrame(newRows, meta.cols, newTotal,
-                    meta.shape, meta.cellSizePx, meta.showName, meta.showInfo);
-                meta.rows = newRows;
-            });
-        }
-
-        btnClose.setOnClickListener(v -> {
-            if (gridEditPopup != null && gridEditPopup.isShowing()) {
-                gridEditPopup.dismiss();
-            }
-        });
+        // ── Close
+        TextView btnClose = popupView.findViewById(R.id.btn_grid_simple_close);
+        if (btnClose != null) btnClose.setOnClickListener(v -> gridEditPopup.dismiss());
 
         int popupX = (int) (gridContainer.getX() + 20);
         int popupY = (int) (gridContainer.getY() + 20);
-
         gridEditPopup.showAtLocation(mainLayout, Gravity.NO_GRAVITY, popupX, popupY);
     }
+
 
     private void showGridCellMaskEditDialog(RelativeLayout gridContainer) {
         Object tag = gridContainer.getTag(R.id.btn_grid_frame);
