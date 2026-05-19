@@ -4102,6 +4102,16 @@ public class MainActivity extends AppCompatActivity {
         List<JSONObject> cellDataList = new ArrayList<>();
 
         for (int r = 0; r < rows; r++) {
+            // ── Last row ma keta cells che
+            int cellsInThisRow = (r == rows - 1)
+                ? (totalPhotos - r * cols)
+                : cols;
+
+            // ── Last row center offset
+            int rowStartX = (r == rows - 1 && cellsInThisRow < cols)
+                ? (totalW - cellsInThisRow * cellSizePx - (cellsInThisRow - 1) * gap) / 2
+                : 0;
+
             for (int c = 0; c < cols; c++) {
                 final int cellIdx = r * cols + c;
 
@@ -4113,10 +4123,9 @@ public class MainActivity extends AppCompatActivity {
                 cell.setGravity(Gravity.CENTER_HORIZONTAL);
 
                 RelativeLayout.LayoutParams cellLp =
-                        new RelativeLayout.LayoutParams(
-                                cellSizePx, cellTotalH);
-                cellLp.leftMargin = c * (cellSizePx + gap);
-                cellLp.topMargin = r * (cellTotalH + gap);
+                        new RelativeLayout.LayoutParams(cellSizePx, cellTotalH);
+                cellLp.leftMargin = rowStartX + c * (cellSizePx + gap);
+                cellLp.topMargin  = r * (cellTotalH + gap);
                 cell.setLayoutParams(cellLp);
 
                 // ── Photo ImageView
