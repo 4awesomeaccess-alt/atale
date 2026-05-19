@@ -6843,10 +6843,10 @@ public class MainActivity extends AppCompatActivity {
         TextView btnDeleteCellNumber = popupView.findViewById(R.id.btn_grid_delete_cell_number);
         TextView btnCellPhoto = popupView.findViewById(R.id.btn_grid_cell_photo);
   /*      TextView btnSizeMinus = popupView.findViewById(R.id.btn_grid_size_minus);
-        TextView btnSizePlus = popupView.findViewById(R.id.btn_grid_size_plus);
+        TextView btnSizePlus = popupView.findViewById(R.id.btn_grid_size_plus);*/
         TextView btnRowMinus = popupView.findViewById(R.id.btn_grid_row_minus);
         TextView btnRowPlus = popupView.findViewById(R.id.btn_grid_row_plus);
-        TextView btnColMinus = popupView.findViewById(R.id.btn_grid_col_minus);
+        /*TextView btnColMinus = popupView.findViewById(R.id.btn_grid_col_minus);
         TextView btnColPlus = popupView.findViewById(R.id.btn_grid_col_plus);*/
         TextView btnFullEdit = popupView.findViewById(R.id.btn_grid_full_edit);
         TextView btnDeleteGrid = popupView.findViewById(R.id.btn_grid_delete);
@@ -7302,6 +7302,36 @@ public class MainActivity extends AppCompatActivity {
                     .setNegativeButton("Cancel", null)
                     .show();
         });
+
+        // ── Row + button — navi row add karo
+        if (btnRowPlus != null) {
+            btnRowPlus.setOnClickListener(v -> {
+                int newRows = meta.rows + 1;
+                int newTotal = newRows * meta.cols;
+                gridEditPopup.dismiss();
+                mainLayout.removeView(gridContainer);
+                createGridPhotoFrame(newRows, meta.cols, newTotal,
+                    meta.shape, meta.cellSizePx, meta.showName, meta.showInfo);
+                meta.rows = newRows;
+            });
+        }
+
+        // ── Row - button — last row remove karo
+        if (btnRowMinus != null) {
+            btnRowMinus.setOnClickListener(v -> {
+                if (meta.rows <= 1) {
+                    Toast.makeText(this, "Minimum 1 row joiye", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                int newRows = meta.rows - 1;
+                int newTotal = newRows * meta.cols;
+                gridEditPopup.dismiss();
+                mainLayout.removeView(gridContainer);
+                createGridPhotoFrame(newRows, meta.cols, newTotal,
+                    meta.shape, meta.cellSizePx, meta.showName, meta.showInfo);
+                meta.rows = newRows;
+            });
+        }
 
         btnClose.setOnClickListener(v -> {
             if (gridEditPopup != null && gridEditPopup.isShowing()) {
