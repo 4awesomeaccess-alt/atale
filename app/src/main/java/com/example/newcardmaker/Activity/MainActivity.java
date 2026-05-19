@@ -4009,10 +4009,22 @@ public class MainActivity extends AppCompatActivity {
             btnToggleInfo.setText(showInfo[0] ? "✓ %" : "✕ %");
         });
 
-        // ── Add — start with 1 row, user drags to add more
+        // ── Add — grid banao + direct GridListActivity open
         btnAdd.setOnClickListener(v -> {
             dialog.dismiss();
             createDraggableGrid(cols[0], selectedShape[0], 200, showName[0], showInfo[0]);
+            // Grid add thay pachhi GridListActivity open karo
+            new android.os.Handler().postDelayed(() -> {
+                // Last added grid container find karo
+                for (int i = mainLayout.getChildCount() - 1; i >= 0; i--) {
+                    View child = mainLayout.getChildAt(i);
+                    if (child instanceof RelativeLayout &&
+                        "GRID_FRAME".equals(child.getTag(R.id.btn_set_background))) {
+                        showGridListDialog((RelativeLayout) child);
+                        break;
+                    }
+                }
+            }, 300);
         });
 
         btnCancel.setOnClickListener(v -> dialog.dismiss());
