@@ -15114,7 +15114,6 @@ public class MainActivity extends AppCompatActivity {
      * Drag handle setup — pure delta tracking, no getLocationOnScreen
      */
     private void setupDragHandle(View cv) {
-        final float[] lastTX = {0};
         final float[] lastTY = {0};
         final boolean[] dragging = {false};
 
@@ -15124,21 +15123,20 @@ public class MainActivity extends AppCompatActivity {
         dragHandle.setOnTouchListener((v2, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    lastTX[0] = event.getRawX();
                     lastTY[0] = event.getRawY();
                     dragging[0] = true;
                     return true;
 
                 case MotionEvent.ACTION_MOVE:
                     if (!dragging[0]) return true;
-                    int dx = (int)(event.getRawX() - lastTX[0]);
                     int dy = (int)(event.getRawY() - lastTY[0]);
-                    lastTX[0] = event.getRawX();
                     lastTY[0] = event.getRawY();
-                    selControlsLastX += dx;
                     selControlsLastY += dy;
+                    // Screen boundary check
+                    int screenH2 = getResources().getDisplayMetrics().heightPixels;
+                    selControlsLastY = Math.max(0, Math.min(selControlsLastY, screenH2 - 100));
                     if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) {
-                        selectionControlsPopup.update(selControlsLastX, selControlsLastY, -1, -1);
+                        selectionControlsPopup.update(0, selControlsLastY, -1, -1);
                     }
                     isSelControlsMoved = true;
                     return true;
@@ -15433,8 +15431,14 @@ public class MainActivity extends AppCompatActivity {
             btnClose.setOnClickListener(v -> dismissSelectionControls());
         }
 
-        // ── Show popup at bottom full width
-        selectionControlsPopup.showAtLocation(mainLayout, Gravity.BOTTOM | Gravity.START, 0, 0);
+        // ── Show popup at bottom (TOP|LEFT thi show — drag mate)
+        cv.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        int popupH = cv.getMeasuredHeight();
+        int screenH = getResources().getDisplayMetrics().heightPixels;
+        selControlsLastX = 0;
+        selControlsLastY = screenH - popupH;
+        isSelControlsMoved = false;
+        selectionControlsPopup.showAtLocation(mainLayout, Gravity.TOP | Gravity.START, 0, selControlsLastY);
     }
 
 
