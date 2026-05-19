@@ -1,0 +1,224 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@android:color/transparent">
+
+    <!-- DRAG HANDLE -->
+    <TextView
+        android:id="@+id/drag_handle_align"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:text="⊞ Align &amp; Distribute  ↕ drag"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:background="#1565C0"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"/>
+
+    <!-- MAIN CARD -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#E3F2FD"
+        android:padding="10dp">
+
+        <!-- SECTION: Horizontal Align -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="↔ Horizontal"
+            android:textSize="10sp"
+            android:textColor="#1565C0"
+            android:paddingBottom="4dp"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <!-- Left -->
+            <LinearLayout
+                android:id="@+id/btn_align_left"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="#FFFFFF"
+                android:layout_marginEnd="4dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="⊢" android:textSize="20sp" android:textColor="#1565C0"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Left" android:textSize="9sp" android:textColor="#555555"/>
+            </LinearLayout>
+
+            <!-- Center H -->
+            <LinearLayout
+                android:id="@+id/btn_align_center_h"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="#FFFFFF"
+                android:layout_marginEnd="4dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="⊣⊢" android:textSize="20sp" android:textColor="#1565C0"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Center" android:textSize="9sp" android:textColor="#555555"/>
+            </LinearLayout>
+
+            <!-- Right -->
+            <LinearLayout
+                android:id="@+id/btn_align_right"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="#FFFFFF">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="⊣" android:textSize="20sp" android:textColor="#1565C0"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Right" android:textSize="9sp" android:textColor="#555555"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- SECTION: Vertical Align -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="↕ Vertical"
+            android:textSize="10sp"
+            android:textColor="#1565C0"
+            android:paddingBottom="4dp"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <!-- Top -->
+            <LinearLayout
+                android:id="@+id/btn_align_top"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="#FFFFFF"
+                android:layout_marginEnd="4dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="⊤" android:textSize="20sp" android:textColor="#0D47A1"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Top" android:textSize="9sp" android:textColor="#555555"/>
+            </LinearLayout>
+
+            <!-- Middle V -->
+            <LinearLayout
+                android:id="@+id/btn_align_middle"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="#FFFFFF"
+                android:layout_marginEnd="4dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="⊥⊤" android:textSize="20sp" android:textColor="#0D47A1"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Middle" android:textSize="9sp" android:textColor="#555555"/>
+            </LinearLayout>
+
+            <!-- Bottom -->
+            <LinearLayout
+                android:id="@+id/btn_align_bottom"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="#FFFFFF">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="⊥" android:textSize="20sp" android:textColor="#0D47A1"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Bottom" android:textSize="9sp" android:textColor="#555555"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- DIVIDER -->
+        <View android:layout_width="match_parent" android:layout_height="1dp"
+            android:background="#90CAF9" android:layout_marginBottom="8dp"/>
+
+        <!-- SECTION: Distribute -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="⇔ Distribute (2+ elements)"
+            android:textSize="10sp"
+            android:textColor="#1565C0"
+            android:paddingBottom="4dp"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <!-- Distribute H -->
+            <LinearLayout
+                android:id="@+id/btn_distribute_h"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="#FFFFFF"
+                android:layout_marginEnd="4dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="| | |" android:textSize="16sp" android:textColor="#388E3C"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Space H" android:textSize="9sp" android:textColor="#555555"/>
+            </LinearLayout>
+
+            <!-- Distribute V -->
+            <LinearLayout
+                android:id="@+id/btn_distribute_v"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="#FFFFFF">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="≡" android:textSize="22sp" android:textColor="#388E3C"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Space V" android:textSize="9sp" android:textColor="#555555"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- CLOSE -->
+        <TextView
+            android:id="@+id/btn_align_close"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:text="✕ Close"
+            android:textSize="11sp"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:background="#B71C1C"
+            android:layout_marginTop="4dp"/>
+
+    </LinearLayout>
+</LinearLayout>

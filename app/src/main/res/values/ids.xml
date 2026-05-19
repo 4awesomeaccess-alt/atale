@@ -41,4 +41,14 @@
     <item name="tv_corner_label" type="id" />
     <item name="btn_highlight_color" type="id" />
     <item name="tag_brightness" type="id" />
+    <item name="btn_align_left" type="id" />
+    <item name="btn_align_center_h" type="id" />
+    <item name="btn_align_right" type="id" />
+    <item name="btn_align_top" type="id" />
+    <item name="btn_align_middle" type="id" />
+    <item name="btn_align_bottom" type="id" />
+    <item name="btn_distribute_h" type="id" />
+    <item name="btn_distribute_v" type="id" />
+    <item name="btn_align_close" type="id" />
+    <item name="drag_handle_align" type="id" />
 </resources>

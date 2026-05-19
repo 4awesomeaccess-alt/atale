@@ -15679,14 +15679,133 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        if (btnToggleAlign != null && hsvAlign != null) {
+        if (btnToggleAlign != null) {
             btnToggleAlign.setOnClickListener(v -> {
-                boolean show = hsvAlign.getVisibility() != View.VISIBLE;
-                hsvAlign.setVisibility(show ? View.VISIBLE : View.GONE);
-                if (show && rowMove != null) rowMove.setVisibility(View.GONE);
-                if (show && rowLayer != null) rowLayer.setVisibility(View.GONE);
+                // Old hsv_align_row hide rakho
+                if (hsvAlign != null) hsvAlign.setVisibility(View.GONE);
+                if (rowMove != null) rowMove.setVisibility(View.GONE);
+                if (rowLayer != null) rowLayer.setVisibility(View.GONE);
+                // Navo align popup kholo
+                showAlignPopup(cv);
             });
         }
+    }
+
+    private PopupWindow alignPopupWindow = null;
+
+    private void showAlignPopup(View anchorView) {
+        try {
+            if (alignPopupWindow != null && alignPopupWindow.isShowing()) {
+                alignPopupWindow.dismiss();
+                return;
+            }
+        } catch (Exception e) { alignPopupWindow = null; }
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View popupView = inflater.inflate(R.layout.layout_align_popup, null);
+
+        alignPopupWindow = new PopupWindow(popupView,
+            android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+            android.view.ViewGroup.LayoutParams.WRAP_CONTENT, false);
+        alignPopupWindow.setOutsideTouchable(true);
+        alignPopupWindow.setTouchable(true);
+        alignPopupWindow.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        // ── Drag handle
+        View dragHandle = popupView.findViewById(R.id.drag_handle_align);
+        if (dragHandle != null) {
+            dragHandle.setOnTouchListener(new View.OnTouchListener() {
+                float dX, dY;
+                @Override
+                public boolean onTouch(View v2, MotionEvent e) {
+                    switch (e.getActionMasked()) {
+                        case MotionEvent.ACTION_DOWN:
+                            dX = alignPopupWindow.getContentView().getX() - e.getRawX();
+                            dY = alignPopupWindow.getContentView().getY() - e.getRawY();
+                            break;
+                        case MotionEvent.ACTION_MOVE:
+                            int[] loc = new int[2];
+                            mainLayout.getLocationOnScreen(loc);
+                            alignPopupWindow.update((int)(e.getRawX() + dX), (int)(e.getRawY() + dY), -1, -1);
+                            break;
+                    }
+                    return true;
+                }
+            });
+        }
+
+        // ── Get current target view
+        View targetView = currentlySelectedView;
+
+        View.OnClickListener alignListener = v -> {
+            int id = v.getId();
+            float canvasLeft = main_image_view.getX();
+            float canvasTop = main_image_view.getY();
+            float canvasRight = canvasLeft + main_image_view.getWidth();
+            float canvasBottom = canvasTop + main_image_view.getHeight();
+            float canvasCenterX = canvasLeft + main_image_view.getWidth() / 2f;
+            float canvasCenterY = canvasTop + main_image_view.getHeight() / 2f;
+
+            List<View> targets = new ArrayList<>();
+            if (!selectedViews.isEmpty()) targets.addAll(selectedViews);
+            else if (targetView != null) targets.add(targetView);
+
+            if ((id == R.id.btn_distribute_h || id == R.id.btn_distribute_v) && targets.size() < 2) {
+                Toast.makeText(this, "Distribute માટે 2+ elements select કરો", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (id == R.id.btn_align_left) {
+                for (View t : targets) t.setX(canvasLeft);
+            } else if (id == R.id.btn_align_center_h) {
+                for (View t : targets) t.setX(canvasCenterX - t.getWidth() / 2f);
+            } else if (id == R.id.btn_align_right) {
+                for (View t : targets) t.setX(canvasRight - t.getWidth());
+            } else if (id == R.id.btn_align_top) {
+                for (View t : targets) t.setY(canvasTop);
+            } else if (id == R.id.btn_align_middle) {
+                for (View t : targets) t.setY(canvasCenterY - t.getHeight() / 2f);
+            } else if (id == R.id.btn_align_bottom) {
+                for (View t : targets) t.setY(canvasBottom - t.getHeight());
+            } else if (id == R.id.btn_distribute_h) {
+                targets.sort((a, b) -> Float.compare(a.getX(), b.getX()));
+                float totalW = 0;
+                for (View t : targets) totalW += t.getWidth();
+                float gap = (main_image_view.getWidth() - totalW) / (targets.size() - 1);
+                float curX = canvasLeft;
+                for (View t : targets) { t.setX(curX); curX += t.getWidth() + gap; }
+            } else if (id == R.id.btn_distribute_v) {
+                targets.sort((a, b) -> Float.compare(a.getY(), b.getY()));
+                float totalH = 0;
+                for (View t : targets) totalH += t.getHeight();
+                float gap = (main_image_view.getHeight() - totalH) / (targets.size() - 1);
+                float curY = canvasTop;
+                for (View t : targets) { t.setY(curY); curY += t.getHeight() + gap; }
+            }
+
+            groupStartPositions.clear();
+            for (View sel : selectedViews) groupStartPositions.add(new float[]{sel.getX(), sel.getY()});
+            exportToJson();
+        };
+
+        popupView.findViewById(R.id.btn_align_left).setOnClickListener(alignListener);
+        popupView.findViewById(R.id.btn_align_center_h).setOnClickListener(alignListener);
+        popupView.findViewById(R.id.btn_align_right).setOnClickListener(alignListener);
+        popupView.findViewById(R.id.btn_align_top).setOnClickListener(alignListener);
+        popupView.findViewById(R.id.btn_align_middle).setOnClickListener(alignListener);
+        popupView.findViewById(R.id.btn_align_bottom).setOnClickListener(alignListener);
+        popupView.findViewById(R.id.btn_distribute_h).setOnClickListener(alignListener);
+        popupView.findViewById(R.id.btn_distribute_v).setOnClickListener(alignListener);
+
+        // ── Close
+        TextView btnClose = popupView.findViewById(R.id.btn_align_close);
+        if (btnClose != null) btnClose.setOnClickListener(v -> alignPopupWindow.dismiss());
+
+        // ── Show at center
+        popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        int px = Math.max(0, (mainLayout.getWidth() - popupView.getMeasuredWidth()) / 2);
+        int py = Math.max(0, (mainLayout.getHeight() - popupView.getMeasuredHeight()) / 2);
+        alignPopupWindow.showAtLocation(mainLayout, Gravity.TOP | Gravity.LEFT, px, py);
     }
 
 
