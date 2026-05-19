@@ -89,4 +89,6 @@
     <item name="btn_shape_circle" type="id" />
     <item name="btn_shape_rounded" type="id" />
     <item name="btn_shape_square" type="id" />
+    <item name="btn_grid_row_minus" type="id" />
+    <item name="btn_grid_row_plus" type="id" />
 </resources>
