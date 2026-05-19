@@ -41,102 +41,130 @@
         android:paddingTop="6dp"
         android:paddingBottom="6dp">
 
-        <!-- ROW 1: Horizontal align + Vertical align all in one row -->
-        <LinearLayout
+        <!-- HORIZONTAL SCROLLVIEW for all buttons -->
+        <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="4dp">
+            android:scrollbars="none">
 
-            <!-- Left -->
-            <LinearLayout android:id="@+id/btn_align_left"
-                android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1"
-                android:orientation="vertical" android:gravity="center"
-                android:background="#FFFFFF" android:layout_marginEnd="3dp">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="⊢" android:textSize="16sp" android:textColor="#1565C0"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Left" android:textSize="8sp" android:textColor="#555555"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!-- Left -->
+                <LinearLayout android:id="@+id/btn_align_left"
+                    android:layout_width="52dp" android:layout_height="48dp"
+                    android:orientation="vertical" android:gravity="center"
+                    android:background="#FFFFFF" android:layout_marginEnd="4dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="⊢" android:textSize="16sp" android:textColor="#1565C0"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Left" android:textSize="8sp" android:textColor="#555555"/>
+                </LinearLayout>
+
+                <!-- H-Center -->
+                <LinearLayout android:id="@+id/btn_align_center_h"
+                    android:layout_width="52dp" android:layout_height="48dp"
+                    android:orientation="vertical" android:gravity="center"
+                    android:background="#FFFFFF" android:layout_marginEnd="4dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="⊣⊢" android:textSize="16sp" android:textColor="#1565C0"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="H-Center" android:textSize="8sp" android:textColor="#555555"/>
+                </LinearLayout>
+
+                <!-- Right -->
+                <LinearLayout android:id="@+id/btn_align_right"
+                    android:layout_width="52dp" android:layout_height="48dp"
+                    android:orientation="vertical" android:gravity="center"
+                    android:background="#FFFFFF" android:layout_marginEnd="4dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="⊣" android:textSize="16sp" android:textColor="#1565C0"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Right" android:textSize="8sp" android:textColor="#555555"/>
+                </LinearLayout>
+
+                <!-- Divider -->
+                <View android:layout_width="1dp" android:layout_height="48dp"
+                    android:background="#90CAF9" android:layout_marginEnd="4dp"/>
+
+                <!-- Top -->
+                <LinearLayout android:id="@+id/btn_align_top"
+                    android:layout_width="52dp" android:layout_height="48dp"
+                    android:orientation="vertical" android:gravity="center"
+                    android:background="#FFFFFF" android:layout_marginEnd="4dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="⊤" android:textSize="16sp" android:textColor="#0D47A1"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Top" android:textSize="8sp" android:textColor="#555555"/>
+                </LinearLayout>
+
+                <!-- V-Center -->
+                <LinearLayout android:id="@+id/btn_align_middle"
+                    android:layout_width="52dp" android:layout_height="48dp"
+                    android:orientation="vertical" android:gravity="center"
+                    android:background="#FFFFFF" android:layout_marginEnd="4dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="⊥⊤" android:textSize="16sp" android:textColor="#0D47A1"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="V-Center" android:textSize="8sp" android:textColor="#555555"/>
+                </LinearLayout>
+
+                <!-- Bottom -->
+                <LinearLayout android:id="@+id/btn_align_bottom"
+                    android:layout_width="52dp" android:layout_height="48dp"
+                    android:orientation="vertical" android:gravity="center"
+                    android:background="#FFFFFF" android:layout_marginEnd="4dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="⊥" android:textSize="16sp" android:textColor="#0D47A1"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Bottom" android:textSize="8sp" android:textColor="#555555"/>
+                </LinearLayout>
+
+                <!-- Divider -->
+                <View android:layout_width="1dp" android:layout_height="48dp"
+                    android:background="#90CAF9" android:layout_marginEnd="4dp"/>
+
+                <!-- Space H -->
+                <LinearLayout android:id="@+id/btn_distribute_h"
+                    android:layout_width="52dp" android:layout_height="48dp"
+                    android:orientation="vertical" android:gravity="center"
+                    android:background="#FFFFFF" android:layout_marginEnd="4dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="|||" android:textSize="14sp" android:textColor="#388E3C"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Space H" android:textSize="8sp" android:textColor="#555555"/>
+                </LinearLayout>
+
+                <!-- Space V -->
+                <LinearLayout android:id="@+id/btn_distribute_v"
+                    android:layout_width="52dp" android:layout_height="48dp"
+                    android:orientation="vertical" android:gravity="center"
+                    android:background="#FFFFFF" android:layout_marginEnd="4dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="≡" android:textSize="16sp" android:textColor="#388E3C"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Space V" android:textSize="8sp" android:textColor="#555555"/>
+                </LinearLayout>
+
+                <!-- Divider -->
+                <View android:layout_width="1dp" android:layout_height="48dp"
+                    android:background="#90CAF9" android:layout_marginEnd="4dp"/>
+
+                <!-- Same Height -->
+                <LinearLayout android:id="@+id/btn_same_height"
+                    android:layout_width="52dp" android:layout_height="48dp"
+                    android:orientation="vertical" android:gravity="center"
+                    android:background="#FFFFFF">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="⇕" android:textSize="16sp" android:textColor="#6A1B9A"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="Same H" android:textSize="8sp" android:textColor="#555555"/>
+                </LinearLayout>
+
             </LinearLayout>
-
-            <!-- Center H -->
-            <LinearLayout android:id="@+id/btn_align_center_h"
-                android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1"
-                android:orientation="vertical" android:gravity="center"
-                android:background="#FFFFFF" android:layout_marginEnd="3dp">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="⊣⊢" android:textSize="16sp" android:textColor="#1565C0"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="H-Center" android:textSize="8sp" android:textColor="#555555"/>
-            </LinearLayout>
-
-            <!-- Right -->
-            <LinearLayout android:id="@+id/btn_align_right"
-                android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1"
-                android:orientation="vertical" android:gravity="center"
-                android:background="#FFFFFF" android:layout_marginEnd="3dp">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="⊣" android:textSize="16sp" android:textColor="#1565C0"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Right" android:textSize="8sp" android:textColor="#555555"/>
-            </LinearLayout>
-
-            <!-- Top -->
-            <LinearLayout android:id="@+id/btn_align_top"
-                android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1"
-                android:orientation="vertical" android:gravity="center"
-                android:background="#FFFFFF" android:layout_marginEnd="3dp">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="⊤" android:textSize="16sp" android:textColor="#0D47A1"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Top" android:textSize="8sp" android:textColor="#555555"/>
-            </LinearLayout>
-
-            <!-- Middle -->
-            <LinearLayout android:id="@+id/btn_align_middle"
-                android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1"
-                android:orientation="vertical" android:gravity="center"
-                android:background="#FFFFFF" android:layout_marginEnd="3dp">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="⊥⊤" android:textSize="16sp" android:textColor="#0D47A1"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="V-Center" android:textSize="8sp" android:textColor="#555555"/>
-            </LinearLayout>
-
-            <!-- Bottom -->
-            <LinearLayout android:id="@+id/btn_align_bottom"
-                android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1"
-                android:orientation="vertical" android:gravity="center"
-                android:background="#FFFFFF" android:layout_marginEnd="3dp">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="⊥" android:textSize="16sp" android:textColor="#0D47A1"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Bottom" android:textSize="8sp" android:textColor="#555555"/>
-            </LinearLayout>
-
-            <!-- Space H -->
-            <LinearLayout android:id="@+id/btn_distribute_h"
-                android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1"
-                android:orientation="vertical" android:gravity="center"
-                android:background="#FFFFFF" android:layout_marginEnd="3dp">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="|||" android:textSize="14sp" android:textColor="#388E3C"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Space H" android:textSize="8sp" android:textColor="#555555"/>
-            </LinearLayout>
-
-            <!-- Space V -->
-            <LinearLayout android:id="@+id/btn_distribute_v"
-                android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1"
-                android:orientation="vertical" android:gravity="center"
-                android:background="#FFFFFF">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="≡" android:textSize="16sp" android:textColor="#388E3C"/>
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="Space V" android:textSize="8sp" android:textColor="#555555"/>
-            </LinearLayout>
-
-        </LinearLayout>
+        </HorizontalScrollView>
 
     </LinearLayout>
 </LinearLayout>

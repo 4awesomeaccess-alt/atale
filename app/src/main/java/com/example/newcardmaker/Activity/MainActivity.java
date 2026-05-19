@@ -15945,8 +15945,8 @@ public class MainActivity extends AppCompatActivity {
             if (!selectedViews.isEmpty()) targets.addAll(selectedViews);
             else if (targetView != null) targets.add(targetView);
 
-            if ((id == R.id.btn_distribute_h || id == R.id.btn_distribute_v) && targets.size() < 2) {
-                Toast.makeText(this, "Distribute માટે 2+ elements select કરો", Toast.LENGTH_SHORT).show();
+            if ((id == R.id.btn_distribute_h || id == R.id.btn_distribute_v || id == R.id.btn_same_height) && targets.size() < 2) {
+                Toast.makeText(this, "2+ elements select કરો", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -15976,6 +15976,17 @@ public class MainActivity extends AppCompatActivity {
                 float gap = (main_image_view.getHeight() - totalH) / (targets.size() - 1);
                 float curY = canvasTop;
                 for (View t : targets) { t.setY(curY); curY += t.getHeight() + gap; }
+            } else if (id == R.id.btn_same_height) {
+                // Pehla selected view ni height reference lao
+                int refH = targets.get(0).getHeight();
+                for (View t : targets) {
+                    android.view.ViewGroup.LayoutParams lp2 = t.getLayoutParams();
+                    if (lp2 != null) {
+                        lp2.height = refH;
+                        t.setLayoutParams(lp2);
+                        t.requestLayout();
+                    }
+                }
             }
 
             groupStartPositions.clear();
@@ -15991,6 +16002,7 @@ public class MainActivity extends AppCompatActivity {
         popupView.findViewById(R.id.btn_align_bottom).setOnClickListener(alignListener);
         popupView.findViewById(R.id.btn_distribute_h).setOnClickListener(alignListener);
         popupView.findViewById(R.id.btn_distribute_v).setOnClickListener(alignListener);
+        popupView.findViewById(R.id.btn_same_height).setOnClickListener(alignListener);
 
         // ── Close
         TextView btnClose = popupView.findViewById(R.id.btn_align_close);

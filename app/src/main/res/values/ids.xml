@@ -68,4 +68,5 @@
     <item name="btn_layer_up" type="id" />
     <item name="btn_layer_down" type="id" />
     <item name="btn_layer_back" type="id" />
+    <item name="btn_same_height" type="id" />
 </resources>
