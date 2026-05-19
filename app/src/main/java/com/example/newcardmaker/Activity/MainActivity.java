@@ -15393,6 +15393,37 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+        // ── Brightness SeekBar
+        android.widget.SeekBar seekBrightness = cv.findViewById(R.id.seek_brightness);
+        TextView tvBrightnessVal = cv.findViewById(R.id.tv_brightness_val);
+        if (seekBrightness != null) {
+            // Current brightness tag thi restore karo
+            Object brightnessTag = targetView.getTag(R.id.tag_brightness);
+            int currentProgress = (brightnessTag instanceof Integer) ? (int) brightnessTag : 100;
+            seekBrightness.setProgress(currentProgress);
+            if (tvBrightnessVal != null) tvBrightnessVal.setText(String.valueOf(currentProgress - 100));
+
+            seekBrightness.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(android.widget.SeekBar s, int progress, boolean fromUser) {
+                    if (!fromUser) return;
+                    // progress: 0=dark, 100=normal, 200=bright
+                    float brightness = (progress - 100) / 100f; // -1.0 to +1.0
+                    android.graphics.ColorMatrix cm = new android.graphics.ColorMatrix(new float[]{
+                        1, 0, 0, 0, brightness * 255,
+                        0, 1, 0, 0, brightness * 255,
+                        0, 0, 1, 0, brightness * 255,
+                        0, 0, 0, 1, 0
+                    });
+                    targetView.setColorFilter(new android.graphics.ColorMatrixColorFilter(cm));
+                    targetView.setTag(R.id.tag_brightness, progress);
+                    if (tvBrightnessVal != null) tvBrightnessVal.setText(String.valueOf(progress - 100));
+                }
+                @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+                @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
+            });
+        }
+
         // ── Close
         TextView btnClose = cv.findViewById(R.id.btn_sel_close);
         if (btnClose != null) {

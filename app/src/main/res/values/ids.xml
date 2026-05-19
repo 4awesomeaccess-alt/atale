@@ -40,4 +40,5 @@
     <item name="seek_corner_radius" type="id" />
     <item name="tv_corner_label" type="id" />
     <item name="btn_highlight_color" type="id" />
+    <item name="tag_brightness" type="id" />
 </resources>
