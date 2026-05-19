@@ -15891,12 +15891,14 @@ public class MainActivity extends AppCompatActivity {
         alignPopupWindow.setTouchable(true);
         alignPopupWindow.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        // ── Align close thay tyare image controls pachu open karo
+        // ── Align close thay tyare previous popup pachu open karo
         alignPopupWindow.setOnDismissListener(() -> {
             try {
                 View targetView2 = currentlySelectedView;
                 if (targetView2 instanceof ImageView) {
                     showSelectionControlsForImage((ImageView) targetView2);
+                } else if (targetView2 instanceof StrokeTextView) {
+                    showSelectionControlsForText((StrokeTextView) targetView2);
                 }
             } catch (Exception ignored) {}
         });
@@ -22599,10 +22601,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Text Controls restore on dismiss
         arcPopupWindow.setOnDismissListener(() -> {
-            if (selectionControlsPopup != null && !selectionControlsPopup.isShowing()) {
-                selectionControlsPopup.showAtLocation(mainLayout,
-                    Gravity.TOP | Gravity.LEFT, selControlsLastX, selControlsLastY);
-            }
+            try {
+                showAlignPopup(null);
+            } catch (Exception ignored) {}
         });
 
         // ── Drag
