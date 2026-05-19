@@ -51,4 +51,14 @@
     <item name="btn_distribute_v" type="id" />
     <item name="btn_align_close" type="id" />
     <item name="drag_handle_align" type="id" />
+    <item name="drag_handle_size_move" type="id" />
+    <item name="btn_size_move_close" type="id" />
+    <item name="btn_sm_size_minus" type="id" />
+    <item name="btn_sm_size_plus" type="id" />
+    <item name="seek_sm_size" type="id" />
+    <item name="tv_sm_size_label" type="id" />
+    <item name="btn_sm_up" type="id" />
+    <item name="btn_sm_down" type="id" />
+    <item name="btn_sm_left" type="id" />
+    <item name="btn_sm_right" type="id" />
 </resources>

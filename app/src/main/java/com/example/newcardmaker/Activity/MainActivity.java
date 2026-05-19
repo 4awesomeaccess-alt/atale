@@ -15668,14 +15668,18 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout rowLayer = cv.findViewById(R.id.row_layer_btns);
         HorizontalScrollView hsvAlign = cv.findViewById(R.id.hsv_align_row);
 
-        if (btnToggleMove == null || rowMove == null) return;
+        if (btnToggleMove == null) return;
 
-        if (btnToggleMove != null && rowMove != null) {
+        if (btnToggleMove != null) {
             btnToggleMove.setOnClickListener(v -> {
-                boolean show = rowMove.getVisibility() != View.VISIBLE;
-                rowMove.setVisibility(show ? View.VISIBLE : View.GONE);
-                if (show && rowLayer != null) rowLayer.setVisibility(View.GONE);
-                if (show && hsvAlign != null) hsvAlign.setVisibility(View.GONE);
+                if (rowMove != null) rowMove.setVisibility(View.GONE);
+                if (rowLayer != null) rowLayer.setVisibility(View.GONE);
+                if (hsvAlign != null) hsvAlign.setVisibility(View.GONE);
+                // Bija badha popups dismiss karo
+                try { if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) selectionControlsPopup.dismiss(); } catch (Exception ignored) {}
+                try { if (currentStickerToolbarPopup != null && currentStickerToolbarPopup.isShowing()) currentStickerToolbarPopup.dismiss(); } catch (Exception ignored) {}
+                // Navo size+move popup kholo
+                showSizeMovePopup(cv);
             });
         }
 
@@ -15692,6 +15696,91 @@ public class MainActivity extends AppCompatActivity {
                 showAlignPopup(cv);
             });
         }
+    }
+
+    private PopupWindow sizeMovePopupWindow = null;
+
+    private void showSizeMovePopup(View anchorView) {
+        try {
+            if (sizeMovePopupWindow != null && sizeMovePopupWindow.isShowing()) {
+                sizeMovePopupWindow.dismiss();
+                return;
+            }
+        } catch (Exception e) { sizeMovePopupWindow = null; }
+
+        View targetView = currentlySelectedView;
+        if (targetView == null) return;
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View popupView = inflater.inflate(R.layout.layout_size_move_popup, null);
+
+        sizeMovePopupWindow = new PopupWindow(popupView,
+            android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+            android.view.ViewGroup.LayoutParams.WRAP_CONTENT, false);
+        sizeMovePopupWindow.setOutsideTouchable(true);
+        sizeMovePopupWindow.setTouchable(true);
+        sizeMovePopupWindow.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        // ── Close thay tyare image controls pachu open karo
+        sizeMovePopupWindow.setOnDismissListener(() -> {
+            try {
+                if (currentlySelectedView instanceof ImageView) {
+                    showSelectionControlsForImage((ImageView) currentlySelectedView);
+                }
+            } catch (Exception ignored) {}
+        });
+
+        // ── Size label + seekbar
+        TextView tvLbl = popupView.findViewById(R.id.tv_sm_size_label);
+        android.view.ViewGroup.LayoutParams lp = targetView.getLayoutParams();
+        int origW = (lp != null && lp.width > 0) ? lp.width : targetView.getWidth();
+        int origH = (lp != null && lp.height > 0) ? lp.height : targetView.getHeight();
+        if (tvLbl != null) tvLbl.setText("W:" + origW + " H:" + origH);
+
+        android.widget.SeekBar seekSize = popupView.findViewById(R.id.seek_sm_size);
+        if (seekSize != null) {
+            seekSize.setProgress(50);
+            seekSize.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(android.widget.SeekBar s, int progress, boolean fromUser) {
+                    if (!fromUser) return;
+                    applySelSizeChange(targetView, progress, tvLbl);
+                    android.view.ViewGroup.LayoutParams p = targetView.getLayoutParams();
+                    if (p != null && tvLbl != null) tvLbl.setText("W:" + p.width + " H:" + p.height);
+                }
+                @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+                @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
+            });
+        }
+
+        // ── Size − + buttons
+        TextView btnSzM = popupView.findViewById(R.id.btn_sm_size_minus);
+        TextView btnSzP = popupView.findViewById(R.id.btn_sm_size_plus);
+        if (btnSzM != null && seekSize != null) {
+            btnSzM.setOnClickListener(v -> { int nv = Math.max(0, seekSize.getProgress() - 2); seekSize.setProgress(nv); applySelSizeChange(targetView, nv, tvLbl); exportToJson(); });
+            btnSzM.setOnLongClickListener(v -> { int nv = Math.max(0, seekSize.getProgress() - 5); seekSize.setProgress(nv); applySelSizeChange(targetView, nv, tvLbl); return true; });
+        }
+        if (btnSzP != null && seekSize != null) {
+            btnSzP.setOnClickListener(v -> { int nv = Math.min(100, seekSize.getProgress() + 2); seekSize.setProgress(nv); applySelSizeChange(targetView, nv, tvLbl); exportToJson(); });
+            btnSzP.setOnLongClickListener(v -> { int nv = Math.min(100, seekSize.getProgress() + 5); seekSize.setProgress(nv); applySelSizeChange(targetView, nv, tvLbl); return true; });
+        }
+
+        // ── Move buttons
+        TextView btnUp    = popupView.findViewById(R.id.btn_sm_up);
+        TextView btnDown  = popupView.findViewById(R.id.btn_sm_down);
+        TextView btnLeft  = popupView.findViewById(R.id.btn_sm_left);
+        TextView btnRight = popupView.findViewById(R.id.btn_sm_right);
+        if (btnUp != null)    { btnUp.setOnClickListener(v -> moveSingleView(targetView, 0, -SEL_MOVE_STEP));    btnUp.setOnLongClickListener(v -> { moveSingleView(targetView, 0, -SEL_MOVE_STEP * 5); return true; }); }
+        if (btnDown != null)  { btnDown.setOnClickListener(v -> moveSingleView(targetView, 0, SEL_MOVE_STEP));   btnDown.setOnLongClickListener(v -> { moveSingleView(targetView, 0, SEL_MOVE_STEP * 5); return true; }); }
+        if (btnLeft != null)  { btnLeft.setOnClickListener(v -> moveSingleView(targetView, -SEL_MOVE_STEP, 0));  btnLeft.setOnLongClickListener(v -> { moveSingleView(targetView, -SEL_MOVE_STEP * 5, 0); return true; }); }
+        if (btnRight != null) { btnRight.setOnClickListener(v -> moveSingleView(targetView, SEL_MOVE_STEP, 0));  btnRight.setOnLongClickListener(v -> { moveSingleView(targetView, SEL_MOVE_STEP * 5, 0); return true; }); }
+
+        // ── Close
+        TextView btnClose = popupView.findViewById(R.id.btn_size_move_close);
+        if (btnClose != null) btnClose.setOnClickListener(v -> sizeMovePopupWindow.dismiss());
+
+        // ── Show at bottom full width
+        sizeMovePopupWindow.showAtLocation(mainLayout, Gravity.BOTTOM | Gravity.START, 0, 0);
     }
 
     private PopupWindow alignPopupWindow = null;
