@@ -3,6 +3,8 @@ package com.example.newcardmaker.Activity;
 import static android.util.Log.ASSERT;
 import static android.view.View.VISIBLE;
 
+import com.gif.infosys.gifgoodnight.billing.SubscriptionManager;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -341,6 +343,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // ── Subscription init
+        SubscriptionManager.getInstance(this).startConnection();
 
         rotationGestureDetector = new RotationGestureDetector(deltaAngle -> {
             if (currentlySelectedView != null && currentlySelectedView != main_image_view) {
@@ -17550,41 +17555,93 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveLayoutAsImage() {
-        // 1. લેઆઉટને Bitmap માં કન્વર્ટ કરો
         mainLayout.setDrawingCacheEnabled(true);
         mainLayout.buildDrawingCache();
         android.graphics.Bitmap bitmap = android.graphics.Bitmap.createBitmap(mainLayout.getDrawingCache());
         mainLayout.setDrawingCacheEnabled(false);
 
-        // 2. ફાઈલનું નામ અને લોકેશન (Public Pictures Folder)
-        String fileName = "Card_Page_" + (currentPageIndex + 1) + "_" + System.currentTimeMillis() + ".jpg";
-
-        // ગેલેરીમાં દેખાય તે માટે Environment.DIRECTORY_PICTURES નો ઉપયોગ કરો
-        File storageDir = new File(android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "MyCardMaker");
-
-        if (!storageDir.exists()) {
-            storageDir.mkdirs();
+        // ── Watermark — free user ne add karo
+        SubscriptionManager subMgr = SubscriptionManager.getInstance(this);
+        if (!subMgr.isSubscribed()) {
+            bitmap = com.gif.infosys.gifgoodnight.billing.WatermarkHelper.addWatermark(bitmap);
         }
 
+        String fileName = "Card_Page_" + (currentPageIndex + 1) + "_" + System.currentTimeMillis() + ".jpg";
+        File storageDir = new File(android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "MyCardMaker");
+        if (!storageDir.exists()) storageDir.mkdirs();
         File imageFile = new File(storageDir, fileName);
 
+        final android.graphics.Bitmap finalBitmap = bitmap;
         try {
             FileOutputStream fos = new FileOutputStream(imageFile);
-            bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 100, fos);
+            finalBitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 100, fos);
             fos.flush();
             fos.close();
 
-            // --- સૌથી મહત્વનું: ગેલેરીમાં ઈમેજ બતાવવા માટે સ્કેન કરો ---
-            android.media.MediaScannerConnection.scanFile(this, new String[]{imageFile.getAbsolutePath()}, new String[]{"image/jpeg"}, (path, uri) -> {
-                // સ્કેન પૂરું થયા પછી લોગ અથવા ટોસ્ટ બતાવી શકાય
-            });
-
+            android.media.MediaScannerConnection.scanFile(this, new String[]{imageFile.getAbsolutePath()}, new String[]{"image/jpeg"}, (path, uri) -> {});
             runOnUiThread(() -> Toast.makeText(this, "પેજ " + (currentPageIndex + 1) + " સેવ થયું!", Toast.LENGTH_SHORT).show());
 
         } catch (Exception e) {
             e.printStackTrace();
             runOnUiThread(() -> Toast.makeText(this, "સેવ કરવામાં ભૂલ આવી!", Toast.LENGTH_SHORT).show());
         }
+    }
+
+    // ── Show subscription dialog
+    public void showSubscriptionDialog() {
+        android.app.Dialog dialog = new android.app.Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        dialog.setContentView(R.layout.dialog_subscription);
+        dialog.getWindow().setLayout(android.view.WindowManager.LayoutParams.MATCH_PARENT, android.view.WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setGravity(android.view.Gravity.BOTTOM);
+
+        android.widget.TextView tvWeeklyPrice  = dialog.findViewById(R.id.tv_weekly_price);
+        android.widget.TextView tvMonthlyPrice = dialog.findViewById(R.id.tv_monthly_price);
+        android.widget.TextView btnWeekly      = dialog.findViewById(R.id.btn_weekly_subscribe);
+        android.widget.TextView btnMonthly     = dialog.findViewById(R.id.btn_monthly_subscribe);
+        android.widget.TextView btnClose       = dialog.findViewById(R.id.btn_sub_close);
+
+        final com.android.billingclient.api.ProductDetails[] weeklyDetails  = {null};
+        final com.android.billingclient.api.ProductDetails[] monthlyDetails = {null};
+        final String[] weeklyToken  = {""};
+        final String[] monthlyToken = {""};
+
+        SubscriptionManager subMgr = SubscriptionManager.getInstance(this);
+        subMgr.setListener(new SubscriptionManager.SubscriptionListener() {
+            @Override public void onSubscriptionStatusChanged(boolean isActive) {
+                if (isActive) { runOnUiThread(dialog::dismiss); }
+            }
+            @Override public void onProductsLoaded(java.util.List<com.android.billingclient.api.ProductDetails> products) {
+                runOnUiThread(() -> {
+                    for (com.android.billingclient.api.ProductDetails pd : products) {
+                        java.util.List<com.android.billingclient.api.ProductDetails.SubscriptionOfferDetails> offers = pd.getSubscriptionOfferDetails();
+                        if (offers == null || offers.isEmpty()) continue;
+                        String price = offers.get(0).getPricingPhases().getPricingPhaseList().get(0).getFormattedPrice();
+                        String token = offers.get(0).getOfferToken();
+                        if (pd.getProductId().equals(SubscriptionManager.PRODUCT_WEEKLY)) {
+                            tvWeeklyPrice.setText(price + " / week");
+                            weeklyDetails[0] = pd; weeklyToken[0] = token;
+                        } else if (pd.getProductId().equals(SubscriptionManager.PRODUCT_MONTHLY)) {
+                            tvMonthlyPrice.setText(price + " / month");
+                            monthlyDetails[0] = pd; monthlyToken[0] = token;
+                        }
+                    }
+                });
+            }
+            @Override public void onError(String message) {
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show());
+            }
+        });
+
+        btnWeekly.setOnClickListener(v -> {
+            if (weeklyDetails[0] != null) subMgr.launchPurchase(this, weeklyDetails[0], weeklyToken[0]);
+        });
+        btnMonthly.setOnClickListener(v -> {
+            if (monthlyDetails[0] != null) subMgr.launchPurchase(this, monthlyDetails[0], monthlyToken[0]);
+        });
+        btnClose.setOnClickListener(v -> dialog.dismiss());
+
+        subMgr.startConnection();
+        dialog.show();
     }
 
 
