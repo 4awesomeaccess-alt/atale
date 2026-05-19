@@ -4055,11 +4055,10 @@ public class MainActivity extends AppCompatActivity {
                 case MotionEvent.ACTION_MOVE:
                     view.setX(startVX[0] + event.getRawX() - downX[0]);
                     view.setY(startVY[0] + event.getRawY() - downY[0]);
-                    if (gridEditPopup != null && gridEditPopup.isShowing()) gridEditPopup.dismiss();
                     return true;
                 case MotionEvent.ACTION_UP:
                     float dist = (float) Math.sqrt(Math.pow(event.getRawX() - downX[0], 2) + Math.pow(event.getRawY() - downY[0], 2));
-                    if (dist < 10) showGridEditPopup((RelativeLayout) view);
+                    if (dist < 10) showGridListDialog((RelativeLayout) view);
                     exportToJson();
                     return true;
             }
@@ -4505,47 +4504,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void applyTouchListenerForGrid(RelativeLayout gridContainer) {
-
-        final float[] downX = {0};
-        final float[] downY = {0};
-        final float[] startVX = {0};
-        final float[] startVY = {0};
-
+        final float[] downX = {0}, downY = {0}, startVX = {0}, startVY = {0};
         gridContainer.setOnTouchListener((view, event) -> {
             switch (event.getActionMasked()) {
-
                 case MotionEvent.ACTION_DOWN:
-                    downX[0] = event.getRawX();
-                    downY[0] = event.getRawY();
-                    startVX[0] = view.getX();
-                    startVY[0] = view.getY();
-
+                    downX[0] = event.getRawX(); downY[0] = event.getRawY();
+                    startVX[0] = view.getX();   startVY[0] = view.getY();
                     currentlySelectedGrid = (RelativeLayout) view;
                     selectView(view);
                     return true;
-
                 case MotionEvent.ACTION_MOVE:
-                    float dx = event.getRawX() - downX[0];
-                    float dy = event.getRawY() - downY[0];
-
-                    view.setX(startVX[0] + dx);
-                    view.setY(startVY[0] + dy);
-
-                    if (gridEditPopup != null && gridEditPopup.isShowing()) {
-                        gridEditPopup.dismiss();
-                    }
+                    view.setX(startVX[0] + event.getRawX() - downX[0]);
+                    view.setY(startVY[0] + event.getRawY() - downY[0]);
                     return true;
-
                 case MotionEvent.ACTION_UP:
-                    float dist = (float) Math.sqrt(
-                            Math.pow(event.getRawX() - downX[0], 2) +
-                                    Math.pow(event.getRawY() - downY[0], 2)
-                    );
-
-                    if (dist < 10) {
-                        showGridEditPopup((RelativeLayout) view);
-                    }
-
+                    float dist = (float) Math.sqrt(Math.pow(event.getRawX() - downX[0], 2) + Math.pow(event.getRawY() - downY[0], 2));
+                    if (dist < 10) showGridListDialog((RelativeLayout) view);
                     exportToJson();
                     return true;
             }
@@ -6844,65 +6818,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void showGridEditPopup(RelativeLayout gridContainer) {
-
-        Object tag = gridContainer.getTag(R.id.btn_grid_frame);
-        if (!(tag instanceof GridMeta)) {
-            Toast.makeText(this, "Grid data મળ્યો નહીં", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        GridMeta meta = (GridMeta) tag;
-
-        if (gridEditPopup != null && gridEditPopup.isShowing()) {
-            gridEditPopup.dismiss();
-        }
-
-        View popupView = LayoutInflater.from(this).inflate(R.layout.popup_grid_simple, null);
-
-        gridEditPopup = new PopupWindow(popupView,
-            android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-            android.view.ViewGroup.LayoutParams.WRAP_CONTENT, false);
-        gridEditPopup.setOutsideTouchable(true);
-        gridEditPopup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
-
-        // ── Info
-        TextView tvInfo = popupView.findViewById(R.id.tv_grid_simple_info);
-        if (tvInfo != null) tvInfo.setText("Grid " + meta.rows + "×" + meta.cols);
-
-        // ── Edit — GridListActivity open
-        TextView btnEdit = popupView.findViewById(R.id.btn_grid_simple_edit);
-        if (btnEdit != null) {
-            btnEdit.setOnClickListener(v -> {
-                gridEditPopup.dismiss();
-                showGridListDialog(gridContainer);
-            });
-        }
-
-        // ── Delete
-        TextView btnDelete = popupView.findViewById(R.id.btn_grid_simple_delete);
-        if (btnDelete != null) {
-            btnDelete.setOnClickListener(v -> {
-                gridEditPopup.dismiss();
-                new AlertDialog.Builder(this)
-                    .setTitle("Delete Grid?")
-                    .setMessage("Grid delete kari devo?")
-                    .setPositiveButton("Delete", (d, w) -> {
-                        mainLayout.removeView(gridContainer);
-                        currentlySelectedGrid = null;
-                        exportToJson();
-                        Toast.makeText(this, "✅ Grid delete થઈ ગઈ", Toast.LENGTH_SHORT).show();
-                    })
-                    .setNegativeButton("Cancel", null)
-                    .show();
-            });
-        }
-
-        // ── Close
-        TextView btnClose = popupView.findViewById(R.id.btn_grid_simple_close);
-        if (btnClose != null) btnClose.setOnClickListener(v -> gridEditPopup.dismiss());
-
-        int popupX = (int) (gridContainer.getX() + 20);
-        int popupY = (int) (gridContainer.getY() + 20);
-        gridEditPopup.showAtLocation(mainLayout, Gravity.NO_GRAVITY, popupX, popupY);
+        showGridListDialog(gridContainer);
     }
 
 
@@ -8401,8 +8317,7 @@ public class MainActivity extends AppCompatActivity {
                                     cellDataList, shape,
                                     cellSizePx, gridContainer);
                         } else {
-                            gridContainer.postDelayed(
-                                    () -> showGridEditPopup(gridContainer), 80);
+                            showGridListDialog(gridContainer);
                         }
 
                     } else if (isMoving[0]) {
