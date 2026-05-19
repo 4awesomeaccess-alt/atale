@@ -12557,16 +12557,11 @@ public class MainActivity extends AppCompatActivity {
         // ════════════════════════════
         // QR CODE GENERATE
         // ════════════════════════════
-        View btnQR = cv.findViewById(R.id.btn_qr_generate);
-        if (btnQR != null) {
-            btnQR.setOnClickListener(v -> {
-                String text = targetView.getText().toString().trim();
-                if (text.isEmpty()) {
-                    Toast.makeText(this, "Text empty — QR generate ન થઈ શકે",
-                            Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                generateQRCode(text);
+        View btnCurveText = cv.findViewById(R.id.btn_curve_text);
+        if (btnCurveText != null) {
+            btnCurveText.setOnClickListener(v -> {
+                dismissSelectionControls();
+                showCurvePopup(targetView);
             });
         }
 
