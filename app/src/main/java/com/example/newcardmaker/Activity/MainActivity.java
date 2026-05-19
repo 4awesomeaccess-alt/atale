@@ -15685,6 +15685,9 @@ public class MainActivity extends AppCompatActivity {
                 if (hsvAlign != null) hsvAlign.setVisibility(View.GONE);
                 if (rowMove != null) rowMove.setVisibility(View.GONE);
                 if (rowLayer != null) rowLayer.setVisibility(View.GONE);
+                // Bija badha popups dismiss karo
+                try { if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) selectionControlsPopup.dismiss(); } catch (Exception ignored) {}
+                try { if (currentStickerToolbarPopup != null && currentStickerToolbarPopup.isShowing()) currentStickerToolbarPopup.dismiss(); } catch (Exception ignored) {}
                 // Navo align popup kholo
                 showAlignPopup(cv);
             });
