@@ -15714,6 +15714,16 @@ public class MainActivity extends AppCompatActivity {
         alignPopupWindow.setTouchable(true);
         alignPopupWindow.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
 
+        // ── Align close thay tyare image controls pachu open karo
+        alignPopupWindow.setOnDismissListener(() -> {
+            try {
+                View targetView2 = currentlySelectedView;
+                if (targetView2 instanceof ImageView) {
+                    showSelectionControlsForImage((ImageView) targetView2);
+                }
+            } catch (Exception ignored) {}
+        });
+
         // ── Drag handle
         View dragHandle = popupView.findViewById(R.id.drag_handle_align);
         if (dragHandle != null) {
