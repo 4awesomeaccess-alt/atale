@@ -15233,32 +15233,34 @@ public class MainActivity extends AppCompatActivity {
         if (btnCopyImage != null) {
             btnCopyImage.setOnClickListener(v -> {
                 try {
+                    // Drawable ma thi bitmap lo
+                    android.graphics.Bitmap bmp = null;
                     android.graphics.drawable.Drawable drawable = targetView.getDrawable();
                     if (drawable instanceof android.graphics.drawable.BitmapDrawable) {
-                        android.graphics.Bitmap bitmap = ((android.graphics.drawable.BitmapDrawable) drawable).getBitmap();
-                        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(android.content.Context.CLIPBOARD_SERVICE);
-                        android.content.ClipData clip = android.content.ClipData.newUri(
-                            getContentResolver(),
-                            "Image",
-                            android.net.Uri.parse((String) targetView.getTag(R.id.tag_image_uri))
-                        );
-                        if (clipboard != null) clipboard.setPrimaryClip(clip);
-                        android.widget.Toast.makeText(this, "Image copied!", android.widget.Toast.LENGTH_SHORT).show();
+                        bmp = ((android.graphics.drawable.BitmapDrawable) drawable).getBitmap();
                     } else {
-                        // Fallback: view ne bitmap ma convert karo
+                        // Fallback: view render karo
                         targetView.setDrawingCacheEnabled(true);
-                        android.graphics.Bitmap bmp = android.graphics.Bitmap.createBitmap(targetView.getDrawingCache());
+                        bmp = android.graphics.Bitmap.createBitmap(targetView.getDrawingCache());
                         targetView.setDrawingCacheEnabled(false);
-                        java.io.File file = new java.io.File(getCacheDir(), "copied_image.png");
-                        java.io.FileOutputStream fos = new java.io.FileOutputStream(file);
-                        bmp.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, fos);
-                        fos.close();
-                        android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(this, getPackageName() + ".provider", file);
-                        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(android.content.Context.CLIPBOARD_SERVICE);
-                        android.content.ClipData clip = android.content.ClipData.newUri(getContentResolver(), "Image", uri);
-                        if (clipboard != null) clipboard.setPrimaryClip(clip);
-                        android.widget.Toast.makeText(this, "Image copied!", android.widget.Toast.LENGTH_SHORT).show();
                     }
+                    if (bmp == null) {
+                        android.widget.Toast.makeText(this, "Image not found!", android.widget.Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    // Cache ma save karo
+                    java.io.File file = new java.io.File(getCacheDir(), "copied_image.png");
+                    java.io.FileOutputStream fos = new java.io.FileOutputStream(file);
+                    bmp.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, fos);
+                    fos.close();
+                    // FileProvider thi URI banavo
+                    android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(
+                        this, getPackageName() + ".provider", file);
+                    // Clipboard ma copy karo
+                    android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(android.content.Context.CLIPBOARD_SERVICE);
+                    android.content.ClipData clip = android.content.ClipData.newUri(getContentResolver(), "Image", uri);
+                    if (clipboard != null) clipboard.setPrimaryClip(clip);
+                    android.widget.Toast.makeText(this, "✅ Image copied!", android.widget.Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     android.widget.Toast.makeText(this, "Copy failed: " + e.getMessage(), android.widget.Toast.LENGTH_SHORT).show();
                 }
