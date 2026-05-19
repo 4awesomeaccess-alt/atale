@@ -99,6 +99,7 @@ public class GridListActivity extends AppCompatActivity {
     private RecyclerView.Adapter<RecyclerView.ViewHolder> adapter;
     private RecyclerView recyclerView;
     private TextView tvStats;
+    private TextView tvTitle;
     private EditText etSearch;
     private TextView[] sortBtns;
     private TextView tvMultiCount;
@@ -194,13 +195,27 @@ public class GridListActivity extends AppCompatActivity {
         h.setPadding(dp(14), dp(44), dp(14), dp(14));
         h.setGravity(Gravity.CENTER_VERTICAL);
 
-        TextView title = new TextView(this);
-        title.setText("Grid List (" + rows + "x" + cols + ")");
-        title.setTextColor(Color.WHITE);
-        title.setTextSize(14);
-        title.setTypeface(null, Typeface.BOLD);
-        title.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
-        h.addView(title);
+        tvTitle = new TextView(this);
+        tvTitle.setText("Grid List (" + rows + "x" + cols + ")");
+        tvTitle.setTextColor(Color.WHITE);
+        tvTitle.setTextSize(14);
+        tvTitle.setTypeface(null, Typeface.BOLD);
+        tvTitle.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+        h.addView(tvTitle);
+
+        // ── Cols change button
+        TextView btnCols = new TextView(this);
+        btnCols.setText("⊞ " + cols);
+        btnCols.setTextColor(Color.WHITE);
+        btnCols.setTextSize(13);
+        btnCols.setPadding(dp(10), dp(4), dp(10), dp(4));
+        btnCols.setBackgroundColor(Color.parseColor("#0D47A1"));
+        btnCols.setOnClickListener(v -> showColsChangeDialog());
+        LinearLayout.LayoutParams colsBtnLp = new LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        colsBtnLp.setMargins(0, 0, dp(6), 0);
+        btnCols.setLayoutParams(colsBtnLp);
+        h.addView(btnCols);
 
         etSearch = new EditText(this);
         etSearch.setHint("Search...");
@@ -2124,6 +2139,62 @@ public class GridListActivity extends AppCompatActivity {
                     dataChanged = true;
                     updateStats();
                 }).setNegativeButton("Cancel", null).show();
+    }
+
+    private void showColsChangeDialog() {
+        LinearLayout root = new LinearLayout(this);
+        root.setOrientation(LinearLayout.VERTICAL);
+        root.setPadding(dp(20), dp(16), dp(20), dp(16));
+
+        TextView lbl = new TextView(this);
+        lbl.setText("Columns select karo:");
+        lbl.setTextSize(14);
+        lbl.setPadding(0, 0, 0, dp(12));
+        root.addView(lbl);
+
+        final int[] selected = {cols};
+        LinearLayout btnRow = new LinearLayout(this);
+        btnRow.setOrientation(LinearLayout.HORIZONTAL);
+        Button[] colBtns = new Button[6];
+
+        for (int c = 1; c <= 6; c++) {
+            final int cv = c;
+            Button b = new Button(this);
+            b.setText(String.valueOf(c));
+            b.setTextColor(Color.WHITE);
+            b.setTextSize(14);
+            b.setBackgroundColor(c == cols
+                ? Color.parseColor("#1565C0")
+                : Color.parseColor("#90CAF9"));
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+            lp.setMargins(dp(2), 0, dp(2), 0);
+            b.setLayoutParams(lp);
+            colBtns[c - 1] = b;
+            b.setOnClickListener(v -> {
+                selected[0] = cv;
+                for (int j = 0; j < 6; j++)
+                    colBtns[j].setBackgroundColor(j + 1 == cv
+                        ? Color.parseColor("#1565C0")
+                        : Color.parseColor("#90CAF9"));
+            });
+            btnRow.addView(b);
+        }
+        root.addView(btnRow);
+
+        new AlertDialog.Builder(this)
+            .setView(root)
+            .setPositiveButton("Apply", (d, w) -> {
+                cols = selected[0];
+                // Title update
+                if (tvTitle != null)
+                    tvTitle.setText("Grid List (" + rows + "x" + cols + ")");
+                dataChanged = true;
+                adapter.notifyDataSetChanged();
+                Toast.makeText(this, "Columns: " + cols, Toast.LENGTH_SHORT).show();
+            })
+            .setNegativeButton("Cancel", null)
+            .show();
     }
 
     private void showAddCell() {
