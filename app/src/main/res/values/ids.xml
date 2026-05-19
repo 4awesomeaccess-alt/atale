@@ -69,4 +69,11 @@
     <item name="btn_layer_down" type="id" />
     <item name="btn_layer_back" type="id" />
     <item name="btn_same_height" type="id" />
+    <item name="btn_same_width" type="id" />
+    <item name="btn_same_size" type="id" />
+    <item name="btn_center_both" type="id" />
+    <item name="btn_fit_canvas" type="id" />
+    <item name="btn_flip_h" type="id" />
+    <item name="btn_flip_v" type="id" />
+    <item name="btn_rotate_90" type="id" />
 </resources>

@@ -15945,7 +15945,7 @@ public class MainActivity extends AppCompatActivity {
             if (!selectedViews.isEmpty()) targets.addAll(selectedViews);
             else if (targetView != null) targets.add(targetView);
 
-            if ((id == R.id.btn_distribute_h || id == R.id.btn_distribute_v || id == R.id.btn_same_height) && targets.size() < 2) {
+            if ((id == R.id.btn_distribute_h || id == R.id.btn_distribute_v || id == R.id.btn_same_height || id == R.id.btn_same_width || id == R.id.btn_same_size) && targets.size() < 2) {
                 Toast.makeText(this, "2+ elements select કરો", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -15962,6 +15962,11 @@ public class MainActivity extends AppCompatActivity {
                 for (View t : targets) t.setY(canvasCenterY - t.getHeight() / 2f);
             } else if (id == R.id.btn_align_bottom) {
                 for (View t : targets) t.setY(canvasBottom - t.getHeight());
+            } else if (id == R.id.btn_center_both) {
+                for (View t : targets) {
+                    t.setX(canvasCenterX - t.getWidth() / 2f);
+                    t.setY(canvasCenterY - t.getHeight() / 2f);
+                }
             } else if (id == R.id.btn_distribute_h) {
                 targets.sort((a, b) -> Float.compare(a.getX(), b.getX()));
                 float totalW = 0;
@@ -15977,16 +15982,40 @@ public class MainActivity extends AppCompatActivity {
                 float curY = canvasTop;
                 for (View t : targets) { t.setY(curY); curY += t.getHeight() + gap; }
             } else if (id == R.id.btn_same_height) {
-                // Pehla selected view ni height reference lao
                 int refH = targets.get(0).getHeight();
                 for (View t : targets) {
                     android.view.ViewGroup.LayoutParams lp2 = t.getLayoutParams();
-                    if (lp2 != null) {
-                        lp2.height = refH;
-                        t.setLayoutParams(lp2);
-                        t.requestLayout();
-                    }
+                    if (lp2 != null) { lp2.height = refH; t.setLayoutParams(lp2); t.requestLayout(); }
                 }
+            } else if (id == R.id.btn_same_width) {
+                int refW = targets.get(0).getWidth();
+                for (View t : targets) {
+                    android.view.ViewGroup.LayoutParams lp2 = t.getLayoutParams();
+                    if (lp2 != null) { lp2.width = refW; t.setLayoutParams(lp2); t.requestLayout(); }
+                }
+            } else if (id == R.id.btn_same_size) {
+                int refW = targets.get(0).getWidth();
+                int refH = targets.get(0).getHeight();
+                for (View t : targets) {
+                    android.view.ViewGroup.LayoutParams lp2 = t.getLayoutParams();
+                    if (lp2 != null) { lp2.width = refW; lp2.height = refH; t.setLayoutParams(lp2); t.requestLayout(); }
+                }
+            } else if (id == R.id.btn_fit_canvas) {
+                for (View t : targets) {
+                    android.view.ViewGroup.LayoutParams lp2 = t.getLayoutParams();
+                    if (lp2 != null) {
+                        lp2.width = main_image_view.getWidth();
+                        lp2.height = main_image_view.getHeight();
+                        t.setLayoutParams(lp2); t.requestLayout();
+                    }
+                    t.setX(canvasLeft); t.setY(canvasTop);
+                }
+            } else if (id == R.id.btn_flip_h) {
+                for (View t : targets) t.setScaleX(t.getScaleX() * -1);
+            } else if (id == R.id.btn_flip_v) {
+                for (View t : targets) t.setScaleY(t.getScaleY() * -1);
+            } else if (id == R.id.btn_rotate_90) {
+                for (View t : targets) t.setRotation((t.getRotation() + 90) % 360);
             }
 
             groupStartPositions.clear();
@@ -16000,9 +16029,16 @@ public class MainActivity extends AppCompatActivity {
         popupView.findViewById(R.id.btn_align_top).setOnClickListener(alignListener);
         popupView.findViewById(R.id.btn_align_middle).setOnClickListener(alignListener);
         popupView.findViewById(R.id.btn_align_bottom).setOnClickListener(alignListener);
+        popupView.findViewById(R.id.btn_center_both).setOnClickListener(alignListener);
         popupView.findViewById(R.id.btn_distribute_h).setOnClickListener(alignListener);
         popupView.findViewById(R.id.btn_distribute_v).setOnClickListener(alignListener);
         popupView.findViewById(R.id.btn_same_height).setOnClickListener(alignListener);
+        popupView.findViewById(R.id.btn_same_width).setOnClickListener(alignListener);
+        popupView.findViewById(R.id.btn_same_size).setOnClickListener(alignListener);
+        popupView.findViewById(R.id.btn_fit_canvas).setOnClickListener(alignListener);
+        popupView.findViewById(R.id.btn_flip_h).setOnClickListener(alignListener);
+        popupView.findViewById(R.id.btn_flip_v).setOnClickListener(alignListener);
+        popupView.findViewById(R.id.btn_rotate_90).setOnClickListener(alignListener);
 
         // ── Close
         TextView btnClose = popupView.findViewById(R.id.btn_align_close);
