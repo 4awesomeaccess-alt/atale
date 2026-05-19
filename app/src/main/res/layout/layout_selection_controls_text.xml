@@ -594,6 +594,16 @@
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Curve" android:textColor="#6B7280" android:textSize="6sp" android:layout_marginTop="2dp" />
                             </LinearLayout>
 
+                            <!-- Align -->
+                            <LinearLayout android:id="@+id/btn_text_align_popup"
+                                android:layout_width="52dp" android:layout_height="50dp"
+                                android:layout_marginEnd="4dp" android:background="#FFFFFF"
+                                android:gravity="center" android:orientation="vertical"
+                                android:padding="4dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⊞" android:textColor="#1565C0" android:textSize="14sp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Align" android:textColor="#6B7280" android:textSize="6sp" android:layout_marginTop="2dp" />
+                            </LinearLayout>
+
                         </LinearLayout>
                     </HorizontalScrollView>
 

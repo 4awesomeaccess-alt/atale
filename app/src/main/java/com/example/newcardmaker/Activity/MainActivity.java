@@ -12565,6 +12565,14 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+        View btnTextAlignPopup = cv.findViewById(R.id.btn_text_align_popup);
+        if (btnTextAlignPopup != null) {
+            btnTextAlignPopup.setOnClickListener(v -> {
+                dismissSelectionControls();
+                showAlignPopup(null);
+            });
+        }
+
         // ════════════════════════════
         // SIZE SEEKBAR
         // ════════════════════════════

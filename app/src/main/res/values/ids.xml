@@ -77,4 +77,5 @@
     <item name="btn_flip_v" type="id" />
     <item name="btn_rotate_90" type="id" />
     <item name="btn_curve_text" type="id" />
+    <item name="btn_text_align_popup" type="id" />
 </resources>
