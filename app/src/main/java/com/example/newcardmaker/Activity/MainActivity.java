@@ -3944,35 +3944,33 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void showGridFrameDialog() {
-        android.app.Dialog dialog = new android.app.Dialog(this);
-        dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_grid_frame);
-        dialog.getWindow().setLayout(
-            android.view.WindowManager.LayoutParams.MATCH_PARENT,
-            android.view.WindowManager.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setGravity(android.view.Gravity.BOTTOM);
+        android.view.View root = getLayoutInflater().inflate(R.layout.dialog_grid_frame, null);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+            .setView(root)
+            .create();
         dialog.getWindow().setBackgroundDrawable(
             new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        final int[] totalPhotos = {10};
-        final int[] cols        = {3};
+        final int[] totalPhotos  = {10};
+        final int[] cols         = {3};
         final String[] selectedShape = {"ROUNDED"};
         final boolean[] showName = {true};
         final boolean[] showInfo = {true};
 
-        TextView tvPhotoCount = dialog.findViewById(R.id.tv_photo_count);
-        TextView tvColCount   = dialog.findViewById(R.id.tv_col_count);
-        TextView btnPhotoM    = dialog.findViewById(R.id.btn_photo_minus);
-        TextView btnPhotoP    = dialog.findViewById(R.id.btn_photo_plus);
-        TextView btnColM      = dialog.findViewById(R.id.btn_col_minus);
-        TextView btnColP      = dialog.findViewById(R.id.btn_col_plus);
-        TextView btnAdd       = dialog.findViewById(R.id.btn_grid_add);
-        TextView btnCancel    = dialog.findViewById(R.id.btn_grid_cancel);
-        TextView btnShapeCircle  = dialog.findViewById(R.id.btn_shape_circle);
-        TextView btnShapeRounded = dialog.findViewById(R.id.btn_shape_rounded);
-        TextView btnShapeSquare  = dialog.findViewById(R.id.btn_shape_square);
-        TextView btnToggleName   = dialog.findViewById(R.id.btn_toggle_name);
-        TextView btnToggleInfo   = dialog.findViewById(R.id.btn_toggle_info);
+        TextView tvPhotoCount    = root.findViewById(R.id.tv_photo_count);
+        TextView tvColCount      = root.findViewById(R.id.tv_col_count);
+        TextView btnPhotoM       = root.findViewById(R.id.btn_photo_minus);
+        TextView btnPhotoP       = root.findViewById(R.id.btn_photo_plus);
+        TextView btnColM         = root.findViewById(R.id.btn_col_minus);
+        TextView btnColP         = root.findViewById(R.id.btn_col_plus);
+        TextView btnAdd          = root.findViewById(R.id.btn_grid_add);
+        TextView btnCancel       = root.findViewById(R.id.btn_grid_cancel);
+        TextView btnShapeCircle  = root.findViewById(R.id.btn_shape_circle);
+        TextView btnShapeRounded = root.findViewById(R.id.btn_shape_rounded);
+        TextView btnShapeSquare  = root.findViewById(R.id.btn_shape_square);
+        TextView btnToggleName   = root.findViewById(R.id.btn_toggle_name);
+        TextView btnToggleInfo   = root.findViewById(R.id.btn_toggle_info);
 
         tvPhotoCount.setText(String.valueOf(totalPhotos[0]));
         tvColCount.setText(String.valueOf(cols[0]));
@@ -3993,10 +3991,7 @@ public class MainActivity extends AppCompatActivity {
             if (cols[0] < 6) { cols[0]++; tvColCount.setText(String.valueOf(cols[0])); }
         });
 
-        // ── Shape buttons
-        android.graphics.drawable.ColorDrawable selBg = new android.graphics.drawable.ColorDrawable(Color.parseColor("#1565C0"));
-        android.graphics.drawable.ColorDrawable norBg = new android.graphics.drawable.ColorDrawable(Color.parseColor("#E3F2FD"));
-
+        // ── Shape
         btnShapeRounded.setBackgroundColor(Color.parseColor("#1565C0"));
         btnShapeRounded.setTextColor(Color.WHITE);
 
@@ -4004,10 +3999,11 @@ public class MainActivity extends AppCompatActivity {
             btnShapeCircle.setBackgroundColor(Color.parseColor("#E3F2FD"));  btnShapeCircle.setTextColor(Color.parseColor("#1565C0"));
             btnShapeRounded.setBackgroundColor(Color.parseColor("#E3F2FD")); btnShapeRounded.setTextColor(Color.parseColor("#1565C0"));
             btnShapeSquare.setBackgroundColor(Color.parseColor("#E3F2FD"));  btnShapeSquare.setTextColor(Color.parseColor("#1565C0"));
-            v.setBackgroundColor(Color.parseColor("#1565C0")); ((TextView)v).setTextColor(Color.WHITE);
-            if (v == btnShapeCircle)  selectedShape[0] = "CIRCLE";
-            else if (v == btnShapeRounded) selectedShape[0] = "ROUNDED";
-            else selectedShape[0] = "SQUARE";
+            ((TextView) v).setTextColor(Color.WHITE);
+            v.setBackgroundColor(Color.parseColor("#1565C0"));
+            if (v == btnShapeCircle) selectedShape[0] = "CIRCLE";
+            else if (v == btnShapeSquare) selectedShape[0] = "SQUARE";
+            else selectedShape[0] = "ROUNDED";
         };
         btnShapeCircle.setOnClickListener(shapeListener);
         btnShapeRounded.setOnClickListener(shapeListener);
@@ -4027,7 +4023,7 @@ public class MainActivity extends AppCompatActivity {
             btnToggleInfo.setText(showInfo[0] ? "✓ %" : "✕ %");
         });
 
-        // ── Add button — directly create grid
+        // ── Add
         btnAdd.setOnClickListener(v -> {
             dialog.dismiss();
             int autoRows = (int) Math.ceil((double) totalPhotos[0] / cols[0]);
