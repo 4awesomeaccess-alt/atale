@@ -15228,6 +15228,43 @@ public class MainActivity extends AppCompatActivity {
         // ── Toggle rows
         bindToggleRows(cv);
 
+        // ── Copy Image
+        TextView btnCopyImage = cv.findViewById(R.id.btn_copy_image);
+        if (btnCopyImage != null) {
+            btnCopyImage.setOnClickListener(v -> {
+                try {
+                    android.graphics.drawable.Drawable drawable = targetView.getDrawable();
+                    if (drawable instanceof android.graphics.drawable.BitmapDrawable) {
+                        android.graphics.Bitmap bitmap = ((android.graphics.drawable.BitmapDrawable) drawable).getBitmap();
+                        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(android.content.Context.CLIPBOARD_SERVICE);
+                        android.content.ClipData clip = android.content.ClipData.newUri(
+                            getContentResolver(),
+                            "Image",
+                            android.net.Uri.parse((String) targetView.getTag(R.id.tag_image_uri))
+                        );
+                        if (clipboard != null) clipboard.setPrimaryClip(clip);
+                        android.widget.Toast.makeText(this, "Image copied!", android.widget.Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Fallback: view ne bitmap ma convert karo
+                        targetView.setDrawingCacheEnabled(true);
+                        android.graphics.Bitmap bmp = android.graphics.Bitmap.createBitmap(targetView.getDrawingCache());
+                        targetView.setDrawingCacheEnabled(false);
+                        java.io.File file = new java.io.File(getCacheDir(), "copied_image.png");
+                        java.io.FileOutputStream fos = new java.io.FileOutputStream(file);
+                        bmp.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, fos);
+                        fos.close();
+                        android.net.Uri uri = androidx.core.content.FileProvider.getUriForFile(this, getPackageName() + ".provider", file);
+                        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(android.content.Context.CLIPBOARD_SERVICE);
+                        android.content.ClipData clip = android.content.ClipData.newUri(getContentResolver(), "Image", uri);
+                        if (clipboard != null) clipboard.setPrimaryClip(clip);
+                        android.widget.Toast.makeText(this, "Image copied!", android.widget.Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    android.widget.Toast.makeText(this, "Copy failed: " + e.getMessage(), android.widget.Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
         // ── Close
         TextView btnClose = cv.findViewById(R.id.btn_sel_close);
         if (btnClose != null) {
