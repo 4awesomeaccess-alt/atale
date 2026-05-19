@@ -78,4 +78,15 @@
     <item name="btn_rotate_90" type="id" />
     <item name="btn_curve_text" type="id" />
     <item name="btn_text_align_popup" type="id" />
+    <item name="tv_photo_count" type="id" />
+    <item name="tv_col_count" type="id" />
+    <item name="btn_photo_minus" type="id" />
+    <item name="btn_photo_plus" type="id" />
+    <item name="btn_col_minus" type="id" />
+    <item name="btn_col_plus" type="id" />
+    <item name="btn_grid_add" type="id" />
+    <item name="btn_grid_cancel" type="id" />
+    <item name="btn_shape_circle" type="id" />
+    <item name="btn_shape_rounded" type="id" />
+    <item name="btn_shape_square" type="id" />
 </resources>

@@ -3944,136 +3944,99 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void showGridFrameDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Grid Photo Frame");
+        android.app.Dialog dialog = new android.app.Dialog(this);
+        dialog.requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_grid_frame);
+        dialog.getWindow().setLayout(
+            android.view.WindowManager.LayoutParams.MATCH_PARENT,
+            android.view.WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setGravity(android.view.Gravity.BOTTOM);
+        dialog.getWindow().setBackgroundDrawable(
+            new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        LinearLayout root = new LinearLayout(this);
-        root.setOrientation(LinearLayout.VERTICAL);
-        root.setPadding(24, 20, 24, 16);
-
-        // ── Total Photos
-        TextView lblPhotos = new TextView(this);
-        lblPhotos.setText("Total Photos:");
-        lblPhotos.setPadding(0, 0, 0, 4);
-        root.addView(lblPhotos);
         final int[] totalPhotos = {10};
-        android.widget.NumberPicker npPhotos = new android.widget.NumberPicker(this);
-        npPhotos.setMinValue(1);
-        npPhotos.setMaxValue(50);
-        npPhotos.setValue(10);
-        npPhotos.setOnValueChangedListener((p, o, n) -> totalPhotos[0] = n);
-        root.addView(npPhotos);
-
-        // ── Cols
-        TextView lblCols = new TextView(this);
-        lblCols.setText("Columns:");
-        lblCols.setPadding(0, 12, 0, 4);
-        root.addView(lblCols);
-        final int[] cols = {3};
-        android.widget.NumberPicker npCols = new android.widget.NumberPicker(this);
-        npCols.setMinValue(1);
-        npCols.setMaxValue(6);
-        npCols.setValue(3);
-        npCols.setOnValueChangedListener((p, o, n) -> cols[0] = n);
-        root.addView(npCols);
-
-        // ── Frame Shape
-        TextView lblShape = new TextView(this);
-        lblShape.setText("Photo Shape:");
-        lblShape.setPadding(0, 12, 0, 4);
-        root.addView(lblShape);
-
-        final String[] shapes = {"CIRCLE", "ROUNDED", "SQUARE"};
+        final int[] cols        = {3};
         final String[] selectedShape = {"ROUNDED"};
-        LinearLayout shapeRow = new LinearLayout(this);
-        shapeRow.setOrientation(LinearLayout.HORIZONTAL);
-        Button[] shapeBtns = new Button[3];
-        String[] shapeLabels = {"Circle", "Rounded", "Square"};
-
-        for (int i = 0; i < shapes.length; i++) {
-            final int idx = i;
-            Button sb = new Button(this);
-            sb.setText(shapeLabels[i]);
-            sb.setTextSize(12);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                    0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
-            lp.setMargins(0, 0, i < 2 ? 6 : 0, 0);
-            sb.setLayoutParams(lp);
-            sb.setBackgroundColor(i == 1
-                    ? Color.parseColor("#1565C0")
-                    : Color.parseColor("#90CAF9"));
-            sb.setTextColor(Color.WHITE);
-            shapeBtns[i] = sb;
-            sb.setOnClickListener(v -> {
-                selectedShape[0] = shapes[idx];
-                for (int j = 0; j < shapeBtns.length; j++)
-                    shapeBtns[j].setBackgroundColor(
-                            j == idx
-                                    ? Color.parseColor("#1565C0")
-                                    : Color.parseColor("#90CAF9"));
-            });
-            shapeRow.addView(sb);
-        }
-        root.addView(shapeRow);
-
-        // ── Cell Size
-        TextView lblSize = new TextView(this);
-        lblSize.setText("Cell Size: 200px");
-        lblSize.setPadding(0, 12, 0, 0);
-        root.addView(lblSize);
-
-        final int[] cellSize = {200};
-        android.widget.SeekBar seekCell = new android.widget.SeekBar(this);
-        seekCell.setMin(100);
-        seekCell.setMax(400);
-        seekCell.setProgress(200);
-        seekCell.setOnSeekBarChangeListener(
-                new android.widget.SeekBar.OnSeekBarChangeListener() {
-                    public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) {
-                        cellSize[0] = p;
-                        lblSize.setText("Cell Size: " + p + "px");
-                    }
-                    public void onStartTrackingTouch(android.widget.SeekBar s) {}
-                    public void onStopTrackingTouch(android.widget.SeekBar s) {}
-                });
-        root.addView(seekCell);
-
-        // ── Name/Info toggle
         final boolean[] showName = {true};
         final boolean[] showInfo = {true};
-        Button btnToggleName = new Button(this);
-        btnToggleName.setText("✓ Name Text");
-        btnToggleName.setBackgroundColor(Color.parseColor("#1565C0"));
-        btnToggleName.setTextColor(Color.WHITE);
+
+        TextView tvPhotoCount = dialog.findViewById(R.id.tv_photo_count);
+        TextView tvColCount   = dialog.findViewById(R.id.tv_col_count);
+        TextView btnPhotoM    = dialog.findViewById(R.id.btn_photo_minus);
+        TextView btnPhotoP    = dialog.findViewById(R.id.btn_photo_plus);
+        TextView btnColM      = dialog.findViewById(R.id.btn_col_minus);
+        TextView btnColP      = dialog.findViewById(R.id.btn_col_plus);
+        TextView btnAdd       = dialog.findViewById(R.id.btn_grid_add);
+        TextView btnCancel    = dialog.findViewById(R.id.btn_grid_cancel);
+        TextView btnShapeCircle  = dialog.findViewById(R.id.btn_shape_circle);
+        TextView btnShapeRounded = dialog.findViewById(R.id.btn_shape_rounded);
+        TextView btnShapeSquare  = dialog.findViewById(R.id.btn_shape_square);
+        TextView btnToggleName   = dialog.findViewById(R.id.btn_toggle_name);
+        TextView btnToggleInfo   = dialog.findViewById(R.id.btn_toggle_info);
+
+        tvPhotoCount.setText(String.valueOf(totalPhotos[0]));
+        tvColCount.setText(String.valueOf(cols[0]));
+
+        // ── Photo count
+        btnPhotoM.setOnClickListener(v -> {
+            if (totalPhotos[0] > 1) { totalPhotos[0]--; tvPhotoCount.setText(String.valueOf(totalPhotos[0])); }
+        });
+        btnPhotoP.setOnClickListener(v -> {
+            if (totalPhotos[0] < 50) { totalPhotos[0]++; tvPhotoCount.setText(String.valueOf(totalPhotos[0])); }
+        });
+
+        // ── Col count
+        btnColM.setOnClickListener(v -> {
+            if (cols[0] > 1) { cols[0]--; tvColCount.setText(String.valueOf(cols[0])); }
+        });
+        btnColP.setOnClickListener(v -> {
+            if (cols[0] < 6) { cols[0]++; tvColCount.setText(String.valueOf(cols[0])); }
+        });
+
+        // ── Shape buttons
+        android.graphics.drawable.ColorDrawable selBg = new android.graphics.drawable.ColorDrawable(Color.parseColor("#1565C0"));
+        android.graphics.drawable.ColorDrawable norBg = new android.graphics.drawable.ColorDrawable(Color.parseColor("#E3F2FD"));
+
+        btnShapeRounded.setBackgroundColor(Color.parseColor("#1565C0"));
+        btnShapeRounded.setTextColor(Color.WHITE);
+
+        View.OnClickListener shapeListener = v -> {
+            btnShapeCircle.setBackgroundColor(Color.parseColor("#E3F2FD"));  btnShapeCircle.setTextColor(Color.parseColor("#1565C0"));
+            btnShapeRounded.setBackgroundColor(Color.parseColor("#E3F2FD")); btnShapeRounded.setTextColor(Color.parseColor("#1565C0"));
+            btnShapeSquare.setBackgroundColor(Color.parseColor("#E3F2FD"));  btnShapeSquare.setTextColor(Color.parseColor("#1565C0"));
+            v.setBackgroundColor(Color.parseColor("#1565C0")); ((TextView)v).setTextColor(Color.WHITE);
+            if (v == btnShapeCircle)  selectedShape[0] = "CIRCLE";
+            else if (v == btnShapeRounded) selectedShape[0] = "ROUNDED";
+            else selectedShape[0] = "SQUARE";
+        };
+        btnShapeCircle.setOnClickListener(shapeListener);
+        btnShapeRounded.setOnClickListener(shapeListener);
+        btnShapeSquare.setOnClickListener(shapeListener);
+
+        // ── Name/Info toggle
         btnToggleName.setOnClickListener(v -> {
             showName[0] = !showName[0];
-            btnToggleName.setBackgroundColor(showName[0]
-                    ? Color.parseColor("#1565C0") : Color.parseColor("#90CAF9"));
-            btnToggleName.setText(showName[0] ? "✓ Name Text" : "✕ Name Text");
+            btnToggleName.setBackgroundColor(showName[0] ? Color.parseColor("#1565C0") : Color.parseColor("#E3F2FD"));
+            btnToggleName.setTextColor(showName[0] ? Color.WHITE : Color.parseColor("#1565C0"));
+            btnToggleName.setText(showName[0] ? "✓ Name" : "✕ Name");
         });
-        root.addView(btnToggleName);
-
-        Button btnToggleInfo = new Button(this);
-        btnToggleInfo.setText("✓ Info Text (%)");
-        btnToggleInfo.setBackgroundColor(Color.parseColor("#1565C0"));
-        btnToggleInfo.setTextColor(Color.WHITE);
         btnToggleInfo.setOnClickListener(v -> {
             showInfo[0] = !showInfo[0];
-            btnToggleInfo.setBackgroundColor(showInfo[0]
-                    ? Color.parseColor("#1565C0") : Color.parseColor("#90CAF9"));
-            btnToggleInfo.setText(showInfo[0] ? "✓ Info Text (%)" : "✕ Info Text (%)");
+            btnToggleInfo.setBackgroundColor(showInfo[0] ? Color.parseColor("#1565C0") : Color.parseColor("#E3F2FD"));
+            btnToggleInfo.setTextColor(showInfo[0] ? Color.WHITE : Color.parseColor("#1565C0"));
+            btnToggleInfo.setText(showInfo[0] ? "✓ %" : "✕ %");
         });
-        root.addView(btnToggleInfo);
 
-        builder.setView(new ScrollView(this) {{ addView(root); }});
-        builder.setPositiveButton("Create Grid", (d, w) -> {
-            // ── Auto calculate rows from totalPhotos + cols
+        // ── Add button — directly create grid
+        btnAdd.setOnClickListener(v -> {
+            dialog.dismiss();
             int autoRows = (int) Math.ceil((double) totalPhotos[0] / cols[0]);
             createGridPhotoFrame(autoRows, cols[0], totalPhotos[0],
-                    selectedShape[0], cellSize[0], showName[0], showInfo[0]);
+                selectedShape[0], 200, showName[0], showInfo[0]);
         });
-        builder.setNegativeButton("Cancel", null);
-        builder.show();
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
     }
 
     private void createGridPhotoFrame(int rows, int cols, int totalPhotos,
