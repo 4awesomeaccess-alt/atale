@@ -15415,7 +15415,7 @@ public class MainActivity extends AppCompatActivity {
                         0, 0, 1, 0, brightness * 255,
                         0, 0, 0, 1, 0
                     });
-                    targetView.setColorFilter(new android.graphics.ColorMatrixColorFilter(cm));
+                    if (targetView instanceof android.widget.ImageView) { ((android.widget.ImageView) targetView).setColorFilter(new android.graphics.ColorMatrixColorFilter(cm)); }
                     targetView.setTag(R.id.tag_brightness, progress);
                     if (tvBrightnessVal != null) tvBrightnessVal.setText(String.valueOf(progress - 100));
                 }
@@ -15794,7 +15794,9 @@ public class MainActivity extends AppCompatActivity {
                         0, 0, 1, 0, brightness * 255,
                         0, 0, 0, 1, 0
                     });
-                    targetView.setColorFilter(new android.graphics.ColorMatrixColorFilter(cm));
+                    if (targetView instanceof android.widget.ImageView) {
+                        ((android.widget.ImageView) targetView).setColorFilter(new android.graphics.ColorMatrixColorFilter(cm));
+                    }
                     targetView.setTag(R.id.tag_brightness, progress);
                     if (tvBrightnessVal != null) tvBrightnessVal.setText(String.valueOf(progress - 100));
                 }
