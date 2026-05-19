@@ -3902,7 +3902,7 @@ public class MainActivity extends AppCompatActivity {
 
             // ── Premium check
             if (!SubscriptionManager.getInstance(this).isSubscribed()) {
-                showSubscriptionDialog();
+                startActivity(new Intent(this, PremiumActivity.class));
                 return;
             }
             exportToJson();

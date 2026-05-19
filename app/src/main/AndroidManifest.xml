@@ -93,6 +93,10 @@
             android:name=".Activity.LocationPickerActivity"
             android:label="Location પસંદ કરો"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".Activity.PremiumActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+
     </application>
 
 </manifest>
