@@ -15169,7 +15169,7 @@ public class MainActivity extends AppCompatActivity {
         // ✅ IMAGE-specific XML
         View cv = inflater.inflate(R.layout.layout_selection_controls_image, null);
 
-        selectionControlsPopup = new PopupWindow(cv, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, false);
+        selectionControlsPopup = new PopupWindow(cv, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, false);
         selectionControlsPopup.setOutsideTouchable(false);
         selectionControlsPopup.setTouchable(true);
         selectionControlsPopup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -15430,8 +15430,8 @@ public class MainActivity extends AppCompatActivity {
             btnClose.setOnClickListener(v -> dismissSelectionControls());
         }
 
-        // ── Show popup
-        showPopupAtSavedPosition(cv);
+        // ── Show popup at bottom full width
+        selectionControlsPopup.showAtLocation(mainLayout, Gravity.BOTTOM | Gravity.START, 0, 0);
     }
 
 
@@ -15774,6 +15774,34 @@ public class MainActivity extends AppCompatActivity {
         if (btnDown != null)  { btnDown.setOnClickListener(v -> moveSingleView(targetView, 0, SEL_MOVE_STEP));   btnDown.setOnLongClickListener(v -> { moveSingleView(targetView, 0, SEL_MOVE_STEP * 5); return true; }); }
         if (btnLeft != null)  { btnLeft.setOnClickListener(v -> moveSingleView(targetView, -SEL_MOVE_STEP, 0));  btnLeft.setOnLongClickListener(v -> { moveSingleView(targetView, -SEL_MOVE_STEP * 5, 0); return true; }); }
         if (btnRight != null) { btnRight.setOnClickListener(v -> moveSingleView(targetView, SEL_MOVE_STEP, 0));  btnRight.setOnLongClickListener(v -> { moveSingleView(targetView, SEL_MOVE_STEP * 5, 0); return true; }); }
+
+        // ── Brightness SeekBar
+        android.widget.SeekBar seekBrightness = popupView.findViewById(R.id.seek_brightness);
+        TextView tvBrightnessVal = popupView.findViewById(R.id.tv_brightness_val);
+        if (seekBrightness != null) {
+            Object brightnessTag = targetView.getTag(R.id.tag_brightness);
+            int currentProgress = (brightnessTag instanceof Integer) ? (int) brightnessTag : 100;
+            seekBrightness.setProgress(currentProgress);
+            if (tvBrightnessVal != null) tvBrightnessVal.setText(String.valueOf(currentProgress - 100));
+            seekBrightness.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(android.widget.SeekBar s, int progress, boolean fromUser) {
+                    if (!fromUser) return;
+                    float brightness = (progress - 100) / 100f;
+                    android.graphics.ColorMatrix cm = new android.graphics.ColorMatrix(new float[]{
+                        1, 0, 0, 0, brightness * 255,
+                        0, 1, 0, 0, brightness * 255,
+                        0, 0, 1, 0, brightness * 255,
+                        0, 0, 0, 1, 0
+                    });
+                    targetView.setColorFilter(new android.graphics.ColorMatrixColorFilter(cm));
+                    targetView.setTag(R.id.tag_brightness, progress);
+                    if (tvBrightnessVal != null) tvBrightnessVal.setText(String.valueOf(progress - 100));
+                }
+                @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+                @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
+            });
+        }
 
         // ── Close
         TextView btnClose = popupView.findViewById(R.id.btn_size_move_close);
