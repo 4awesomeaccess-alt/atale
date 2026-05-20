@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-            = new android.util.SparseArray<>();
+
 
 
     private static final int REQUEST_TEXT_BG_IMAGE = 701;
@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
     private int selectedSwapCellSize = 200;
 
 
-    private ActivityResultLauncher<Intent> framePickerLauncher;    }
+    private ActivityResultLauncher<Intent> framePickerLauncher;
 
 
     @SuppressLint("ClickableViewAccessibility")
