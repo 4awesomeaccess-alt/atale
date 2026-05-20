@@ -512,10 +512,11 @@ public class GridListActivity extends AppCompatActivity {
 
         JSONObject obj = displayList.get(position);
         // ✅ Real cellDataList index find — filter active હોય તો પણ correct
-        int cellIdx = -1;
+        int _tmpIdx = -1;
         for (int _i = 0; _i < cellDataList.size(); _i++) {
-            if (cellDataList.get(_i) == obj) { cellIdx = _i; break; } // reference compare
+            if (cellDataList.get(_i) == obj) { _tmpIdx = _i; break; } // reference compare
         }
+        final int cellIdx = _tmpIdx;
         String photoUri = obj.optString("photoUri", "");
         String photoB64 = obj.optString("photoBitmap", "");
         String name = obj.optString("name", "");
