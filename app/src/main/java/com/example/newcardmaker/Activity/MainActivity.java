@@ -3945,7 +3945,7 @@ public class MainActivity extends AppCompatActivity {
                     View child = mainLayout.getChildAt(ci);
                     if (child instanceof RelativeLayout &&
                         "GRID_FRAME".equals(child.getTag(R.id.btn_set_background))) {
-                        showGridListDialog((RelativeLayout) child);
+                        showGridMainPopup((RelativeLayout) child);
                         break;
                     }
                 }
@@ -4031,7 +4031,7 @@ public class MainActivity extends AppCompatActivity {
                     View child = mainLayout.getChildAt(i);
                     if (child instanceof RelativeLayout &&
                         "GRID_FRAME".equals(child.getTag(R.id.btn_set_background))) {
-                        showGridListDialog((RelativeLayout) child);
+                        showGridMainPopup((RelativeLayout) child);
                         break;
                     }
                 }
@@ -4058,7 +4058,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case MotionEvent.ACTION_UP:
                     float dist = (float) Math.sqrt(Math.pow(event.getRawX() - downX[0], 2) + Math.pow(event.getRawY() - downY[0], 2));
-                    if (dist < 10) showGridListDialog((RelativeLayout) view);
+                    if (dist < 10) showGridMainPopup((RelativeLayout) view);
                     exportToJson();
                     return true;
             }
@@ -4519,7 +4519,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case MotionEvent.ACTION_UP:
                     float dist = (float) Math.sqrt(Math.pow(event.getRawX() - downX[0], 2) + Math.pow(event.getRawY() - downY[0], 2));
-                    if (dist < 10) showGridListDialog((RelativeLayout) view);
+                    if (dist < 10) showGridMainPopup((RelativeLayout) view);
                     exportToJson();
                     return true;
             }
@@ -6010,6 +6010,162 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
+
+    // ── Grid tap → Simple popup: Size + Delete + Edit List ──
+    private void showGridMainPopup(RelativeLayout gridContainer) {
+        Object tag = gridContainer.getTag(R.id.btn_grid_frame);
+        if (!(tag instanceof GridMeta)) {
+            Toast.makeText(this, "Grid data મળ્યો નહીં", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        GridMeta meta = (GridMeta) tag;
+
+        android.app.AlertDialog.Builder b = new android.app.AlertDialog.Builder(this);
+        b.setTitle("Grid Options");
+
+        android.widget.LinearLayout root = new android.widget.LinearLayout(this);
+        root.setOrientation(android.widget.LinearLayout.VERTICAL);
+        root.setPadding(dp(20), dp(16), dp(20), dp(16));
+
+        // ── Size label
+        android.widget.TextView lblSize = new android.widget.TextView(this);
+        lblSize.setText("Size: " + meta.cellSizePx + "px");
+        lblSize.setTextSize(14);
+        lblSize.setTypeface(null, android.graphics.Typeface.BOLD);
+        lblSize.setTextColor(android.graphics.Color.parseColor("#1565C0"));
+        lblSize.setGravity(android.view.Gravity.CENTER);
+        root.addView(lblSize);
+
+        // ── SeekBar for size
+        android.widget.SeekBar seekBar = new android.widget.SeekBar(this);
+        int minSize = 80, maxSize = 500;
+        seekBar.setMax(maxSize - minSize);
+        seekBar.setProgress(Math.max(0, Math.min(meta.cellSizePx - minSize, maxSize - minSize)));
+        android.widget.LinearLayout.LayoutParams sbLp = new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        sbLp.setMargins(0, dp(8), 0, dp(16));
+        seekBar.setLayoutParams(sbLp);
+        root.addView(seekBar);
+
+        // ── Small / Large hint row
+        android.widget.LinearLayout hintRow = new android.widget.LinearLayout(this);
+        hintRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        android.widget.TextView hintL = new android.widget.TextView(this);
+        hintL.setText("નાની");
+        hintL.setTextSize(11);
+        hintL.setTextColor(android.graphics.Color.GRAY);
+        hintL.setLayoutParams(new android.widget.LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+        android.widget.TextView hintR = new android.widget.TextView(this);
+        hintR.setText("મોટી");
+        hintR.setTextSize(11);
+        hintR.setTextColor(android.graphics.Color.GRAY);
+        hintR.setGravity(android.view.Gravity.END);
+        hintR.setLayoutParams(new android.widget.LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+        hintRow.addView(hintL);
+        hintRow.addView(hintR);
+        android.widget.LinearLayout.LayoutParams hrLp = new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        hrLp.setMargins(0, 0, 0, dp(16));
+        hintRow.setLayoutParams(hrLp);
+        root.addView(hintRow);
+
+        final int[] newSize = {meta.cellSizePx};
+        seekBar.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(android.widget.SeekBar sb, int progress, boolean fromUser) {
+                newSize[0] = minSize + progress;
+                lblSize.setText("Size: " + newSize[0] + "px");
+            }
+            @Override public void onStartTrackingTouch(android.widget.SeekBar sb) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar sb) {}
+        });
+
+        // ── Edit List button → open GridListActivity
+        android.widget.Button btnEdit = new android.widget.Button(this);
+        btnEdit.setText("✏ Edit List (GridListActivity)");
+        btnEdit.setTextColor(android.graphics.Color.WHITE);
+        btnEdit.setBackgroundColor(android.graphics.Color.parseColor("#1565C0"));
+        android.widget.LinearLayout.LayoutParams eLp = new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        eLp.setMargins(0, 0, 0, dp(8));
+        btnEdit.setLayoutParams(eLp);
+        root.addView(btnEdit);
+
+        // ── Delete button
+        android.widget.Button btnDel = new android.widget.Button(this);
+        btnDel.setText("🗑 Delete Grid");
+        btnDel.setTextColor(android.graphics.Color.WHITE);
+        btnDel.setBackgroundColor(android.graphics.Color.parseColor("#C62828"));
+        btnDel.setLayoutParams(new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT));
+        root.addView(btnDel);
+
+        b.setView(root);
+        b.setNegativeButton("Cancel", null);
+        b.setPositiveButton("Apply Size", (d, w) -> {
+            // Apply new size to grid cells
+            meta.cellSizePx = newSize[0];
+            rebuildGridCells(gridContainer, meta);
+            exportToJson();
+            Toast.makeText(this, "Size update: " + newSize[0] + "px", Toast.LENGTH_SHORT).show();
+        });
+
+        android.app.AlertDialog dlg = b.create();
+
+        btnEdit.setOnClickListener(v -> {
+            dlg.dismiss();
+            showGridListDialog(gridContainer);
+        });
+
+        btnDel.setOnClickListener(v -> {
+            dlg.dismiss();
+            new android.app.AlertDialog.Builder(this)
+                .setTitle("Delete Grid?")
+                .setMessage("આ grid delete થશે. Continue?")
+                .setPositiveButton("Delete", (d2, w2) -> {
+                    if (gridContainer.getParent() != null) {
+                        ((android.view.ViewGroup) gridContainer.getParent()).removeView(gridContainer);
+                    }
+                    exportToJson();
+                    Toast.makeText(this, "Grid deleted!", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+        });
+
+        dlg.show();
+    }
+
+    // ── Rebuild grid cells with new size ──────────────────────
+    private void rebuildGridCells(RelativeLayout gridContainer, GridMeta meta) {
+        // Cell size update — resize all ImageView cells
+        for (int i = 0; i < gridContainer.getChildCount(); i++) {
+            View cell = gridContainer.getChildAt(i);
+            if (cell instanceof RelativeLayout) {
+                RelativeLayout cellRl = (RelativeLayout) cell;
+                android.view.ViewGroup.LayoutParams lp = cellRl.getLayoutParams();
+                lp.width = meta.cellSizePx;
+                lp.height = meta.cellSizePx;
+                cellRl.setLayoutParams(lp);
+                // Photo ImageView resize
+                for (int j = 0; j < cellRl.getChildCount(); j++) {
+                    View child = cellRl.getChildAt(j);
+                    if (child instanceof android.widget.ImageView) {
+                        android.view.ViewGroup.LayoutParams clp = child.getLayoutParams();
+                        clp.width = meta.cellSizePx;
+                        clp.height = meta.cellSizePx;
+                        child.setLayoutParams(clp);
+                    }
+                }
+            }
+        }
+        gridContainer.requestLayout();
+        gridContainer.invalidate();
+    }
 
     private void showGridListDialog(RelativeLayout gridContainer) {
 
