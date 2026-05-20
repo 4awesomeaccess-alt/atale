@@ -7676,7 +7676,10 @@ public class MainActivity extends AppCompatActivity {
         gridContainer.setY(oldY);
 
         ArrayList<JSONObject> newDataList = new ArrayList<>();
-        int totalCells = rows * cols;
+        // ✅ Actual data size વાપરો — delete/add reflect થાય
+        int totalCells = (oldDataList != null && !oldDataList.isEmpty())
+                ? oldDataList.size()
+                : rows * cols;
 
         for (int i = 0; i < totalCells; i++) {
             JSONObject obj;
