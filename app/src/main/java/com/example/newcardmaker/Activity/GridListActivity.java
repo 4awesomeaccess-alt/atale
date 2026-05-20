@@ -2138,11 +2138,20 @@ public class GridListActivity extends AppCompatActivity {
     private void confirmDelete(JSONObject obj, int ci) {
         new AlertDialog.Builder(this).setTitle("Delete Cell " + (ci + 1)).setMessage(obj.optString("name", ""))
                 .setPositiveButton("Delete", (d, w) -> {
-                    // ✅ Index-based remove — same-content cells ને wrong delete ન થાય
-                    if (ci >= 0 && ci < cellDataList.size()) {
+                    // ✅ Reference-based remove — same-content cells ને wrong delete ન થાય
+                    if (ci >= 0 && ci < cellDataList.size() && cellDataList.get(ci) == obj) {
                         cellDataList.remove(ci);
+                    } else {
+                        // fallback: reference search
+                        for (int i = 0; i < cellDataList.size(); i++) {
+                            if (cellDataList.get(i) == obj) { cellDataList.remove(i); break; }
+                        }
                     }
-                    displayList.remove(obj);
+                    // displayList પણ reference-based remove
+                    java.util.Iterator<JSONObject> it = displayList.iterator();
+                    while (it.hasNext()) {
+                        if (it.next() == obj) { it.remove(); break; }
+                    }
                     adapter.notifyDataSetChanged();
                     dataChanged = true;
                     updateStats();
