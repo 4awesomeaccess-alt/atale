@@ -3938,21 +3938,107 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ImageListActivity.class);
             startActivity(intent);
         } else if (id.getId() == R.id.btn_grid_frame) {
-            // Direct empty grid banao + GridListActivity open karo
-            createGridPhotoFrame(1, 3, 3, "ROUNDED", 200, true, true);
-            new android.os.Handler().postDelayed(() -> {
-                for (int ci = mainLayout.getChildCount() - 1; ci >= 0; ci--) {
-                    View child = mainLayout.getChildAt(ci);
-                    if (child instanceof RelativeLayout &&
-                        "GRID_FRAME".equals(child.getTag(R.id.btn_set_background))) {
-                        showGridMainPopup((RelativeLayout) child);
-                        break;
-                    }
-                }
-            }, 200);
+            showNewGridDialog();
         }
     }
 
+
+    // ── New Grid: columns choose → empty grid → GridListActivity ──
+    private void showNewGridDialog() {
+        android.widget.LinearLayout root = new android.widget.LinearLayout(this);
+        root.setOrientation(android.widget.LinearLayout.VERTICAL);
+        root.setPadding(dp(24), dp(20), dp(24), dp(16));
+
+        android.widget.TextView lbl = new android.widget.TextView(this);
+        lbl.setText("Columns per row:");
+        lbl.setTextSize(15);
+        lbl.setTypeface(null, android.graphics.Typeface.BOLD);
+        lbl.setTextColor(android.graphics.Color.parseColor("#1565C0"));
+        lbl.setPadding(0, 0, 0, dp(12));
+        root.addView(lbl);
+
+        final int[] selectedCols = {3};
+        android.widget.LinearLayout btnRow = new android.widget.LinearLayout(this);
+        btnRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        android.widget.Button[] colBtns = new android.widget.Button[6];
+
+        for (int c = 1; c <= 6; c++) {
+            final int cv = c;
+            android.widget.Button b = new android.widget.Button(this);
+            b.setText(String.valueOf(c));
+            b.setTextColor(android.graphics.Color.WHITE);
+            b.setTextSize(15);
+            b.setBackgroundColor(c == 3
+                    ? android.graphics.Color.parseColor("#1565C0")
+                    : android.graphics.Color.parseColor("#90CAF9"));
+            android.widget.LinearLayout.LayoutParams lp =
+                    new android.widget.LinearLayout.LayoutParams(0,
+                            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+            lp.setMargins(dp(2), 0, dp(2), 0);
+            b.setLayoutParams(lp);
+            colBtns[c - 1] = b;
+            b.setOnClickListener(v -> {
+                selectedCols[0] = cv;
+                for (int j = 0; j < 6; j++)
+                    colBtns[j].setBackgroundColor(j + 1 == cv
+                            ? android.graphics.Color.parseColor("#1565C0")
+                            : android.graphics.Color.parseColor("#90CAF9"));
+            });
+            btnRow.addView(b);
+        }
+        root.addView(btnRow);
+
+        new android.app.AlertDialog.Builder(this)
+                .setTitle("New Grid")
+                .setView(root)
+                .setPositiveButton("Create", (d, w) -> {
+                    int cols = selectedCols[0];
+                    int cellSizePx = 200;
+                    // ── Empty grid container banao (0 cells, 1 row placeholder)
+                    int gap = 8;
+                    int nameH = 40;
+                    int infoH = 30;
+                    int cellTotalH = cellSizePx + nameH + infoH;
+                    int totalW = cols * cellSizePx + (cols - 1) * gap;
+                    int totalH = cellTotalH; // 1 row height placeholder
+
+                    RelativeLayout gridContainer = new RelativeLayout(this);
+                    RelativeLayout.LayoutParams outerLp =
+                            new RelativeLayout.LayoutParams(totalW, totalH);
+                    int cx = (mainLayout.getWidth() - totalW) / 2;
+                    int cy = 100;
+                    outerLp.leftMargin = cx > 0 ? cx : 0;
+                    outerLp.topMargin = cy;
+                    gridContainer.setLayoutParams(outerLp);
+                    gridContainer.setTag(R.id.btn_set_background, "GRID_FRAME");
+                    gridContainer.setBackgroundColor(android.graphics.Color.parseColor("#F5F5F5"));
+
+                    // ── GridMeta set (0 cells)
+                    GridMeta meta = new GridMeta(1, cols, "ROUNDED", cellSizePx,
+                            true, true, new java.util.ArrayList<>());
+                    gridContainer.setTag(R.id.btn_grid_frame, meta);
+
+                    mainLayout.addView(gridContainer);
+                    setGridContainerTouch(gridContainer);
+                    attachGridEditOpenListener(gridContainer);
+                    exportToJson();
+
+                    // ── Directly open GridListActivity with 0 cells
+                    currentGridListTarget = gridContainer;
+                    Intent intent = new Intent(this, GridListActivity.class);
+                    intent.putExtra(GridListActivity.EXTRA_CELLS_JSON, "[]");
+                    intent.putExtra(GridListActivity.EXTRA_ROWS, 0);
+                    intent.putExtra(GridListActivity.EXTRA_COLS, cols);
+                    intent.putExtra(GridListActivity.EXTRA_SHAPE, "ROUNDED");
+                    intent.putExtra(GridListActivity.EXTRA_CELL_SIZE, cellSizePx);
+                    intent.putExtra(GridListActivity.EXTRA_SHOW_NAME, true);
+                    intent.putExtra(GridListActivity.EXTRA_SHOW_INFO, true);
+                    intent.putExtra(GridListActivity.EXTRA_GRID_INDEX, mainLayout.getChildCount() - 1);
+                    startActivityForResult(intent, REQUEST_GRID_LIST_ACTIVITY);
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
 
     private void showGridFrameDialog() {
         android.view.View root = getLayoutInflater().inflate(R.layout.dialog_grid_frame, null);
