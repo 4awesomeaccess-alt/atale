@@ -41,9 +41,6 @@
             android:name=".PdfViewerActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.GridListActivity"
-            android:exported="false" />
-        <activity
             android:name=".invite_sticker.invite_sticker_main_category"
             android:exported="false" />
         <activity
