@@ -511,7 +511,11 @@ public class GridListActivity extends AppCompatActivity {
         card.removeAllViews();
 
         JSONObject obj = displayList.get(position);
-        int cellIdx = cellDataList.indexOf(obj);
+        // ✅ Real cellDataList index find — filter active હોય તો પણ correct
+        int cellIdx = -1;
+        for (int _i = 0; _i < cellDataList.size(); _i++) {
+            if (cellDataList.get(_i) == obj) { cellIdx = _i; break; } // reference compare
+        }
         String photoUri = obj.optString("photoUri", "");
         String photoB64 = obj.optString("photoBitmap", "");
         String name = obj.optString("name", "");
@@ -2133,7 +2137,10 @@ public class GridListActivity extends AppCompatActivity {
     private void confirmDelete(JSONObject obj, int ci) {
         new AlertDialog.Builder(this).setTitle("Delete Cell " + (ci + 1)).setMessage(obj.optString("name", ""))
                 .setPositiveButton("Delete", (d, w) -> {
-                    cellDataList.remove(obj);
+                    // ✅ Index-based remove — same-content cells ને wrong delete ન થાય
+                    if (ci >= 0 && ci < cellDataList.size()) {
+                        cellDataList.remove(ci);
+                    }
                     displayList.remove(obj);
                     adapter.notifyDataSetChanged();
                     dataChanged = true;
