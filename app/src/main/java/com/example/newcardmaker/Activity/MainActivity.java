@@ -279,12 +279,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private ImageView selectedSwapCell = null;
-    private int selectedSwapCellIdx = -1;
-    private List<JSONObject> selectedSwapDataList = null;
     private String selectedSwapShape = "ROUNDED";
-    private int selectedSwapCellSize = 200;
-
 
     private ActivityResultLauncher<Intent> framePickerLauncher;
 
@@ -518,28 +513,13 @@ public class MainActivity extends AppCompatActivity {
 
         mainLayout.setOnTouchListener((v, event) -> {
 
-            // mainLayout.setOnTouchListener માં ઉમેરો:
-                resetSwapSelection();
-                Toast.makeText(this, "Swap mode OFF", Toast.LENGTH_SHORT).show();
-            }
-
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                    return true;
-                }
-
-                deselectAll();
-                hideAllPopupWindows();
-            }
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-
-                // ✅ આ ઉમેરો
                 try {
                     if (frameImageControlsPopup != null && frameImageControlsPopup.isShowing()) {
                         frameImageControlsPopup.dismiss();
                     }
                 } catch (Exception ignored) {
                 }
-
                 deselectAll();
                 hideAllPopupWindows();
             }
@@ -5212,21 +5192,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-
-    private void resetSwapSelection() {
-        // ── Previous selected cell highlight remove
-        if (selectedSwapCell != null) {
-            GradientDrawable restoreGd = new GradientDrawable();
-            restoreGd.setColor(Color.TRANSPARENT);
-            selectedSwapCell.setBackground(null);
-        }
-
-        selectedSwapCell = null;
-        selectedSwapCellIdx = -1;
-        selectedSwapDataList = null;
-    }
-
 
     private void addFrameWithoutPhoto(String frameUrl, String maskUrl, String topUrl, int overlayColor) {
 
