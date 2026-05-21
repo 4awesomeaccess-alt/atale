@@ -499,76 +499,10 @@
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Align" android:textColor="#6B7280" android:textSize="6sp" android:layout_marginTop="2dp" />
                             </LinearLayout>
 
-                            <TextView android:id="@+id/tab_spacing"
-                                android:layout_width="wrap_content" android:layout_height="match_parent"
-                                android:background="#FFFFFF" android:gravity="center"
-                                android:paddingHorizontal="12dp"
-                                android:text="Spacing" android:textColor="#6B7280"
-                                android:textSize="8sp" />
-
-
-                            <TextView android:id="@+id/tab_transform"
-                                android:layout_width="wrap_content" android:layout_height="match_parent"
-                                android:background="#FFFFFF" android:gravity="center"
-                                android:paddingHorizontal="12dp"
-                                android:text="Transform" android:textColor="#6B7280"
-                                android:textSize="8sp" />
-
-
-                            <TextView android:id="@+id/tab_effects"
-                                android:layout_width="wrap_content" android:layout_height="match_parent"
-                                android:background="#FFFFFF" android:gravity="center"
-                                android:paddingHorizontal="12dp"
-                                android:text="Effects" android:textColor="#6B7280"
-                                android:textSize="8sp" />
-
-
-                            <TextView android:id="@+id/tab_layout"
-                                android:layout_width="wrap_content" android:layout_height="match_parent"
-                                android:background="#FFFFFF" android:gravity="center"
-                                android:paddingHorizontal="12dp"
-                                android:text="Layout" android:textColor="#6B7280"
-                                android:textSize="8sp" />
-
-                            <View android:layout_width="3dp" android:layout_height="match_parent" />
-
-                            <TextView android:id="@+id/tab_transform2"
-                                android:layout_width="wrap_content" android:layout_height="match_parent"
-                                android:background="#FFFFFF" android:gravity="center"
-                                android:paddingHorizontal="12dp"
-                                android:text="Transform" android:textColor="#6B7280"
-                                android:textSize="8sp" />
-
                         </LinearLayout>
 
                     </HorizontalScrollView>
 
-                    <!-- Transform quick row -->
-                    <LinearLayout
-                        android:layout_width="match_parent" android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingHorizontal="6dp" android:paddingBottom="4dp"
-                        android:layout_marginTop="2dp">
-                        <TextView android:id="@+id/btn_transform_upper"
-                            android:layout_width="0dp" android:layout_height="24dp"
-                            android:layout_marginEnd="3dp" android:layout_weight="1"
-                            android:background="#FFFFFF" android:gravity="center"
-                            android:text="ABC" android:textColor="#374151"
-                            android:textSize="8sp" android:textStyle="bold"
-                            android:visibility="gone" />
-                        <TextView android:id="@+id/btn_transform_lower"
-                            android:layout_width="0dp" android:layout_height="24dp"
-                            android:layout_marginEnd="3dp" android:layout_weight="1"
-                            android:background="#FFFFFF" android:gravity="center"
-                            android:text="abc" android:textColor="#374151" android:textSize="8sp"
-                            android:visibility="gone" />
-                        <TextView android:id="@+id/btn_transform_title"
-                            android:layout_width="0dp" android:layout_height="24dp"
-                            android:layout_marginEnd="3dp" android:layout_weight="1"
-                            android:background="#FFFFFF" android:gravity="center"
-                            android:text="Abc" android:textColor="#374151" android:textSize="8sp"
-                            android:visibility="gone" />
-                    </LinearLayout>
                 </LinearLayout>
 
                 <!-- ══ SPACING TAB ══ -->
@@ -875,6 +809,15 @@
                 <TextView android:id="@+id/btn_toggle_move" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
                 <TextView android:id="@+id/btn_toggle_layer" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
                 <TextView android:id="@+id/btn_toggle_align" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+                <TextView android:id="@+id/tab_action" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+                <TextView android:id="@+id/tab_spacing" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+                <TextView android:id="@+id/tab_transform" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+                <TextView android:id="@+id/tab_effects" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+                <TextView android:id="@+id/tab_layout" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+                <TextView android:id="@+id/tab_transform2" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+                <TextView android:id="@+id/btn_transform_upper" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+                <TextView android:id="@+id/btn_transform_lower" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+                <TextView android:id="@+id/btn_transform_title" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
 
             </LinearLayout>
         </ScrollView>
