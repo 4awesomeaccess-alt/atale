@@ -7279,6 +7279,30 @@ public class MainActivity extends AppCompatActivity {
         int measuredH = root.getMeasuredHeight();
         fontPopup.update(0, screenH - measuredH, screenW, -1);
 
+        // ── Drag handle — popup move
+        final int[] popXY = {0, screenH - measuredH};
+        final float[] lastRaw = {0f, 0f};
+        dragRow.setOnTouchListener((v, ev) -> {
+            switch (ev.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    lastRaw[0] = ev.getRawX();
+                    lastRaw[1] = ev.getRawY();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    int dx = (int)(ev.getRawX() - lastRaw[0]);
+                    int dy = (int)(ev.getRawY() - lastRaw[1]);
+                    popXY[0] += dx;
+                    popXY[1] += dy;
+                    popXY[0] = Math.max(0, Math.min(popXY[0], screenW - 100));
+                    popXY[1] = Math.max(0, Math.min(popXY[1], screenH - 50));
+                    fontPopup.update(popXY[0], popXY[1], screenW, -1);
+                    lastRaw[0] = ev.getRawX();
+                    lastRaw[1] = ev.getRawY();
+                    break;
+            }
+            return true;
+        });
+
         // ── Restore controls on dismiss
         fontPopup.setOnDismissListener(() -> {
             if (selectionControlsPopup != null && !selectionControlsPopup.isShowing()) {
