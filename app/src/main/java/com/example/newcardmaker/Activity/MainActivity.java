@@ -9183,7 +9183,7 @@ public class MainActivity extends AppCompatActivity {
 
         View anchor = getWindow().getDecorView().getRootView();
         int screenHeight = getResources().getDisplayMetrics().heightPixels;
-        int yOffset = (screenHeight - popupHeight) / 2;
+        int yOffset = screenHeight - popupHeight;
         popup.showAtLocation(anchor, Gravity.TOP | Gravity.START, 0, yOffset);
 
         // ── Text Controls restore when color popup closes ──
@@ -16892,7 +16892,7 @@ public class MainActivity extends AppCompatActivity {
         }
         int screenH = getResources().getDisplayMetrics().heightPixels;
         popup.showAtLocation(getWindow().getDecorView().getRootView(),
-            Gravity.TOP | Gravity.START, 0, (screenH - popupH) / 2);
+            Gravity.TOP | Gravity.START, 0, screenH - popupH);
         popup.setOnDismissListener(() -> {
             if (selectionControlsPopup != null && !selectionControlsPopup.isShowing()) {
                 selectionControlsPopup.showAtLocation(mainLayout,
@@ -17968,7 +17968,7 @@ public class MainActivity extends AppCompatActivity {
         View rootView = getWindow().getDecorView().getRootView();
         int screenH = getResources().getDisplayMetrics().heightPixels;
         arcPopupWindow.showAtLocation(rootView,
-            Gravity.TOP | Gravity.START, 0, (screenH - popupH) / 2);
+            Gravity.TOP | Gravity.START, 0, screenH - popupH);
 
         // Text Controls restore on dismiss
         arcPopupWindow.setOnDismissListener(() -> {
