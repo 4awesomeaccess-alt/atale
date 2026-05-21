@@ -7147,114 +7147,147 @@ public class MainActivity extends AppCompatActivity {
                 {"Sans-Serif", "sans-serif"},
         };
 
-        // Custom Typeface fonts — add your asset fonts here if needed
-        // e.g., fonts loaded from assets/fonts/
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Font Family");
-
-        // Build scrollable list with live preview per font
-        ScrollView sv = new ScrollView(this);
+        // ── Root layout
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
-        root.setPadding(16, 8, 16, 8);
-        sv.addView(root);
+        root.setBackgroundColor(Color.parseColor("#F3F4F6"));
 
-        // Current selection tracking
+        // ── Drag handle + title row
+        LinearLayout dragRow = new LinearLayout(this);
+        dragRow.setOrientation(LinearLayout.HORIZONTAL);
+        dragRow.setGravity(Gravity.CENTER_VERTICAL);
+        dragRow.setBackgroundColor(Color.parseColor("#2A3439"));
+        dragRow.setPadding(dpToPx(12), dpToPx(8), dpToPx(12), dpToPx(8));
+        dragRow.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, dpToPx(36)));
+
+        TextView tvTitle = new TextView(this);
+        tvTitle.setText("Font Family");
+        tvTitle.setTextColor(Color.WHITE);
+        tvTitle.setTextSize(11);
+        tvTitle.setTypeface(null, android.graphics.Typeface.BOLD);
+        tvTitle.setLayoutParams(new LinearLayout.LayoutParams(0,
+                LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+        dragRow.addView(tvTitle);
+
+        TextView btnClose = new TextView(this);
+        btnClose.setText("✕");
+        btnClose.setTextColor(Color.WHITE);
+        btnClose.setTextSize(14);
+        btnClose.setGravity(Gravity.CENTER);
+        btnClose.setPadding(dpToPx(12), 0, dpToPx(4), 0);
+        dragRow.addView(btnClose);
+        root.addView(dragRow);
+
+        // ── Font rows
         final String[] currentKey = {
-                // Try to detect current
                 targetText.getTypeface() != null &&
                         targetText.getTypeface().equals(Typeface.MONOSPACE)
-                        ? "monospace"
-                        : "DEFAULT"
+                        ? "monospace" : "DEFAULT"
         };
+
+        // ── PopupWindow create
+        int screenW = getResources().getDisplayMetrics().widthPixels;
+        int screenH = getResources().getDisplayMetrics().heightPixels;
+
+        final android.widget.PopupWindow fontPopup = new android.widget.PopupWindow(
+                root, screenW, android.view.ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        fontPopup.setBackgroundDrawable(
+                new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+        fontPopup.setElevation(16f);
+        fontPopup.setOutsideTouchable(true);
 
         for (String[] fontEntry : fonts) {
             final String label = fontEntry[0];
             final String fontKey = fontEntry[1];
 
-            // Row
             LinearLayout row = new LinearLayout(this);
             row.setOrientation(LinearLayout.HORIZONTAL);
-            row.setPadding(12, 10, 12, 10);
+            row.setPadding(dpToPx(16), dpToPx(10), dpToPx(16), dpToPx(10));
             row.setGravity(Gravity.CENTER_VERTICAL);
-
-            LinearLayout.LayoutParams rowLp =
-                    new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT);
-            rowLp.setMargins(0, 0, 0, 4);
+            LinearLayout.LayoutParams rowLp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            rowLp.setMargins(0, 0, 0, 1);
             row.setLayoutParams(rowLp);
 
-            // Highlight current
             boolean isCurrent = fontKey.equals(currentKey[0]);
             row.setBackgroundColor(isCurrent
-                    ? Color.parseColor("#E3F2FD")
-                    : Color.WHITE);
+                    ? Color.parseColor("#E3F2FD") : Color.WHITE);
 
-            // Preview TextView
+            // Preview
             TextView preview = new TextView(this);
             preview.setText("Aa Bb 123");
             preview.setTextSize(15);
             preview.setTextColor(Color.parseColor("#212121"));
-
-            // Apply the font for preview
-            Typeface tf = getTypefaceForKey(fontKey);
-            preview.setTypeface(tf);
-
-            LinearLayout.LayoutParams prevLp =
-                    new LinearLayout.LayoutParams(0,
-                            LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
-            preview.setLayoutParams(prevLp);
+            preview.setTypeface(getTypefaceForKey(fontKey));
+            preview.setLayoutParams(new LinearLayout.LayoutParams(
+                    0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
             row.addView(preview);
 
-            // Font name label
+            // Label
             TextView name = new TextView(this);
             name.setText(label);
             name.setTextSize(13);
             name.setTextColor(Color.parseColor("#757575"));
-            name.setPadding(12, 0, 0, 0);
+            name.setPadding(dpToPx(12), 0, 0, 0);
             row.addView(name);
 
-            // Check mark if selected
+            // Check mark
             if (isCurrent) {
                 TextView check = new TextView(this);
                 check.setText("✓");
                 check.setTextSize(16);
                 check.setTextColor(Color.parseColor("#1565C0"));
-                check.setPadding(12, 0, 0, 0);
+                check.setPadding(dpToPx(12), 0, 0, 0);
                 row.addView(check);
             }
 
             root.addView(row);
 
-            // Click — apply font immediately + dismiss
             row.setOnClickListener(v -> {
                 Typeface selected = getTypefaceForKey(fontKey);
-
-                // Preserve bold/italic state
                 boolean bold = targetText.getTypeface() != null
                         && targetText.getTypeface().isBold();
                 boolean italic = targetText.getTypeface() != null
                         && targetText.getTypeface().isItalic();
-
                 int style = Typeface.NORMAL;
                 if (bold && italic) style = Typeface.BOLD_ITALIC;
                 else if (bold) style = Typeface.BOLD;
                 else if (italic) style = Typeface.ITALIC;
-
-                targetText.setTypeface(
-                        Typeface.create(selected, style));
+                targetText.setTypeface(Typeface.create(selected, style));
                 exportToJson();
-
-                Toast.makeText(this,
-                        label + " font apply!", Toast.LENGTH_SHORT).show();
+                fontPopup.dismiss();
+                Toast.makeText(this, label + " font apply!", Toast.LENGTH_SHORT).show();
             });
         }
 
-        builder.setView(sv);
-        builder.setNegativeButton("Close", null);
-        builder.show();
+        // ── Dismiss controls
+        if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) {
+            selectionControlsPopup.dismiss();
+        }
+
+        // ── Show at bottom
+        fontPopup.showAtLocation(getWindow().getDecorView().getRootView(),
+                Gravity.TOP | Gravity.START, 0,
+                screenH - root.getMeasuredHeight());
+
+        // Measure before show for correct height
+        root.measure(android.view.View.MeasureSpec.makeMeasureSpec(screenW,
+                android.view.View.MeasureSpec.EXACTLY),
+                android.view.View.MeasureSpec.UNSPECIFIED);
+        int measuredH = root.getMeasuredHeight();
+        fontPopup.update(0, screenH - measuredH, screenW, -1);
+
+        // ── Restore controls on dismiss
+        fontPopup.setOnDismissListener(() -> {
+            if (selectionControlsPopup != null && !selectionControlsPopup.isShowing()) {
+                selectionControlsPopup.showAtLocation(mainLayout,
+                        Gravity.TOP | Gravity.LEFT, selControlsLastX, selControlsLastY);
+            }
+        });
+
+        btnClose.setOnClickListener(v -> fontPopup.dismiss());
     }
 
 
