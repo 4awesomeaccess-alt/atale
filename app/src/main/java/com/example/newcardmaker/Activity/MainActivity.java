@@ -7566,11 +7566,11 @@ public class MainActivity extends AppCompatActivity {
         };
 
 
-        if (tabSpacing != null) tabSpacing.setOnClickListener(v -> { dismissSelectionControls(); showEditTextDialog(targetView); showTextPropertiesPopup(targetView, 0); });
-        if (tabTransformTab != null) tabTransformTab.setOnClickListener(v -> { dismissSelectionControls(); showEditTextDialog(targetView); showTextPropertiesPopup(targetView, 1); });
-        if (tabEffects != null) tabEffects.setOnClickListener(v -> { dismissSelectionControls(); showEditTextDialog(targetView); showTextPropertiesPopup(targetView, 2); });
-        if (tabLayout != null) tabLayout.setOnClickListener(v -> { dismissSelectionControls(); showEditTextDialog(targetView); showTextPropertiesPopup(targetView, 3); });
-        if (tabTransform2 != null) tabTransform2.setOnClickListener(v -> { dismissSelectionControls(); showEditTextDialog(targetView); showTextPropertiesPopup(targetView, 1); });
+        if (tabSpacing != null) tabSpacing.setOnClickListener(v -> { dismissSelectionControls(); showTextPropertiesPopup(targetView, 0); });
+        if (tabTransformTab != null) tabTransformTab.setOnClickListener(v -> { dismissSelectionControls(); showTextPropertiesPopup(targetView, 1); });
+        if (tabEffects != null) tabEffects.setOnClickListener(v -> { dismissSelectionControls(); showTextPropertiesPopup(targetView, 2); });
+        if (tabLayout != null) tabLayout.setOnClickListener(v -> { dismissSelectionControls(); showTextPropertiesPopup(targetView, 3); });
+        if (tabTransform2 != null) tabTransform2.setOnClickListener(v -> { dismissSelectionControls(); showTextPropertiesPopup(targetView, 1); });
 
         // ── Undo/Redo history
         final java.util.ArrayDeque<String> undoStack = new java.util.ArrayDeque<>();
