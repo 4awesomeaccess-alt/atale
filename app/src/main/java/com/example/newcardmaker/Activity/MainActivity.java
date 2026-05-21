@@ -3865,6 +3865,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (id.getId() == R.id.btn_image_list) {
             Intent intent = new Intent(this, ImageListActivity.class);
             startActivity(intent);
+        }
     }
 
 
@@ -4873,6 +4874,7 @@ public class MainActivity extends AppCompatActivity {
             intent.setType("image/*");
             startActivityForResult(
                     Intent.createChooser(intent, "Photo Select"),
+                    PICK_STICKER_IMAGE);
         });
 
         // ── Remove photo
@@ -5718,57 +5720,35 @@ public class MainActivity extends AppCompatActivity {
             pendingTextBgTarget = null;
         }
 
-        if (requestCode == REQUEST_BG_IMAGE_LIST && resultCode == RESULT_OK && data != null) {
-            String filePath = data.getStringExtra(ImageListActivity.RESULT_IMAGE_PATH);
-            if (filePath != null && pendingTextBgTarget != null) {
-                Uri fileUri = Uri.fromFile(new java.io.File(filePath));
-                applyTextBgImage(fileUri, pendingTextBgTarget);
-                // Preview update
-                pendingTextBgTarget.setTag(R.id.btn_sticker_gallery, fileUri.toString());
-                exportToJson();
-            }
-            pendingTextBgTarget = null;
-        }
-
-                resultCode == RESULT_OK && data != null) {
-
+        // Cell photo pick result
+        if (requestCode == REQUEST_FRAME_PHOTO_ADJUST
+                && resultCode == RESULT_OK && data != null) {
             Uri uri = data.getData();
+            if (uri != null) {
+                Glide.with(this)
+                        .asBitmap()
+                        .load(uri)
+                        .into(new com.bumptech.glide.request.target
+                                .CustomTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(
+                                    @NonNull Bitmap bitmap,
+                                    @Nullable com.bumptech.glide.request.transition
+                                            .Transition<? super Bitmap> t) {
+                                // handled elsewhere
+                            }
 
-
-            Glide.with(this)
-                    .asBitmap()
-                    .load(uri)
-                    .into(new com.bumptech.glide.request.target
-                            .CustomTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(
-                                @NonNull Bitmap bitmap,
-                                @Nullable com.bumptech.glide.request.transition
-                                        .Transition<? super Bitmap> t) {
-
-                            runOnUiThread(() ->
-                                    showCellPhotoAdjustDialog(
-                                            target, bitmap,
-                                            sh, sz, idx,
-                                            dList, uri)
-                            );
-                        }
-
-                        @Override
-                        public void onLoadCleared(
-                                @Nullable Drawable p) {
-                        }
-                    });
-
+                            @Override
+                            public void onLoadCleared(
+                                    @Nullable Drawable p) {
+                            }
+                        });
+            }
         }
 
-
-                resultCode == RESULT_OK &&
-                data != null) {
-
-                Toast.makeText(this, "Grid target મળ્યો નહીં", Toast.LENGTH_SHORT).show();
-                return;
-            }
+        // Multi grid photo pick result
+        if (requestCode == PICK_STICKER_IMAGE + 100
+                && resultCode == RESULT_OK && data != null) {
 
             ArrayList<Uri> selectedUris = new ArrayList<>();
 
@@ -5818,6 +5798,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
+        } // end multi grid photo pick
 
         if (requestCode == REQUEST_FRAME_PHOTO_ADJUST
                 && resultCode == RESULT_OK && data != null
@@ -14911,6 +14892,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // ✅ Empty page — texts + stickers + grids
                 loadTextsAndStickers(textArray, stickerArray);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
