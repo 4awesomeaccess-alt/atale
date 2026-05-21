@@ -7566,10 +7566,36 @@ public class MainActivity extends AppCompatActivity {
         };
 
 
-        if (tabSpacing != null) tabSpacing.setOnClickListener(v -> { dismissSelectionControls(); showTextPropertiesPopup(targetView, 0); });
-        if (tabTransformTab != null) tabTransformTab.setOnClickListener(v -> { dismissSelectionControls(); showTextPropertiesPopup(targetView, 1); });
-        if (tabEffects != null) tabEffects.setOnClickListener(v -> { dismissSelectionControls(); showTextPropertiesPopup(targetView, 2); });
-        if (tabLayout != null) tabLayout.setOnClickListener(v -> { dismissSelectionControls(); showTextPropertiesPopup(targetView, 3); });
+        // ── Tab active highlight helper
+        TextView tabAction = cv.findViewById(R.id.tab_action);
+        final TextView[] allTabViews = {tabAction, tabSpacing, tabTransformTab, tabEffects, tabLayout};
+        final LinearLayout[] allPanelViews = {panelAction, panelSpacing, panelTransformP, panelEffects, panelLayout};
+
+        Runnable[] switchTab = {null};
+        switchTab[0] = () -> {};
+
+        java.util.function.Consumer<Integer> activateTab = idx -> {
+            for (int i = 0; i < allTabViews.length; i++) {
+                if (allTabViews[i] != null) {
+                    allTabViews[i].setBackgroundColor(i == idx
+                            ? Color.parseColor("#607D8B") : Color.parseColor("#2A3439"));
+                    allTabViews[i].setTextColor(i == idx
+                            ? Color.WHITE : Color.parseColor("#9CA3AF"));
+                }
+                if (allPanelViews[i] != null) {
+                    allPanelViews[i].setVisibility(i == idx ? View.VISIBLE : View.GONE);
+                }
+            }
+        };
+
+        // Default — Action tab active
+        activateTab.accept(0);
+
+        if (tabAction != null) tabAction.setOnClickListener(v -> activateTab.accept(0));
+        if (tabSpacing != null) tabSpacing.setOnClickListener(v -> activateTab.accept(1));
+        if (tabTransformTab != null) tabTransformTab.setOnClickListener(v -> activateTab.accept(2));
+        if (tabEffects != null) tabEffects.setOnClickListener(v -> activateTab.accept(3));
+        if (tabLayout != null) tabLayout.setOnClickListener(v -> activateTab.accept(4));
         if (tabTransform2 != null) tabTransform2.setOnClickListener(v -> { dismissSelectionControls(); showTextPropertiesPopup(targetView, 1); });
 
         // ── Undo/Redo history
