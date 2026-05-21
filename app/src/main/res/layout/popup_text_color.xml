@@ -263,6 +263,65 @@
 
         </LinearLayout>
 
+        <!-- Default Theme Gradient Presets -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quick Presets:"
+            android:textColor="#9CA3AF"
+            android:textSize="9sp"
+            android:layout_marginBottom="4dp" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:layout_marginBottom="6dp">
+
+            <LinearLayout
+                android:id="@+id/tc_preset_row"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:orientation="horizontal">
+
+                <!-- Material3 Default: Purple → Teal (theme default) -->
+                <View android:id="@+id/tc_preset_theme"
+                    android:layout_width="48dp" android:layout_height="22dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@drawable/tc_preset_theme" />
+
+                <!-- Sunset -->
+                <View android:id="@+id/tc_preset_sunset"
+                    android:layout_width="48dp" android:layout_height="22dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@drawable/tc_preset_sunset" />
+
+                <!-- Ocean -->
+                <View android:id="@+id/tc_preset_ocean"
+                    android:layout_width="48dp" android:layout_height="22dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@drawable/tc_preset_ocean" />
+
+                <!-- Gold -->
+                <View android:id="@+id/tc_preset_gold"
+                    android:layout_width="48dp" android:layout_height="22dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@drawable/tc_preset_gold" />
+
+                <!-- Forest -->
+                <View android:id="@+id/tc_preset_forest"
+                    android:layout_width="48dp" android:layout_height="22dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@drawable/tc_preset_forest" />
+
+                <!-- Fire -->
+                <View android:id="@+id/tc_preset_fire"
+                    android:layout_width="48dp" android:layout_height="22dp"
+                    android:background="@drawable/tc_preset_fire" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
         <!-- Direction -->
         <LinearLayout
             android:layout_width="match_parent"

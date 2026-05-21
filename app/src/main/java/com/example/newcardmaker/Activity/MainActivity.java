@@ -9091,6 +9091,33 @@ public class MainActivity extends AppCompatActivity {
         tcGradC1Box.setOnClickListener(v -> openGradColorWheel.accept(gradC1[0], true));
         tcGradC2Box.setOnClickListener(v -> openGradColorWheel.accept(gradC2[0], false));
 
+        // ── Preset gradient clicks ──
+        // Helper lambda to apply preset
+        java.util.function.BiConsumer<Integer, Integer> applyPreset = (c1, c2) -> {
+            gradC1[0] = c1;
+            gradC2[0] = c2;
+            tcGradC1Box.setBackgroundColor(c1);
+            tcGradC2Box.setBackgroundColor(c2);
+            tcGradC1Hex.setText(String.format("%06X", 0xFFFFFF & c1));
+            tcGradC2Hex.setText(String.format("%06X", 0xFFFFFF & c2));
+            updateGradPreview.run();
+        };
+
+        View tcPresetTheme  = root.findViewById(R.id.tc_preset_theme);
+        View tcPresetSunset = root.findViewById(R.id.tc_preset_sunset);
+        View tcPresetOcean  = root.findViewById(R.id.tc_preset_ocean);
+        View tcPresetGold   = root.findViewById(R.id.tc_preset_gold);
+        View tcPresetForest = root.findViewById(R.id.tc_preset_forest);
+        View tcPresetFire   = root.findViewById(R.id.tc_preset_fire);
+
+        // Material3 Default Theme: Purple → Teal
+        if (tcPresetTheme  != null) tcPresetTheme.setOnClickListener(v  -> applyPreset.accept(0xFF6750A4, 0xFF00BCD4));
+        if (tcPresetSunset != null) tcPresetSunset.setOnClickListener(v -> applyPreset.accept(0xFFFF6B35, 0xFFF7C59F));
+        if (tcPresetOcean  != null) tcPresetOcean.setOnClickListener(v  -> applyPreset.accept(0xFF4FACFE, 0xFF00F2FE));
+        if (tcPresetGold   != null) tcPresetGold.setOnClickListener(v   -> applyPreset.accept(0xFFF7971E, 0xFFFFD200));
+        if (tcPresetForest != null) tcPresetForest.setOnClickListener(v -> applyPreset.accept(0xFF11998E, 0xFF38EF7D));
+        if (tcPresetFire   != null) tcPresetFire.setOnClickListener(v   -> applyPreset.accept(0xFFFF416C, 0xFFFF4B2B));
+
         tcGradC1Hex.addTextChangedListener(new android.text.TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
             @Override public void afterTextChanged(android.text.Editable s) {}
