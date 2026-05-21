@@ -7654,8 +7654,6 @@ public class MainActivity extends AppCompatActivity {
         TextView btnUpper = cv.findViewById(R.id.btn_transform_upper);
         TextView btnLower = cv.findViewById(R.id.btn_transform_lower);
         TextView btnTitle = cv.findViewById(R.id.btn_transform_title);
-        TextView btnCopyStyle = cv.findViewById(R.id.btn_copy_style_all);
-        TextView btnReset = cv.findViewById(R.id.btn_reset_style);
 
         if (btnUpper != null) {
             btnUpper.setOnClickListener(v -> {
@@ -7693,79 +7691,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 targetView.setText(sb.toString());
                 exportToJson();
-            });
-        }
-
-        if (btnCopyStyle != null) {
-            btnCopyStyle.setOnClickListener(v -> {
-                new android.app.AlertDialog.Builder(this)
-                        .setTitle("Style Copy to All Texts")
-                        .setMessage("આ text ની styling (color, size, font, stroke) "
-                                + "page ના બધા texts પર apply કરવી?")
-                        .setPositiveButton("Apply All", (d, w) -> {
-                            for (int i = 0; i < mainLayout.getChildCount(); i++) {
-                                View child = mainLayout.getChildAt(i);
-                                if (child instanceof StrokeTextView
-                                        && child != targetView) {
-                                    StrokeTextView other = (StrokeTextView) child;
-                                    other.setTextColor(targetView.getCurrentTextColor());
-                                    other.setTextSize(
-                                            android.util.TypedValue.COMPLEX_UNIT_PX,
-                                            targetView.getTextSize());
-                                    other.setTypeface(targetView.getTypeface());
-                                    other.setPaintFlags(targetView.getPaintFlags());
-                                    other.setStrokeWidth(targetView.getStrokeWidth());
-                                    other.setStrokeColor(targetView.getStrokeColor());
-                                    other.setLetterSpacing(targetView.getLetterSpacing());
-                                    other.setLineSpacing(0f,
-                                            targetView.getLineSpacingMultiplier());
-                                }
-                            }
-                            exportToJson();
-                            Toast.makeText(this,
-                                    "✅ Style copy to all texts!",
-                                    Toast.LENGTH_SHORT).show();
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .show();
-            });
-        }
-
-        if (btnReset != null) {
-            btnReset.setOnClickListener(v -> {
-                new android.app.AlertDialog.Builder(this)
-                        .setTitle("Reset Style")
-                        .setMessage("Default style restore કરવી?")
-                        .setPositiveButton("Reset", (d, w) -> {
-                            targetView.setTextColor(Color.BLACK);
-                            targetView.setTextSize(20f);
-                            targetView.setTypeface(
-                                    android.graphics.Typeface.DEFAULT);
-                            targetView.setPaintFlags(0);
-                            targetView.setStrokeWidth(0f);
-                            targetView.setStrokeColor(Color.BLACK);
-                            targetView.setLetterSpacing(0f);
-                            targetView.setLineSpacing(0f, 1.0f);
-                            targetView.setAlpha(1.0f);
-                            targetView.setScaleX(1.0f);
-                            targetView.setScaleY(1.0f);
-                            targetView.setRotation(0f);
-                            targetView.setTextGradient(null);
-                            targetView.setTag(R.id.tv_move_speed, null);
-                            targetView.getPaint().clearShadowLayer();
-
-                            GradientDrawable gd = new GradientDrawable();
-                            gd.setColor(Color.TRANSPARENT);
-                            gd.setStroke(0, Color.TRANSPARENT);
-                            gd.setCornerRadius(8f);
-                            targetView.setBackground(gd);
-                            targetView.setTag(Color.TRANSPARENT);
-
-                            exportToJson();
-                            Toast.makeText(this, "✅ Reset!", Toast.LENGTH_SHORT).show();
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .show();
             });
         }
 
