@@ -7423,7 +7423,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout panelEffects = cv.findViewById(R.id.panel_tab_effects);
         LinearLayout panelLayout = cv.findViewById(R.id.panel_tab_layout);
 
-        TextView[] allTabs = { tabSpacing,
+        TextView[] allTabs = { tabAction, tabSpacing,
                 tabTransformTab, tabEffects, tabLayout};
         LinearLayout[] allPanels = {panelAction, panelSpacing,
                 panelTransformP, panelEffects, panelLayout};
