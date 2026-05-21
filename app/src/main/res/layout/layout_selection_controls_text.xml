@@ -225,35 +225,6 @@
                 android:background="#F5F5F5" android:gravity="center"
                 android:text="⇕" android:textColor="#374151"
                 android:textSize="12sp" />
-
-            <TextView android:id="@+id/btn_undo"
-                android:layout_width="0dp" android:layout_height="26dp"
-                android:layout_marginEnd="3dp" android:layout_weight="1"
-                android:background="#374151" android:gravity="center"
-                android:text="↩" android:textColor="#F3F4F6"
-                android:textSize="12sp" />
-
-            <TextView android:id="@+id/btn_redo"
-                android:layout_width="0dp" android:layout_height="26dp"
-                android:layout_weight="1"
-                android:background="#374151" android:gravity="center"
-                android:text="↪" android:textColor="#F3F4F6"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-        <!-- Border line -->
-        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#D1D5DB" />
-
-        <!-- ── DELETE + LOCK FIXED ROW ── -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:background="#FFFFFF"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="4dp">
-
             <LinearLayout
                 android:id="@+id/btn_sel_delete_text"
                 android:layout_width="0dp"
@@ -278,75 +249,9 @@
                 <TextView android:id="@+id/tv_lock_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔓 " android:textSize="11sp" />
                 <TextView android:id="@+id/tv_lock_label" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Lock" android:textColor="#FFFFFF" android:textSize="9sp" android:textStyle="bold" />
             </LinearLayout>
+
         </LinearLayout>
 
-        <!-- Border line -->
-        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#D1D5DB" />
-
-        <!-- ── TAB ROW ── -->
-        <HorizontalScrollView
-            android:id="@+id/main_scroll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#F3F4F6"
-            android:scrollbars="none">
-            <LinearLayout
-                android:id="@+id/hsv_tab_row"
-                android:layout_width="wrap_content"
-                android:layout_height="28dp"
-                android:orientation="horizontal"
-                android:paddingHorizontal="6dp"
-                android:paddingVertical="3dp">
-
-                <TextView android:id="@+id/tab_action"
-                    android:layout_width="wrap_content" android:layout_height="match_parent"
-                    android:background="#2A3439" android:gravity="center"
-                    android:paddingHorizontal="12dp"
-                    android:text="Action" android:textColor="#F3F4F6"
-                    android:textSize="8sp" android:textStyle="bold" />
-
-                <View android:layout_width="3dp" android:layout_height="match_parent" />
-
-                <TextView android:id="@+id/tab_spacing"
-                    android:layout_width="wrap_content" android:layout_height="match_parent"
-                    android:background="#FFFFFF" android:gravity="center"
-                    android:paddingHorizontal="12dp"
-                    android:text="Spacing" android:textColor="#6B7280"
-                    android:textSize="8sp" />
-
-                <View android:layout_width="3dp" android:layout_height="match_parent" />
-
-                <TextView android:id="@+id/tab_transform"
-                    android:layout_width="wrap_content" android:layout_height="match_parent"
-                    android:background="#FFFFFF" android:gravity="center"
-                    android:paddingHorizontal="12dp"
-                    android:text="Transform" android:textColor="#6B7280"
-                    android:textSize="8sp" />
-
-                <View android:layout_width="3dp" android:layout_height="match_parent" />
-
-                <TextView android:id="@+id/tab_effects"
-                    android:layout_width="wrap_content" android:layout_height="match_parent"
-                    android:background="#FFFFFF" android:gravity="center"
-                    android:paddingHorizontal="12dp"
-                    android:text="Effects" android:textColor="#6B7280"
-                    android:textSize="8sp" />
-
-                <View android:layout_width="3dp" android:layout_height="match_parent" />
-
-                <TextView android:id="@+id/tab_layout"
-                    android:layout_width="wrap_content" android:layout_height="match_parent"
-                    android:background="#FFFFFF" android:gravity="center"
-                    android:paddingHorizontal="12dp"
-                    android:text="Layout" android:textColor="#6B7280"
-                    android:textSize="8sp" />
-            </LinearLayout>
-        </HorizontalScrollView>
-
-        <!-- Border line -->
-        <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#D1D5DB" />
-
-        <!-- ══ SCROLL CONTENT ══ -->
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="140dp"
@@ -594,7 +499,39 @@
                                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Align" android:textColor="#6B7280" android:textSize="6sp" android:layout_marginTop="2dp" />
                             </LinearLayout>
 
+                            <TextView android:id="@+id/tab_spacing"
+                                android:layout_width="wrap_content" android:layout_height="match_parent"
+                                android:background="#FFFFFF" android:gravity="center"
+                                android:paddingHorizontal="12dp"
+                                android:text="Spacing" android:textColor="#6B7280"
+                                android:textSize="8sp" />
+
+
+                            <TextView android:id="@+id/tab_transform"
+                                android:layout_width="wrap_content" android:layout_height="match_parent"
+                                android:background="#FFFFFF" android:gravity="center"
+                                android:paddingHorizontal="12dp"
+                                android:text="Transform" android:textColor="#6B7280"
+                                android:textSize="8sp" />
+
+
+                            <TextView android:id="@+id/tab_effects"
+                                android:layout_width="wrap_content" android:layout_height="match_parent"
+                                android:background="#FFFFFF" android:gravity="center"
+                                android:paddingHorizontal="12dp"
+                                android:text="Effects" android:textColor="#6B7280"
+                                android:textSize="8sp" />
+
+
+                            <TextView android:id="@+id/tab_layout"
+                                android:layout_width="wrap_content" android:layout_height="match_parent"
+                                android:background="#FFFFFF" android:gravity="center"
+                                android:paddingHorizontal="12dp"
+                                android:text="Layout" android:textColor="#6B7280"
+                                android:textSize="8sp" />
+
                         </LinearLayout>
+
                     </HorizontalScrollView>
 
                     <!-- Transform quick row -->

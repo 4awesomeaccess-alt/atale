@@ -5793,10 +5793,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-            if (m == null) {
-                Toast.makeText(this, "Grid meta મળ્યો નહીં", Toast.LENGTH_SHORT).show();
-                return;
-            }
+//            if (m == null) {
+//                Toast.makeText(this, "Grid meta મળ્યો નહીં", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
 
         } // end multi grid photo pick
 
@@ -7350,7 +7350,7 @@ public class MainActivity extends AppCompatActivity {
 // ════════════════════════════
 // TAB SWITCHING LOGIC
 // ════════════════════════════
-        TextView tabAction = cv.findViewById(R.id.tab_action);
+
         TextView tabSpacing = cv.findViewById(R.id.tab_spacing);
         TextView tabTransformTab = cv.findViewById(R.id.tab_transform);
         TextView tabEffects = cv.findViewById(R.id.tab_effects);
@@ -7362,7 +7362,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout panelEffects = cv.findViewById(R.id.panel_tab_effects);
         LinearLayout panelLayout = cv.findViewById(R.id.panel_tab_layout);
 
-        TextView[] allTabs = {tabAction, tabSpacing,
+        TextView[] allTabs = { tabSpacing,
                 tabTransformTab, tabEffects, tabLayout};
         LinearLayout[] allPanels = {panelAction, panelSpacing,
                 panelTransformP, panelEffects, panelLayout};
@@ -7504,7 +7504,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        if (tabAction != null) tabAction.setOnClickListener(tabClickListener);
+
         if (tabSpacing != null) tabSpacing.setOnClickListener(v -> { dismissSelectionControls(); showEditTextDialog(targetView); showTextPropertiesPopup(targetView, 0); });
         if (tabTransformTab != null) tabTransformTab.setOnClickListener(v -> { dismissSelectionControls(); showEditTextDialog(targetView); showTextPropertiesPopup(targetView, 1); });
         if (tabEffects != null) tabEffects.setOnClickListener(v -> { dismissSelectionControls(); showEditTextDialog(targetView); showTextPropertiesPopup(targetView, 2); });
@@ -8373,43 +8373,6 @@ public class MainActivity extends AppCompatActivity {
                             exportToJson();
                         })
                         .show();
-            });
-        }
-
-        // ════════════════════════════
-        // UNDO / REDO
-        // ════════════════════════════
-        TextView btnUndo = cv.findViewById(R.id.btn_undo);
-        TextView btnRedo = cv.findViewById(R.id.btn_redo);
-
-        if (btnUndo != null) {
-            btnUndo.setOnClickListener(v -> {
-                if (undoStack.size() > 1) {
-                    redoStack.push(targetView.getText().toString());
-                    undoStack.pop();
-                    targetView.setText(undoStack.peek());
-                    exportToJson();
-                    Toast.makeText(this, "↩ Undo",
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Nothing to undo",
-                            Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-
-        if (btnRedo != null) {
-            btnRedo.setOnClickListener(v -> {
-                if (!redoStack.isEmpty()) {
-                    undoStack.push(redoStack.pop());
-                    targetView.setText(undoStack.peek());
-                    exportToJson();
-                    Toast.makeText(this, "↪ Redo",
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Nothing to redo",
-                            Toast.LENGTH_SHORT).show();
-                }
             });
         }
 
@@ -9954,7 +9917,6 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout panelEffects  = cv.findViewById(R.id.panel_tab_effects);
         LinearLayout panelLayout   = cv.findViewById(R.id.panel_tab_layout);
         LinearLayout panelArc      = cv.findViewById(R.id.panel_arc_controls);
-        HorizontalScrollView tabScroll = cv.findViewById(R.id.main_scroll);
 
         if (panelAction   != null) panelAction.setVisibility(View.GONE);
         if (panelSpacing  != null) panelSpacing.setVisibility(View.GONE);
@@ -9962,7 +9924,7 @@ public class MainActivity extends AppCompatActivity {
         if (panelEffects  != null) panelEffects.setVisibility(View.GONE);
         if (panelLayout   != null) panelLayout.setVisibility(View.GONE);
         if (panelArc      != null) panelArc.setVisibility(View.GONE);
-        if (tabScroll     != null) tabScroll.setVisibility(View.GONE);
+
 
         int dp8 = dpToPx(8); int dp4 = dpToPx(4);
 
@@ -10129,7 +10091,6 @@ public class MainActivity extends AppCompatActivity {
         Runnable backAction = () -> {
             if (scrollParent != null) scrollParent.removeView(scrollWrapper);
             if (panelAction != null) panelAction.setVisibility(View.VISIBLE);
-            if (tabScroll   != null) tabScroll.setVisibility(View.VISIBLE);
         };
         btnBack.setOnClickListener(vv -> backAction.run());
         btnApply.setOnClickListener(vv -> {
