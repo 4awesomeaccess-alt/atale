@@ -17026,7 +17026,7 @@ public class MainActivity extends AppCompatActivity {
 
         int screenH = getResources().getDisplayMetrics().heightPixels;
         popup.showAtLocation(getWindow().getDecorView().getRootView(),
-            Gravity.TOP | Gravity.START, 0, (screenH - popupH) / 2);
+            Gravity.TOP | Gravity.START, 0, screenH - popupH);
 
         // Text Controls restore
         popup.setOnDismissListener(() -> {
