@@ -7524,10 +7524,10 @@ public class MainActivity extends AppCompatActivity {
         };
 
         if (tabAction != null) tabAction.setOnClickListener(tabClickListener);
-        if (tabSpacing != null) tabSpacing.setOnClickListener(v -> showTextPropertiesPopup(targetView, 0));
-        if (tabTransformTab != null) tabTransformTab.setOnClickListener(v -> showTextPropertiesPopup(targetView, 1));
-        if (tabEffects != null) tabEffects.setOnClickListener(v -> showTextPropertiesPopup(targetView, 2));
-        if (tabLayout != null) tabLayout.setOnClickListener(v -> showTextPropertiesPopup(targetView, 3));
+        if (tabSpacing != null) tabSpacing.setOnClickListener(v -> { dismissSelectionControls(); showEditTextDialog(targetView); showTextPropertiesPopup(targetView, 0); });
+        if (tabTransformTab != null) tabTransformTab.setOnClickListener(v -> { dismissSelectionControls(); showEditTextDialog(targetView); showTextPropertiesPopup(targetView, 1); });
+        if (tabEffects != null) tabEffects.setOnClickListener(v -> { dismissSelectionControls(); showEditTextDialog(targetView); showTextPropertiesPopup(targetView, 2); });
+        if (tabLayout != null) tabLayout.setOnClickListener(v -> { dismissSelectionControls(); showEditTextDialog(targetView); showTextPropertiesPopup(targetView, 3); });
 
         // ── Undo/Redo history
         final java.util.ArrayDeque<String> undoStack = new java.util.ArrayDeque<>();
