@@ -11258,14 +11258,20 @@ public class MainActivity extends AppCompatActivity {
             btnClose.setOnClickListener(v -> dismissSelectionControls());
         }
 
-        // ── Show popup at bottom (TOP|LEFT thi show — drag mate)
+        // ── Show popup at bottom or last saved position
         cv.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         int popupH = cv.getMeasuredHeight();
         int screenH = getResources().getDisplayMetrics().heightPixels;
-        selControlsLastX = 0;
-        selControlsLastY = screenH - popupH;
-        isSelControlsMoved = false;
-        selectionControlsPopup.showAtLocation(mainLayout, Gravity.TOP | Gravity.START, 0, selControlsLastY);
+
+        if (isSelControlsMoved) {
+            // User moved popup — same position par show
+            selectionControlsPopup.showAtLocation(mainLayout, Gravity.TOP | Gravity.START, selControlsLastX, selControlsLastY);
+        } else {
+            // First time — bottom center
+            selControlsLastX = 0;
+            selControlsLastY = screenH - popupH;
+            selectionControlsPopup.showAtLocation(mainLayout, Gravity.TOP | Gravity.START, 0, selControlsLastY);
+        }
     }
 
 
