@@ -554,27 +554,20 @@
                             android:layout_marginEnd="3dp" android:layout_weight="1"
                             android:background="#FFFFFF" android:gravity="center"
                             android:text="ABC" android:textColor="#374151"
-                            android:textSize="8sp" android:textStyle="bold" />
+                            android:textSize="8sp" android:textStyle="bold"
+                            android:visibility="gone" />
                         <TextView android:id="@+id/btn_transform_lower"
                             android:layout_width="0dp" android:layout_height="24dp"
                             android:layout_marginEnd="3dp" android:layout_weight="1"
                             android:background="#FFFFFF" android:gravity="center"
-                            android:text="abc" android:textColor="#374151" android:textSize="8sp" />
+                            android:text="abc" android:textColor="#374151" android:textSize="8sp"
+                            android:visibility="gone" />
                         <TextView android:id="@+id/btn_transform_title"
                             android:layout_width="0dp" android:layout_height="24dp"
                             android:layout_marginEnd="3dp" android:layout_weight="1"
                             android:background="#FFFFFF" android:gravity="center"
-                            android:text="Abc" android:textColor="#374151" android:textSize="8sp" />
-                        <TextView android:id="@+id/btn_copy_style_all"
-                            android:layout_width="0dp" android:layout_height="24dp"
-                            android:layout_marginEnd="3dp" android:layout_weight="1"
-                            android:background="#607D8B" android:gravity="center"
-                            android:text="Copy Style" android:textColor="#FFFFFF" android:textSize="7sp" />
-                        <TextView android:id="@+id/btn_reset_style"
-                            android:layout_width="0dp" android:layout_height="24dp"
-                            android:layout_weight="1"
-                            android:background="#B2BEB5" android:gravity="center"
-                            android:text="Reset" android:textColor="#374151" android:textSize="7sp" />
+                            android:text="Abc" android:textColor="#374151" android:textSize="8sp"
+                            android:visibility="gone" />
                     </LinearLayout>
                 </LinearLayout>
 
