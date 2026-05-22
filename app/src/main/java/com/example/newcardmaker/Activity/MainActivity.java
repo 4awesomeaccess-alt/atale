@@ -7395,9 +7395,9 @@ public class MainActivity extends AppCompatActivity {
 
         android.widget.Button btnLM = makeSpacingBtn("−");
         android.widget.SeekBar sbLetter = new android.widget.SeekBar(this);
-        sbLetter.setMax(40);
+        sbLetter.setMax(80); // -2.0(0) to 2.0(80), step=0.05, offset=40
         float curLS = targetView.getLetterSpacing();
-        sbLetter.setProgress(Math.round(curLS * 20f));
+        sbLetter.setProgress(Math.max(0, Math.min(80, Math.round((curLS + 2.0f) * 20f))));
         android.widget.LinearLayout.LayoutParams sbLp = new android.widget.LinearLayout.LayoutParams(0,
                 android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
         sbLp.setMargins(dp(6), 0, dp(6), 0);
@@ -7420,7 +7420,7 @@ public class MainActivity extends AppCompatActivity {
         sbLetter.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
             @Override public void onProgressChanged(android.widget.SeekBar s, int p, boolean fromUser) {
                 if (!fromUser) return;
-                float ls = p * 0.05f;
+                float ls = -2.0f + p * 0.05f;
                 targetView.setLetterSpacing(ls);
                 tvLV.setText(String.format("%.2f", ls));
             }
@@ -7430,15 +7430,15 @@ public class MainActivity extends AppCompatActivity {
         btnLM.setOnClickListener(v -> {
             int nv = Math.max(0, sbLetter.getProgress() - 1);
             sbLetter.setProgress(nv);
-            float ls = nv * 0.05f;
+            float ls = -2.0f + nv * 0.05f;
             targetView.setLetterSpacing(ls);
             tvLV.setText(String.format("%.2f", ls));
             exportToJson();
         });
         btnLP.setOnClickListener(v -> {
-            int nv = Math.min(40, sbLetter.getProgress() + 1);
+            int nv = Math.min(80, sbLetter.getProgress() + 1);
             sbLetter.setProgress(nv);
-            float ls = nv * 0.05f;
+            float ls = -2.0f + nv * 0.05f;
             targetView.setLetterSpacing(ls);
             tvLV.setText(String.format("%.2f", ls));
             exportToJson();
