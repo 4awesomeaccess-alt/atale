@@ -7555,9 +7555,9 @@ public class MainActivity extends AppCompatActivity {
 
         android.widget.Button btnPXM = makeSpacingBtn("−");
         android.widget.SeekBar sbPadX = new android.widget.SeekBar(this);
-        sbPadX.setMax(100);
+        sbPadX.setMax(300);
         int curPadX = targetView.getPaddingLeft();
-        sbPadX.setProgress(Math.min(100, curPadX));
+        sbPadX.setProgress(Math.min(300, curPadX));
         android.widget.LinearLayout.LayoutParams sbPadXLp = new android.widget.LinearLayout.LayoutParams(
                 0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
         sbPadXLp.setMargins(dp(6), 0, dp(6), 0);
@@ -7594,7 +7594,7 @@ public class MainActivity extends AppCompatActivity {
             exportToJson();
         });
         btnPXP.setOnClickListener(v -> {
-            int nv = Math.min(100, sbPadX.getProgress() + 2);
+            int nv = Math.min(300, sbPadX.getProgress() + 2);
             sbPadX.setProgress(nv);
             targetView.setPadding(nv, targetView.getPaddingTop(), nv, targetView.getPaddingBottom());
             tvPXV.setText(nv + "px");
@@ -7634,9 +7634,9 @@ public class MainActivity extends AppCompatActivity {
 
         android.widget.Button btnPYM = makeSpacingBtn("−");
         android.widget.SeekBar sbPadY = new android.widget.SeekBar(this);
-        sbPadY.setMax(100);
+        sbPadY.setMax(300);
         int curPadY = targetView.getPaddingTop();
-        sbPadY.setProgress(Math.min(100, curPadY));
+        sbPadY.setProgress(Math.min(300, curPadY));
         android.widget.LinearLayout.LayoutParams sbPadYLp = new android.widget.LinearLayout.LayoutParams(
                 0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
         sbPadYLp.setMargins(dp(6), 0, dp(6), 0);
@@ -7673,7 +7673,7 @@ public class MainActivity extends AppCompatActivity {
             exportToJson();
         });
         btnPYP.setOnClickListener(v -> {
-            int nv = Math.min(100, sbPadY.getProgress() + 2);
+            int nv = Math.min(300, sbPadY.getProgress() + 2);
             sbPadY.setProgress(nv);
             targetView.setPadding(targetView.getPaddingLeft(), nv, targetView.getPaddingRight(), nv);
             tvPYV.setText(nv + "px");
