@@ -8598,7 +8598,6 @@ public class MainActivity extends AppCompatActivity {
         // ════════════════════════════
         // QUICK STYLE TOGGLE BUTTONS
         // ════════════════════════════
-        View btn_curve = cv.findViewById(R.id.btn_curve);
         TextView btnBold = cv.findViewById(R.id.btn_quick_bold);
         TextView btnItalic = cv.findViewById(R.id.btn_quick_italic);
         TextView btnUnderline = cv.findViewById(R.id.btn_quick_underline);
@@ -8646,9 +8645,7 @@ public class MainActivity extends AppCompatActivity {
                         : Color.parseColor("#1565C0"));
         };
         updateStyleBtns.run();
-        if (btn_curve != null) {
-            btn_curve.setOnClickListener(v -> showArcTextPopup(targetView));
-        }
+
 
         if (btnBold != null) {
             btnBold.setOnClickListener(v -> {
