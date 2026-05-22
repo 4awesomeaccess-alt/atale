@@ -14647,15 +14647,8 @@ public class MainActivity extends AppCompatActivity {
         // Update tab counts
         btnTabText.setText("📝 Texts (" + deletedTextsList.size() + ")");
         btnTabSticker.setText("🖼 Stickers (" + deletedStickersList.size() + ")");
-        btnClose.setBackgroundColor(Color.parseColor("#616161"));
-        btnClose.setLayoutParams(new android.widget.LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
-
-        btnRow.addView(btnDeleteAll);
-        btnRow.addView(btnClose);
-        root.addView(btnRow);
 
         // ── Build dialog
-        builder.setView(root);
         AlertDialog dialog = builder.create();
 
         // ── State
