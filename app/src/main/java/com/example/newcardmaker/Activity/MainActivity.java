@@ -9791,6 +9791,28 @@ public class MainActivity extends AppCompatActivity {
                         .setTitle("Delete Text?")
                         .setMessage("Aa text delete karvu che?")
                         .setPositiveButton("Ha, Delete", (d, w) -> {
+                            // ✅ deletedTextsList માં save
+                            try {
+                                JSONObject deletedObj = new JSONObject();
+                                deletedObj.put("text", targetView.getText().toString());
+                                deletedObj.put("color", targetView.getCurrentTextColor());
+                                deletedObj.put("size", targetView.getTextSize() / getResources().getDisplayMetrics().scaledDensity);
+                                float sw = mainLayout.getWidth();
+                                float sh = mainLayout.getHeight();
+                                deletedObj.put("xPercent", sw == 0 ? 0 : (targetView.getX() / sw) * 100);
+                                deletedObj.put("yPercent", sh == 0 ? 0 : (targetView.getY() / sh) * 100);
+                                deletedObj.put("rotation", targetView.getRotation());
+                                deletedObj.put("bgColor", getStoredBackgroundColor(targetView));
+                                // Font
+                                Object fontTag = targetView.getTag(R.id.btn_font_picker);
+                                if (fontTag != null) deletedObj.put("fontKey", fontTag.toString());
+                                // letterSpacing / lineSpacing
+                                deletedObj.put("letterSpacing", targetView.getLetterSpacing());
+                                deletedObj.put("lineSpacing", targetView.getLineSpacingMultiplier());
+                                deletedTextsList.add(deletedObj);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             dismissSelectionControls();
                             mainLayout.removeView(targetView);
                             exportToJson();
