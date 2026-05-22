@@ -14963,6 +14963,15 @@ public class MainActivity extends AppCompatActivity {
         renderTextTab.run();
 
         dialog.show();
+
+        // ── Full screen
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setLayout(
+                android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+                android.view.ViewGroup.LayoutParams.MATCH_PARENT);
+            dialog.getWindow().setBackgroundDrawable(
+                new android.graphics.drawable.ColorDrawable(android.graphics.Color.WHITE));
+        }
     }
 
 
