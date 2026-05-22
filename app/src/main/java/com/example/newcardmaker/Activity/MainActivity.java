@@ -7437,7 +7437,7 @@ public class MainActivity extends AppCompatActivity {
             @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
         });
 
-        visualPopup = showBottomPopup(root, header, () -> visualPopup);
+        visualPopup = showBottomPopup(root, header);
     }
 
     // ── Typo movable popup ──────────────────────────────────────
@@ -7570,7 +7570,7 @@ public class MainActivity extends AppCompatActivity {
         }
         root.addView(fxRow);
 
-        typoPopup = showBottomPopup(root, header, () -> typoPopup);
+        typoPopup = showBottomPopup(root, header);
     }
 
     // ── Transform movable popup ─────────────────────────────────
@@ -7640,7 +7640,7 @@ public class MainActivity extends AppCompatActivity {
             @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
         });
 
-        transformPopup = showBottomPopup(root, header, () -> transformPopup);
+        transformPopup = showBottomPopup(root, header);
     }
 
     // ── Effects movable popup ───────────────────────────────────
@@ -7713,7 +7713,7 @@ public class MainActivity extends AppCompatActivity {
             @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
         });
 
-        effectsPopup = showBottomPopup(root, header, () -> effectsPopup);
+        effectsPopup = showBottomPopup(root, header);
     }
 
     // ── Layout movable popup ────────────────────────────────────
@@ -7807,7 +7807,7 @@ public class MainActivity extends AppCompatActivity {
         }
         root.addView(alignRow);
 
-        layoutPopup = showBottomPopup(root, header, () -> layoutPopup);
+        layoutPopup = showBottomPopup(root, header);
     }
 
     // ── Popup helper methods ────────────────────────────────────
@@ -7876,7 +7876,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private PopupWindow showBottomPopup(android.widget.LinearLayout root,
-            android.widget.TextView header, java.util.function.Supplier<PopupWindow> selfRef) {
+            android.widget.TextView header) {
         root.measure(android.view.View.MeasureSpec.UNSPECIFIED, android.view.View.MeasureSpec.UNSPECIFIED);
         int pw = Math.max(dp(300), root.getMeasuredWidth());
         PopupWindow pw2 = new PopupWindow(root, pw,
