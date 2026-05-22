@@ -7801,9 +7801,27 @@ public class MainActivity extends AppCompatActivity {
             abLp.setMargins(dp(2), 0, dp(2), 0); ab.setLayoutParams(abLp);
             ab.setOnClickListener(v -> {
                 mainLayout.post(() -> {
-                    int w = mainLayout.getWidth(), h = mainLayout.getHeight();
-                    int vw = tv.getWidth() > 0 ? tv.getWidth() : tv.getMeasuredWidth();
-                    int vh = tv.getHeight() > 0 ? tv.getHeight() : tv.getMeasuredHeight();
+                    // ✅ Background image bounds વાપરો
+                    int w, h;
+                    if (main_image_view != null && main_image_view.getDrawable() != null) {
+                        android.graphics.drawable.Drawable d = main_image_view.getDrawable();
+                        android.graphics.Matrix m = main_image_view.getImageMatrix();
+                        android.graphics.RectF bounds = new android.graphics.RectF(
+                            d.getBounds());
+                        m.mapRect(bounds);
+                        w = (int) bounds.width();
+                        h = (int) bounds.height();
+                        if (w <= 0) w = main_image_view.getWidth();
+                        if (h <= 0) h = main_image_view.getHeight();
+                    } else {
+                        w = mainLayout.getWidth();
+                        h = mainLayout.getHeight();
+                    }
+                    // ✅ Text measured width/height વાપરો
+                    tv.measure(android.view.View.MeasureSpec.UNSPECIFIED,
+                               android.view.View.MeasureSpec.UNSPECIFIED);
+                    int vw = tv.getMeasuredWidth();
+                    int vh = tv.getMeasuredHeight();
                     android.widget.RelativeLayout.LayoutParams lp =
                         (android.widget.RelativeLayout.LayoutParams) tv.getLayoutParams();
                     if (lp == null) return;
