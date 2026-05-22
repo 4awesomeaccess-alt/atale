@@ -7729,39 +7729,8 @@ public class MainActivity extends AppCompatActivity {
         _bg3.setColor(android.graphics.Color.WHITE); _bg3.setCornerRadius(dp(16));
         _bg3.setStroke(1, android.graphics.Color.parseColor("#E5E7EB")); root.setBackground(_bg3);
 
-        android.widget.TextView header = makePopupHeader("✦ Layout");
+        android.widget.TextView header = makePopupHeader("✦ Align & Distribute");
         root.addView(header);
-
-        // Move buttons row (◀ ▲ ▼ ▶)
-        android.widget.LinearLayout moveRow = new android.widget.LinearLayout(this);
-        moveRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
-        moveRow.setGravity(android.view.Gravity.CENTER);
-        android.widget.LinearLayout.LayoutParams mrLp = new android.widget.LinearLayout.LayoutParams(
-            android.widget.LinearLayout.LayoutParams.MATCH_PARENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
-        mrLp.setMargins(0, 0, 0, dp(8)); moveRow.setLayoutParams(mrLp);
-
-        String[] moveLabels = {"◀", "▲", "▼", "▶"};
-        int[] moveDeltas = {0, 0, 0, 0}; // dx for ◀▶, dy for ▲▼
-        for (int mi = 0; mi < 4; mi++) {
-            final int idx = mi;
-            android.widget.Button mb = makeSpacingBtn(moveLabels[mi]);
-            android.widget.LinearLayout.LayoutParams mbLp = new android.widget.LinearLayout.LayoutParams(dp(44), dp(44));
-            mbLp.setMargins(dp(4), 0, dp(4), 0); mb.setLayoutParams(mbLp);
-            mb.setOnClickListener(v -> {
-                android.widget.RelativeLayout.LayoutParams lp = (android.widget.RelativeLayout.LayoutParams) tv.getLayoutParams();
-                if (lp == null) return;
-                int step = 5;
-                if (idx == 0) lp.leftMargin -= step;
-                else if (idx == 1) lp.topMargin -= step;
-                else if (idx == 2) lp.topMargin += step;
-                else lp.leftMargin += step;
-                tv.setLayoutParams(lp); exportToJson();
-            });
-            moveRow.addView(mb);
-        }
-        root.addView(moveRow);
-
-        addPopupDivider(root);
 
         // Align buttons
         android.widget.TextView lblAlign = new android.widget.TextView(this);
