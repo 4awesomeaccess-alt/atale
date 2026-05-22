@@ -8365,7 +8365,6 @@ public class MainActivity extends AppCompatActivity {
 // TAB SWITCHING LOGIC
 // ════════════════════════════
 
-        TextView tabAction = cv.findViewById(R.id.tab_action);
         TextView tabSpacing = cv.findViewById(R.id.tab_spacing);
         TextView tabTransformTab = cv.findViewById(R.id.tab_transform);
         TextView tabEffects = cv.findViewById(R.id.tab_effects);
