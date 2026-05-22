@@ -7475,10 +7475,10 @@ public class MainActivity extends AppCompatActivity {
 
         android.widget.Button btnLineM = makeSpacingBtn("−");
         android.widget.SeekBar sbLine = new android.widget.SeekBar(this);
-        sbLine.setMax(40);
+        sbLine.setMax(100); // -5.0x(0) to 5.0x(100), step=0.1, offset=50
         float curMult = targetView.getLineSpacingMultiplier();
-        int lineP = Math.round((curMult - 1.0f) * 10f);
-        sbLine.setProgress(Math.max(0, Math.min(40, lineP)));
+        int lineP = Math.round((curMult + 5.0f) * 10f);
+        sbLine.setProgress(Math.max(0, Math.min(100, lineP)));
         sbLine.setLayoutParams(sbLp);
         android.widget.Button btnLineP = makeSpacingBtn("+");
         android.widget.TextView tvLnV = new android.widget.TextView(this);
@@ -7498,7 +7498,7 @@ public class MainActivity extends AppCompatActivity {
         sbLine.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
             @Override public void onProgressChanged(android.widget.SeekBar s, int p, boolean fromUser) {
                 if (!fromUser) return;
-                float m = 1.0f + p * 0.1f;
+                float m = -5.0f + p * 0.1f;
                 targetView.setLineSpacing(0f, m);
                 tvLnV.setText(String.format("%.1f", m) + "x");
             }
@@ -7508,15 +7508,15 @@ public class MainActivity extends AppCompatActivity {
         btnLineM.setOnClickListener(v -> {
             int nv = Math.max(0, sbLine.getProgress() - 1);
             sbLine.setProgress(nv);
-            float m = 1.0f + nv * 0.1f;
+            float m = -5.0f + nv * 0.1f;
             targetView.setLineSpacing(0f, m);
             tvLnV.setText(String.format("%.1f", m) + "x");
             exportToJson();
         });
         btnLineP.setOnClickListener(v -> {
-            int nv = Math.min(40, sbLine.getProgress() + 1);
+            int nv = Math.min(100, sbLine.getProgress() + 1);
             sbLine.setProgress(nv);
-            float m = 1.0f + nv * 0.1f;
+            float m = -5.0f + nv * 0.1f;
             targetView.setLineSpacing(0f, m);
             tvLnV.setText(String.format("%.1f", m) + "x");
             exportToJson();
