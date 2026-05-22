@@ -372,15 +372,6 @@
                         android:orientation="horizontal"
                         android:paddingHorizontal="4dp">
 
-                        <TextView android:id="@+id/tab_action"
-                            android:layout_width="wrap_content" android:layout_height="match_parent"
-                            android:background="#607D8B" android:gravity="center"
-                            android:paddingHorizontal="14dp"
-                            android:text="Action" android:textColor="#FFFFFF"
-                            android:textSize="8sp" android:textStyle="bold" />
-
-                        <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#374151" />
-
                         <TextView android:id="@+id/tab_spacing"
                             android:layout_width="wrap_content" android:layout_height="match_parent"
                             android:background="#2A3439" android:gravity="center"
@@ -417,12 +408,27 @@
 
                         <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#374151" />
 
-                        <TextView android:id="@+id/tab_transform2"
+                        <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#374151" />
+
+                        <TextView android:id="@+id/tab_visual"
                             android:layout_width="wrap_content" android:layout_height="match_parent"
                             android:background="#2A3439" android:gravity="center"
                             android:paddingHorizontal="14dp"
-                            android:text="More" android:textColor="#9CA3AF"
+                            android:text="Visual" android:textColor="#9CA3AF"
                             android:textSize="8sp" />
+
+                        <View android:layout_width="2dp" android:layout_height="match_parent" android:background="#374151" />
+
+                        <TextView android:id="@+id/tab_typo"
+                            android:layout_width="wrap_content" android:layout_height="match_parent"
+                            android:background="#2A3439" android:gravity="center"
+                            android:paddingHorizontal="14dp"
+                            android:text="Typo" android:textColor="#9CA3AF"
+                            android:textSize="8sp" />
+
+                        <TextView android:id="@+id/tab_transform2"
+                            android:layout_width="0dp" android:layout_height="0dp"
+                            android:visibility="gone" />
 
                     </LinearLayout>
                 </HorizontalScrollView>
@@ -430,7 +436,8 @@
                 <!-- ══ ACTION TAB ══ -->
                 <LinearLayout android:id="@+id/panel_tab_action"
                     android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
                     <!-- Action buttons card -->
                     <HorizontalScrollView

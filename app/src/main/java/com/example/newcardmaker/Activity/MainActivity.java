@@ -7347,6 +7347,232 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    // ── Visual movable popup ────────────────────────────────────
+    private PopupWindow visualPopup = null;
+
+    private void showVisualPopup(StrokeTextView tv) {
+        if (visualPopup != null && visualPopup.isShowing()) { visualPopup.dismiss(); visualPopup = null; return; }
+
+        android.widget.LinearLayout root = new android.widget.LinearLayout(this);
+        root.setOrientation(android.widget.LinearLayout.VERTICAL);
+        root.setPadding(dp(16), dp(12), dp(16), dp(12));
+        android.graphics.drawable.GradientDrawable _bgV = new android.graphics.drawable.GradientDrawable();
+        _bgV.setColor(android.graphics.Color.WHITE); _bgV.setCornerRadius(dp(16));
+        _bgV.setStroke(1, android.graphics.Color.parseColor("#E5E7EB")); root.setBackground(_bgV);
+
+        android.widget.TextView header = makePopupHeader("✦ Visual");
+        root.addView(header);
+
+        // Outline Width
+        android.widget.SeekBar sbOW = makePopupSeekRow(root, "Outline", 30,
+            (int) tv.getDoubleStrokeWidth(), String.valueOf((int)tv.getDoubleStrokeWidth()));
+        android.widget.TextView tvOWV = (android.widget.TextView)((android.widget.LinearLayout)root.getChildAt(root.getChildCount()-1)).getChildAt(2);
+        sbOW.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) {
+                if (!f) return; tv.setDoubleStrokeWidth(p); tvOWV.setText(String.valueOf(p)); }
+            @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
+        });
+
+        // Outline Color button
+        android.widget.Button btnOC = new android.widget.Button(this);
+        btnOC.setText("Outline Color");
+        btnOC.setTextColor(android.graphics.Color.WHITE); btnOC.setTextSize(11);
+        btnOC.setBackgroundColor(tv.getDoubleStrokeColor());
+        android.widget.LinearLayout.LayoutParams ocLp = new android.widget.LinearLayout.LayoutParams(
+            android.widget.LinearLayout.LayoutParams.MATCH_PARENT, dp(36));
+        ocLp.setMargins(0, dp(4), 0, dp(4)); btnOC.setLayoutParams(ocLp);
+        btnOC.setOnClickListener(v -> openWheelPopup(tv.getDoubleStrokeColor(), c -> {
+            tv.setDoubleStrokeColor(c); btnOC.setBackgroundColor(c); }));
+        root.addView(btnOC);
+
+        addPopupDivider(root);
+
+        // Glow
+        android.widget.SeekBar sbGl = makePopupSeekRow(root, "Glow", 50,
+            (int) tv.getGlowRadius(), String.valueOf((int)tv.getGlowRadius()));
+        android.widget.TextView tvGlV = (android.widget.TextView)((android.widget.LinearLayout)root.getChildAt(root.getChildCount()-1)).getChildAt(2);
+        sbGl.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) {
+                if (!f) return; tv.setGlowRadius(p); tvGlV.setText(String.valueOf(p)); }
+            @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
+        });
+
+        // Glow Color button
+        android.widget.Button btnGC = new android.widget.Button(this);
+        btnGC.setText("Glow Color");
+        btnGC.setTextColor(android.graphics.Color.WHITE); btnGC.setTextSize(11);
+        btnGC.setBackgroundColor(tv.getGlowColor());
+        android.widget.LinearLayout.LayoutParams gcLp = new android.widget.LinearLayout.LayoutParams(
+            android.widget.LinearLayout.LayoutParams.MATCH_PARENT, dp(36));
+        gcLp.setMargins(0, dp(4), 0, dp(4)); btnGC.setLayoutParams(gcLp);
+        btnGC.setOnClickListener(v -> openWheelPopup(tv.getGlowColor(), c -> {
+            tv.setGlowColor(c); btnGC.setBackgroundColor(c); }));
+        root.addView(btnGC);
+
+        addPopupDivider(root);
+
+        // 3D Depth
+        android.widget.SeekBar sb3D = makePopupSeekRow(root, "3D Depth", 30,
+            (int) tv.getThreeDDepth(), String.valueOf((int)tv.getThreeDDepth()));
+        android.widget.TextView tv3DV = (android.widget.TextView)((android.widget.LinearLayout)root.getChildAt(root.getChildCount()-1)).getChildAt(2);
+        sb3D.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) {
+                if (!f) return; tv.setThreeDDepth(p); tv3DV.setText(String.valueOf(p)); }
+            @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
+        });
+
+        addPopupDivider(root);
+
+        // BG Opacity
+        android.widget.SeekBar sbBg = makePopupSeekRow(root, "BG Alpha", 100,
+            (int)(tv.getBgOpacity()*100), (int)(tv.getBgOpacity()*100) + "%");
+        android.widget.TextView tvBgV = (android.widget.TextView)((android.widget.LinearLayout)root.getChildAt(root.getChildCount()-1)).getChildAt(2);
+        sbBg.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) {
+                if (!f) return; tv.setBgOpacity(p/100f); tvBgV.setText(p+"%"); }
+            @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
+        });
+
+        visualPopup = showBottomPopup(root, header, () -> visualPopup);
+    }
+
+    // ── Typo movable popup ──────────────────────────────────────
+    private PopupWindow typoPopup = null;
+
+    private void showTypoPopup(StrokeTextView tv) {
+        if (typoPopup != null && typoPopup.isShowing()) { typoPopup.dismiss(); typoPopup = null; return; }
+
+        android.widget.LinearLayout root = new android.widget.LinearLayout(this);
+        root.setOrientation(android.widget.LinearLayout.VERTICAL);
+        root.setPadding(dp(16), dp(12), dp(16), dp(12));
+        android.graphics.drawable.GradientDrawable _bgT = new android.graphics.drawable.GradientDrawable();
+        _bgT.setColor(android.graphics.Color.WHITE); _bgT.setCornerRadius(dp(16));
+        _bgT.setStroke(1, android.graphics.Color.parseColor("#E5E7EB")); root.setBackground(_bgT);
+
+        android.widget.TextView header = makePopupHeader("✦ Typo");
+        root.addView(header);
+
+        // Font Weight
+        int[] weights = {100,200,300,400,500,600,700,800,900};
+        int curW = tv.getFontWeight();
+        int wIdx = 3; for (int i=0;i<weights.length;i++) if (weights[i]==curW) wIdx=i;
+        android.widget.SeekBar sbFW = makePopupSeekRow(root, "Weight", 8, wIdx, String.valueOf(curW));
+        android.widget.TextView tvFWV = (android.widget.TextView)((android.widget.LinearLayout)root.getChildAt(root.getChildCount()-1)).getChildAt(2);
+        sbFW.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) {
+                if (!f) return; int w=weights[Math.min(p,8)]; tv.setFontWeight(w); tvFWV.setText(String.valueOf(w)); }
+            @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
+        });
+
+        addPopupDivider(root);
+
+        // Skew X
+        android.widget.SeekBar sbSk = makePopupSeekRow(root, "Skew X", 100, 50,
+            String.format("%.1f", tv.getSkewX()));
+        android.widget.TextView tvSkV = (android.widget.TextView)((android.widget.LinearLayout)root.getChildAt(root.getChildCount()-1)).getChildAt(2);
+        sbSk.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) {
+                if (!f) return; float sk=(p-50)/50f; tv.setSkewX(sk); tvSkV.setText(String.format("%.1f",sk)); }
+            @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
+        });
+
+        addPopupDivider(root);
+
+        // Case buttons
+        android.widget.TextView lblCase = new android.widget.TextView(this);
+        lblCase.setText("Text Case"); lblCase.setTextSize(11);
+        lblCase.setTypeface(null, android.graphics.Typeface.BOLD);
+        lblCase.setTextColor(android.graphics.Color.parseColor("#6B7280"));
+        android.widget.LinearLayout.LayoutParams cLp = new android.widget.LinearLayout.LayoutParams(
+            android.widget.LinearLayout.LayoutParams.MATCH_PARENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        cLp.setMargins(0, dp(6), 0, dp(6)); lblCase.setLayoutParams(cLp);
+        root.addView(lblCase);
+
+        android.widget.LinearLayout caseRow = new android.widget.LinearLayout(this);
+        caseRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        caseRow.setGravity(android.view.Gravity.CENTER);
+        String[] caseLabels = {"Aa", "AA", "aa", "Title"};
+        android.widget.Button[] caseBtns = new android.widget.Button[4];
+        for (int ci=0; ci<4; ci++) {
+            final int cix=ci;
+            android.widget.Button cb = new android.widget.Button(this);
+            cb.setText(caseLabels[ci]); cb.setTextSize(10);
+            cb.setTextColor(android.graphics.Color.WHITE);
+            android.graphics.drawable.GradientDrawable cgd = new android.graphics.drawable.GradientDrawable();
+            cgd.setColor(ci==tv.getTextCase() ? 0xFF607D8B : 0xFF374151);
+            cgd.setCornerRadius(dp(4)); cb.setBackground(cgd);
+            android.widget.LinearLayout.LayoutParams cbLp = new android.widget.LinearLayout.LayoutParams(0, dp(34), 1f);
+            cbLp.setMargins(dp(2), 0, dp(2), 0); cb.setLayoutParams(cbLp);
+            caseBtns[ci] = cb;
+            cb.setOnClickListener(v -> {
+                tv.setTextCase(cix); exportToJson();
+                for (android.widget.Button b : caseBtns) {
+                    android.graphics.drawable.GradientDrawable gd2 = new android.graphics.drawable.GradientDrawable();
+                    gd2.setColor(0xFF374151); gd2.setCornerRadius(dp(4)); b.setBackground(gd2); }
+                android.graphics.drawable.GradientDrawable agd = new android.graphics.drawable.GradientDrawable();
+                agd.setColor(0xFF607D8B); agd.setCornerRadius(dp(4)); cb.setBackground(agd);
+            });
+            caseRow.addView(cb);
+        }
+        root.addView(caseRow);
+
+        addPopupDivider(root);
+
+        // Toggle buttons row: Overline, Super, Sub, MirrorH, MirrorV, Wave
+        android.widget.TextView lblFx = new android.widget.TextView(this);
+        lblFx.setText("Effects"); lblFx.setTextSize(11);
+        lblFx.setTypeface(null, android.graphics.Typeface.BOLD);
+        lblFx.setTextColor(android.graphics.Color.parseColor("#6B7280"));
+        android.widget.LinearLayout.LayoutParams fxLp = new android.widget.LinearLayout.LayoutParams(
+            android.widget.LinearLayout.LayoutParams.MATCH_PARENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        fxLp.setMargins(0, dp(6), 0, dp(6)); lblFx.setLayoutParams(fxLp);
+        root.addView(lblFx);
+
+        android.widget.LinearLayout fxRow = new android.widget.LinearLayout(this);
+        fxRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        fxRow.setGravity(android.view.Gravity.CENTER);
+        String[] fxLabels = {"Over","Super","Sub","MirH","MirV","Wave"};
+        boolean[] fxStates = {tv.isOverline(), tv.isSuperscript(), tv.isSubscript(),
+                               tv.isMirrorH(), tv.isMirrorV(), tv.isWaveMode()};
+        android.widget.Button[] fxBtns = new android.widget.Button[6];
+        for (int fi=0; fi<6; fi++) {
+            final int fix=fi;
+            android.widget.Button fb = new android.widget.Button(this);
+            fb.setText(fxLabels[fi]); fb.setTextSize(8);
+            fb.setTextColor(android.graphics.Color.WHITE);
+            android.graphics.drawable.GradientDrawable fgd = new android.graphics.drawable.GradientDrawable();
+            fgd.setColor(fxStates[fi] ? 0xFF607D8B : 0xFF374151);
+            fgd.setCornerRadius(dp(4)); fb.setBackground(fgd);
+            android.widget.LinearLayout.LayoutParams fbLp = new android.widget.LinearLayout.LayoutParams(0, dp(30), 1f);
+            fbLp.setMargins(dp(1), 0, dp(1), 0); fb.setLayoutParams(fbLp);
+            fxBtns[fi] = fb;
+            fb.setOnClickListener(v -> {
+                boolean ns;
+                switch(fix) {
+                    case 0: ns=!tv.isOverline(); tv.setOverline(ns); break;
+                    case 1: ns=!tv.isSuperscript(); tv.setSuperscript(ns); break;
+                    case 2: ns=!tv.isSubscript(); tv.setSubscript(ns); break;
+                    case 3: ns=!tv.isMirrorH(); tv.setMirrorH(ns); break;
+                    case 4: ns=!tv.isMirrorV(); tv.setMirrorV(ns); break;
+                    default: ns=!tv.isWaveMode(); tv.setWaveMode(ns); break;
+                }
+                android.graphics.drawable.GradientDrawable tgd = new android.graphics.drawable.GradientDrawable();
+                tgd.setColor(ns ? 0xFF607D8B : 0xFF374151); tgd.setCornerRadius(dp(4)); fb.setBackground(tgd);
+                exportToJson();
+            });
+            fxRow.addView(fb);
+        }
+        root.addView(fxRow);
+
+        typoPopup = showBottomPopup(root, header, () -> typoPopup);
+    }
+
     // ── Transform movable popup ─────────────────────────────────
     private PopupWindow transformPopup = null;
 
@@ -8145,6 +8371,8 @@ public class MainActivity extends AppCompatActivity {
         TextView tabEffects = cv.findViewById(R.id.tab_effects);
         TextView tabLayout = cv.findViewById(R.id.tab_layout);
         TextView tabTransform2 = cv.findViewById(R.id.tab_transform2);
+        TextView tabVisual = cv.findViewById(R.id.tab_visual);
+        TextView tabTypo = cv.findViewById(R.id.tab_typo);
 
         LinearLayout panelAction = cv.findViewById(R.id.panel_tab_action);
         LinearLayout panelSpacing = cv.findViewById(R.id.panel_tab_spacing);
@@ -8152,10 +8380,10 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout panelEffects = cv.findViewById(R.id.panel_tab_effects);
         LinearLayout panelLayout = cv.findViewById(R.id.panel_tab_layout);
 
-        TextView[] allTabs = { tabAction, tabSpacing,
-                tabTransformTab, tabEffects, tabLayout};
-        LinearLayout[] allPanels = {panelAction, panelSpacing,
-                panelTransformP, panelEffects, panelLayout};
+        TextView[] allTabs = { tabSpacing,
+                tabTransformTab, tabEffects, tabLayout, tabVisual, tabTypo};
+        LinearLayout[] allPanels = {null, panelSpacing,
+                panelTransformP, panelEffects, panelLayout, null, null};
 
         // Padding X
         android.widget.SeekBar seekPadX = cv.findViewById(R.id.seek_padding_x);
@@ -8296,34 +8524,28 @@ public class MainActivity extends AppCompatActivity {
 
 
         // ── Tab active highlight helper
-        final TextView[] allTabViews = {tabAction, tabSpacing, tabTransformTab, tabEffects, tabLayout};
-        final LinearLayout[] allPanelViews = {panelAction, panelSpacing, panelTransformP, panelEffects, panelLayout};
+        final TextView[] allTabViews = {tabSpacing, tabTransformTab, tabEffects, tabLayout, tabVisual, tabTypo};
+        final LinearLayout[] allPanelViews = {panelSpacing, panelTransformP, panelEffects, panelLayout, null, null};
 
         Runnable[] switchTab = {null};
         switchTab[0] = () -> {};
 
         java.util.function.Consumer<Integer> activateTab = idx -> {
-            for (int i = 0; i < allTabViews.length; i++) {
-                if (allTabViews[i] != null) {
-                    allTabViews[i].setBackgroundColor(i == idx
-                            ? Color.parseColor("#607D8B") : Color.parseColor("#2A3439"));
-                    allTabViews[i].setTextColor(i == idx
-                            ? Color.WHITE : Color.parseColor("#9CA3AF"));
-                }
-                if (allPanelViews[i] != null) {
-                    allPanelViews[i].setVisibility(i == idx ? View.VISIBLE : View.GONE);
-                }
-            }
+            // Hide tab-controlled panels (spacing/transform/effects/layout)
+            for (LinearLayout p : allPanelViews) { if (p != null) p.setVisibility(View.GONE); }
+            // Action panel always visible
+            if (panelAction != null) panelAction.setVisibility(View.VISIBLE);
         };
 
-        // Default — Action tab active
-        activateTab.accept(0);
+        // Default — show action panel always
+        if (panelAction != null) panelAction.setVisibility(View.VISIBLE);
 
-        if (tabAction != null) tabAction.setOnClickListener(v -> activateTab.accept(0));
         if (tabSpacing != null) tabSpacing.setOnClickListener(v -> showSpacingPopup(targetView));
         if (tabTransformTab != null) tabTransformTab.setOnClickListener(v -> showTransformPopup(targetView));
         if (tabEffects != null) tabEffects.setOnClickListener(v -> showEffectsPopup(targetView));
         if (tabLayout != null) tabLayout.setOnClickListener(v -> showLayoutPopup(targetView));
+        if (tabVisual != null) tabVisual.setOnClickListener(v -> showVisualPopup(targetView));
+        if (tabTypo != null) tabTypo.setOnClickListener(v -> showTypoPopup(targetView));
         if (tabTransform2 != null) tabTransform2.setOnClickListener(v -> { dismissSelectionControls(); showTextPropertiesPopup(targetView, 1); });
 
         // ── Undo/Redo history
