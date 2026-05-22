@@ -15041,8 +15041,9 @@ public class MainActivity extends AppCompatActivity {
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_deleted_pages, null);
 
-        final PopupWindow movablePopup = new PopupWindow(dialogView, 600, 800, true);
-        movablePopup.setElevation(20);
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create();
 
         LinearLayout listContainer = dialogView.findViewById(R.id.deleted_pages_container);
         listContainer.removeAllViews();
@@ -15060,7 +15061,7 @@ public class MainActivity extends AppCompatActivity {
             btnPage.setOnClickListener(v -> {
                 allPagesData.add(deletedPagesList.get(index));
                 deletedPagesList.remove(index);
-                movablePopup.dismiss();
+                dialog.dismiss();
                 updatePageIndicator();
                 exportToJson();
                 Toast.makeText(this, "Page Recovered!", Toast.LENGTH_SHORT).show();
@@ -15068,28 +15069,20 @@ public class MainActivity extends AppCompatActivity {
             listContainer.addView(btnPage);
         }
 
-        dialogView.findViewById(R.id.dialog_header).setOnTouchListener(new View.OnTouchListener() {
-            private float initialX, initialY, initialTouchX, initialTouchY;
+        // Close button via header tap
+        View dialogHeader = dialogView.findViewById(R.id.dialog_header);
+        if (dialogHeader != null) dialogHeader.setOnClickListener(v -> dialog.dismiss());
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        initialTouchX = event.getRawX();
-                        initialTouchY = event.getRawY();
-                        return true;
+        dialog.show();
 
-                    case MotionEvent.ACTION_MOVE:
-                        float dx = event.getRawX() - initialTouchX;
-                        float dy = event.getRawY() - initialTouchY;
-                        movablePopup.update((int) (initialX + dx), (int) (initialY + dy), -1, -1);
-                        return true;
-                }
-                return false;
-            }
-        });
-
-        movablePopup.showAtLocation(mainLayout, Gravity.CENTER, 0, 0);
+        // Full screen
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setLayout(
+                android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+                android.view.ViewGroup.LayoutParams.MATCH_PARENT);
+            dialog.getWindow().setBackgroundDrawable(
+                new android.graphics.drawable.ColorDrawable(android.graphics.Color.WHITE));
+        }
     }
 
     private void exportToJson() {
