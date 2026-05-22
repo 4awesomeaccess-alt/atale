@@ -7813,6 +7813,45 @@ public class MainActivity extends AppCompatActivity {
         root.addView(alignRow1);
         root.addView(alignRow2);
 
+        addPopupDivider(root);
+
+        // Move buttons
+        android.widget.TextView lblMove = new android.widget.TextView(this);
+        lblMove.setText("Move");
+        lblMove.setTextSize(11); lblMove.setTypeface(null, android.graphics.Typeface.BOLD);
+        lblMove.setTextColor(android.graphics.Color.parseColor("#6B7280"));
+        android.widget.LinearLayout.LayoutParams mvLblLp = new android.widget.LinearLayout.LayoutParams(
+            android.widget.LinearLayout.LayoutParams.MATCH_PARENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        mvLblLp.setMargins(0, dp(4), 0, dp(6)); lblMove.setLayoutParams(mvLblLp);
+        root.addView(lblMove);
+
+        android.widget.LinearLayout moveRow = new android.widget.LinearLayout(this);
+        moveRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        moveRow.setGravity(android.view.Gravity.CENTER);
+
+        String[] mvLabels = {"◀", "▲", "▼", "▶"};
+        for (int mi = 0; mi < 4; mi++) {
+            final int idx = mi;
+            android.widget.Button mb = makeSpacingBtn(mvLabels[mi]);
+            android.widget.LinearLayout.LayoutParams mbLp = new android.widget.LinearLayout.LayoutParams(0, dp(40), 1f);
+            mbLp.setMargins(dp(3), 0, dp(3), 0); mb.setLayoutParams(mbLp);
+            mb.setOnClickListener(v -> {
+                android.widget.RelativeLayout.LayoutParams lp =
+                    (android.widget.RelativeLayout.LayoutParams) tv.getLayoutParams();
+                if (lp == null) return;
+                int step = 5;
+                if (idx == 0) lp.leftMargin -= step;
+                else if (idx == 1) lp.topMargin -= step;
+                else if (idx == 2) lp.topMargin += step;
+                else lp.leftMargin += step;
+                tv.setLayoutParams(lp);
+                tv.requestLayout();
+                exportToJson();
+            });
+            moveRow.addView(mb);
+        }
+        root.addView(moveRow);
+
         layoutPopup = showBottomPopup(root, header);
     }
 
