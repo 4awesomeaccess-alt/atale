@@ -7347,6 +7347,343 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    // ── Transform movable popup ─────────────────────────────────
+    private PopupWindow transformPopup = null;
+
+    private void showTransformPopup(StrokeTextView tv) {
+        if (transformPopup != null && transformPopup.isShowing()) { transformPopup.dismiss(); transformPopup = null; return; }
+
+        android.widget.LinearLayout root = new android.widget.LinearLayout(this);
+        root.setOrientation(android.widget.LinearLayout.VERTICAL);
+        root.setPadding(dp(16), dp(12), dp(16), dp(12));
+        android.graphics.drawable.GradientDrawable _bg1 = new android.graphics.drawable.GradientDrawable();
+        _bg1.setColor(android.graphics.Color.WHITE); _bg1.setCornerRadius(dp(16));
+        _bg1.setStroke(1, android.graphics.Color.parseColor("#E5E7EB")); root.setBackground(_bg1);
+
+        android.widget.TextView header = makePopupHeader("✦ Transform");
+        root.addView(header);
+
+        // Rotation
+        float[] rotArr = {tv.getRotation()};
+        android.widget.SeekBar sbRot = makePopupSeekRow(root, "Rotate", 360, (int)(tv.getRotation() + 180) % 360,
+            String.format("%.0f°", tv.getRotation()));
+        android.widget.TextView tvRotV = (android.widget.TextView) ((android.widget.LinearLayout) root.getChildAt(root.getChildCount()-1)).getChildAt(2);
+        sbRot.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) {
+                float r = p - 180f; tv.setRotation(r); tvRotV.setText(String.format("%.0f°", r)); }
+            @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
+        });
+
+        addPopupDivider(root);
+
+        // Opacity
+        android.widget.SeekBar sbOp = makePopupSeekRow(root, "Opacity", 100, (int)(tv.getAlpha() * 100),
+            (int)(tv.getAlpha()*100) + "%");
+        android.widget.TextView tvOpV = (android.widget.TextView) ((android.widget.LinearLayout) root.getChildAt(root.getChildCount()-1)).getChildAt(2);
+        sbOp.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) {
+                tv.setAlpha(p / 100f); tvOpV.setText(p + "%"); }
+            @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
+        });
+
+        addPopupDivider(root);
+
+        // Scale X
+        android.widget.SeekBar sbSX = makePopupSeekRow(root, "Scale X", 200, (int)(tv.getScaleX() * 100),
+            String.format("%.1fx", tv.getScaleX()));
+        android.widget.TextView tvSXV = (android.widget.TextView) ((android.widget.LinearLayout) root.getChildAt(root.getChildCount()-1)).getChildAt(2);
+        sbSX.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) {
+                float sc = p / 100f; tv.setScaleX(sc); tvSXV.setText(String.format("%.1fx", sc)); }
+            @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
+        });
+
+        addPopupDivider(root);
+
+        // Scale Y
+        android.widget.SeekBar sbSY = makePopupSeekRow(root, "Scale Y", 200, (int)(tv.getScaleY() * 100),
+            String.format("%.1fx", tv.getScaleY()));
+        android.widget.TextView tvSYV = (android.widget.TextView) ((android.widget.LinearLayout) root.getChildAt(root.getChildCount()-1)).getChildAt(2);
+        sbSY.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) {
+                float sc = p / 100f; tv.setScaleY(sc); tvSYV.setText(String.format("%.1fx", sc)); }
+            @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
+        });
+
+        transformPopup = showBottomPopup(root, header, () -> transformPopup);
+    }
+
+    // ── Effects movable popup ───────────────────────────────────
+    private PopupWindow effectsPopup = null;
+
+    private void showEffectsPopup(StrokeTextView tv) {
+        if (effectsPopup != null && effectsPopup.isShowing()) { effectsPopup.dismiss(); effectsPopup = null; return; }
+
+        android.widget.LinearLayout root = new android.widget.LinearLayout(this);
+        root.setOrientation(android.widget.LinearLayout.VERTICAL);
+        root.setPadding(dp(16), dp(12), dp(16), dp(12));
+        android.graphics.drawable.GradientDrawable _bg2 = new android.graphics.drawable.GradientDrawable();
+        _bg2.setColor(android.graphics.Color.WHITE); _bg2.setCornerRadius(dp(16));
+        _bg2.setStroke(1, android.graphics.Color.parseColor("#E5E7EB")); root.setBackground(_bg2);
+
+        android.widget.TextView header = makePopupHeader("✦ Effects");
+        root.addView(header);
+
+        // Shadow Radius
+        float[] shadowVals = {0, 0, 0};
+        android.widget.SeekBar sbShadowR = makePopupSeekRow(root, "Shadow R", 30, 0, "0");
+        android.widget.TextView tvSRV = (android.widget.TextView) ((android.widget.LinearLayout) root.getChildAt(root.getChildCount()-1)).getChildAt(2);
+        sbShadowR.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) {
+                shadowVals[0] = p;
+                tv.setShadowLayer(shadowVals[0], shadowVals[1], shadowVals[2], android.graphics.Color.parseColor("#80000000"));
+                tvSRV.setText(String.valueOf(p)); }
+            @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
+        });
+
+        addPopupDivider(root);
+
+        // Shadow DX
+        android.widget.SeekBar sbSDX = makePopupSeekRow(root, "Shadow X", 50, 25, "0");
+        android.widget.TextView tvSDXV = (android.widget.TextView) ((android.widget.LinearLayout) root.getChildAt(root.getChildCount()-1)).getChildAt(2);
+        sbSDX.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) {
+                shadowVals[1] = p - 25f;
+                tv.setShadowLayer(shadowVals[0], shadowVals[1], shadowVals[2], android.graphics.Color.parseColor("#80000000"));
+                tvSDXV.setText(String.format("%.0f", shadowVals[1])); }
+            @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
+        });
+
+        addPopupDivider(root);
+
+        // Shadow DY
+        android.widget.SeekBar sbSDY = makePopupSeekRow(root, "Shadow Y", 50, 25, "0");
+        android.widget.TextView tvSDYV = (android.widget.TextView) ((android.widget.LinearLayout) root.getChildAt(root.getChildCount()-1)).getChildAt(2);
+        sbSDY.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) {
+                shadowVals[2] = p - 25f;
+                tv.setShadowLayer(shadowVals[0], shadowVals[1], shadowVals[2], android.graphics.Color.parseColor("#80000000"));
+                tvSDYV.setText(String.format("%.0f", shadowVals[2])); }
+            @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
+        });
+
+        addPopupDivider(root);
+
+        // Opacity
+        android.widget.SeekBar sbOp = makePopupSeekRow(root, "Opacity", 100, (int)(tv.getAlpha() * 100),
+            (int)(tv.getAlpha()*100) + "%");
+        android.widget.TextView tvOpV = (android.widget.TextView) ((android.widget.LinearLayout) root.getChildAt(root.getChildCount()-1)).getChildAt(2);
+        sbOp.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) {
+                tv.setAlpha(p / 100f); tvOpV.setText(p + "%"); }
+            @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
+        });
+
+        effectsPopup = showBottomPopup(root, header, () -> effectsPopup);
+    }
+
+    // ── Layout movable popup ────────────────────────────────────
+    private PopupWindow layoutPopup = null;
+
+    private void showLayoutPopup(StrokeTextView tv) {
+        if (layoutPopup != null && layoutPopup.isShowing()) { layoutPopup.dismiss(); layoutPopup = null; return; }
+
+        android.widget.LinearLayout root = new android.widget.LinearLayout(this);
+        root.setOrientation(android.widget.LinearLayout.VERTICAL);
+        root.setPadding(dp(16), dp(12), dp(16), dp(12));
+        android.graphics.drawable.GradientDrawable _bg3 = new android.graphics.drawable.GradientDrawable();
+        _bg3.setColor(android.graphics.Color.WHITE); _bg3.setCornerRadius(dp(16));
+        _bg3.setStroke(1, android.graphics.Color.parseColor("#E5E7EB")); root.setBackground(_bg3);
+
+        android.widget.TextView header = makePopupHeader("✦ Layout");
+        root.addView(header);
+
+        // Move buttons row (◀ ▲ ▼ ▶)
+        android.widget.LinearLayout moveRow = new android.widget.LinearLayout(this);
+        moveRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        moveRow.setGravity(android.view.Gravity.CENTER);
+        android.widget.LinearLayout.LayoutParams mrLp = new android.widget.LinearLayout.LayoutParams(
+            android.widget.LinearLayout.LayoutParams.MATCH_PARENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        mrLp.setMargins(0, 0, 0, dp(8)); moveRow.setLayoutParams(mrLp);
+
+        String[] moveLabels = {"◀", "▲", "▼", "▶"};
+        int[] moveDeltas = {0, 0, 0, 0}; // dx for ◀▶, dy for ▲▼
+        for (int mi = 0; mi < 4; mi++) {
+            final int idx = mi;
+            android.widget.Button mb = makeSpacingBtn(moveLabels[mi]);
+            android.widget.LinearLayout.LayoutParams mbLp = new android.widget.LinearLayout.LayoutParams(dp(44), dp(44));
+            mbLp.setMargins(dp(4), 0, dp(4), 0); mb.setLayoutParams(mbLp);
+            mb.setOnClickListener(v -> {
+                android.widget.RelativeLayout.LayoutParams lp = (android.widget.RelativeLayout.LayoutParams) tv.getLayoutParams();
+                if (lp == null) return;
+                int step = 5;
+                if (idx == 0) lp.leftMargin -= step;
+                else if (idx == 1) lp.topMargin -= step;
+                else if (idx == 2) lp.topMargin += step;
+                else lp.leftMargin += step;
+                tv.setLayoutParams(lp); exportToJson();
+            });
+            moveRow.addView(mb);
+        }
+        root.addView(moveRow);
+
+        addPopupDivider(root);
+
+        // Align buttons
+        android.widget.TextView lblAlign = new android.widget.TextView(this);
+        lblAlign.setText("Align");
+        lblAlign.setTextSize(11); lblAlign.setTypeface(null, android.graphics.Typeface.BOLD);
+        lblAlign.setTextColor(android.graphics.Color.parseColor("#6B7280"));
+        android.widget.LinearLayout.LayoutParams alLp = new android.widget.LinearLayout.LayoutParams(
+            android.widget.LinearLayout.LayoutParams.MATCH_PARENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        alLp.setMargins(0, dp(8), 0, dp(6)); lblAlign.setLayoutParams(alLp);
+        root.addView(lblAlign);
+
+        android.widget.LinearLayout alignRow = new android.widget.LinearLayout(this);
+        alignRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        alignRow.setGravity(android.view.Gravity.CENTER);
+
+        String[] alignLabels = {"⊢L", "⊣⊢", "R⊣", "⊤T", "⊥⊤", "B⊥"};
+        for (int ai = 0; ai < 6; ai++) {
+            final int aidx = ai;
+            android.widget.Button ab = new android.widget.Button(this);
+            ab.setText(alignLabels[ai]); ab.setTextSize(9);
+            ab.setTextColor(android.graphics.Color.WHITE);
+            android.graphics.drawable.GradientDrawable agd = new android.graphics.drawable.GradientDrawable();
+            agd.setColor(android.graphics.Color.parseColor(ai < 3 ? "#374151" : "#607D8B"));
+            agd.setCornerRadius(dp(4)); ab.setBackground(agd);
+            android.widget.LinearLayout.LayoutParams abLp = new android.widget.LinearLayout.LayoutParams(dp(40), dp(30));
+            abLp.setMargins(dp(2), 0, dp(2), 0); ab.setLayoutParams(abLp);
+            ab.setOnClickListener(v -> {
+                int w = mainLayout.getWidth(), h = mainLayout.getHeight();
+                int vw = tv.getWidth(), vh = tv.getHeight();
+                android.widget.RelativeLayout.LayoutParams lp = (android.widget.RelativeLayout.LayoutParams) tv.getLayoutParams();
+                if (lp == null) return;
+                switch (aidx) {
+                    case 0: lp.leftMargin = 0; break;
+                    case 1: lp.leftMargin = (w - vw) / 2; break;
+                    case 2: lp.leftMargin = w - vw; break;
+                    case 3: lp.topMargin = 0; break;
+                    case 4: lp.topMargin = (h - vh) / 2; break;
+                    case 5: lp.topMargin = h - vh; break;
+                }
+                tv.setLayoutParams(lp); exportToJson();
+            });
+            alignRow.addView(ab);
+        }
+        root.addView(alignRow);
+
+        layoutPopup = showBottomPopup(root, header, () -> layoutPopup);
+    }
+
+    // ── Popup helper methods ────────────────────────────────────
+    private android.widget.TextView makePopupHeader(String title) {
+        android.widget.TextView h = new android.widget.TextView(this);
+        h.setText(title); h.setTextSize(13);
+        h.setTypeface(null, android.graphics.Typeface.BOLD);
+        h.setTextColor(android.graphics.Color.parseColor("#1565C0"));
+        h.setGravity(android.view.Gravity.CENTER);
+        h.setPadding(0, 0, 0, dp(10));
+        return h;
+    }
+
+    private void addPopupDivider(android.widget.LinearLayout root) {
+        android.view.View div = new android.view.View(this);
+        div.setBackgroundColor(android.graphics.Color.parseColor("#E5E7EB"));
+        android.widget.LinearLayout.LayoutParams lp = new android.widget.LinearLayout.LayoutParams(
+            android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 1);
+        lp.setMargins(0, dp(6), 0, dp(6)); div.setLayoutParams(lp);
+        root.addView(div);
+    }
+
+    // Returns the SeekBar; last child of root is the row LinearLayout
+    private android.widget.SeekBar makePopupSeekRow(android.widget.LinearLayout root,
+            String label, int max, int progress, String valText) {
+        android.widget.LinearLayout row = new android.widget.LinearLayout(this);
+        row.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        row.setGravity(android.view.Gravity.CENTER_VERTICAL);
+        android.widget.LinearLayout.LayoutParams rowLp = new android.widget.LinearLayout.LayoutParams(
+            android.widget.LinearLayout.LayoutParams.MATCH_PARENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        rowLp.setMargins(0, dp(4), 0, dp(4)); row.setLayoutParams(rowLp);
+
+        android.widget.TextView lbl = new android.widget.TextView(this);
+        lbl.setText(label); lbl.setTextSize(10);
+        lbl.setTextColor(android.graphics.Color.parseColor("#6B7280"));
+        lbl.setTypeface(null, android.graphics.Typeface.BOLD);
+        lbl.setMinWidth(dp(54));
+        row.addView(lbl); // child 0
+
+        android.widget.SeekBar sb = new android.widget.SeekBar(this);
+        sb.setMax(max); sb.setProgress(progress);
+        android.widget.LinearLayout.LayoutParams sbLp = new android.widget.LinearLayout.LayoutParams(
+            0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+        sbLp.setMargins(dp(4), 0, dp(4), 0); sb.setLayoutParams(sbLp);
+        row.addView(sb); // child 1 — NOTE: no −/+ buttons here, just seekbar
+
+        android.widget.TextView tvVal = new android.widget.TextView(this);
+        tvVal.setText(valText); tvVal.setTextSize(10);
+        tvVal.setTextColor(android.graphics.Color.parseColor("#374151"));
+        tvVal.setTypeface(null, android.graphics.Typeface.BOLD);
+        tvVal.setMinWidth(dp(40)); tvVal.setGravity(android.view.Gravity.END);
+        row.addView(tvVal); // child 2 — but we access as child 3 in callers... fix below
+
+        // Add dummy view so child 3 = tvVal consistently
+        android.view.View dummy = new android.view.View(this);
+        dummy.setLayoutParams(new android.widget.LinearLayout.LayoutParams(0, 0));
+        row.addView(dummy); // child 3 placeholder
+
+        // Re-add as child 3 properly: swap
+        row.removeView(tvVal);
+        row.removeView(dummy);
+        row.addView(tvVal); // child 2
+
+        root.addView(row);
+        return sb;
+    }
+
+    private PopupWindow showBottomPopup(android.widget.LinearLayout root,
+            android.widget.TextView header, java.util.function.Supplier<PopupWindow> selfRef) {
+        root.measure(android.view.View.MeasureSpec.UNSPECIFIED, android.view.View.MeasureSpec.UNSPECIFIED);
+        int pw = Math.max(dp(300), root.getMeasuredWidth());
+        PopupWindow pw2 = new PopupWindow(root, pw,
+            android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, true);
+        pw2.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+        pw2.setElevation(dp(8)); pw2.setOutsideTouchable(true);
+
+        int screenW = getResources().getDisplayMetrics().widthPixels;
+        int screenH = getResources().getDisplayMetrics().heightPixels;
+        root.measure(android.view.View.MeasureSpec.makeMeasureSpec(pw, android.view.View.MeasureSpec.EXACTLY),
+            android.view.View.MeasureSpec.UNSPECIFIED);
+        int popH = root.getMeasuredHeight();
+        int startX = (screenW - pw) / 2;
+        int startY = screenH - popH - dp(60);
+        pw2.showAtLocation(mainLayout, android.view.Gravity.NO_GRAVITY, startX, startY);
+
+        final int[] dragStart = {0, 0};
+        final int[] pos = {startX, startY};
+        header.setOnTouchListener((v, e) -> {
+            switch (e.getAction()) {
+                case android.view.MotionEvent.ACTION_DOWN:
+                    dragStart[0] = (int) e.getRawX(); dragStart[1] = (int) e.getRawY(); break;
+                case android.view.MotionEvent.ACTION_MOVE:
+                    pos[0] += (int) e.getRawX() - dragStart[0];
+                    pos[1] += (int) e.getRawY() - dragStart[1];
+                    pw2.update(pos[0], pos[1], -1, -1);
+                    dragStart[0] = (int) e.getRawX(); dragStart[1] = (int) e.getRawY(); break;
+            }
+            return true;
+        });
+        return pw2;
+    }
+
     // ── Spacing movable popup ──────────────────────────────────
     private PopupWindow spacingPopup = null;
 
@@ -7984,9 +8321,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (tabAction != null) tabAction.setOnClickListener(v -> activateTab.accept(0));
         if (tabSpacing != null) tabSpacing.setOnClickListener(v -> showSpacingPopup(targetView));
-        if (tabTransformTab != null) tabTransformTab.setOnClickListener(v -> activateTab.accept(2));
-        if (tabEffects != null) tabEffects.setOnClickListener(v -> activateTab.accept(3));
-        if (tabLayout != null) tabLayout.setOnClickListener(v -> activateTab.accept(4));
+        if (tabTransformTab != null) tabTransformTab.setOnClickListener(v -> showTransformPopup(targetView));
+        if (tabEffects != null) tabEffects.setOnClickListener(v -> showEffectsPopup(targetView));
+        if (tabLayout != null) tabLayout.setOnClickListener(v -> showLayoutPopup(targetView));
         if (tabTransform2 != null) tabTransform2.setOnClickListener(v -> { dismissSelectionControls(); showTextPropertiesPopup(targetView, 1); });
 
         // ── Undo/Redo history
