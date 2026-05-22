@@ -9803,9 +9803,6 @@ public class MainActivity extends AppCompatActivity {
                                 deletedObj.put("yPercent", sh == 0 ? 0 : (targetView.getY() / sh) * 100);
                                 deletedObj.put("rotation", targetView.getRotation());
                                 deletedObj.put("bgColor", getStoredBackgroundColor(targetView));
-                                // Font
-                                Object fontTag = targetView.getTag(R.id.btn_font_picker);
-                                if (fontTag != null) deletedObj.put("fontKey", fontTag.toString());
                                 // letterSpacing / lineSpacing
                                 deletedObj.put("letterSpacing", targetView.getLetterSpacing());
                                 deletedObj.put("lineSpacing", targetView.getLineSpacingMultiplier());
