@@ -12872,7 +12872,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            } else if (id == R.id.btn_align_25) {
+            if (id == R.id.btn_align_25) {
                 for (View t : targets) t.setX(canvasLeft + (main_image_view.getWidth() * 0.25f) - t.getWidth() / 2f);
             } else if (id == R.id.btn_align_75) {
                 for (View t : targets) t.setX(canvasLeft + (main_image_view.getWidth() * 0.75f) - t.getWidth() / 2f);
