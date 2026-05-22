@@ -6,9 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- ══════════════════════════════════
-         MAIN CONTENT
-    ══════════════════════════════════ -->
     <RelativeLayout
         android:id="@+id/main_layout"
         android:layout_width="match_parent"
@@ -18,9 +15,6 @@
             android:id="@+id/main_image_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-
-        <!-- ── Lock Panel Open Button (left edge) -->
-
 
         <HorizontalScrollView
             android:id="@+id/bottom_bt_scroll"
@@ -249,21 +243,6 @@
                         android:text="Export PDF"/>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/btn_arc_text"
-                    style="@style/BottomToolItem">
-                    <TextView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:gravity="center"
-                        android:text="Ω"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        style="@style/BottomToolText"
-                        android:text="Arc Text"/>
-                </LinearLayout>
 
 
                 <LinearLayout
@@ -298,22 +277,6 @@
                         android:text="Image  List activity"/>
                 </LinearLayout>
 
-
-                <LinearLayout
-                    android:id="@+id/btn_grid_frame"
-                    style="@style/BottomToolItem">
-                    <TextView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:gravity="center"
-                        android:text="Ω"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        style="@style/BottomToolText"
-                        android:text="Grid photo"/>
-                </LinearLayout>
 
             </LinearLayout>
         </HorizontalScrollView>
