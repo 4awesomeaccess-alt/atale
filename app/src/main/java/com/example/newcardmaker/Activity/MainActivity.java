@@ -7568,7 +7568,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         // ── Tab active highlight helper
-        TextView tabAction = cv.findViewById(R.id.tab_action);
         final TextView[] allTabViews = {tabAction, tabSpacing, tabTransformTab, tabEffects, tabLayout};
         final LinearLayout[] allPanelViews = {panelAction, panelSpacing, panelTransformP, panelEffects, panelLayout};
 
