@@ -7690,15 +7690,19 @@ public class MainActivity extends AppCompatActivity {
         spacingPopup.setElevation(dp(8));
         spacingPopup.setOutsideTouchable(true);
 
-        // ── Show at center of screen
+        // ── Show at bottom of screen
         int screenW = getResources().getDisplayMetrics().widthPixels;
         int screenH = getResources().getDisplayMetrics().heightPixels;
-        spacingPopup.showAtLocation(mainLayout, android.view.Gravity.NO_GRAVITY,
-                (screenW - pw) / 2, screenH / 3);
+        root.measure(android.view.View.MeasureSpec.makeMeasureSpec(pw, android.view.View.MeasureSpec.EXACTLY),
+                android.view.View.MeasureSpec.UNSPECIFIED);
+        int popupH = root.getMeasuredHeight();
+        int startX = (screenW - pw) / 2;
+        int startY = screenH - popupH - dp(60); // bottom ma, nav bar upar
+        spacingPopup.showAtLocation(mainLayout, android.view.Gravity.NO_GRAVITY, startX, startY);
 
         // ── Drag to move
         final int[] dragStart = {0, 0};
-        final int[] popupPos = {(screenW - pw) / 2, screenH / 3};
+        final int[] popupPos = {startX, startY};
         header.setOnTouchListener((v, e) -> {
             switch (e.getAction()) {
                 case android.view.MotionEvent.ACTION_DOWN:
