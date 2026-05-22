@@ -14665,7 +14665,12 @@ public class MainActivity extends AppCompatActivity {
         panelSticker.setPadding(8, 8, 8, 8);
         panelSticker.setVisibility(View.GONE);
 
-        scrollView.addView(panelText);
+        // ── Container for both panels inside scrollView
+        android.widget.LinearLayout scrollContainer = new android.widget.LinearLayout(this);
+        scrollContainer.setOrientation(android.widget.LinearLayout.VERTICAL);
+        scrollContainer.addView(panelText);
+        scrollContainer.addView(panelSticker);
+        scrollView.addView(scrollContainer);
         root.addView(scrollView);
 
         // ── Bottom buttons
@@ -14900,9 +14905,8 @@ public class MainActivity extends AppCompatActivity {
             btnTabText.setTextColor(Color.WHITE);
             btnTabSticker.setBackgroundColor(Color.parseColor("#E3F2FD"));
             btnTabSticker.setTextColor(Color.parseColor("#1565C0"));
-
-            scrollView.removeAllViews();
-            scrollView.addView(panelText);
+            panelText.setVisibility(View.VISIBLE);
+            panelSticker.setVisibility(View.GONE);
             renderTextTab.run();
         });
 
@@ -14912,9 +14916,8 @@ public class MainActivity extends AppCompatActivity {
             btnTabSticker.setTextColor(Color.WHITE);
             btnTabText.setBackgroundColor(Color.parseColor("#E3F2FD"));
             btnTabText.setTextColor(Color.parseColor("#1565C0"));
-
-            scrollView.removeAllViews();
-            scrollView.addView(panelSticker);
+            panelText.setVisibility(View.GONE);
+            panelSticker.setVisibility(View.VISIBLE);
             renderStickerTab.run();
         });
 
