@@ -15156,7 +15156,7 @@ public class MainActivity extends AppCompatActivity {
         float lineMult = (float) obj.optDouble("lineSpacingMult", 1.0f);
         textView.setLineSpacing(0f, lineMult);
 
-        float letterSp = (float) obj.optDouble("letterSpacing", 0f);
+        float letterSp = (float) obj.optDouble("letterSpacing", obj.optDouble("letterSpace", 0f));
         textView.setLetterSpacing(letterSp);
 
         float alpha = (float) obj.optDouble("alpha", 1.0f);
@@ -15181,12 +15181,13 @@ public class MainActivity extends AppCompatActivity {
         obj.put("isItalic", textView.getTypeface() != null && textView.getTypeface().isItalic());
         obj.put("isUnderline", (textView.getPaintFlags() & Paint.UNDERLINE_TEXT_FLAG) != 0);
         obj.put("isStrike", (textView.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) != 0);
-        obj.put("letterSpace", textView.getLetterSpacing());
+        obj.put("letterSpacing", textView.getLetterSpacing());
+        obj.put("letterSpace", textView.getLetterSpacing()); // backward compat
         obj.put("lineSpace", textView.getLineSpacingMultiplier());
         float rotation = (float) obj.optDouble("rotation", 0f);
         textView.setRotation(rotation);
 // Load માં ઉમેરો:
-        applyAllStyles(textView, obj.optBoolean("isBold", false), obj.optBoolean("isItalic", false), obj.optBoolean("isUnderline", false), obj.optBoolean("isStrike", false), obj.optString("fontKey", "DEFAULT"), (float) obj.optDouble("letterSpace", 0f), (float) obj.optDouble("lineSpace", 1.0f), obj.optString("textTransform", "NONE"));
+        applyAllStyles(textView, obj.optBoolean("isBold", false), obj.optBoolean("isItalic", false), obj.optBoolean("isUnderline", false), obj.optBoolean("isStrike", false), obj.optString("fontKey", "DEFAULT"), (float) obj.optDouble("letterSpace", obj.optDouble("letterSpacing", 0f)), (float) obj.optDouble("lineSpace", 1.0f), obj.optString("textTransform", "NONE"));
 
         mainLayout.post(() -> {
             int savedIndex = obj.optInt("layerIndex", -1);
@@ -15319,7 +15320,7 @@ public class MainActivity extends AppCompatActivity {
         float lineMult = (float) obj.optDouble("lineSpacingMult", 1.0f);
         textView.setLineSpacing(0f, lineMult);
 
-        float letterSp = (float) obj.optDouble("letterSpacing", 0f);
+        float letterSp = (float) obj.optDouble("letterSpacing", obj.optDouble("letterSpace", 0f));
         textView.setLetterSpacing(letterSp);
 
         float alpha = (float) obj.optDouble("alpha", 1.0f);
@@ -15348,7 +15349,8 @@ public class MainActivity extends AppCompatActivity {
         obj.put("isItalic", textView.getTypeface() != null && textView.getTypeface().isItalic());
         obj.put("isUnderline", (textView.getPaintFlags() & Paint.UNDERLINE_TEXT_FLAG) != 0);
         obj.put("isStrike", (textView.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG) != 0);
-        obj.put("letterSpace", textView.getLetterSpacing());
+        obj.put("letterSpacing", textView.getLetterSpacing());
+        obj.put("letterSpace", textView.getLetterSpacing()); // backward compat
         obj.put("lineSpace", textView.getLineSpacingMultiplier());
 
         applyAllStyles(
@@ -15358,7 +15360,7 @@ public class MainActivity extends AppCompatActivity {
                 obj.optBoolean("isUnderline", false),
                 obj.optBoolean("isStrike", false),
                 obj.optString("fontKey", "DEFAULT"),
-                (float) obj.optDouble("letterSpace", 0f),
+                (float) obj.optDouble("letterSpace", obj.optDouble("letterSpacing", 0f)),
                 (float) obj.optDouble("lineSpace", 1.0f),
                 obj.optString("textTransform", "NONE")
         );
