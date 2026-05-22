@@ -3823,7 +3823,6 @@ public class MainActivity extends AppCompatActivity {
 
             showDeletedTextsDialog();
         } else if (id.getId() == R.id.btn_save_dialog) {
-            // Save dialog — Image અથવા PDF choose
             new android.app.AlertDialog.Builder(this)
                 .setTitle("Save")
                 .setItems(new String[]{"📷  Save Image", "📄  Download PDF"}, (d, which) -> {
@@ -3836,24 +3835,11 @@ public class MainActivity extends AppCompatActivity {
                             return;
                         }
                         exportToJson();
-                        handleButtonClick(findViewById(R.id.btn_download_pdf));
+                        saveAllPagesAsClickablePdf();
+                        Toast.makeText(this, "Pdf download thay che", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .show();
-        } else if (id.getId() == R.id.btn_saveimage) {
-
-            exportToJson(); // JSON ડેટા સેવ કરશે
-            saveAllPagesAsImages(); // હવે આ બધા પેજને ફોટા તરીકે સેવ કરશે
-        } else if (id.getId() == R.id.btn_download_pdf) {
-
-            // ── Premium check
-            if (!SubscriptionManager.getInstance(this).isSubscribed()) {
-                startActivity(new Intent(this, PremiumActivity.class));
-                return;
-            }
-            exportToJson();
-            saveAllPagesAsClickablePdf();
-            Toast.makeText(this, "Pdf download thay che ", Toast.LENGTH_SHORT).show();
         } else if (id.getId() == R.id.btn_remove_bg_offline) {
             // ગેલેરી ખોલવા માટેનો ઇન્ટેન્ટ
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
