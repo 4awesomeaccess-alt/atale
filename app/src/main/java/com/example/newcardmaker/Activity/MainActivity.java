@@ -12872,7 +12872,11 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            if (id == R.id.btn_align_left) {
+            } else if (id == R.id.btn_align_25) {
+                for (View t : targets) t.setX(canvasLeft + (main_image_view.getWidth() * 0.25f) - t.getWidth() / 2f);
+            } else if (id == R.id.btn_align_75) {
+                for (View t : targets) t.setX(canvasLeft + (main_image_view.getWidth() * 0.75f) - t.getWidth() / 2f);
+            } else if (id == R.id.btn_align_left) {
                 for (View t : targets) t.setX(canvasLeft);
             } else if (id == R.id.btn_align_center_h) {
                 for (View t : targets) t.setX(canvasCenterX - t.getWidth() / 2f);
@@ -12946,7 +12950,9 @@ public class MainActivity extends AppCompatActivity {
         };
 
         popupView.findViewById(R.id.btn_align_left).setOnClickListener(alignListener);
+        popupView.findViewById(R.id.btn_align_25).setOnClickListener(alignListener);
         popupView.findViewById(R.id.btn_align_center_h).setOnClickListener(alignListener);
+        popupView.findViewById(R.id.btn_align_75).setOnClickListener(alignListener);
         popupView.findViewById(R.id.btn_align_right).setOnClickListener(alignListener);
         popupView.findViewById(R.id.btn_align_top).setOnClickListener(alignListener);
         popupView.findViewById(R.id.btn_align_middle).setOnClickListener(alignListener);

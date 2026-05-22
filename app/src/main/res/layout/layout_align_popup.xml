@@ -33,10 +33,32 @@
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Left" android:textSize="8sp" android:textColor="#555555"/>
                 </LinearLayout>
 
+                <!-- 25% -->
+                <LinearLayout android:id="@+id/btn_align_25"
+                    android:layout_width="52dp" android:layout_height="48dp"
+                    android:orientation="vertical" android:gravity="center"
+                    android:background="#FFFFFF" android:layout_marginEnd="4dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="25%" android:textSize="14sp" android:textColor="#1565C0" android:textStyle="bold"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="H-25%" android:textSize="8sp" android:textColor="#555555"/>
+                </LinearLayout>
+
                 <!-- H-Center -->
                 <LinearLayout android:id="@+id/btn_align_center_h" android:layout_width="52dp" android:layout_height="48dp" android:orientation="vertical" android:gravity="center" android:background="#FFFFFF" android:layout_marginEnd="4dp">
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⊣⊢" android:textSize="16sp" android:textColor="#1565C0"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="H-Center" android:textSize="8sp" android:textColor="#555555"/>
+                </LinearLayout>
+
+                <!-- 75% -->
+                <LinearLayout android:id="@+id/btn_align_75"
+                    android:layout_width="52dp" android:layout_height="48dp"
+                    android:orientation="vertical" android:gravity="center"
+                    android:background="#FFFFFF" android:layout_marginEnd="4dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="75%" android:textSize="14sp" android:textColor="#1565C0" android:textStyle="bold"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="H-75%" android:textSize="8sp" android:textColor="#555555"/>
                 </LinearLayout>
 
                 <!-- Right -->
