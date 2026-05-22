@@ -3822,6 +3822,24 @@ public class MainActivity extends AppCompatActivity {
         } else if (id.getId() == R.id.btn_show_deleted_texts) {
 
             showDeletedTextsDialog();
+        } else if (id.getId() == R.id.btn_save_dialog) {
+            // Save dialog — Image અથવા PDF choose
+            new android.app.AlertDialog.Builder(this)
+                .setTitle("Save")
+                .setItems(new String[]{"📷  Save Image", "📄  Download PDF"}, (d, which) -> {
+                    if (which == 0) {
+                        exportToJson();
+                        saveAllPagesAsImages();
+                    } else {
+                        if (!SubscriptionManager.getInstance(this).isSubscribed()) {
+                            startActivity(new Intent(this, PremiumActivity.class));
+                            return;
+                        }
+                        exportToJson();
+                        handleButtonClick(findViewById(R.id.btn_download_pdf));
+                    }
+                })
+                .show();
         } else if (id.getId() == R.id.btn_saveimage) {
 
             exportToJson(); // JSON ડેટા સેવ કરશે

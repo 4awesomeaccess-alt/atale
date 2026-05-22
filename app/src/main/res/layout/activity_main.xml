@@ -218,6 +218,19 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/btn_save_dialog"
+                    style="@style/BottomToolItem">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_save_image"
+                        app:tint="@android:color/white"/>
+                    <TextView
+                        style="@style/BottomToolText"
+                        android:text="Save"/>
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/btn_saveimage"
                     style="@style/BottomToolItem">
                     <ImageView
