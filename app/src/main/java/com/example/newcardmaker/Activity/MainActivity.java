@@ -7907,8 +7907,8 @@ public class MainActivity extends AppCompatActivity {
         // ════════════════════════════
         // LINE SPACING
         // ════════════════════════════
-        TextView tvLineLabel = cv.findViewById(R.id.tv_line_spacing_label);
-        android.widget.SeekBar seekLine = cv.findViewById(R.id.seek_line_spacing);
+        TextView tvLineLabel = cv.findViewById(R.id.tv_line_val);
+        android.widget.SeekBar seekLine = cv.findViewById(R.id.sb_line_spacing);
         if (seekLine != null) {
             float curMult = targetView.getLineSpacingMultiplier();
             int lineP = Math.round((curMult - 1.0f) * 10f);
@@ -7969,8 +7969,8 @@ public class MainActivity extends AppCompatActivity {
         // ════════════════════════════
         // LETTER SPACING
         // ════════════════════════════
-        TextView tvLetterLabel = cv.findViewById(R.id.tv_letter_spacing_label);
-        android.widget.SeekBar seekLetter = cv.findViewById(R.id.seek_letter_spacing);
+        TextView tvLetterLabel = cv.findViewById(R.id.tv_letter_val);
+        android.widget.SeekBar seekLetter = cv.findViewById(R.id.sb_letter_spacing);
         if (seekLetter != null) {
             float curLS = targetView.getLetterSpacing();
             seekLetter.setMax(40);
