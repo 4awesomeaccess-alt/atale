@@ -7368,7 +7368,7 @@ public class MainActivity extends AppCompatActivity {
 
         // ── Header (drag handle)
         android.widget.TextView header = new android.widget.TextView(this);
-        header.setText("✦ Text Spacing");
+        header.setText("✦ Spacing");
         header.setTextSize(13);
         header.setTypeface(null, android.graphics.Typeface.BOLD);
         header.setTextColor(android.graphics.Color.parseColor("#1565C0"));
@@ -7378,7 +7378,7 @@ public class MainActivity extends AppCompatActivity {
 
         // ── Spacing X ──
         android.widget.TextView lblLetter = new android.widget.TextView(this);
-        lblLetter.setText("Spacing X  ↔");
+        lblLetter.setText("Letter Spacing");
         lblLetter.setTextSize(11);
         lblLetter.setTextColor(android.graphics.Color.parseColor("#6B7280"));
         lblLetter.setTypeface(null, android.graphics.Typeface.BOLD);
@@ -7453,7 +7453,7 @@ public class MainActivity extends AppCompatActivity {
 
         // ── Spacing Y ──
         android.widget.TextView lblLine = new android.widget.TextView(this);
-        lblLine.setText("Spacing Y  ↕");
+        lblLine.setText("Line Spacing");
         lblLine.setTextSize(11);
         lblLine.setTextColor(android.graphics.Color.parseColor("#6B7280"));
         lblLine.setTypeface(null, android.graphics.Typeface.BOLD);
