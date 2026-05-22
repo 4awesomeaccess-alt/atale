@@ -7800,22 +7800,25 @@ public class MainActivity extends AppCompatActivity {
             android.widget.LinearLayout.LayoutParams abLp = new android.widget.LinearLayout.LayoutParams(0, dp(34), 1f);
             abLp.setMargins(dp(2), 0, dp(2), 0); ab.setLayoutParams(abLp);
             ab.setOnClickListener(v -> {
-                int w = mainLayout.getWidth(), h = mainLayout.getHeight();
-                int vw = tv.getWidth(), vh = tv.getHeight();
-                android.widget.RelativeLayout.LayoutParams lp =
-                    (android.widget.RelativeLayout.LayoutParams) tv.getLayoutParams();
-                if (lp == null) return;
-                switch (aidx) {
-                    case 0: lp.leftMargin = 0; break;
-                    case 1: lp.leftMargin = (w - vw) / 2; break;
-                    case 2: lp.leftMargin = w - vw; break;
-                    case 3: lp.topMargin = 0; break;
-                    case 4: lp.topMargin = (h - vh) / 2; break;
-                    case 5: lp.topMargin = h - vh; break;
-                }
-                tv.setLayoutParams(lp);
-                tv.requestLayout();
-                exportToJson();
+                mainLayout.post(() -> {
+                    int w = mainLayout.getWidth(), h = mainLayout.getHeight();
+                    int vw = tv.getWidth() > 0 ? tv.getWidth() : tv.getMeasuredWidth();
+                    int vh = tv.getHeight() > 0 ? tv.getHeight() : tv.getMeasuredHeight();
+                    android.widget.RelativeLayout.LayoutParams lp =
+                        (android.widget.RelativeLayout.LayoutParams) tv.getLayoutParams();
+                    if (lp == null) return;
+                    switch (aidx) {
+                        case 0: lp.leftMargin = 0; break;
+                        case 1: lp.leftMargin = (w - vw) / 2; break;
+                        case 2: lp.leftMargin = w - vw; break;
+                        case 3: lp.topMargin = 0; break;
+                        case 4: lp.topMargin = (h - vh) / 2; break;
+                        case 5: lp.topMargin = h - vh; break;
+                    }
+                    tv.setLayoutParams(lp);
+                    tv.requestLayout();
+                    exportToJson();
+                });
             });
             if (ai < 3) alignRow1.addView(ab);
             else alignRow2.addView(ab);
