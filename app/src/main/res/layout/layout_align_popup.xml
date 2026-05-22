@@ -75,10 +75,58 @@
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Top" android:textSize="8sp" android:textColor="#555555"/>
                 </LinearLayout>
 
+                <!-- V10% -->
+                <LinearLayout android:id="@+id/btn_align_v10" android:layout_width="44dp" android:layout_height="48dp" android:orientation="vertical" android:gravity="center" android:background="#FFFFFF" android:layout_marginEnd="3dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="10%" android:textSize="11sp" android:textColor="#0D47A1" android:textStyle="bold"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="V-10%" android:textSize="7sp" android:textColor="#555555"/>
+                </LinearLayout>
+
+                <!-- V20% -->
+                <LinearLayout android:id="@+id/btn_align_v20" android:layout_width="44dp" android:layout_height="48dp" android:orientation="vertical" android:gravity="center" android:background="#FFFFFF" android:layout_marginEnd="3dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="20%" android:textSize="11sp" android:textColor="#0D47A1" android:textStyle="bold"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="V-20%" android:textSize="7sp" android:textColor="#555555"/>
+                </LinearLayout>
+
+                <!-- V30% -->
+                <LinearLayout android:id="@+id/btn_align_v30" android:layout_width="44dp" android:layout_height="48dp" android:orientation="vertical" android:gravity="center" android:background="#FFFFFF" android:layout_marginEnd="3dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="30%" android:textSize="11sp" android:textColor="#0D47A1" android:textStyle="bold"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="V-30%" android:textSize="7sp" android:textColor="#555555"/>
+                </LinearLayout>
+
+                <!-- V40% -->
+                <LinearLayout android:id="@+id/btn_align_v40" android:layout_width="44dp" android:layout_height="48dp" android:orientation="vertical" android:gravity="center" android:background="#FFFFFF" android:layout_marginEnd="4dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="40%" android:textSize="11sp" android:textColor="#0D47A1" android:textStyle="bold"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="V-40%" android:textSize="7sp" android:textColor="#555555"/>
+                </LinearLayout>
+
                 <!-- V-Center -->
                 <LinearLayout android:id="@+id/btn_align_middle" android:layout_width="52dp" android:layout_height="48dp" android:orientation="vertical" android:gravity="center" android:background="#FFFFFF" android:layout_marginEnd="4dp">
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⊥⊤" android:textSize="16sp" android:textColor="#0D47A1"/>
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="V-Center" android:textSize="8sp" android:textColor="#555555"/>
+                </LinearLayout>
+
+                <!-- V60% -->
+                <LinearLayout android:id="@+id/btn_align_v60" android:layout_width="44dp" android:layout_height="48dp" android:orientation="vertical" android:gravity="center" android:background="#FFFFFF" android:layout_marginEnd="3dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="60%" android:textSize="11sp" android:textColor="#0D47A1" android:textStyle="bold"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="V-60%" android:textSize="7sp" android:textColor="#555555"/>
+                </LinearLayout>
+
+                <!-- V70% -->
+                <LinearLayout android:id="@+id/btn_align_v70" android:layout_width="44dp" android:layout_height="48dp" android:orientation="vertical" android:gravity="center" android:background="#FFFFFF" android:layout_marginEnd="3dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="70%" android:textSize="11sp" android:textColor="#0D47A1" android:textStyle="bold"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="V-70%" android:textSize="7sp" android:textColor="#555555"/>
+                </LinearLayout>
+
+                <!-- V80% -->
+                <LinearLayout android:id="@+id/btn_align_v80" android:layout_width="44dp" android:layout_height="48dp" android:orientation="vertical" android:gravity="center" android:background="#FFFFFF" android:layout_marginEnd="3dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="80%" android:textSize="11sp" android:textColor="#0D47A1" android:textStyle="bold"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="V-80%" android:textSize="7sp" android:textColor="#555555"/>
+                </LinearLayout>
+
+                <!-- V90% -->
+                <LinearLayout android:id="@+id/btn_align_v90" android:layout_width="44dp" android:layout_height="48dp" android:orientation="vertical" android:gravity="center" android:background="#FFFFFF" android:layout_marginEnd="4dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="90%" android:textSize="11sp" android:textColor="#0D47A1" android:textStyle="bold"/>
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="V-90%" android:textSize="7sp" android:textColor="#555555"/>
                 </LinearLayout>
 
                 <!-- Bottom -->
