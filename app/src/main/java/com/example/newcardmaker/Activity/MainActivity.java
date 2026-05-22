@@ -7347,6 +7347,235 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    // ── Spacing movable popup ──────────────────────────────────
+    private PopupWindow spacingPopup = null;
+
+    private void showSpacingPopup(StrokeTextView targetView) {
+        if (spacingPopup != null && spacingPopup.isShowing()) {
+            spacingPopup.dismiss();
+            spacingPopup = null;
+            return;
+        }
+
+        android.widget.LinearLayout root = new android.widget.LinearLayout(this);
+        root.setOrientation(android.widget.LinearLayout.VERTICAL);
+        root.setPadding(dp(16), dp(12), dp(16), dp(12));
+        android.graphics.drawable.GradientDrawable _popBg = new android.graphics.drawable.GradientDrawable();
+        _popBg.setColor(android.graphics.Color.WHITE);
+        _popBg.setCornerRadius(dp(16));
+        _popBg.setStroke(1, android.graphics.Color.parseColor("#E5E7EB"));
+        root.setBackground(_popBg);
+
+        // ── Header (drag handle)
+        android.widget.TextView header = new android.widget.TextView(this);
+        header.setText("✦ Spacing");
+        header.setTextSize(13);
+        header.setTypeface(null, android.graphics.Typeface.BOLD);
+        header.setTextColor(android.graphics.Color.parseColor("#1565C0"));
+        header.setGravity(android.view.Gravity.CENTER);
+        header.setPadding(0, 0, 0, dp(10));
+        root.addView(header);
+
+        // ── Letter Spacing ──
+        android.widget.TextView lblLetter = new android.widget.TextView(this);
+        lblLetter.setText("Letter Spacing");
+        lblLetter.setTextSize(11);
+        lblLetter.setTextColor(android.graphics.Color.parseColor("#6B7280"));
+        lblLetter.setTypeface(null, android.graphics.Typeface.BOLD);
+        root.addView(lblLetter);
+
+        android.widget.LinearLayout rowLetter = new android.widget.LinearLayout(this);
+        rowLetter.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        rowLetter.setGravity(android.view.Gravity.CENTER_VERTICAL);
+        android.widget.LinearLayout.LayoutParams rowLp = new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        rowLp.setMargins(0, dp(4), 0, dp(10));
+        rowLetter.setLayoutParams(rowLp);
+
+        android.widget.Button btnLM = makeSpacingBtn("−");
+        android.widget.SeekBar sbLetter = new android.widget.SeekBar(this);
+        sbLetter.setMax(40);
+        float curLS = targetView.getLetterSpacing();
+        sbLetter.setProgress(Math.round(curLS * 20f));
+        android.widget.LinearLayout.LayoutParams sbLp = new android.widget.LinearLayout.LayoutParams(0,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+        sbLp.setMargins(dp(6), 0, dp(6), 0);
+        sbLetter.setLayoutParams(sbLp);
+        android.widget.Button btnLP = makeSpacingBtn("+");
+        android.widget.TextView tvLV = new android.widget.TextView(this);
+        tvLV.setText(String.format("%.2f", curLS));
+        tvLV.setTextSize(11);
+        tvLV.setTextColor(android.graphics.Color.parseColor("#374151"));
+        tvLV.setTypeface(null, android.graphics.Typeface.BOLD);
+        tvLV.setMinWidth(dp(36));
+        tvLV.setGravity(android.view.Gravity.CENTER);
+
+        rowLetter.addView(btnLM);
+        rowLetter.addView(sbLetter);
+        rowLetter.addView(btnLP);
+        rowLetter.addView(tvLV);
+        root.addView(rowLetter);
+
+        sbLetter.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override public void onProgressChanged(android.widget.SeekBar s, int p, boolean fromUser) {
+                if (!fromUser) return;
+                float ls = p * 0.05f;
+                targetView.setLetterSpacing(ls);
+                tvLV.setText(String.format("%.2f", ls));
+            }
+            @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
+        });
+        btnLM.setOnClickListener(v -> {
+            int nv = Math.max(0, sbLetter.getProgress() - 1);
+            sbLetter.setProgress(nv);
+            float ls = nv * 0.05f;
+            targetView.setLetterSpacing(ls);
+            tvLV.setText(String.format("%.2f", ls));
+            exportToJson();
+        });
+        btnLP.setOnClickListener(v -> {
+            int nv = Math.min(40, sbLetter.getProgress() + 1);
+            sbLetter.setProgress(nv);
+            float ls = nv * 0.05f;
+            targetView.setLetterSpacing(ls);
+            tvLV.setText(String.format("%.2f", ls));
+            exportToJson();
+        });
+
+        // ── Divider
+        android.view.View div = new android.view.View(this);
+        div.setBackgroundColor(android.graphics.Color.parseColor("#E5E7EB"));
+        div.setLayoutParams(new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 1));
+        root.addView(div);
+
+        // ── Line Spacing ──
+        android.widget.TextView lblLine = new android.widget.TextView(this);
+        lblLine.setText("Line Spacing");
+        lblLine.setTextSize(11);
+        lblLine.setTextColor(android.graphics.Color.parseColor("#6B7280"));
+        lblLine.setTypeface(null, android.graphics.Typeface.BOLD);
+        android.widget.LinearLayout.LayoutParams lineLblLp = new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        lineLblLp.setMargins(0, dp(10), 0, 0);
+        lblLine.setLayoutParams(lineLblLp);
+        root.addView(lblLine);
+
+        android.widget.LinearLayout rowLine = new android.widget.LinearLayout(this);
+        rowLine.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        rowLine.setGravity(android.view.Gravity.CENTER_VERTICAL);
+        android.widget.LinearLayout.LayoutParams rowLineLp = new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        rowLineLp.setMargins(0, dp(4), 0, 0);
+        rowLine.setLayoutParams(rowLineLp);
+
+        android.widget.Button btnLineM = makeSpacingBtn("−");
+        android.widget.SeekBar sbLine = new android.widget.SeekBar(this);
+        sbLine.setMax(40);
+        float curMult = targetView.getLineSpacingMultiplier();
+        int lineP = Math.round((curMult - 1.0f) * 10f);
+        sbLine.setProgress(Math.max(0, Math.min(40, lineP)));
+        sbLine.setLayoutParams(sbLp);
+        android.widget.Button btnLineP = makeSpacingBtn("+");
+        android.widget.TextView tvLnV = new android.widget.TextView(this);
+        tvLnV.setText(String.format("%.1f", curMult) + "x");
+        tvLnV.setTextSize(11);
+        tvLnV.setTextColor(android.graphics.Color.parseColor("#374151"));
+        tvLnV.setTypeface(null, android.graphics.Typeface.BOLD);
+        tvLnV.setMinWidth(dp(36));
+        tvLnV.setGravity(android.view.Gravity.CENTER);
+
+        rowLine.addView(btnLineM);
+        rowLine.addView(sbLine);
+        rowLine.addView(btnLineP);
+        rowLine.addView(tvLnV);
+        root.addView(rowLine);
+
+        sbLine.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            @Override public void onProgressChanged(android.widget.SeekBar s, int p, boolean fromUser) {
+                if (!fromUser) return;
+                float m = 1.0f + p * 0.1f;
+                targetView.setLineSpacing(0f, m);
+                tvLnV.setText(String.format("%.1f", m) + "x");
+            }
+            @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
+        });
+        btnLineM.setOnClickListener(v -> {
+            int nv = Math.max(0, sbLine.getProgress() - 1);
+            sbLine.setProgress(nv);
+            float m = 1.0f + nv * 0.1f;
+            targetView.setLineSpacing(0f, m);
+            tvLnV.setText(String.format("%.1f", m) + "x");
+            exportToJson();
+        });
+        btnLineP.setOnClickListener(v -> {
+            int nv = Math.min(40, sbLine.getProgress() + 1);
+            sbLine.setProgress(nv);
+            float m = 1.0f + nv * 0.1f;
+            targetView.setLineSpacing(0f, m);
+            tvLnV.setText(String.format("%.1f", m) + "x");
+            exportToJson();
+        });
+
+        // ── PopupWindow
+        root.measure(android.view.View.MeasureSpec.UNSPECIFIED, android.view.View.MeasureSpec.UNSPECIFIED);
+        int pw = Math.max(dp(280), root.getMeasuredWidth());
+        spacingPopup = new PopupWindow(root, pw,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, true);
+        spacingPopup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(
+                android.graphics.Color.TRANSPARENT));
+        spacingPopup.setElevation(dp(8));
+        spacingPopup.setOutsideTouchable(true);
+
+        // ── Show at center of screen
+        int screenW = getResources().getDisplayMetrics().widthPixels;
+        int screenH = getResources().getDisplayMetrics().heightPixels;
+        spacingPopup.showAtLocation(mainLayout, android.view.Gravity.NO_GRAVITY,
+                (screenW - pw) / 2, screenH / 3);
+
+        // ── Drag to move
+        final int[] dragStart = {0, 0};
+        final int[] popupPos = {(screenW - pw) / 2, screenH / 3};
+        header.setOnTouchListener((v, e) -> {
+            switch (e.getAction()) {
+                case android.view.MotionEvent.ACTION_DOWN:
+                    dragStart[0] = (int) e.getRawX();
+                    dragStart[1] = (int) e.getRawY();
+                    break;
+                case android.view.MotionEvent.ACTION_MOVE:
+                    int dx = (int) e.getRawX() - dragStart[0];
+                    int dy = (int) e.getRawY() - dragStart[1];
+                    popupPos[0] += dx;
+                    popupPos[1] += dy;
+                    spacingPopup.update(popupPos[0], popupPos[1], -1, -1);
+                    dragStart[0] = (int) e.getRawX();
+                    dragStart[1] = (int) e.getRawY();
+                    break;
+            }
+            return true;
+        });
+    }
+
+    private android.widget.Button makeSpacingBtn(String label) {
+        android.widget.Button btn = new android.widget.Button(this);
+        btn.setText(label);
+        btn.setTextSize(16);
+        btn.setTextColor(android.graphics.Color.WHITE);
+        btn.setTypeface(null, android.graphics.Typeface.BOLD);
+        btn.setPadding(0, 0, 0, 0);
+        android.graphics.drawable.GradientDrawable gd = new android.graphics.drawable.GradientDrawable();
+        gd.setColor(android.graphics.Color.parseColor("#374151"));
+        gd.setCornerRadius(dp(6));
+        btn.setBackground(gd);
+        btn.setLayoutParams(new android.widget.LinearLayout.LayoutParams(dp(32), dp(32)));
+        return btn;
+    }
+
     private void showSelectionControlsForText(StrokeTextView targetView) {
 
         try {
@@ -7592,7 +7821,7 @@ public class MainActivity extends AppCompatActivity {
         activateTab.accept(0);
 
         if (tabAction != null) tabAction.setOnClickListener(v -> activateTab.accept(0));
-        if (tabSpacing != null) tabSpacing.setOnClickListener(v -> activateTab.accept(1));
+        if (tabSpacing != null) tabSpacing.setOnClickListener(v -> showSpacingPopup(targetView));
         if (tabTransformTab != null) tabTransformTab.setOnClickListener(v -> activateTab.accept(2));
         if (tabEffects != null) tabEffects.setOnClickListener(v -> activateTab.accept(3));
         if (tabLayout != null) tabLayout.setOnClickListener(v -> activateTab.accept(4));
