@@ -14632,82 +14632,21 @@ public class MainActivity extends AppCompatActivity {
     private void showDeletedTextsDialog() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("🗑 Deleted Items");
 
-        // ── Root layout
-        android.widget.LinearLayout root = new android.widget.LinearLayout(this);
-        root.setOrientation(android.widget.LinearLayout.VERTICAL);
-        root.setBackgroundColor(Color.parseColor("#F5F5F5"));
+        // ── Inflate XML layout
+        android.view.View root = getLayoutInflater().inflate(R.layout.dialog_deleted_items, null);
+        builder.setView(root);
 
-        // ── Tab row
-        android.widget.LinearLayout tabRow = new android.widget.LinearLayout(this);
-        tabRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
-        tabRow.setBackgroundColor(Color.WHITE);
-        tabRow.setPadding(8, 8, 8, 0);
+        Button btnTabText    = root.findViewById(R.id.btn_tab_text);
+        Button btnTabSticker = root.findViewById(R.id.btn_tab_sticker);
+        android.widget.LinearLayout panelText    = root.findViewById(R.id.panel_text);
+        android.widget.LinearLayout panelSticker = root.findViewById(R.id.panel_sticker);
+        Button btnDeleteAll  = root.findViewById(R.id.btn_delete_all);
+        Button btnClose      = root.findViewById(R.id.btn_close_deleted);
 
-        Button btnTabText = new Button(this);
+        // Update tab counts
         btnTabText.setText("📝 Texts (" + deletedTextsList.size() + ")");
-        btnTabText.setTextSize(12);
-        btnTabText.setTextColor(Color.WHITE);
-        btnTabText.setBackgroundColor(Color.parseColor("#1565C0"));
-        android.widget.LinearLayout.LayoutParams tabP = new android.widget.LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
-        tabP.setMargins(4, 0, 4, 0);
-        btnTabText.setLayoutParams(tabP);
-
-        Button btnTabSticker = new Button(this);
         btnTabSticker.setText("🖼 Stickers (" + deletedStickersList.size() + ")");
-        btnTabSticker.setTextSize(12);
-        btnTabSticker.setTextColor(Color.parseColor("#1565C0"));
-        btnTabSticker.setBackgroundColor(Color.parseColor("#E3F2FD"));
-        btnTabSticker.setLayoutParams(new android.widget.LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
-
-        tabRow.addView(btnTabText);
-        tabRow.addView(btnTabSticker);
-        root.addView(tabRow);
-
-        // ── Content area
-        android.widget.ScrollView scrollView = new android.widget.ScrollView(this);
-        android.widget.LinearLayout.LayoutParams svP = new android.widget.LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 600);
-        scrollView.setLayoutParams(svP);
-
-        // ── Text panel
-        android.widget.LinearLayout panelText = new android.widget.LinearLayout(this);
-        panelText.setOrientation(android.widget.LinearLayout.VERTICAL);
-        panelText.setPadding(8, 8, 8, 8);
-
-        // ── Sticker panel
-        android.widget.LinearLayout panelSticker = new android.widget.LinearLayout(this);
-        panelSticker.setOrientation(android.widget.LinearLayout.VERTICAL);
-        panelSticker.setPadding(8, 8, 8, 8);
-        panelSticker.setVisibility(View.GONE);
-
-        // ── Container for both panels inside scrollView
-        android.widget.LinearLayout scrollContainer = new android.widget.LinearLayout(this);
-        scrollContainer.setOrientation(android.widget.LinearLayout.VERTICAL);
-        scrollContainer.addView(panelText);
-        scrollContainer.addView(panelSticker);
-        scrollView.addView(scrollContainer);
-        root.addView(scrollView);
-
-        // ── Bottom buttons
-        android.widget.LinearLayout btnRow = new android.widget.LinearLayout(this);
-        btnRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
-        btnRow.setPadding(8, 8, 8, 8);
-        btnRow.setBackgroundColor(Color.WHITE);
-
-        Button btnDeleteAll = new Button(this);
-        btnDeleteAll.setText("🗑 Delete All");
-        btnDeleteAll.setTextColor(Color.WHITE);
-        btnDeleteAll.setBackgroundColor(Color.parseColor("#C62828"));
-        btnDeleteAll.setTextSize(12);
-        android.widget.LinearLayout.LayoutParams daP = new android.widget.LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
-        daP.setMargins(4, 0, 4, 0);
-        btnDeleteAll.setLayoutParams(daP);
-
-        Button btnClose = new Button(this);
-        btnClose.setText("Close");
-        btnClose.setTextSize(12);
-        btnClose.setTextColor(Color.WHITE);
         btnClose.setBackgroundColor(Color.parseColor("#616161"));
         btnClose.setLayoutParams(new android.widget.LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
 
