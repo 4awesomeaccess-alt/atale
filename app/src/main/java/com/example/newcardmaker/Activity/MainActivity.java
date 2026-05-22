@@ -12965,6 +12965,32 @@ public class MainActivity extends AppCompatActivity {
         TextView btnClose = popupView.findViewById(R.id.btn_align_close);
         if (btnClose != null) btnClose.setOnClickListener(v -> alignPopupWindow.dismiss());
 
+        // ── Move buttons
+        int moveStep = 5;
+        View btnMoveLeft  = popupView.findViewById(R.id.btn_move_left);
+        View btnMoveUp    = popupView.findViewById(R.id.btn_move_up);
+        View btnMoveDown  = popupView.findViewById(R.id.btn_move_down);
+        View btnMoveRight = popupView.findViewById(R.id.btn_move_right);
+
+        View.OnClickListener moveListener = v -> {
+            List<View> targets = new ArrayList<>();
+            if (!selectedViews.isEmpty()) targets.addAll(selectedViews);
+            else if (currentlySelectedView != null) targets.add(currentlySelectedView);
+            for (View t : targets) {
+                int vid = v.getId();
+                if (vid == R.id.btn_move_left)       t.setX(t.getX() - moveStep);
+                else if (vid == R.id.btn_move_right)  t.setX(t.getX() + moveStep);
+                else if (vid == R.id.btn_move_up)     t.setY(t.getY() - moveStep);
+                else if (vid == R.id.btn_move_down)   t.setY(t.getY() + moveStep);
+            }
+            exportToJson();
+        };
+
+        if (btnMoveLeft  != null) btnMoveLeft.setOnClickListener(moveListener);
+        if (btnMoveUp    != null) btnMoveUp.setOnClickListener(moveListener);
+        if (btnMoveDown  != null) btnMoveDown.setOnClickListener(moveListener);
+        if (btnMoveRight != null) btnMoveRight.setOnClickListener(moveListener);
+
         // ── Show at bottom full width
         alignPopupWindow.showAtLocation(mainLayout, Gravity.BOTTOM | Gravity.START, 0, 0);
     }
