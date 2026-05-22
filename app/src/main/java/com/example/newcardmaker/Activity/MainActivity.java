@@ -7773,25 +7773,37 @@ public class MainActivity extends AppCompatActivity {
         alLp.setMargins(0, dp(8), 0, dp(6)); lblAlign.setLayoutParams(alLp);
         root.addView(lblAlign);
 
-        android.widget.LinearLayout alignRow = new android.widget.LinearLayout(this);
-        alignRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
-        alignRow.setGravity(android.view.Gravity.CENTER);
+        // Row 1: Horizontal align (Left, Center H, Right)
+        android.widget.LinearLayout alignRow1 = new android.widget.LinearLayout(this);
+        alignRow1.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        alignRow1.setGravity(android.view.Gravity.CENTER);
+        android.widget.LinearLayout.LayoutParams ar1Lp = new android.widget.LinearLayout.LayoutParams(
+            android.widget.LinearLayout.LayoutParams.MATCH_PARENT, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        ar1Lp.setMargins(0, 0, 0, dp(4)); alignRow1.setLayoutParams(ar1Lp);
 
-        String[] alignLabels = {"⊢L", "⊣⊢", "R⊣", "⊤T", "⊥⊤", "B⊥"};
+        // Row 2: Vertical align (Top, Center V, Bottom)
+        android.widget.LinearLayout alignRow2 = new android.widget.LinearLayout(this);
+        alignRow2.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        alignRow2.setGravity(android.view.Gravity.CENTER);
+
+        String[] alignLabels = {"◀ Left", "⬌ Center", "Right ▶", "▲ Top", "⬍ Middle", "Bottom ▼"};
+        String[] alignColors = {"#374151","#374151","#374151","#607D8B","#607D8B","#607D8B"};
+
         for (int ai = 0; ai < 6; ai++) {
             final int aidx = ai;
             android.widget.Button ab = new android.widget.Button(this);
             ab.setText(alignLabels[ai]); ab.setTextSize(9);
             ab.setTextColor(android.graphics.Color.WHITE);
             android.graphics.drawable.GradientDrawable agd = new android.graphics.drawable.GradientDrawable();
-            agd.setColor(android.graphics.Color.parseColor(ai < 3 ? "#374151" : "#607D8B"));
-            agd.setCornerRadius(dp(4)); ab.setBackground(agd);
-            android.widget.LinearLayout.LayoutParams abLp = new android.widget.LinearLayout.LayoutParams(dp(40), dp(30));
+            agd.setColor(android.graphics.Color.parseColor(alignColors[ai]));
+            agd.setCornerRadius(dp(6)); ab.setBackground(agd);
+            android.widget.LinearLayout.LayoutParams abLp = new android.widget.LinearLayout.LayoutParams(0, dp(34), 1f);
             abLp.setMargins(dp(2), 0, dp(2), 0); ab.setLayoutParams(abLp);
             ab.setOnClickListener(v -> {
                 int w = mainLayout.getWidth(), h = mainLayout.getHeight();
                 int vw = tv.getWidth(), vh = tv.getHeight();
-                android.widget.RelativeLayout.LayoutParams lp = (android.widget.RelativeLayout.LayoutParams) tv.getLayoutParams();
+                android.widget.RelativeLayout.LayoutParams lp =
+                    (android.widget.RelativeLayout.LayoutParams) tv.getLayoutParams();
                 if (lp == null) return;
                 switch (aidx) {
                     case 0: lp.leftMargin = 0; break;
@@ -7801,11 +7813,15 @@ public class MainActivity extends AppCompatActivity {
                     case 4: lp.topMargin = (h - vh) / 2; break;
                     case 5: lp.topMargin = h - vh; break;
                 }
-                tv.setLayoutParams(lp); exportToJson();
+                tv.setLayoutParams(lp);
+                tv.requestLayout();
+                exportToJson();
             });
-            alignRow.addView(ab);
+            if (ai < 3) alignRow1.addView(ab);
+            else alignRow2.addView(ab);
         }
-        root.addView(alignRow);
+        root.addView(alignRow1);
+        root.addView(alignRow2);
 
         layoutPopup = showBottomPopup(root, header);
     }
