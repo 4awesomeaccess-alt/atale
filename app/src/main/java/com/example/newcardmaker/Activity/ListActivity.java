@@ -45,6 +45,22 @@ public class ListActivity extends AppCompatActivity {
             openFilePicker();
         });
 
+        // PDF List button
+        View btnPdfList = findViewById(R.id.btn_pdf_list);
+        if (btnPdfList != null) {
+            btnPdfList.setOnClickListener(v -> {
+                startActivity(new Intent(this, PdfListActivity.class));
+            });
+        }
+
+        // Image List button
+        View btnImageList = findViewById(R.id.btn_image_list);
+        if (btnImageList != null) {
+            btnImageList.setOnClickListener(v -> {
+                startActivity(new Intent(this, ImageListActivity.class));
+            });
+        }
+
         loadFiles();
     }
 

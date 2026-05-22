@@ -229,41 +229,7 @@
                         style="@style/BottomToolText"
                         android:text="Save"/>
                 </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btn_pdf_list"
-                    style="@style/BottomToolItem">
-                    <TextView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:gravity="center"
-                        android:text="Ω"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        style="@style/BottomToolText"
-                        android:text="Pdf LIst activity"/>
                 </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btn_image_list"
-                    style="@style/BottomToolItem">
-                    <TextView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:gravity="center"
-                        android:text="Ω"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold"/>
-                    <TextView
-                        style="@style/BottomToolText"
-                        android:text="Image  List activity"/>
-                </LinearLayout>
-
-
-            </LinearLayout>
         </HorizontalScrollView>
 
         <include

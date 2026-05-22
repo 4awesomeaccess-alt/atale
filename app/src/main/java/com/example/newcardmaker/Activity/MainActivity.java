@@ -3877,12 +3877,6 @@ public class MainActivity extends AppCompatActivity {
             framePickerLauncher.launch(intent);
 
 //            showPhotoFrameDialog();
-        } else if (id.getId() == R.id.btn_pdf_list) {
-            Intent intent = new Intent(this, PdfListActivity.class);
-            startActivity(intent);
-        } else if (id.getId() == R.id.btn_image_list) {
-            Intent intent = new Intent(this, ImageListActivity.class);
-            startActivity(intent);
         }
     }
 
