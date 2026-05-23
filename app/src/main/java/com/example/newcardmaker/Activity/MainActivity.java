@@ -12055,23 +12055,32 @@ public class MainActivity extends AppCompatActivity {
         View dragHandle = cv.findViewById(R.id.drag_handle_sel);
         if (dragHandle == null) return;
 
+        final float[] dragStartX = {0};
+        final float[] dragStartY = {0};
+
         dragHandle.setOnTouchListener((v2, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    lastTY[0] = event.getRawY();
+                    dragStartX[0] = event.getRawX();
+                    dragStartY[0] = event.getRawY();
                     dragging[0] = true;
                     return true;
 
                 case MotionEvent.ACTION_MOVE:
                     if (!dragging[0]) return true;
-                    int dy = (int)(event.getRawY() - lastTY[0]);
-                    lastTY[0] = event.getRawY();
+                    int dx = (int)(event.getRawX() - dragStartX[0]);
+                    int dy = (int)(event.getRawY() - dragStartY[0]);
+                    dragStartX[0] = event.getRawX();
+                    dragStartY[0] = event.getRawY();
+                    selControlsLastX += dx;
                     selControlsLastY += dy;
                     // Screen boundary check
+                    int screenW2 = getResources().getDisplayMetrics().widthPixels;
                     int screenH2 = getResources().getDisplayMetrics().heightPixels;
+                    selControlsLastX = Math.max(0, Math.min(selControlsLastX, screenW2 - 100));
                     selControlsLastY = Math.max(0, Math.min(selControlsLastY, screenH2 - 100));
                     if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) {
-                        selectionControlsPopup.update(0, selControlsLastY, -1, -1);
+                        selectionControlsPopup.update(selControlsLastX, selControlsLastY, -1, -1);
                     }
                     isSelControlsMoved = true;
                     return true;
