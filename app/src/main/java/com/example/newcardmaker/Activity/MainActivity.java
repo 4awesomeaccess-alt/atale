@@ -8424,13 +8424,13 @@ public class MainActivity extends AppCompatActivity {
 // TAB SWITCHING LOGIC
 // ════════════════════════════
 
-        TextView tabSpacing = cv.findViewById(R.id.tab_spacing);
-        TextView tabTransformTab = cv.findViewById(R.id.tab_transform);
-        TextView tabEffects = cv.findViewById(R.id.tab_effects);
-        TextView tabLayout = cv.findViewById(R.id.tab_layout);
-        TextView tabTransform2 = cv.findViewById(R.id.tab_transform2);
-        TextView tabVisual = cv.findViewById(R.id.tab_visual);
-        TextView tabTypo = cv.findViewById(R.id.tab_typo);
+        View tabSpacing = cv.findViewById(R.id.tab_spacing);
+        View tabTransformTab = cv.findViewById(R.id.tab_transform);
+        View tabEffects = cv.findViewById(R.id.tab_effects);
+        View tabLayout = cv.findViewById(R.id.tab_layout);
+        View tabTransform2 = cv.findViewById(R.id.tab_transform2);
+        View tabVisual = cv.findViewById(R.id.tab_visual);
+        View tabTypo = cv.findViewById(R.id.tab_typo);
 
         LinearLayout panelAction = cv.findViewById(R.id.panel_tab_action);
         LinearLayout panelSpacing = cv.findViewById(R.id.panel_tab_spacing);
@@ -8582,7 +8582,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // ── Tab active highlight helper
-        final TextView[] allTabViews = {tabSpacing, tabTransformTab, tabEffects, tabLayout, tabVisual, tabTypo};
+        final View[] allTabViews = {tabSpacing, tabTransformTab, tabEffects, tabLayout, tabVisual, tabTypo};
         final LinearLayout[] allPanelViews = {panelSpacing, panelTransformP, panelEffects, panelLayout, null, null};
 
         Runnable[] switchTab = {null};
@@ -8614,10 +8614,10 @@ public class MainActivity extends AppCompatActivity {
         // ════════════════════════════
         // QUICK STYLE TOGGLE BUTTONS
         // ════════════════════════════
-        TextView btnBold = cv.findViewById(R.id.btn_quick_bold);
-        TextView btnItalic = cv.findViewById(R.id.btn_quick_italic);
-        TextView btnUnderline = cv.findViewById(R.id.btn_quick_underline);
-        TextView btnStrike = cv.findViewById(R.id.btn_quick_strike);
+        TextView btnBold = cv.findViewById(R.id.btn_bold);
+        TextView btnItalic = cv.findViewById(R.id.btn_italic);
+        TextView btnUnderline = cv.findViewById(R.id.btn_underline);
+        TextView btnStrike = cv.findViewById(R.id.btn_overline);
         TextView btnFlipH = cv.findViewById(R.id.btn_quick_flip_h);
         TextView btnFlipV = cv.findViewById(R.id.btn_quick_flip_v);
 
@@ -8742,9 +8742,9 @@ public class MainActivity extends AppCompatActivity {
         // ════════════════════════════
         // TRANSFORM BUTTONS
         // ════════════════════════════
-        TextView btnUpper = cv.findViewById(R.id.btn_transform_upper);
-        TextView btnLower = cv.findViewById(R.id.btn_transform_lower);
-        TextView btnTitle = cv.findViewById(R.id.btn_transform_title);
+        TextView btnUpper = cv.findViewById(R.id.btn_overline);
+        TextView btnLower = cv.findViewById(R.id.btn_italic);
+        TextView btnTitle = cv.findViewById(R.id.btn_underline);
 
         if (btnUpper != null) {
             btnUpper.setOnClickListener(v -> {
@@ -9397,7 +9397,7 @@ public class MainActivity extends AppCompatActivity {
         // ════════════════════════════
         // DUPLICATE
         // ════════════════════════════
-        View btnDuplicate = cv.findViewById(R.id.btn_duplicate_text);
+        View btnDuplicate = cv.findViewById(R.id.btn_copy_view);
         if (btnDuplicate != null) {
             btnDuplicate.setOnClickListener(v -> {
                 StrokeTextView copy = new StrokeTextView(this);
@@ -9502,14 +9502,14 @@ public class MainActivity extends AppCompatActivity {
         bindToggleRows(cv);
 
         // ── Font / Stroke / Gradient / Border / BG Image
-        View btnFont = cv.findViewById(R.id.btn_sel_font);
+        View btnFont = cv.findViewById(R.id.btn_font_pick);
         if (btnFont != null)
             btnFont.setOnClickListener(v -> showFontPickerDialog(targetView));
 
-        View btnStroke2 = cv.findViewById(R.id.btn_sel_stroke);
+        View btnStroke2 = cv.findViewById(R.id.btn_stroke_color);
         if (btnStroke2 != null)
             btnStroke2.setOnClickListener(v -> showStrokeDialog(targetView));
-        View btnBorder2 = cv.findViewById(R.id.btn_sel_border);
+        View btnBorder2 = cv.findViewById(R.id.btn_bg_border);
         if (btnBorder2 != null)
             btnBorder2.setOnClickListener(v -> {
 
@@ -9766,7 +9766,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
         // ── BG Color
-        View btnBgColor = cv.findViewById(R.id.btn_sel_bg_color);
+        View btnBgColor = cv.findViewById(R.id.btn_bg_color);
         if (btnBgColor != null) {
             btnBgColor.setOnClickListener(v -> showBgColorGradientPopup(targetView));
         }
@@ -9791,7 +9791,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // ── Text Color
-        View btnTextColor = cv.findViewById(R.id.btn_sel_text_color);
+        View btnTextColor = cv.findViewById(R.id.btn_text_color);
         if (btnTextColor != null) {
             btnTextColor.setOnClickListener(v -> showTextColorPopup(targetView));
         }
@@ -10337,7 +10337,7 @@ public class MainActivity extends AppCompatActivity {
                 imgDraw.clearColorFilter();
                 android.graphics.drawable.Drawable bg = targetView.getBackground();
                 if (bg != null) bg.clearColorFilter();
-                targetView.setTag(R.id.btn_sel_text_color, null);
+                targetView.setTag(R.id.btn_text_color, null);
             } else {
                 int tint = Color.argb(tintAlpha[0],
                     Color.red(tintColor[0]),
@@ -10346,7 +10346,7 @@ public class MainActivity extends AppCompatActivity {
                 imgDraw.setColorFilter(tint, android.graphics.PorterDuff.Mode.SRC_ATOP);
                 android.graphics.drawable.Drawable bg = targetView.getBackground();
                 if (bg != null) bg.setColorFilter(tint, android.graphics.PorterDuff.Mode.SRC_ATOP);
-                targetView.setTag(R.id.btn_sel_text_color, new int[]{tintColor[0], tintAlpha[0]});
+                targetView.setTag(R.id.btn_text_color, new int[]{tintColor[0], tintAlpha[0]});
             }
             imgPreview.invalidate();
             targetView.invalidate();
@@ -10395,7 +10395,7 @@ public class MainActivity extends AppCompatActivity {
             if (imgDraw != null) imgDraw.clearColorFilter();
             android.graphics.drawable.Drawable bg = targetView.getBackground();
             if (bg != null) bg.clearColorFilter();
-            targetView.setTag(R.id.btn_sel_text_color, null);
+            targetView.setTag(R.id.btn_text_color, null);
             imgPreview.invalidate();
             targetView.invalidate();
         });
@@ -10457,7 +10457,7 @@ public class MainActivity extends AppCompatActivity {
             int borderStyle = borderTag instanceof Integer ? (int) borderTag : 0;
             applyBorderStyle(gd, borderStyle);
             targetView.setTag(R.id.btn_sticker_gallery, "");
-            targetView.setTag(R.id.btn_sel_bg_color, null);
+            targetView.setTag(R.id.btn_bg_color, null);
             targetView.setTag(colorWithAlpha);
             targetView.setBackground(gd);
         };
@@ -10550,7 +10550,7 @@ public class MainActivity extends AppCompatActivity {
             // ✅ Image tag clear — gradient apply
             targetView.setTag(R.id.btn_sticker_gallery, "");
             // ✅ Tag save
-            targetView.setTag(R.id.btn_sel_bg_color, applyGd);
+            targetView.setTag(R.id.btn_bg_color, applyGd);
             targetView.setBackground(applyGd);
         };
 
@@ -10726,7 +10726,7 @@ public class MainActivity extends AppCompatActivity {
             // ✅ Image tag clear
             targetView.setTag(R.id.btn_sticker_gallery, "");
             // ✅ Gradient tag ma save karo - restore mate
-            targetView.setTag(R.id.btn_sel_bg_color, gradGd);
+            targetView.setTag(R.id.btn_bg_color, gradGd);
             targetView.setBackground(gradGd);
             exportToJson();
         });
@@ -10780,7 +10780,7 @@ public class MainActivity extends AppCompatActivity {
                         // Tag set
                         targetView.setTag(R.id.btn_sticker_gallery, url);
                         // ✅ Solid/gradient tags clear
-                        targetView.setTag(R.id.btn_sel_bg_color, null);
+                        targetView.setTag(R.id.btn_bg_color, null);
                         targetView.setTag(Color.TRANSPARENT);
                         // Preview update in popup
                         Glide.with(MainActivity.this).load(url).into(imgPreview);
@@ -10815,7 +10815,7 @@ public class MainActivity extends AppCompatActivity {
                                         // ✅ Tint reset
                                         tintColor[0] = Color.TRANSPARENT;
                                         tintPreview.setBackgroundColor(Color.TRANSPARENT);
-                                        targetView.setTag(R.id.btn_sel_text_color, null);
+                                        targetView.setTag(R.id.btn_text_color, null);
 
                                         // ✅ Opacity 255
                                         tintAlpha[0] = 255;
@@ -10849,7 +10849,7 @@ public class MainActivity extends AppCompatActivity {
 
         btnImageRemove.setOnClickListener(v -> {
             targetView.setTag(R.id.btn_sticker_gallery, "");
-            targetView.setTag(R.id.btn_sel_bg_color, null);
+            targetView.setTag(R.id.btn_bg_color, null);
             GradientDrawable clear = new GradientDrawable();
             clear.setColor(Color.TRANSPARENT);
             targetView.setBackground(clear);
@@ -10889,7 +10889,7 @@ public class MainActivity extends AppCompatActivity {
         tabNone.setOnClickListener(v -> {
             targetView.setBackground(null);
             targetView.setTag(Color.TRANSPARENT);
-            targetView.setTag(R.id.btn_sel_bg_color, null);
+            targetView.setTag(R.id.btn_bg_color, null);
             targetView.setTag(R.id.btn_sticker_gallery, "");
             exportToJson();
         });
@@ -15421,7 +15421,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         // ── Tint save
-                        Object tintTag = tv.getTag(R.id.btn_sel_text_color);
+                        Object tintTag = tv.getTag(R.id.btn_text_color);
                         if (tintTag instanceof int[]) {
                             int[] tintData = (int[]) tintTag;
                             if (tintData.length >= 2) {
@@ -16577,7 +16577,7 @@ public class MainActivity extends AppCompatActivity {
             int bgTintColor = obj.optInt("bgTintColor", 0);
             int bgTintAlpha = obj.optInt("bgTintAlpha", 0);
             if (bgTintColor != 0 && bgTintAlpha > 0) {
-                textView.setTag(R.id.btn_sel_text_color, new int[]{bgTintColor, bgTintAlpha});
+                textView.setTag(R.id.btn_text_color, new int[]{bgTintColor, bgTintAlpha});
             }
             mainLayout.post(() -> applyTextBgImage(
                     Uri.parse(bgImageUri), textView));
@@ -18842,7 +18842,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // ✅ Gradient/LayerDrawable saved હોય તો restore
-        Object gradTag = tv.getTag(R.id.btn_sel_bg_color);
+        Object gradTag = tv.getTag(R.id.btn_bg_color);
         if (gradTag instanceof GradientDrawable) {
             tv.setBackground((GradientDrawable) gradTag);
             reapplyTint(tv);
@@ -18942,7 +18942,7 @@ public class MainActivity extends AppCompatActivity {
 
     // ── Tint reapply helper ──
     private void reapplyTint(StrokeTextView tv) {
-        Object tintTag = tv.getTag(R.id.btn_sel_text_color);
+        Object tintTag = tv.getTag(R.id.btn_text_color);
         if (!(tintTag instanceof int[])) return;
         int[] tintData = (int[]) tintTag;
         if (tintData.length < 2) return;
