@@ -16052,6 +16052,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void updatePageIndicator() {
         txtPageIndicator.setText("Page: " + (currentPageIndex + 1) + " / " + allPagesData.size());
+        updateDeletedPageBadge();
+    }
+
+    private void updateDeletedPageBadge() {
+        android.widget.TextView badge = findViewById(R.id.tv_deleted_page_count);
+        if (badge == null) return;
+        int count = deletedPagesList.size();
+        if (count > 0) {
+            badge.setVisibility(View.VISIBLE);
+            badge.setText(count > 99 ? "99+" : String.valueOf(count));
+        } else {
+            badge.setVisibility(View.GONE);
+        }
     }
 
 /*    private void addNewTextViewFromLoad(JSONObject obj) throws JSONException {

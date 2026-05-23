@@ -178,18 +178,39 @@
                         android:text="Add Page"/>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/btn_delete_page"
-                    style="@style/BottomToolItem">
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_delete_page"
-                        app:tint="@android:color/white"/>
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:id="@+id/btn_delete_page"
+                        style="@style/BottomToolItem">
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_delete_page"
+                            app:tint="@android:color/white"/>
+                        <TextView
+                            style="@style/BottomToolText"
+                            android:text="Delete Page"/>
+                    </LinearLayout>
+
                     <TextView
-                        style="@style/BottomToolText"
-                        android:text="Delete Page"/>
-                </LinearLayout>
+                        android:id="@+id/tv_deleted_page_count"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="top|end"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="2dp"
+                        android:background="@drawable/badge_circle"
+                        android:gravity="center"
+                        android:textColor="#FFFFFF"
+                        android:textSize="9sp"
+                        android:textStyle="bold"
+                        android:text="0"
+                        android:visibility="gone"/>
+
+                </FrameLayout>
 
                 <LinearLayout
                     android:id="@+id/btn_show_delete_page"
