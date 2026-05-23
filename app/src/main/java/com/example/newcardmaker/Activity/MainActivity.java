@@ -8390,7 +8390,7 @@ public class MainActivity extends AppCompatActivity {
         // ════════════════════════════
 // HIDE/SHOW TOGGLE
 // ════════════════════════════
-        View btnPanelToggle = cv.findViewById(R.id.btn_panel_toggle);
+        TextView btnPanelToggle = cv.findViewById(R.id.btn_panel_toggle);
         LinearLayout panelMainContent = cv.findViewById(R.id.panel_main_content);
         final boolean[] isPanelVisible = {true};
 
@@ -8446,14 +8446,14 @@ public class MainActivity extends AppCompatActivity {
         // Padding X
         android.widget.SeekBar seekPadX = cv.findViewById(R.id.seek_padding_x);
         android.widget.TextView tvPadXLbl = cv.findViewById(R.id.tv_padding_x_label);
-        android.widget.View btnPadXM = cv.findViewById(R.id.btn_pad_x_minus);
-        android.widget.View btnPadXP = cv.findViewById(R.id.btn_pad_x_plus);
+        android.widget.TextView btnPadXM = cv.findViewById(R.id.btn_pad_x_minus);
+        android.widget.TextView btnPadXP = cv.findViewById(R.id.btn_pad_x_plus);
 
 // Padding Y
         android.widget.SeekBar seekPadY = cv.findViewById(R.id.seek_padding_y);
         android.widget.TextView tvPadYLbl = cv.findViewById(R.id.tv_padding_y_label);
-        android.widget.View btnPadYM = cv.findViewById(R.id.btn_pad_y_minus);
-        android.widget.View btnPadYP = cv.findViewById(R.id.btn_pad_y_plus);
+        android.widget.TextView btnPadYM = cv.findViewById(R.id.btn_pad_y_minus);
+        android.widget.TextView btnPadYP = cv.findViewById(R.id.btn_pad_y_plus);
 
 // ── Current padding set
         int strokeE = (int) Math.ceil(targetView.getStrokeWidth()) + 4;
@@ -8611,10 +8611,10 @@ public class MainActivity extends AppCompatActivity {
         // ════════════════════════════
         // QUICK STYLE TOGGLE BUTTONS
         // ════════════════════════════
-        View btnBold = cv.findViewById(R.id.btn_bold);
-        View btnItalic = cv.findViewById(R.id.btn_italic);
-        View btnUnderline = cv.findViewById(R.id.btn_underline);
-        View btnStrike = cv.findViewById(R.id.btn_overline);
+        TextView btnBold = cv.findViewById(R.id.btn_bold);
+        TextView btnItalic = cv.findViewById(R.id.btn_italic);
+        TextView btnUnderline = cv.findViewById(R.id.btn_underline);
+        TextView btnStrike = cv.findViewById(R.id.btn_overline);
         View btnFlipH = cv.findViewById(R.id.btn_quick_flip_h);
         View btnFlipV = cv.findViewById(R.id.btn_quick_flip_v);
 
@@ -8785,9 +8785,9 @@ public class MainActivity extends AppCompatActivity {
         // ════════════════════════════
         // TEXT ALIGNMENT
         // ════════════════════════════
-        View btnAlignLeft = cv.findViewById(R.id.btn_text_align_left);
-        View btnAlignCenter = cv.findViewById(R.id.btn_text_align_center);
-        View btnAlignRight = cv.findViewById(R.id.btn_text_align_right);
+        TextView btnAlignLeft = cv.findViewById(R.id.btn_text_align_left);
+        TextView btnAlignCenter = cv.findViewById(R.id.btn_text_align_center);
+        TextView btnAlignRight = cv.findViewById(R.id.btn_text_align_right);
 
         Runnable updateAlignUI = () -> {
             int activeColor = Color.parseColor("#1565C0");
@@ -12210,7 +12210,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // ── Lock / Unlock
-        View btnLock = cv.findViewById(R.id.btn_pop_lock);
+        TextView btnLock = cv.findViewById(R.id.btn_pop_lock);
         if (btnLock != null) {
             boolean isLocked = lockedViews.contains(targetView);
             btnLock.setText(isLocked ? "🔒 Locked" : "🔓 Lock");
