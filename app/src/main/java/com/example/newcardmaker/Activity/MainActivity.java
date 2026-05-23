@@ -8732,6 +8732,50 @@ public class MainActivity extends AppCompatActivity {
                         sb.append(Character.toUpperCase(c));
 
         // ════════════════════════════
+        // TEXT SIZE SEEKBAR + BUTTONS
+        // ════════════════════════════
+        android.widget.SeekBar seekTextSize = cv.findViewById(R.id.seek_text_size);
+        android.widget.TextView tvTextSizeVal = cv.findViewById(R.id.tv_text_size_val);
+        View btnSizeMinus = cv.findViewById(R.id.btn_size_minus);
+        View btnSizePlus  = cv.findViewById(R.id.btn_size_plus);
+
+        float initSizeSp = targetView.getTextSize() / getResources().getDisplayMetrics().scaledDensity;
+        if (seekTextSize != null) {
+            seekTextSize.setMax(300);
+            seekTextSize.setProgress((int) initSizeSp);
+            if (tvTextSizeVal != null) tvTextSizeVal.setText(String.valueOf((int) initSizeSp));
+            seekTextSize.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+                @Override public void onProgressChanged(android.widget.SeekBar sb, int p, boolean fromUser) {
+                    if (!fromUser || p < 6) return;
+                    targetView.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, p);
+                    if (tvTextSizeVal != null) tvTextSizeVal.setText(String.valueOf(p));
+                }
+                @Override public void onStartTrackingTouch(android.widget.SeekBar sb) {}
+                @Override public void onStopTrackingTouch(android.widget.SeekBar sb) { exportToJson(); }
+            });
+        }
+        if (btnSizeMinus != null) {
+            btnSizeMinus.setOnClickListener(v -> {
+                float cur = targetView.getTextSize() / getResources().getDisplayMetrics().scaledDensity;
+                float nv = Math.max(6, cur - 1);
+                targetView.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, nv);
+                if (seekTextSize != null) seekTextSize.setProgress((int) nv);
+                if (tvTextSizeVal != null) tvTextSizeVal.setText(String.valueOf((int) nv));
+                exportToJson();
+            });
+        }
+        if (btnSizePlus != null) {
+            btnSizePlus.setOnClickListener(v -> {
+                float cur = targetView.getTextSize() / getResources().getDisplayMetrics().scaledDensity;
+                float nv = Math.min(300, cur + 1);
+                targetView.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, nv);
+                if (seekTextSize != null) seekTextSize.setProgress((int) nv);
+                if (tvTextSizeVal != null) tvTextSizeVal.setText(String.valueOf((int) nv));
+                exportToJson();
+            });
+        }
+
+        // ════════════════════════════
         // TEXT ALIGNMENT
         // ════════════════════════════
         TextView btnAlignLeft = cv.findViewById(R.id.btn_text_align_left);
