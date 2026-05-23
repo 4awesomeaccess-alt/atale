@@ -8381,8 +8381,9 @@ public class MainActivity extends AppCompatActivity {
         LayoutInflater inflater = LayoutInflater.from(this);
         View cv = inflater.inflate(R.layout.layout_selection_controls_text, null);
 
+        int screenW = getResources().getDisplayMetrics().widthPixels;
         selectionControlsPopup = new PopupWindow(cv,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
+                screenW,
                 LinearLayout.LayoutParams.WRAP_CONTENT, false);
         selectionControlsPopup.setOutsideTouchable(false);
         selectionControlsPopup.setTouchable(true);
