@@ -8390,7 +8390,7 @@ public class MainActivity extends AppCompatActivity {
         // ════════════════════════════
 // HIDE/SHOW TOGGLE
 // ════════════════════════════
-        TextView btnPanelToggle = cv.findViewById(R.id.btn_panel_toggle);
+        View btnPanelToggle = cv.findViewById(R.id.btn_panel_toggle);
         LinearLayout panelMainContent = cv.findViewById(R.id.panel_main_content);
         final boolean[] isPanelVisible = {true};
 
@@ -8446,14 +8446,14 @@ public class MainActivity extends AppCompatActivity {
         // Padding X
         android.widget.SeekBar seekPadX = cv.findViewById(R.id.seek_padding_x);
         android.widget.TextView tvPadXLbl = cv.findViewById(R.id.tv_padding_x_label);
-        android.widget.TextView btnPadXM = cv.findViewById(R.id.btn_pad_x_minus);
-        android.widget.TextView btnPadXP = cv.findViewById(R.id.btn_pad_x_plus);
+        android.widget.View btnPadXM = cv.findViewById(R.id.btn_pad_x_minus);
+        android.widget.View btnPadXP = cv.findViewById(R.id.btn_pad_x_plus);
 
 // Padding Y
         android.widget.SeekBar seekPadY = cv.findViewById(R.id.seek_padding_y);
         android.widget.TextView tvPadYLbl = cv.findViewById(R.id.tv_padding_y_label);
-        android.widget.TextView btnPadYM = cv.findViewById(R.id.btn_pad_y_minus);
-        android.widget.TextView btnPadYP = cv.findViewById(R.id.btn_pad_y_plus);
+        android.widget.View btnPadYM = cv.findViewById(R.id.btn_pad_y_minus);
+        android.widget.View btnPadYP = cv.findViewById(R.id.btn_pad_y_plus);
 
 // ── Current padding set
         int strokeE = (int) Math.ceil(targetView.getStrokeWidth()) + 4;
@@ -8611,12 +8611,12 @@ public class MainActivity extends AppCompatActivity {
         // ════════════════════════════
         // QUICK STYLE TOGGLE BUTTONS
         // ════════════════════════════
-        TextView btnBold = cv.findViewById(R.id.btn_bold);
-        TextView btnItalic = cv.findViewById(R.id.btn_italic);
-        TextView btnUnderline = cv.findViewById(R.id.btn_underline);
-        TextView btnStrike = cv.findViewById(R.id.btn_overline);
-        TextView btnFlipH = cv.findViewById(R.id.btn_quick_flip_h);
-        TextView btnFlipV = cv.findViewById(R.id.btn_quick_flip_v);
+        View btnBold = cv.findViewById(R.id.btn_bold);
+        View btnItalic = cv.findViewById(R.id.btn_italic);
+        View btnUnderline = cv.findViewById(R.id.btn_underline);
+        View btnStrike = cv.findViewById(R.id.btn_overline);
+        View btnFlipH = cv.findViewById(R.id.btn_quick_flip_h);
+        View btnFlipV = cv.findViewById(R.id.btn_quick_flip_v);
 
         // ── Helper: update toggle button highlight
         Runnable updateStyleBtns = () -> {
@@ -8739,9 +8739,9 @@ public class MainActivity extends AppCompatActivity {
         // ════════════════════════════
         // TRANSFORM BUTTONS
         // ════════════════════════════
-        TextView btnUpper = cv.findViewById(R.id.btn_overline);
-        TextView btnLower = cv.findViewById(R.id.btn_italic);
-        TextView btnTitle = cv.findViewById(R.id.btn_underline);
+        View btnUpper = cv.findViewById(R.id.btn_overline);
+        View btnLower = cv.findViewById(R.id.btn_italic);
+        View btnTitle = cv.findViewById(R.id.btn_underline);
 
         if (btnUpper != null) {
             btnUpper.setOnClickListener(v -> {
@@ -8785,9 +8785,9 @@ public class MainActivity extends AppCompatActivity {
         // ════════════════════════════
         // TEXT ALIGNMENT
         // ════════════════════════════
-        TextView btnAlignLeft = cv.findViewById(R.id.btn_text_align_left);
-        TextView btnAlignCenter = cv.findViewById(R.id.btn_text_align_center);
-        TextView btnAlignRight = cv.findViewById(R.id.btn_text_align_right);
+        View btnAlignLeft = cv.findViewById(R.id.btn_text_align_left);
+        View btnAlignCenter = cv.findViewById(R.id.btn_text_align_center);
+        View btnAlignRight = cv.findViewById(R.id.btn_text_align_right);
 
         Runnable updateAlignUI = () -> {
             int activeColor = Color.parseColor("#1565C0");
@@ -8881,8 +8881,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         }
-        TextView btnPadM = cv.findViewById(R.id.btn_text_pad_minus);
-        TextView btnPadP = cv.findViewById(R.id.btn_text_pad_plus);
+        View btnPadM = cv.findViewById(R.id.btn_text_pad_minus);
+        View btnPadP = cv.findViewById(R.id.btn_text_pad_plus);
         if (btnPadM != null && seekPadding != null) {
             btnPadM.setOnClickListener(v -> {
                 int nv = Math.max(0, seekPadding.getProgress() - 2);
@@ -8943,8 +8943,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         }
-        TextView btnLineM = cv.findViewById(R.id.btn_line_minus);
-        TextView btnLineP = cv.findViewById(R.id.btn_line_plus);
+        View btnLineM = cv.findViewById(R.id.btn_line_minus);
+        View btnLineP = cv.findViewById(R.id.btn_line_plus);
         if (btnLineM != null && seekLine != null) {
             btnLineM.setOnClickListener(v -> {
                 int nv = Math.max(0, seekLine.getProgress() - 1);
@@ -9004,8 +9004,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         }
-        TextView btnLetM = cv.findViewById(R.id.btn_letter_minus);
-        TextView btnLetP = cv.findViewById(R.id.btn_letter_plus);
+        View btnLetM = cv.findViewById(R.id.btn_letter_minus);
+        View btnLetP = cv.findViewById(R.id.btn_letter_plus);
         if (btnLetM != null && seekLetter != null) {
             btnLetM.setOnClickListener(v -> {
                 int nv = Math.max(0, seekLetter.getProgress() - 1);
@@ -9066,8 +9066,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         }
-        TextView btnRotM = cv.findViewById(R.id.btn_rotation_minus);
-        TextView btnRotP = cv.findViewById(R.id.btn_rotation_plus);
+        View btnRotM = cv.findViewById(R.id.btn_rotation_minus);
+        View btnRotP = cv.findViewById(R.id.btn_rotation_plus);
         if (btnRotM != null && seekRot != null) {
             btnRotM.setOnClickListener(v -> {
                 int nv = Math.max(0, seekRot.getProgress() - 5);
@@ -9124,8 +9124,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         }
-        TextView btnOpM = cv.findViewById(R.id.btn_opacity_minus);
-        TextView btnOpP = cv.findViewById(R.id.btn_opacity_plus);
+        View btnOpM = cv.findViewById(R.id.btn_opacity_minus);
+        View btnOpP = cv.findViewById(R.id.btn_opacity_plus);
         if (btnOpM != null && seekOpacity != null) {
             btnOpM.setOnClickListener(v -> {
                 int nv = Math.max(0, seekOpacity.getProgress() - 5);
@@ -9227,8 +9227,8 @@ public class MainActivity extends AppCompatActivity {
         android.widget.SeekBar seekShadowR = cv.findViewById(R.id.seek_shadow_radius);
         android.widget.SeekBar seekShadowDX = cv.findViewById(R.id.seek_shadow_dx);
         android.widget.SeekBar seekShadowDY = cv.findViewById(R.id.seek_shadow_dy);
-        TextView btnShadowColor = cv.findViewById(R.id.btn_shadow_color);
-        TextView btnShadowRemove = cv.findViewById(R.id.btn_shadow_remove);
+        View btnShadowColor = cv.findViewById(R.id.btn_shadow_color);
+        View btnShadowRemove = cv.findViewById(R.id.btn_shadow_remove);
 
         Runnable applyShadow = () -> {
             if (seekShadowR == null) return;
@@ -9360,7 +9360,7 @@ public class MainActivity extends AppCompatActivity {
         // ════════════════════════════
         // HIGHLIGHT COLOR
         // ════════════════════════════
-        TextView btnHighlight = cv.findViewById(R.id.btn_highlight_color);
+        View btnHighlight = cv.findViewById(R.id.btn_highlight_color);
         if (btnHighlight != null) {
             btnHighlight.setOnClickListener(v -> {
                 String[] colors = {"None", "Yellow", "Cyan",
@@ -9769,7 +9769,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // ── Close
-        TextView btnClose = cv.findViewById(R.id.btn_sel_close);
+        View btnClose = cv.findViewById(R.id.btn_sel_close);
         if (btnClose != null)
             btnClose.setOnClickListener(v -> dismissSelectionControls());
 
@@ -12008,10 +12008,10 @@ public class MainActivity extends AppCompatActivity {
      * Move arrow buttons
      */
     private void bindMoveButtons(View cv, View targetView) {
-        TextView btnUp = cv.findViewById(R.id.btn_sel_up);
-        TextView btnDown = cv.findViewById(R.id.btn_sel_down);
-        TextView btnLeft = cv.findViewById(R.id.btn_sel_left);
-        TextView btnRight = cv.findViewById(R.id.btn_sel_right);
+        View btnUp = cv.findViewById(R.id.btn_sel_up);
+        View btnDown = cv.findViewById(R.id.btn_sel_down);
+        View btnLeft = cv.findViewById(R.id.btn_sel_left);
+        View btnRight = cv.findViewById(R.id.btn_sel_right);
 
         if (btnUp != null) {
             btnUp.setOnClickListener(v -> moveSingleView(targetView, 0, -SEL_MOVE_STEP));
@@ -12164,7 +12164,7 @@ public class MainActivity extends AppCompatActivity {
         bindToggleRows(cv);
 
         // ── Copy Image
-        TextView btnCopyImage = cv.findViewById(R.id.btn_copy_image);
+        View btnCopyImage = cv.findViewById(R.id.btn_copy_image);
         if (btnCopyImage != null) {
             btnCopyImage.setOnClickListener(v -> {
                 try {
@@ -12210,7 +12210,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // ── Lock / Unlock
-        TextView btnLock = cv.findViewById(R.id.btn_pop_lock);
+        View btnLock = cv.findViewById(R.id.btn_pop_lock);
         if (btnLock != null) {
             boolean isLocked = lockedViews.contains(targetView);
             btnLock.setText(isLocked ? "🔒 Locked" : "🔓 Lock");
@@ -12223,7 +12223,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // ── Replace Sticker
-        TextView btnReplace = cv.findViewById(R.id.btn_pop_replace_sticker);
+        View btnReplace = cv.findViewById(R.id.btn_pop_replace_sticker);
         if (btnReplace != null) {
             btnReplace.setOnClickListener(v -> {
                 dismissSelectionControls();
@@ -12254,7 +12254,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // ── Frame Color (FRAMED_IMAGE only)
-        TextView btnFrameColor = cv.findViewById(R.id.btn_pop_frame_color);
+        View btnFrameColor = cv.findViewById(R.id.btn_pop_frame_color);
         if (btnFrameColor != null) {
             btnFrameColor.setVisibility(isFramedImage ? View.VISIBLE : View.GONE);
             btnFrameColor.setOnClickListener(v -> {
@@ -12264,7 +12264,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // ── Crop
-        TextView btnCrop = cv.findViewById(R.id.btn_pop_crop);
+        View btnCrop = cv.findViewById(R.id.btn_pop_crop);
         if (btnCrop != null) {
             btnCrop.setVisibility(isFramedImage ? View.GONE : View.VISIBLE);
             btnCrop.setOnClickListener(v -> {
@@ -12274,7 +12274,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // ── Freehand Crop
-        TextView btnFreehand = cv.findViewById(R.id.btn_pop_freehand_crop);
+        View btnFreehand = cv.findViewById(R.id.btn_pop_freehand_crop);
         if (btnFreehand != null) {
             btnFreehand.setVisibility(isFramedImage ? View.GONE : View.VISIBLE);
             btnFreehand.setOnClickListener(v -> {
@@ -12284,7 +12284,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // ── Delete
-        TextView btnDelete = cv.findViewById(R.id.btn_pop_delete);
+        View btnDelete = cv.findViewById(R.id.btn_pop_delete);
         if (btnDelete != null) {
             btnDelete.setOnClickListener(v -> {
                 try {
@@ -12360,7 +12360,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // ── Close
-        TextView btnClose = cv.findViewById(R.id.btn_sel_close);
+        View btnClose = cv.findViewById(R.id.btn_sel_close);
         if (btnClose != null) {
             btnClose.setOnClickListener(v -> dismissSelectionControls());
         }
@@ -12387,8 +12387,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private void bindSizeButtons(View cv, View targetView, android.widget.SeekBar seekSize, TextView tvLbl) {
 
-        TextView btnSzM = cv.findViewById(R.id.btn_sel_size_minus);
-        TextView btnSzP = cv.findViewById(R.id.btn_sel_size_plus);
+        View btnSzM = cv.findViewById(R.id.btn_sel_size_minus);
+        View btnSzP = cv.findViewById(R.id.btn_sel_size_plus);
         LinearLayout panelArc = cv.findViewById(R.id.panel_arc_controls);
 
         if (btnSzM != null) {
@@ -12461,15 +12461,15 @@ public class MainActivity extends AppCompatActivity {
      * Align buttons
      */
     private void bindAlignButtons(View cv, View targetView) {
-        TextView btnSelAlignLeft = cv.findViewById(R.id.btn_sel_align_left);
-        TextView btnSelAlignCenterH = cv.findViewById(R.id.btn_sel_align_center_h);
-        TextView btnSelAlignCenterH1 = cv.findViewById(R.id.btn_sel_align_center_h1);
-        TextView btnSelAlignRight = cv.findViewById(R.id.btn_sel_align_right);
-        TextView btnSelAlignTop = cv.findViewById(R.id.btn_sel_align_top);
-        TextView btnSelAlignMiddle = cv.findViewById(R.id.btn_sel_align_middle);
-        TextView btnSelAlignBottom = cv.findViewById(R.id.btn_sel_align_bottom);
-        TextView btnSelDistH = cv.findViewById(R.id.btn_sel_distribute_h);
-        TextView btnSelDistV = cv.findViewById(R.id.btn_sel_distribute_v);
+        View btnSelAlignLeft = cv.findViewById(R.id.btn_sel_align_left);
+        View btnSelAlignCenterH = cv.findViewById(R.id.btn_sel_align_center_h);
+        View btnSelAlignCenterH1 = cv.findViewById(R.id.btn_sel_align_center_h1);
+        View btnSelAlignRight = cv.findViewById(R.id.btn_sel_align_right);
+        View btnSelAlignTop = cv.findViewById(R.id.btn_sel_align_top);
+        View btnSelAlignMiddle = cv.findViewById(R.id.btn_sel_align_middle);
+        View btnSelAlignBottom = cv.findViewById(R.id.btn_sel_align_bottom);
+        View btnSelDistH = cv.findViewById(R.id.btn_sel_distribute_h);
+        View btnSelDistV = cv.findViewById(R.id.btn_sel_distribute_v);
 
         View.OnClickListener singleAlignListener = v -> {
             int id = v.getId();
@@ -12556,9 +12556,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 /*    private void bindToggleRows(View cv) {
-        TextView btnToggleMove = cv.findViewById(R.id.btn_toggle_move);
-        TextView btnToggleLayer = cv.findViewById(R.id.btn_toggle_layer);
-        TextView btnToggleAlign = cv.findViewById(R.id.btn_toggle_align);
+        View btnToggleMove = cv.findViewById(R.id.btn_toggle_move);
+        View btnToggleLayer = cv.findViewById(R.id.btn_toggle_layer);
+        View btnToggleAlign = cv.findViewById(R.id.btn_toggle_align);
 
         LinearLayout rowMove = cv.findViewById(R.id.row_move_btns);
         LinearLayout rowLayer = cv.findViewById(R.id.row_layer_btns);
@@ -12608,9 +12608,9 @@ public class MainActivity extends AppCompatActivity {
     }*/
 
     private void bindToggleRows(View cv) {
-        TextView btnToggleMove = cv.findViewById(R.id.btn_toggle_move);
-        TextView btnToggleLayer = cv.findViewById(R.id.btn_toggle_layer);
-        TextView btnToggleAlign = cv.findViewById(R.id.btn_toggle_align);
+        View btnToggleMove = cv.findViewById(R.id.btn_toggle_move);
+        View btnToggleLayer = cv.findViewById(R.id.btn_toggle_layer);
+        View btnToggleAlign = cv.findViewById(R.id.btn_toggle_align);
         LinearLayout rowMove = cv.findViewById(R.id.row_move_btns);
         LinearLayout rowLayer = cv.findViewById(R.id.row_layer_btns);
         HorizontalScrollView hsvAlign = cv.findViewById(R.id.hsv_align_row);
@@ -13852,27 +13852,27 @@ public class MainActivity extends AppCompatActivity {
 
 
         // ✅ નવો code — TextView cast
-        TextView btnSzM = cv.findViewById(R.id.btn_sel_size_minus);
-        TextView btnSzP = cv.findViewById(R.id.btn_sel_size_plus);
-        TextView btnUp = cv.findViewById(R.id.btn_sel_up);
-        TextView btnDown = cv.findViewById(R.id.btn_sel_down);
-        TextView btnLeft = cv.findViewById(R.id.btn_sel_left);
-        TextView btnRight = cv.findViewById(R.id.btn_sel_right);
-        TextView btnEdit = cv.findViewById(R.id.btn_sel_edit_text);
+        View btnSzM = cv.findViewById(R.id.btn_sel_size_minus);
+        View btnSzP = cv.findViewById(R.id.btn_sel_size_plus);
+        View btnUp = cv.findViewById(R.id.btn_sel_up);
+        View btnDown = cv.findViewById(R.id.btn_sel_down);
+        View btnLeft = cv.findViewById(R.id.btn_sel_left);
+        View btnRight = cv.findViewById(R.id.btn_sel_right);
+        View btnEdit = cv.findViewById(R.id.btn_sel_edit_text);
 
         // ── Align buttons bind
-        TextView btnSelAlignLeft = cv.findViewById(R.id.btn_sel_align_left);
-        TextView btnSelAlignCenterH = cv.findViewById(R.id.btn_sel_align_center_h);
-        TextView btnSelAlignRight = cv.findViewById(R.id.btn_sel_align_right);
-        TextView btnSelAlignTop = cv.findViewById(R.id.btn_sel_align_top);
-        TextView btnSelAlignMiddle = cv.findViewById(R.id.btn_sel_align_middle);
-        TextView btnSelAlignBottom = cv.findViewById(R.id.btn_sel_align_bottom);
-        TextView btnSelDistH = cv.findViewById(R.id.btn_sel_distribute_h);
-        TextView btnSelDistV = cv.findViewById(R.id.btn_sel_distribute_v);
+        View btnSelAlignLeft = cv.findViewById(R.id.btn_sel_align_left);
+        View btnSelAlignCenterH = cv.findViewById(R.id.btn_sel_align_center_h);
+        View btnSelAlignRight = cv.findViewById(R.id.btn_sel_align_right);
+        View btnSelAlignTop = cv.findViewById(R.id.btn_sel_align_top);
+        View btnSelAlignMiddle = cv.findViewById(R.id.btn_sel_align_middle);
+        View btnSelAlignBottom = cv.findViewById(R.id.btn_sel_align_bottom);
+        View btnSelDistH = cv.findViewById(R.id.btn_sel_distribute_h);
+        View btnSelDistV = cv.findViewById(R.id.btn_sel_distribute_v);
 // ── Toggle buttons
-        TextView btnToggleMove = cv.findViewById(R.id.btn_toggle_move);
-        TextView btnToggleLayer = cv.findViewById(R.id.btn_toggle_layer);
-        TextView btnToggleAlign = cv.findViewById(R.id.btn_toggle_align);
+        View btnToggleMove = cv.findViewById(R.id.btn_toggle_move);
+        View btnToggleLayer = cv.findViewById(R.id.btn_toggle_layer);
+        View btnToggleAlign = cv.findViewById(R.id.btn_toggle_align);
 
         LinearLayout rowMove = cv.findViewById(R.id.row_move_btns);
         LinearLayout rowLayer = cv.findViewById(R.id.row_layer_btns);
@@ -13956,7 +13956,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // ── Close button
-        TextView btnSelClose = cv.findViewById(R.id.btn_sel_close);
+        View btnSelClose = cv.findViewById(R.id.btn_sel_close);
         if (btnSelClose != null) {
             btnSelClose.setOnClickListener(v -> {
                 try {
