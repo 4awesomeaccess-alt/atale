@@ -91,4 +91,34 @@
     <item name="btn_shape_square" type="id" />
     <item name="btn_grid_row_minus" type="id" />
     <item name="btn_grid_row_plus" type="id" />
+
+    <!-- Text controls redesign IDs -->
+    <item name="btn_panel_toggle" type="id" />
+    <item name="panel_main_content" type="id" />
+    <item name="btn_quick_bold" type="id" />
+    <item name="btn_quick_italic" type="id" />
+    <item name="btn_quick_underline" type="id" />
+    <item name="btn_quick_strike" type="id" />
+    <item name="btn_transform_upper" type="id" />
+    <item name="btn_transform_lower" type="id" />
+    <item name="btn_transform_title" type="id" />
+    <item name="tv_line_val" type="id" />
+    <item name="sb_line_spacing" type="id" />
+    <item name="btn_line_minus" type="id" />
+    <item name="btn_line_plus" type="id" />
+    <item name="tv_letter_val" type="id" />
+    <item name="sb_letter_spacing" type="id" />
+    <item name="btn_letter_minus" type="id" />
+    <item name="btn_letter_plus" type="id" />
+    <item name="btn_shadow_color" type="id" />
+    <item name="btn_duplicate_text" type="id" />
+    <item name="btn_sel_font" type="id" />
+    <item name="btn_sel_stroke" type="id" />
+    <item name="btn_sel_border" type="id" />
+    <item name="btn_sel_bg_color" type="id" />
+    <item name="btn_sel_text_color" type="id" />
+    <item name="tv_lock_icon" type="id" />
+    <item name="tv_lock_label" type="id" />
+    <item name="panel_arc_controls" type="id" />
+    <item name="btn_sel_align_center_h1" type="id" />
 </resources>
