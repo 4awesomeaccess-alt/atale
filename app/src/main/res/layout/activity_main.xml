@@ -15,7 +15,8 @@
             android:id="@+id/main_image_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/bottom_bt_scroll"/>
+            android:layout_alignParentTop="true"
+            android:layout_above="@id/include_page_liner"/>
 
         <HorizontalScrollView
             android:id="@+id/bottom_bt_scroll"
