@@ -15138,19 +15138,18 @@ public class MainActivity extends AppCompatActivity {
 
                     // Number picker — correct order!
                     android.widget.NumberPicker np = new android.widget.NumberPicker(this);
-                    int totalPages = allPagesData.size();
-                    String[] labels = new String[totalPages + 1];
+                    int npTotalPages = allPagesData.size();
+                    String[] labels = new String[npTotalPages + 1];
                     labels[0] = "Page 1 ની આગળ (Start)";
-                    for (int pi = 1; pi <= totalPages; pi++) {
-                        labels[pi] = "Page " + pi + " પછી" + (pi == totalPages ? " (End)" : "");
+                    for (int pi = 1; pi <= npTotalPages; pi++) {
+                        labels[pi] = "Page " + pi + " પછી" + (pi == npTotalPages ? " (End)" : "");
                     }
-                    // ✅ Must set DisplayedValues BEFORE setMinValue/setMaxValue
                     np.setMinValue(0);
-                    np.setMaxValue(0); // temp
+                    np.setMaxValue(0);
                     np.setDisplayedValues(labels);
-                    np.setMaxValue(totalPages);
-                    int originalNum = pageData.optInt("_deletedPageNum", 1);
-                    np.setValue(Math.max(0, Math.min(originalNum - 1, totalPages)));
+                    np.setMaxValue(npTotalPages);
+                    int npOriginalNum = pageData.optInt("_deletedPageNum", 1);
+                    np.setValue(Math.max(0, Math.min(npOriginalNum - 1, npTotalPages)));
                     android.widget.LinearLayout.LayoutParams npLp = new android.widget.LinearLayout.LayoutParams(
                         android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
                         android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
