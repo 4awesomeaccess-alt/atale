@@ -8611,10 +8611,10 @@ public class MainActivity extends AppCompatActivity {
         // ════════════════════════════
         // QUICK STYLE TOGGLE BUTTONS
         // ════════════════════════════
-        TextView btnBold = cv.findViewById(R.id.btn_bold);
-        TextView btnItalic = cv.findViewById(R.id.btn_italic);
-        TextView btnUnderline = cv.findViewById(R.id.btn_underline);
-        TextView btnStrike = cv.findViewById(R.id.btn_overline);
+        View btnBold = cv.findViewById(R.id.btn_bold);
+        View btnItalic = cv.findViewById(R.id.btn_italic);
+        View btnUnderline = cv.findViewById(R.id.btn_underline);
+        View btnStrike = cv.findViewById(R.id.btn_overline);
         View btnFlipH = cv.findViewById(R.id.btn_quick_flip_h);
         View btnFlipV = cv.findViewById(R.id.btn_quick_flip_v);
 
@@ -8632,30 +8632,18 @@ public class MainActivity extends AppCompatActivity {
             if (btnBold != null)
                 btnBold.setBackgroundColor(isBold
                         ? Color.parseColor("#1565C0") : Color.parseColor("#E3F2FD"));
-            if (btnBold != null)
-                btnBold.setTextColor(isBold ? Color.WHITE
-                        : Color.parseColor("#1565C0"));
 
             if (btnItalic != null)
                 btnItalic.setBackgroundColor(isItalic2
                         ? Color.parseColor("#1565C0") : Color.parseColor("#E3F2FD"));
-            if (btnItalic != null)
-                btnItalic.setTextColor(isItalic2 ? Color.WHITE
-                        : Color.parseColor("#1565C0"));
 
             if (btnUnderline != null)
                 btnUnderline.setBackgroundColor(isUnder
                         ? Color.parseColor("#1565C0") : Color.parseColor("#E3F2FD"));
-            if (btnUnderline != null)
-                btnUnderline.setTextColor(isUnder ? Color.WHITE
-                        : Color.parseColor("#1565C0"));
 
             if (btnStrike != null)
                 btnStrike.setBackgroundColor(isStrike2
                         ? Color.parseColor("#1565C0") : Color.parseColor("#E3F2FD"));
-            if (btnStrike != null)
-                btnStrike.setTextColor(isStrike2 ? Color.WHITE
-                        : Color.parseColor("#1565C0"));
         };
         updateStyleBtns.run();
 
