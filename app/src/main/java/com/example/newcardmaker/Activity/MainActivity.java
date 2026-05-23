@@ -8562,9 +8562,6 @@ public class MainActivity extends AppCompatActivity {
                     allTabs[t].setBackgroundColor(isActive
                             ? Color.parseColor("#1565C0")
                             : Color.parseColor("#BBDEFB"));
-                    allTabs[t].setTextColor(isActive
-                            ? Color.WHITE
-                            : Color.parseColor("#1565C0"));
                 }
 
                 if (allPanels[t] != null) {
