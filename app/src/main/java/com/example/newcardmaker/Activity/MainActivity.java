@@ -15107,12 +15107,19 @@ public class MainActivity extends AppCompatActivity {
                 generatePageThumbnail(pageData, ivPreview);
 
                 btnRecover.setOnClickListener(v -> {
-                    allPagesData.add(pageData);
+                    // Original position ઉપર insert
+                    int originalNum = pageData.optInt("_deletedPageNum", 1);
+                    int insertAt = Math.min(originalNum - 1, allPagesData.size());
+                    allPagesData.add(insertAt, pageData);
                     deletedPagesList.remove(index);
+                    // Navigate to recovered page
+                    currentPageIndex = insertAt;
+                    saveCurrentPage();
+                    loadPageData(allPagesData.get(currentPageIndex));
                     dialog.dismiss();
                     updatePageIndicator();
                     exportToJson();
-                    Toast.makeText(this, "Page Recovered!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Page " + originalNum + " Recovered!", Toast.LENGTH_SHORT).show();
                 });
 
                 btnDeletePerm.setOnClickListener(v -> {
