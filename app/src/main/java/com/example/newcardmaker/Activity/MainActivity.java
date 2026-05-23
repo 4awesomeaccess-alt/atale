@@ -8728,8 +8728,6 @@ public class MainActivity extends AppCompatActivity {
         // TRANSFORM BUTTONS
         // ════════════════════════════
         // Transform case buttons handled via showTypoPopup
-                    } else if (nextUp) {
-                        sb.append(Character.toUpperCase(c));
 
         // ════════════════════════════
         // TEXT SIZE SEEKBAR + BUTTONS
