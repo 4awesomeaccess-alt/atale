@@ -12053,12 +12053,15 @@ public class MainActivity extends AppCompatActivity {
         final boolean[] dragging = {false};
 
         View dragHandle = cv.findViewById(R.id.drag_handle_sel);
-        if (dragHandle == null) return;
+        if (dragHandle == null) {
+            // Fallback: use root view
+            dragHandle = cv;
+        }
 
         final float[] dragStartX = {0};
         final float[] dragStartY = {0};
 
-        dragHandle.setOnTouchListener((v2, event) -> {
+        View.OnTouchListener dragListener = (v2, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     dragStartX[0] = event.getRawX();
@@ -12074,7 +12077,6 @@ public class MainActivity extends AppCompatActivity {
                     dragStartY[0] = event.getRawY();
                     selControlsLastX += dx;
                     selControlsLastY += dy;
-                    // Screen boundary check
                     int screenW2 = getResources().getDisplayMetrics().widthPixels;
                     int screenH2 = getResources().getDisplayMetrics().heightPixels;
                     selControlsLastX = Math.max(0, Math.min(selControlsLastX, screenW2 - 100));
@@ -12091,7 +12093,9 @@ public class MainActivity extends AppCompatActivity {
                     return true;
             }
             return false;
-        });
+        };
+
+        dragHandle.setOnTouchListener(dragListener);
     }
 
 

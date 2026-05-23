@@ -11,9 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="28dp"
         android:gravity="center"
-        android:background="#F5F5F5">
+        android:background="#F5F5F5"
+        android:id="@+id/drag_handle_sel">
         <View
-            android:id="@+id/drag_handle_sel"
             android:layout_width="40dp"
             android:layout_height="4dp"
             android:background="#CCCCCC"/>
