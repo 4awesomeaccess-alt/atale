@@ -15107,19 +15107,65 @@ public class MainActivity extends AppCompatActivity {
                 generatePageThumbnail(pageData, ivPreview);
 
                 btnRecover.setOnClickListener(v -> {
-                    // Original position ઉપર insert
                     int originalNum = pageData.optInt("_deletedPageNum", 1);
-                    int insertAt = Math.min(originalNum - 1, allPagesData.size());
-                    allPagesData.add(insertAt, pageData);
-                    deletedPagesList.remove(index);
-                    // Navigate to recovered page
-                    currentPageIndex = insertAt;
-                    saveCurrentPage();
-                    loadPageData(allPagesData.get(currentPageIndex));
-                    dialog.dismiss();
-                    updatePageIndicator();
-                    exportToJson();
-                    Toast.makeText(this, "Page " + originalNum + " Recovered!", Toast.LENGTH_SHORT).show();
+                    int totalPages = allPagesData.size();
+
+                    // ── Page position choose dialog
+                    android.widget.LinearLayout root = new android.widget.LinearLayout(this);
+                    root.setOrientation(android.widget.LinearLayout.VERTICAL);
+                    root.setPadding(dp(20), dp(16), dp(20), dp(16));
+
+                    android.widget.TextView title = new android.widget.TextView(this);
+                    title.setText("Recover Page " + originalNum);
+                    title.setTextSize(16); title.setTypeface(null, android.graphics.Typeface.BOLD);
+                    title.setTextColor(android.graphics.Color.parseColor("#1565C0"));
+                    title.setGravity(android.view.Gravity.CENTER);
+                    title.setPadding(0, 0, 0, dp(8));
+                    root.addView(title);
+
+                    android.widget.TextView msg = new android.widget.TextView(this);
+                    msg.setText("Total pages: " + totalPages + "\nKaya number na page par recover karvu che?");
+                    msg.setTextSize(13); msg.setTextColor(android.graphics.Color.parseColor("#424242"));
+                    msg.setGravity(android.view.Gravity.CENTER);
+                    msg.setPadding(0, 0, 0, dp(12));
+                    root.addView(msg);
+
+                    // Number picker
+                    android.widget.NumberPicker np = new android.widget.NumberPicker(this);
+                    np.setMinValue(1);
+                    np.setMaxValue(totalPages + 1);
+                    np.setValue(Math.min(originalNum, totalPages + 1));
+                    // Labels
+                    String[] labels = new String[totalPages + 1];
+                    for (int pi = 0; pi < totalPages; pi++) labels[pi] = "After Page " + pi + (pi == 0 ? " (Start)" : "");
+                    labels[totalPages] = "After Page " + totalPages + " (End)";
+                    np.setDisplayedValues(labels);
+                    np.setMinValue(0);
+                    np.setMaxValue(totalPages);
+                    np.setValue(Math.min(originalNum - 1, totalPages));
+                    android.widget.LinearLayout.LayoutParams npLp = new android.widget.LinearLayout.LayoutParams(
+                        android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                        android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+                    npLp.setMargins(0, 0, 0, dp(8));
+                    np.setLayoutParams(npLp);
+                    root.addView(np);
+
+                    new androidx.appcompat.app.AlertDialog.Builder(this)
+                        .setView(root)
+                        .setPositiveButton("Recover", (d2, w2) -> {
+                            int insertAt = np.getValue();
+                            allPagesData.add(insertAt, pageData);
+                            deletedPagesList.remove(index);
+                            currentPageIndex = insertAt;
+                            saveCurrentPage();
+                            loadPageData(allPagesData.get(currentPageIndex));
+                            dialog.dismiss();
+                            updatePageIndicator();
+                            exportToJson();
+                            Toast.makeText(this, "Page " + (insertAt + 1) + " ઉપર Recover થયું!", Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
                 });
 
                 btnDeletePerm.setOnClickListener(v -> {
