@@ -3815,7 +3815,10 @@ public class MainActivity extends AppCompatActivity {
                 cv.findViewById(R.id.btn_confirm_delete).setOnClickListener(v -> {
                     confirmDlg.dismiss();
                     saveCurrentPage();
-                    deletedPagesList.add(allPagesData.get(currentPageIndex));
+                    // ✅ Original page number save
+                    JSONObject pageToDelete = allPagesData.get(currentPageIndex);
+                    try { pageToDelete.put("_deletedPageNum", currentPageIndex + 1); } catch (Exception ignored) {}
+                    deletedPagesList.add(pageToDelete);
                     allPagesData.remove(currentPageIndex);
                     if (currentPageIndex >= allPagesData.size()) {
                         currentPageIndex = allPagesData.size() - 1;
@@ -15079,7 +15082,7 @@ public class MainActivity extends AppCompatActivity {
                 Button btnRecover = card.findViewById(R.id.btn_recover_page);
                 Button btnDeletePerm = card.findViewById(R.id.btn_delete_page_perm);
 
-                tvPageNum.setText("Page " + (i + 1));
+                tvPageNum.setText("Page " + pageData.optInt("_deletedPageNum", i + 1));
 
                 // ── Count elements
                 int textCount = 0, stickerCount = 0;
