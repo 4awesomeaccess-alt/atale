@@ -3799,23 +3799,33 @@ public class MainActivity extends AppCompatActivity {
         } else if (id.getId() == R.id.btn_delete_page) {
 
             if (allPagesData.size() > 1) {
-                new androidx.appcompat.app.AlertDialog.Builder(this)
-                    .setTitle("Delete Page?")
-                    .setMessage("Are you sure you want to delete this page?")
-                    .setPositiveButton("Yes, Delete", (d, w) -> {
-                        saveCurrentPage();
-                        deletedPagesList.add(allPagesData.get(currentPageIndex));
-                        allPagesData.remove(currentPageIndex);
-                        if (currentPageIndex >= allPagesData.size()) {
-                            currentPageIndex = allPagesData.size() - 1;
-                        }
-                        loadPageData(allPagesData.get(currentPageIndex));
-                        updatePageIndicator();
-                        exportToJson();
-                        Toast.makeText(this, "Page moved to Deleted List", Toast.LENGTH_SHORT).show();
-                    })
-                    .setNegativeButton("Cancel", null)
-                    .show();
+                // ── Custom delete confirmation dialog
+                android.view.View cv = getLayoutInflater().inflate(R.layout.dialog_confirm_delete_page, null);
+                AlertDialog confirmDlg = new AlertDialog.Builder(this)
+                        .setView(cv)
+                        .create();
+                if (confirmDlg.getWindow() != null) {
+                    confirmDlg.getWindow().setBackgroundDrawable(
+                        new android.graphics.drawable.GradientDrawable() {{
+                            setColor(android.graphics.Color.WHITE);
+                            setCornerRadius(dp(16));
+                        }});
+                }
+                cv.findViewById(R.id.btn_cancel_delete).setOnClickListener(v -> confirmDlg.dismiss());
+                cv.findViewById(R.id.btn_confirm_delete).setOnClickListener(v -> {
+                    confirmDlg.dismiss();
+                    saveCurrentPage();
+                    deletedPagesList.add(allPagesData.get(currentPageIndex));
+                    allPagesData.remove(currentPageIndex);
+                    if (currentPageIndex >= allPagesData.size()) {
+                        currentPageIndex = allPagesData.size() - 1;
+                    }
+                    loadPageData(allPagesData.get(currentPageIndex));
+                    updatePageIndicator();
+                    exportToJson();
+                    Toast.makeText(this, "Page moved to Deleted List", Toast.LENGTH_SHORT).show();
+                });
+                confirmDlg.show();
             } else {
                 Toast.makeText(this, "ઓછામાં ઓછું એક પેજ રાખવું જરૂરી છે!", Toast.LENGTH_SHORT).show();
             }
