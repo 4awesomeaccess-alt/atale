@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F0F2F5">
+
+    <!-- ── Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#1A237E"
+        android:elevation="4dp"
+        app:title="Photo Frame પસંદ કરો"
+        app:titleTextColor="#FFFFFF" />
+
+    <!-- ── Top Fixed Section 250dp -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:background="#F0F2F5">
+
+        <!-- Step Label -->
+        <TextView
+            android:id="@+id/lblStep"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Step 1: Frame પસંદ કરો"
+            android:textSize="12sp"
+            android:textColor="#1A237E"
+            android:textStyle="bold"
+            android:paddingBottom="4dp" />
+
+        <!-- Row: Frame Preview + Photo Preview + Controls -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <!-- Frame Preview -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="90dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp">
+
+                <ImageView
+                    android:id="@+id/selectedFramePreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitCenter"
+                    android:src="@android:drawable/ic_menu_gallery"
+                    android:background="#F5F5F5"
+                    android:padding="4dp" />
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Photo Preview -->
+            <ImageView
+                android:id="@+id/selectedPhotoPreview"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:background="#EEEEEE"
+                android:visibility="gone"
+                android:layout_marginEnd="6dp" />
+
+            <!-- Right Controls Column -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
+
+                <!-- Photo Buttons Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="4dp">
+
+                    <Button
+                        android:id="@+id/btnSelectPhoto"
+                        android:layout_width="0dp"
+                        android:layout_height="34dp"
+                        android:layout_weight="1"
+                        android:text="📷 Photo"
+                        android:textSize="10sp"
+                        android:textColor="#FFFFFF"
+                        android:backgroundTint="#1565C0"
+                        android:layout_marginEnd="4dp"
+                        android:stateListAnimator="@null" />
+
+                    <Button
+                        android:id="@+id/btnRemovePhoto"
+                        android:layout_width="0dp"
+                        android:layout_height="34dp"
+                        android:layout_weight="1"
+                        android:text="✕"
+                        android:textSize="10sp"
+                        android:textColor="#FFFFFF"
+                        android:backgroundTint="#C62828"
+                        android:stateListAnimator="@null" />
+
+                </LinearLayout>
+
+                <!-- Adjust Button -->
+                <Button
+                    android:id="@+id/btnAdjustPhoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="34dp"
+                    android:text="✋ Adjust"
+                    android:textSize="10sp"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#E65100"
+                    android:visibility="gone"
+                    android:layout_marginBottom="4dp"
+                    android:stateListAnimator="@null" />
+
+                <!-- Color Row -->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:scrollbars="none"
+                    android:layout_marginBottom="4dp">
+
+                    <LinearLayout
+                        android:id="@+id/colorBtnRow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical" />
+
+                </HorizontalScrollView>
+
+                <!-- Add Frame Button -->
+                <Button
+                    android:id="@+id/btnAddFrame"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:text="✅ Add Frame"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:backgroundTint="#9E9E9E"
+                    android:enabled="false"
+                    android:stateListAnimator="@null" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Hidden views — border (kept for Java code compatibility) -->
+        <View
+            android:id="@+id/colorPreviewBox"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+        <View
+            android:id="@+id/borderColorBox"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+        <TextView
+            android:id="@+id/lblColor"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+        <TextView
+            android:id="@+id/lblBorderColor"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+        <TextView
+            android:id="@+id/lblBorderWidth"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+        <LinearLayout
+            android:id="@+id/borderColorBtnRow"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+        <SeekBar
+            android:id="@+id/seekBorderWidth"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <!-- ── Frame List Label -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="📋 Frame select કરો:"
+        android:textSize="12sp"
+        android:textColor="#1A237E"
+        android:textStyle="bold"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="4dp"
+        android:background="#F0F2F5" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="visible" />
+
+    <!-- ── RecyclerView fills remaining space -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/frameRV"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:padding="4dp" />
+
+</LinearLayout>

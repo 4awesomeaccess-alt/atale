@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/popup_bg"
+    android:elevation="8dp"
+    android:orientation="vertical">
+
+    <!-- Drag Handle -->
+    <LinearLayout
+        android:id="@+id/drag_handle_border"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:background="#1565C0"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="▭ Border  ↕ drag"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btn_border_close"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="#B71C1C"
+            android:gravity="center"
+            android:text="✕"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <!-- Border Style -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Style"
+            android:textColor="#555555"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/btn_border_solid"
+                android:layout_width="0dp"
+                android:layout_height="28dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="3dp"
+                android:background="#1565C0"
+                android:gravity="center"
+                android:text="━ Solid"
+                android:textColor="#FFFFFF"
+                android:textSize="9sp" />
+
+            <TextView
+                android:id="@+id/btn_border_dash"
+                android:layout_width="0dp"
+                android:layout_height="28dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="3dp"
+                android:background="#E3F2FD"
+                android:gravity="center"
+                android:text="╌ Dash"
+                android:textColor="#1565C0"
+                android:textSize="9sp" />
+
+            <TextView
+                android:id="@+id/btn_border_dot"
+                android:layout_width="0dp"
+                android:layout_height="28dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="3dp"
+                android:background="#E3F2FD"
+                android:gravity="center"
+                android:text="· · Dot"
+                android:textColor="#1565C0"
+                android:textSize="9sp" />
+
+            <TextView
+                android:id="@+id/btn_border_double"
+                android:layout_width="0dp"
+                android:layout_height="28dp"
+                android:layout_weight="1"
+                android:background="#E3F2FD"
+                android:gravity="center"
+                android:text="═ Double"
+                android:textColor="#1565C0"
+                android:textSize="9sp" />
+        </LinearLayout>
+
+        <!-- Width -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Width"
+            android:textColor="#555555"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <SeekBar
+                android:id="@+id/sb_border_width"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:max="20"
+                android:progress="2" />
+
+            <TextView
+                android:id="@+id/tv_border_width_val"
+                android:layout_width="36dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="2dp"
+                android:textColor="#1565C0"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <!-- Corner Radius -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Corner Radius"
+            android:textColor="#555555"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <SeekBar
+                android:id="@+id/sb_border_corner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:max="60"
+                android:progress="8" />
+
+            <TextView
+                android:id="@+id/tv_border_corner_val"
+                android:layout_width="36dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="8dp"
+                android:textColor="#1565C0"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <!-- Border Color -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Color"
+            android:textColor="#555555"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            >
+
+        <TextView
+            android:id="@+id/btn_border_color"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:background="#000000"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="🎨 Border Color"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp" />
+
+        <!-- Remove -->
+        <TextView
+            android:id="@+id/btn_border_remove"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:background="#C62828"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:text="✕ Remove Border"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

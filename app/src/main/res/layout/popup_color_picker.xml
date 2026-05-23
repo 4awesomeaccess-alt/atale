@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cp_root"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:orientation="vertical"
+    android:background="#455A64"
+    android:elevation="16dp">
+
+    <!-- ── Drag Handle ── -->
+    <LinearLayout
+        android:id="@+id/cp_drag_handle"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#2A3439"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingEnd="6dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⠿ "
+            android:textColor="#9CA3AF"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="🎨 Color"
+            android:textColor="#F3F4F6"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/cp_btn_close"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:text="✕"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:gravity="center"
+            android:background="#374151" />
+
+    </LinearLayout>
+
+    <!-- ── Content: Left + Right ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <!-- Left: Color rows + HEX + Buttons -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingEnd="6dp">
+
+            <!-- Row 1: Basic colors -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🌈 Basic"
+                android:textColor="#CFD8DC"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="2dp" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:scrollbars="none"
+                android:layout_marginBottom="4dp">
+                <LinearLayout
+                    android:id="@+id/cp_row_basic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical" />
+            </HorizontalScrollView>
+
+            <!-- Row 2: Light/Dark colors -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⬜ Light/Dark"
+                android:textColor="#CFD8DC"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="2dp" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:scrollbars="none"
+                android:layout_marginBottom="4dp">
+                <LinearLayout
+                    android:id="@+id/cp_row_light"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical" />
+            </HorizontalScrollView>
+
+            <!-- Row 3: Material colors -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🎨 Material"
+                android:textColor="#CFD8DC"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="2dp" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:scrollbars="none"
+                android:layout_marginBottom="6dp">
+                <LinearLayout
+                    android:id="@+id/cp_row_material"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical" />
+            </HorizontalScrollView>
+
+            <!-- HEX Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="4dp">
+
+                <View
+                    android:id="@+id/cp_hex_preview"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:background="#FF0000"
+                    android:layout_marginEnd="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="#"
+                    android:textColor="#9CA3AF"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="2dp" />
+
+                <EditText
+                    android:id="@+id/cp_et_hex"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="FF0000"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#6B7280"
+                    android:textSize="11sp"
+                    android:background="#374151"
+                    android:paddingHorizontal="6dp"
+                    android:inputType="text"
+                    android:maxLength="6"
+                    android:singleLine="true"
+                    android:imeOptions="actionDone" />
+
+                <TextView
+                    android:id="@+id/cp_btn_hex_apply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="OK"
+                    android:textColor="#FFFFFF"
+                    android:textSize="11sp"
+                    android:gravity="center"
+                    android:paddingHorizontal="8dp"
+                    android:background="#607D8B"
+                    android:layout_marginStart="4dp" />
+
+            </LinearLayout>
+
+            <!-- Cancel / Done -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="end">
+
+                <TextView
+                    android:id="@+id/cp_btn_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="28dp"
+                    android:text="Cancel"
+                    android:textColor="#9CA3AF"
+                    android:textSize="11sp"
+                    android:gravity="center"
+                    android:paddingHorizontal="10dp" />
+
+                <TextView
+                    android:id="@+id/cp_btn_ok"
+                    android:layout_width="wrap_content"
+                    android:layout_height="28dp"
+                    android:text="✅ OK"
+                    android:textColor="#FFFFFF"
+                    android:textSize="11sp"
+                    android:gravity="center"
+                    android:paddingHorizontal="10dp"
+                    android:background="#607D8B"
+                    android:layout_marginStart="6dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Right: RGB Sliders -->
+        <LinearLayout
+            android:id="@+id/cp_sliders"
+            android:layout_width="130dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
+
+            <!-- R -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="6dp">
+                <TextView
+                    android:layout_width="14dp"
+                    android:layout_height="wrap_content"
+                    android:text="R"
+                    android:textColor="#EF5350"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+                <SeekBar
+                    android:id="@+id/cp_seek_r"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:max="255"
+                    android:progressTint="#EF5350"
+                    android:thumbTint="#EF5350"
+                    android:layout_marginHorizontal="4dp" />
+                <TextView
+                    android:id="@+id/cp_val_r"
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content"
+                    android:text="255"
+                    android:textColor="#CFD8DC"
+                    android:textSize="9sp"
+                    android:gravity="end" />
+            </LinearLayout>
+
+            <!-- G -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="6dp">
+                <TextView
+                    android:layout_width="14dp"
+                    android:layout_height="wrap_content"
+                    android:text="G"
+                    android:textColor="#66BB6A"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+                <SeekBar
+                    android:id="@+id/cp_seek_g"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:max="255"
+                    android:progressTint="#66BB6A"
+                    android:thumbTint="#66BB6A"
+                    android:layout_marginHorizontal="4dp" />
+                <TextView
+                    android:id="@+id/cp_val_g"
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="#CFD8DC"
+                    android:textSize="9sp"
+                    android:gravity="end" />
+            </LinearLayout>
+
+            <!-- B -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+                <TextView
+                    android:layout_width="14dp"
+                    android:layout_height="wrap_content"
+                    android:text="B"
+                    android:textColor="#42A5F5"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+                <SeekBar
+                    android:id="@+id/cp_seek_b"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:max="255"
+                    android:progressTint="#42A5F5"
+                    android:thumbTint="#42A5F5"
+                    android:layout_marginHorizontal="4dp" />
+                <TextView
+                    android:id="@+id/cp_val_b"
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="#CFD8DC"
+                    android:textSize="9sp"
+                    android:gravity="end" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/stroke_root"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:orientation="vertical"
+    android:background="#2A3439"
+    android:elevation="16dp">
+
+    <!-- ── Drag Title Bar ── -->
+    <LinearLayout
+        android:id="@+id/stroke_drag_handle"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:background="#1C2529"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingEnd="6dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⠿ "
+            android:textColor="#9CA3AF"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="✏ Stroke"
+            android:textColor="#F3F4F6"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/stroke_btn_remove"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:text="Remove"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            android:gravity="center"
+            android:paddingHorizontal="8dp"
+            android:background="#B71C1C"
+            android:layout_marginEnd="6dp" />
+
+        <TextView
+            android:id="@+id/stroke_btn_done"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:text="Done ✓"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            android:gravity="center"
+            android:paddingHorizontal="8dp"
+            android:background="#4CAF50"
+            android:layout_marginEnd="4dp" />
+
+        <TextView
+            android:id="@+id/stroke_btn_close"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:text="✕"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:gravity="center"
+            android:background="#374151" />
+
+    </LinearLayout>
+
+    <!-- ── Content ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <!-- Left: Preview + Width -->
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingEnd="8dp">
+
+            <!-- Stroke Preview -->
+            <com.example.newcardmaker.StrokeTextView
+                android:id="@+id/stroke_preview"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="Aa"
+                android:textSize="28sp"
+                android:textColor="#FFFFFF"
+                android:gravity="center"
+                android:background="#37474F"
+                android:layout_marginBottom="6dp" />
+
+            <!-- Width -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Width"
+                android:textColor="#9CA3AF"
+                android:textSize="9sp"
+                android:layout_marginBottom="2dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <SeekBar
+                    android:id="@+id/stroke_seek_width"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:max="40"
+                    android:progress="4"
+                    android:progressTint="#4CAF50"
+                    android:thumbTint="#CFD8DC" />
+
+                <TextView
+                    android:id="@+id/stroke_width_val"
+                    android:layout_width="22dp"
+                    android:layout_height="wrap_content"
+                    android:text="4"
+                    android:textColor="#CFD8DC"
+                    android:textSize="9sp"
+                    android:gravity="end"
+                    android:layout_marginStart="3dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Right: Color Wheel + HEX -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- HEX + color preview -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="26dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="4dp">
+
+                <View
+                    android:id="@+id/stroke_color_preview"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:background="#000000"
+                    android:layout_marginEnd="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="#"
+                    android:textColor="#9CA3AF"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/stroke_et_hex"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="000000"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#6B7280"
+                    android:textSize="10sp"
+                    android:background="#374151"
+                    android:paddingHorizontal="4dp"
+                    android:inputType="text"
+                    android:maxLength="6"
+                    android:singleLine="true" />
+
+            </LinearLayout>
+
+            <!-- Color Wheel -->
+            <com.example.newcardmaker.ColorWheelView
+                android:id="@+id/stroke_color_wheel"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

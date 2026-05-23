@@ -1,0 +1,16 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Circle -->
+    <path
+        android:fillColor="#4CAF50"
+        android:pathData="M12,2A10,10 0 1,1 12,22A10,10 0 1,1 12,2"/>
+
+    <!-- Tick -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M9,13.5l-2,-2L5.5,13l3.5,3.5L18.5,7l-1.5,-1.5z"/>
+</vector>

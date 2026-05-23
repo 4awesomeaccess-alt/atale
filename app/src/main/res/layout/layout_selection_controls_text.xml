@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    android:elevation="12dp">
+
+    <!-- ══ DRAG HANDLE ══ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:gravity="center"
+        android:background="#F5F5F5">
+        <View
+            android:id="@+id/drag_handle_sel"
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:background="#CCCCCC"/>
+    </LinearLayout>
+
+    <!-- Title row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Text Tools"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#212121"/>
+        <TextView
+            android:id="@+id/btn_close_controls"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:gravity="center"
+            android:text="✕"
+            android:textSize="16sp"
+            android:textColor="#757575"
+            android:background="#F5F5F5"/>
+    </LinearLayout>
+
+    <!-- ══ ROW 1: Action icons ══ -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp">
+
+            <!-- Bold -->
+            <LinearLayout android:id="@+id/btn_bold"
+                style="@style/IconActionBtn">
+                <TextView style="@style/IconActionIcon" android:text="B" android:textStyle="bold"/>
+                <TextView style="@style/IconActionLabel" android:text="Bold"/>
+            </LinearLayout>
+
+            <!-- Italic -->
+            <LinearLayout android:id="@+id/btn_italic"
+                style="@style/IconActionBtn">
+                <TextView style="@style/IconActionIcon" android:text="I" android:textStyle="italic"/>
+                <TextView style="@style/IconActionLabel" android:text="Italic"/>
+            </LinearLayout>
+
+            <!-- Underline -->
+            <LinearLayout android:id="@+id/btn_underline"
+                style="@style/IconActionBtn">
+                <TextView style="@style/IconActionIcon" android:text="U̲"/>
+                <TextView style="@style/IconActionLabel" android:text="Underline"/>
+            </LinearLayout>
+
+            <!-- Upperline -->
+            <LinearLayout android:id="@+id/btn_overline"
+                style="@style/IconActionBtn">
+                <TextView style="@style/IconActionIcon" android:text="T̄"/>
+                <TextView style="@style/IconActionLabel" android:text="Uperline"/>
+            </LinearLayout>
+
+            <!-- Flip H -->
+            <LinearLayout android:id="@+id/btn_quick_flip_h"
+                style="@style/IconActionBtn">
+                <TextView style="@style/IconActionIcon" android:text="⇔"/>
+                <TextView style="@style/IconActionLabel" android:text="Flip H"/>
+            </LinearLayout>
+
+            <!-- Flip V -->
+            <LinearLayout android:id="@+id/btn_quick_flip_v"
+                style="@style/IconActionBtn">
+                <TextView style="@style/IconActionIcon" android:text="⇕"/>
+                <TextView style="@style/IconActionLabel" android:text="Flip V"/>
+            </LinearLayout>
+
+            <!-- Delete -->
+            <LinearLayout android:id="@+id/btn_sel_delete_text"
+                style="@style/IconActionBtn">
+                <TextView style="@style/IconActionIcon" android:text="🗑"/>
+                <TextView style="@style/IconActionLabel" android:text="Delete"/>
+            </LinearLayout>
+
+            <!-- Copy -->
+            <LinearLayout android:id="@+id/btn_copy_view"
+                style="@style/IconActionBtn">
+                <TextView style="@style/IconActionIcon" android:text="⧉"/>
+                <TextView style="@style/IconActionLabel" android:text="Copy"/>
+            </LinearLayout>
+
+            <!-- Lock -->
+            <LinearLayout android:id="@+id/btn_sel_lock_text"
+                style="@style/IconActionBtn">
+                <TextView style="@style/IconActionIcon" android:text="🔒"/>
+                <TextView style="@style/IconActionLabel" android:text="Lock"/>
+            </LinearLayout>
+
+            <!-- Center -->
+            <LinearLayout android:id="@+id/btn_center_text"
+                style="@style/IconActionBtn">
+                <TextView style="@style/IconActionIcon" android:text="≡"/>
+                <TextView style="@style/IconActionLabel" android:text="Center"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- Divider -->
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" android:layout_marginStart="12dp" android:layout_marginEnd="12dp"/>
+
+    <!-- ══ SIZE ROW ══ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Size"
+            android:textSize="13sp"
+            android:textColor="#757575"
+            android:layout_marginBottom="6dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/btn_size_minus"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:gravity="center"
+                android:text="−"
+                android:textSize="20sp"
+                android:textColor="#424242"
+                android:background="#F5F5F5"/>
+
+            <SeekBar
+                android:id="@+id/seek_text_size"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:max="300"
+                android:progress="50"
+                android:progressTint="#F06292"
+                android:thumbTint="#F06292"/>
+
+            <TextView
+                android:id="@+id/tv_text_size_val"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="50"
+                android:textSize="14sp"
+                android:textColor="#212121"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/btn_size_plus"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:gravity="center"
+                android:text="+"
+                android:textSize="20sp"
+                android:textColor="#424242"
+                android:background="#F5F5F5"
+                android:layout_marginStart="4dp"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Divider -->
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" android:layout_marginStart="12dp" android:layout_marginEnd="12dp"/>
+
+    <!-- ══ GRID: Feature buttons ══ -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <!-- Row 1 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <LinearLayout android:id="@+id/btn_re_edit"
+                    style="@style/GridFeatureBtn">
+                    <TextView style="@style/GridFeatureIcon" android:text="✏"/>
+                    <TextView style="@style/GridFeatureLabel" android:text="Re Edit"/>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/btn_text_size_panel"
+                    style="@style/GridFeatureBtn">
+                    <TextView style="@style/GridFeatureIcon" android:text="Tτ" android:textColor="#E57373"/>
+                    <TextView style="@style/GridFeatureLabel" android:text="Text Size" android:textColor="#E57373"/>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/btn_text_color"
+                    style="@style/GridFeatureBtn">
+                    <TextView style="@style/GridFeatureIcon" android:text="💧"/>
+                    <TextView style="@style/GridFeatureLabel" android:text="Color"/>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/btn_stroke_color"
+                    style="@style/GridFeatureBtn">
+                    <TextView style="@style/GridFeatureIcon" android:text="T̲"/>
+                    <TextView style="@style/GridFeatureLabel" android:text="Text Stroke"/>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/btn_bg_color"
+                    style="@style/GridFeatureBtn">
+                    <TextView style="@style/GridFeatureIcon" android:text="▭"/>
+                    <TextView style="@style/GridFeatureLabel" android:text="BG"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Row 2 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <LinearLayout android:id="@+id/btn_bg_border"
+                    style="@style/GridFeatureBtn">
+                    <TextView style="@style/GridFeatureIcon" android:text="⬜"/>
+                    <TextView style="@style/GridFeatureLabel" android:text="BG Border"/>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/btn_align_text"
+                    style="@style/GridFeatureBtn">
+                    <TextView style="@style/GridFeatureIcon" android:text="≡"/>
+                    <TextView style="@style/GridFeatureLabel" android:text="Align"/>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/btn_font_pick"
+                    style="@style/GridFeatureBtn">
+                    <TextView style="@style/GridFeatureIcon" android:text="Aa"/>
+                    <TextView style="@style/GridFeatureLabel" android:text="Font"/>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/tab_spacing"
+                    style="@style/GridFeatureBtn">
+                    <TextView style="@style/GridFeatureIcon" android:text="↕≡"/>
+                    <TextView style="@style/GridFeatureLabel" android:text="Space"/>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/tab_transform"
+                    style="@style/GridFeatureBtn">
+                    <TextView style="@style/GridFeatureIcon" android:text="⬡"/>
+                    <TextView style="@style/GridFeatureLabel" android:text="Transform"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Row 3 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <LinearLayout android:id="@+id/tab_effects"
+                    style="@style/GridFeatureBtn">
+                    <TextView style="@style/GridFeatureIcon" android:text="💀"/>
+                    <TextView style="@style/GridFeatureLabel" android:text="Shadow"/>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/tab_layout"
+                    style="@style/GridFeatureBtn">
+                    <TextView style="@style/GridFeatureIcon" android:text="⬆⬇"/>
+                    <TextView style="@style/GridFeatureLabel" android:text="Layer Up Tow"/>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/tab_visual"
+                    style="@style/GridFeatureBtn">
+                    <TextView style="@style/GridFeatureIcon" android:text="👁"/>
+                    <TextView style="@style/GridFeatureLabel" android:text="Visual"/>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/tab_typo"
+                    style="@style/GridFeatureBtn">
+                    <TextView style="@style/GridFeatureIcon" android:text="Ω"/>
+                    <TextView style="@style/GridFeatureLabel" android:text="Typo"/>
+                </LinearLayout>
+
+                <LinearLayout android:id="@+id/tab_transform2"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Hidden panels (not shown by default) -->
+    <LinearLayout android:id="@+id/panel_tab_action"      android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone"/>
+    <LinearLayout android:id="@+id/panel_tab_spacing"     android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone"/>
+    <LinearLayout android:id="@+id/panel_tab_effects"     android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone"/>
+    <LinearLayout android:id="@+id/panel_tab_layout"      android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone"/>
+    <LinearLayout android:id="@+id/panel_tab_transform"   android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone"/>
+
+</LinearLayout>
