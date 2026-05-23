@@ -15039,8 +15039,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showDeletedPagesDialog() {
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_deleted_pages, null);
+        android.view.View dialogView = getLayoutInflater().inflate(R.layout.dialog_deleted_pages, null);
 
         AlertDialog dialog = new AlertDialog.Builder(this,
                 android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen)
@@ -15048,32 +15047,66 @@ public class MainActivity extends AppCompatActivity {
                 .create();
 
         LinearLayout listContainer = dialogView.findViewById(R.id.deleted_pages_container);
+        android.widget.TextView tvEmpty = dialogView.findViewById(R.id.tv_empty);
+        android.widget.TextView btnCloseDialog = dialogView.findViewById(R.id.btn_close_page_dialog);
         listContainer.removeAllViews();
 
         if (deletedPagesList.isEmpty()) {
-            TextView tv = new TextView(this);
-            tv.setText("કોઈ ડીલીટ પેજ નથી");
-            listContainer.addView(tv);
+            tvEmpty.setVisibility(View.VISIBLE);
+        } else {
+            tvEmpty.setVisibility(View.GONE);
+            for (int i = 0; i < deletedPagesList.size(); i++) {
+                final int index = i;
+                final JSONObject pageData = deletedPagesList.get(i);
+
+                android.view.View card = getLayoutInflater().inflate(R.layout.item_deleted_page, listContainer, false);
+                android.widget.ImageView ivPreview = card.findViewById(R.id.iv_page_preview);
+                android.widget.TextView tvPageNum = card.findViewById(R.id.tv_page_number);
+                android.widget.TextView tvPageInfo = card.findViewById(R.id.tv_page_info);
+                Button btnRecover = card.findViewById(R.id.btn_recover_page);
+                Button btnDeletePerm = card.findViewById(R.id.btn_delete_page_perm);
+
+                tvPageNum.setText("Page " + (i + 1));
+
+                // ── Count elements
+                int textCount = 0, stickerCount = 0;
+                try {
+                    if (pageData.has("texts")) textCount = pageData.getJSONArray("texts").length();
+                    if (pageData.has("stickers")) stickerCount = pageData.getJSONArray("stickers").length();
+                } catch (Exception ignored) {}
+                tvPageInfo.setText("Texts: " + textCount + "  |  Stickers: " + stickerCount);
+
+                // ── Generate preview thumbnail
+                generatePageThumbnail(pageData, ivPreview);
+
+                btnRecover.setOnClickListener(v -> {
+                    allPagesData.add(pageData);
+                    deletedPagesList.remove(index);
+                    dialog.dismiss();
+                    updatePageIndicator();
+                    exportToJson();
+                    Toast.makeText(this, "Page Recovered!", Toast.LENGTH_SHORT).show();
+                });
+
+                btnDeletePerm.setOnClickListener(v -> {
+                    new androidx.appcompat.app.AlertDialog.Builder(this)
+                        .setTitle("Permanently Delete?")
+                        .setMessage("Page " + (index + 1) + " permanently delete karvu che?")
+                        .setPositiveButton("Delete", (d, w) -> {
+                            deletedPagesList.remove(index);
+                            exportToJson();
+                            dialog.dismiss();
+                            showDeletedPagesDialog(); // Refresh
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
+                });
+
+                listContainer.addView(card);
+            }
         }
 
-        for (int i = 0; i < deletedPagesList.size(); i++) {
-            final int index = i;
-            Button btnPage = new Button(this);
-            btnPage.setText("Recover Page " + (i + 1));
-            btnPage.setOnClickListener(v -> {
-                allPagesData.add(deletedPagesList.get(index));
-                deletedPagesList.remove(index);
-                dialog.dismiss();
-                updatePageIndicator();
-                exportToJson();
-                Toast.makeText(this, "Page Recovered!", Toast.LENGTH_SHORT).show();
-            });
-            listContainer.addView(btnPage);
-        }
-
-        // Close button via header tap
-        View dialogHeader = dialogView.findViewById(R.id.dialog_header);
-        if (dialogHeader != null) dialogHeader.setOnClickListener(v -> dialog.dismiss());
+        if (btnCloseDialog != null) btnCloseDialog.setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();
 
@@ -15084,6 +15117,31 @@ public class MainActivity extends AppCompatActivity {
                 android.view.ViewGroup.LayoutParams.MATCH_PARENT);
             dialog.getWindow().setBackgroundDrawable(
                 new android.graphics.drawable.ColorDrawable(android.graphics.Color.WHITE));
+        }
+    }
+
+    // ── Generate page preview thumbnail
+    private void generatePageThumbnail(JSONObject pageData, android.widget.ImageView ivPreview) {
+        try {
+            String imageUrl = pageData.optString("imageUrl", "");
+            if (!imageUrl.isEmpty()) {
+                com.bumptech.glide.Glide.with(this)
+                    .load(imageUrl)
+                    .centerCrop()
+                    .into(ivPreview);
+            } else {
+                // Solid color background
+                String bgColor = pageData.optString("bgColor", "#FFFFFF");
+                try {
+                    ivPreview.setBackgroundColor(Color.parseColor(bgColor));
+                } catch (Exception e) {
+                    ivPreview.setBackgroundColor(Color.WHITE);
+                }
+                // Draw text count overlay
+                ivPreview.setImageDrawable(null);
+            }
+        } catch (Exception e) {
+            ivPreview.setBackgroundColor(Color.parseColor("#E0E0E0"));
         }
     }
 
