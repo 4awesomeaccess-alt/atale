@@ -3799,20 +3799,23 @@ public class MainActivity extends AppCompatActivity {
         } else if (id.getId() == R.id.btn_delete_page) {
 
             if (allPagesData.size() > 1) {
-                saveCurrentPage();
-
-                deletedPagesList.add(allPagesData.get(currentPageIndex));
-                allPagesData.remove(currentPageIndex);
-
-                if (currentPageIndex >= allPagesData.size()) {
-                    currentPageIndex = allPagesData.size() - 1;
-                }
-
-                loadPageData(allPagesData.get(currentPageIndex));
-                updatePageIndicator();
-                exportToJson();
-
-                Toast.makeText(this, "Page moved to Deleted List", Toast.LENGTH_SHORT).show();
+                new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Delete Page?")
+                    .setMessage("Are you sure you want to delete this page?")
+                    .setPositiveButton("Yes, Delete", (d, w) -> {
+                        saveCurrentPage();
+                        deletedPagesList.add(allPagesData.get(currentPageIndex));
+                        allPagesData.remove(currentPageIndex);
+                        if (currentPageIndex >= allPagesData.size()) {
+                            currentPageIndex = allPagesData.size() - 1;
+                        }
+                        loadPageData(allPagesData.get(currentPageIndex));
+                        updatePageIndicator();
+                        exportToJson();
+                        Toast.makeText(this, "Page moved to Deleted List", Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
             } else {
                 Toast.makeText(this, "ઓછામાં ઓછું એક પેજ રાખવું જરૂરી છે!", Toast.LENGTH_SHORT).show();
             }
