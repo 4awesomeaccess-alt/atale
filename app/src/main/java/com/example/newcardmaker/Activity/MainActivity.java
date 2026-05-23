@@ -15154,13 +15154,20 @@ public class MainActivity extends AppCompatActivity {
                         .setView(root)
                         .setPositiveButton("Recover", (d2, w2) -> {
                             int insertAt = np.getValue();
+                            // ✅ Save current page first
+                            saveCurrentPage();
+                            // ✅ Insert recovered page
                             allPagesData.add(insertAt, pageData);
                             deletedPagesList.remove(index);
+                            // ✅ Navigate to recovered page
                             currentPageIndex = insertAt;
-                            saveCurrentPage();
-                            loadPageData(allPagesData.get(currentPageIndex));
+                            // ✅ Load with all texts/stickers
+                            mainLayout.post(() -> {
+                                loadPageData(allPagesData.get(currentPageIndex));
+                                updatePageIndicator();
+                                updateDeletedPageBadge();
+                            });
                             dialog.dismiss();
-                            updatePageIndicator();
                             exportToJson();
                             Toast.makeText(this, "Page " + (insertAt + 1) + " ઉપર Recover થયું!", Toast.LENGTH_SHORT).show();
                         })
