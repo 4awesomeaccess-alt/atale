@@ -8614,7 +8614,7 @@ public class MainActivity extends AppCompatActivity {
         View btnBold = cv.findViewById(R.id.btn_bold);
         View btnItalic = cv.findViewById(R.id.btn_italic);
         View btnUnderline = cv.findViewById(R.id.btn_underline);
-        View btnStrike = cv.findViewById(R.id.btn_overline);
+        View btnStrike = cv.findViewById(R.id.btn_strikethrough);
         View btnFlipH = cv.findViewById(R.id.btn_quick_flip_h);
         View btnFlipV = cv.findViewById(R.id.btn_quick_flip_v);
 
@@ -8727,48 +8727,9 @@ public class MainActivity extends AppCompatActivity {
         // ════════════════════════════
         // TRANSFORM BUTTONS
         // ════════════════════════════
-        View btnUpper = cv.findViewById(R.id.btn_overline);
-        View btnLower = cv.findViewById(R.id.btn_italic);
-        View btnTitle = cv.findViewById(R.id.btn_underline);
-
-        if (btnUpper != null) {
-            btnUpper.setOnClickListener(v -> {
-                undoStack.push(targetView.getText().toString());
-                redoStack.clear();
-                targetView.setText(targetView.getText().toString().toUpperCase());
-                exportToJson();
-            });
-        }
-        if (btnLower != null) {
-            btnLower.setOnClickListener(v -> {
-                undoStack.push(targetView.getText().toString());
-                redoStack.clear();
-                targetView.setText(targetView.getText().toString().toLowerCase());
-                exportToJson();
-            });
-        }
-        if (btnTitle != null) {
-            btnTitle.setOnClickListener(v -> {
-                undoStack.push(targetView.getText().toString());
-                redoStack.clear();
-                String t = targetView.getText().toString();
-                StringBuilder sb = new StringBuilder();
-                boolean nextUp = true;
-                for (char c : t.toCharArray()) {
-                    if (Character.isWhitespace(c)) {
-                        nextUp = true;
-                        sb.append(c);
+        // Transform case buttons handled via showTypoPopup
                     } else if (nextUp) {
                         sb.append(Character.toUpperCase(c));
-                        nextUp = false;
-                    } else {
-                        sb.append(Character.toLowerCase(c));
-                    }
-                }
-                targetView.setText(sb.toString());
-                exportToJson();
-            });
-        }
 
         // ════════════════════════════
         // TEXT ALIGNMENT

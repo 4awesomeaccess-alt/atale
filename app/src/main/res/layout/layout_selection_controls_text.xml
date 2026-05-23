@@ -84,6 +84,13 @@
                 <TextView style="@style/IconActionLabel" android:text="Underline"/>
             </LinearLayout>
 
+            <!-- Strikethrough -->
+            <LinearLayout android:id="@+id/btn_strikethrough"
+                style="@style/IconActionBtn">
+                <TextView style="@style/IconActionIcon" android:text="S̶"/>
+                <TextView style="@style/IconActionLabel" android:text="Strike"/>
+            </LinearLayout>
+
             <!-- Upperline -->
             <LinearLayout android:id="@+id/btn_overline"
                 style="@style/IconActionBtn">

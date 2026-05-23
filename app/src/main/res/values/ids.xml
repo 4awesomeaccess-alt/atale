@@ -121,4 +121,5 @@
     <item name="tv_lock_label" type="id" />
     <item name="panel_arc_controls" type="id" />
     <item name="btn_sel_align_center_h1" type="id" />
+    <item name="btn_strikethrough" type="id" />
 </resources>
