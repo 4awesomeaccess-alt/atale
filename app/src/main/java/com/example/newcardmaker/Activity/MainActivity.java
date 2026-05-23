@@ -15929,12 +15929,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = mainLayout.getChildCount() - 1; i >= 0; i--) {
             View v = mainLayout.getChildAt(i);
             if (v == main_image_view) continue;
-
-            if (v instanceof TextView ||
-                    (v instanceof ImageView &&
-                            v != main_image_view)) {
-                mainLayout.removeViewAt(i);
-            }
+            mainLayout.removeViewAt(i);
         }
 
         try {
