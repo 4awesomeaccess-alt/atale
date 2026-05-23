@@ -14631,7 +14631,8 @@ public class MainActivity extends AppCompatActivity {
     // ════════════════════════════════════════
     private void showDeletedTextsDialog() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,
+                android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
 
         // ── Inflate XML layout
         android.view.View root = getLayoutInflater().inflate(R.layout.dialog_deleted_items, null);
@@ -15041,7 +15042,8 @@ public class MainActivity extends AppCompatActivity {
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_deleted_pages, null);
 
-        AlertDialog dialog = new AlertDialog.Builder(this)
+        AlertDialog dialog = new AlertDialog.Builder(this,
+                android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen)
                 .setView(dialogView)
                 .create();
 
