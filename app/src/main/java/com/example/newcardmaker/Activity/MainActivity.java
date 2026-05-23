@@ -3814,10 +3814,16 @@ public class MainActivity extends AppCompatActivity {
                 cv.findViewById(R.id.btn_cancel_delete).setOnClickListener(v -> confirmDlg.dismiss());
                 cv.findViewById(R.id.btn_confirm_delete).setOnClickListener(v -> {
                     confirmDlg.dismiss();
+                    // ✅ Latest state save first
                     saveCurrentPage();
-                    // ✅ Original page number save
-                    JSONObject pageToDelete = allPagesData.get(currentPageIndex);
-                    try { pageToDelete.put("_deletedPageNum", currentPageIndex + 1); } catch (Exception ignored) {}
+                    // ✅ Deep copy — original reference modify ન થાય
+                    JSONObject pageToDelete;
+                    try {
+                        pageToDelete = new JSONObject(allPagesData.get(currentPageIndex).toString());
+                        pageToDelete.put("_deletedPageNum", currentPageIndex + 1);
+                    } catch (Exception e) {
+                        pageToDelete = allPagesData.get(currentPageIndex);
+                    }
                     deletedPagesList.add(pageToDelete);
                     allPagesData.remove(currentPageIndex);
                     if (currentPageIndex >= allPagesData.size()) {
