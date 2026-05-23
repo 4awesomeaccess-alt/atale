@@ -9763,15 +9763,25 @@ public class MainActivity extends AppCompatActivity {
 
         // ── Edit Text
         View btnEdit = cv.findViewById(R.id.btn_sel_edit_text);
+        View btnReEdit = cv.findViewById(R.id.btn_re_edit);
+        android.view.View.OnClickListener editClickListener = v -> {
+            dismissSelectionControls();
+            showEditTextDialog(targetView);
+        };
         if (btnEdit != null) {
             if (isLocked) {
                 btnEdit.setEnabled(false);
                 btnEdit.setAlpha(0.4f);
             } else {
-                btnEdit.setOnClickListener(v -> {
-                    dismissSelectionControls();
-                    showEditTextDialog(targetView);
-                });
+                btnEdit.setOnClickListener(editClickListener);
+            }
+        }
+        if (btnReEdit != null) {
+            if (isLocked) {
+                btnReEdit.setEnabled(false);
+                btnReEdit.setAlpha(0.4f);
+            } else {
+                btnReEdit.setOnClickListener(editClickListener);
             }
         }
 
