@@ -114,14 +114,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         new androidx.appcompat.app.AlertDialog.Builder(this)
-            .setTitle("Save & Exit?")
-            .setMessage("Exit કરતા પહેલા JSON save કરવું છે?")
-            .setPositiveButton("💾 Save & Exit", (d, w) -> {
+            .setTitle("Exit?")
+            .setMessage("Exit કરતા પહેલા save કરવું છે?")
+            .setPositiveButton("💾 Save & Close", (d, w) -> {
                 exportToJson();
                 finish();
             })
-            .setNegativeButton("Exit without Save", (d, w) -> finish())
-            .setNeutralButton("Cancel", null)
+            .setNegativeButton("Close", (d, w) -> finish())
             .show();
     }
 
