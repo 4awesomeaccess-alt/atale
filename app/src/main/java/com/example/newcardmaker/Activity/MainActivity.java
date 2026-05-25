@@ -5594,8 +5594,22 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == EditImageActivity.REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             String editedPath = data.getStringExtra(EditImageActivity.RESULT_EDITED_PATH);
             if (editedPath != null) {
-                Uri editedUri = Uri.fromFile(new java.io.File(editedPath));
-                addNewSticker(editedUri);
+                // ✅ Trim transparent edges before adding as sticker
+                android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeFile(editedPath);
+                if (bmp != null) {
+                    android.graphics.Bitmap trimmed = trimBitmapTransparent(bmp);
+                    try {
+                        java.io.File trimFile = new java.io.File(getCacheDir(), "trim_" + System.currentTimeMillis() + ".png");
+                        java.io.FileOutputStream fos = new java.io.FileOutputStream(trimFile);
+                        trimmed.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, fos);
+                        fos.close();
+                        addNewSticker(Uri.fromFile(trimFile));
+                    } catch (Exception e) {
+                        addNewSticker(Uri.fromFile(new java.io.File(editedPath)));
+                    }
+                } else {
+                    addNewSticker(Uri.fromFile(new java.io.File(editedPath)));
+                }
                 Toast.makeText(this, "✅ Edited image add થઈ ગઈ!", Toast.LENGTH_SHORT).show();
             }
         }
@@ -7036,6 +7050,25 @@ public class MainActivity extends AppCompatActivity {
         resultIntent.putExtra("SELECTED_IMAGE_PATH", filePath);
         setResult(RESULT_OK, resultIntent);
         finish();
+    }
+
+    private android.graphics.Bitmap trimBitmapTransparent(android.graphics.Bitmap bmp) {
+        int w = bmp.getWidth(), h = bmp.getHeight();
+        int[] pixels = new int[w * h];
+        bmp.getPixels(pixels, 0, w, 0, 0, w, h);
+        int minX = w, minY = h, maxX = 0, maxY = 0;
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                if (((pixels[y * w + x] >> 24) & 0xFF) > 0) {
+                    if (x < minX) minX = x;
+                    if (x > maxX) maxX = x;
+                    if (y < minY) minY = y;
+                    if (y > maxY) maxY = y;
+                }
+            }
+        }
+        if (maxX < minX || maxY < minY) return bmp;
+        return android.graphics.Bitmap.createBitmap(bmp, minX, minY, maxX-minX+1, maxY-minY+1);
     }
 
     private void addNewSticker(android.net.Uri uri) {
