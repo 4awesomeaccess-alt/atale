@@ -14,7 +14,8 @@
         <ImageView
             android:id="@+id/main_image_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"/>
 
         <HorizontalScrollView
             android:id="@+id/bottom_bt_scroll"
@@ -25,7 +26,8 @@
             android:fillViewport="true"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:scrollbars="none">
+            android:scrollbars="none"
+            android:elevation="8dp">
 
             <LinearLayout
                 android:id="@+id/bottom_controls"
