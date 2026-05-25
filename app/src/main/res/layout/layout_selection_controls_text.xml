@@ -318,7 +318,8 @@
                 </LinearLayout>
 
                 <LinearLayout android:id="@+id/tab_layout"
-                    style="@style/GridFeatureBtn">
+                    style="@style/GridFeatureBtn"
+                    android:visibility="gone">
                     <TextView style="@style/GridFeatureIcon" android:text="⬆⬇"/>
                     <TextView style="@style/GridFeatureLabel" android:text="Layer Up Tow"/>
                 </LinearLayout>
