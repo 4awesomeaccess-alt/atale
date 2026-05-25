@@ -3892,10 +3892,9 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .show();
         } else if (id.getId() == R.id.btn_remove_bg_offline) {
-            // ગેલેરી ખોલવા માટેનો ઇન્ટેન્ટ
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
-            startActivityForResult(Intent.createChooser(intent, "Select Image for Offline BG Removal"), 105);
+            startActivityForResult(Intent.createChooser(intent, "Select Image to Edit"), 105);
         } else if (id.getId() == R.id.btn_add_page) {
             saveCurrentPage(); // ← current page save (with current background)
 
@@ -5574,7 +5573,9 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 105 && resultCode == RESULT_OK && data != null) {
             Uri selectedImageUri = data.getData();
             if (selectedImageUri != null) {
-                removeBackgroundOffline(selectedImageUri);
+                Intent editIntent = new Intent(this, EditImageActivity.class);
+                editIntent.putExtra(EditImageActivity.EXTRA_IMAGE_URI, selectedImageUri.toString());
+                startActivityForResult(editIntent, EditImageActivity.REQUEST_CODE);
             }
         }
 
@@ -5587,6 +5588,16 @@ public class MainActivity extends AppCompatActivity {
             }
             voiceTargetInput = null;
             return;
+        }
+
+        // ── EditImageActivity result
+        if (requestCode == EditImageActivity.REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            String editedPath = data.getStringExtra(EditImageActivity.RESULT_EDITED_PATH);
+            if (editedPath != null) {
+                Uri editedUri = Uri.fromFile(new java.io.File(editedPath));
+                addNewSticker(editedUri);
+                Toast.makeText(this, "✅ Edited image add થઈ ગઈ!", Toast.LENGTH_SHORT).show();
+            }
         }
 
         // ── Sticker pick
