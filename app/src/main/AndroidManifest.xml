@@ -24,25 +24,32 @@
         android:theme="@style/Theme.NewCardMaker">
         <activity
             android:name=".Activity.PhotoAdjustActivity"
-            android:exported="false" />
+            android:exported="false" 
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".Activity.FramePickerActivity"
-            android:exported="false" />
+            android:exported="false" 
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".FreehandCropActivity"
-            android:exported="false" />
+            android:exported="false" 
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".ImageCropActivity"
-            android:exported="false" />
+            android:exported="false" 
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".Activity.PhotoSetActivity"
-            android:exported="false" />
+            android:exported="false" 
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".PdfViewerActivity"
-            android:exported="false" />
+            android:exported="false" 
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".invite_sticker.invite_sticker_main_category"
-            android:exported="false" />
+            android:exported="false" 
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".Activity.ListActivity"
             android:exported="true">
@@ -62,10 +69,12 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".Activity.PdfListActivity"
-            android:label="Saved PDFs" /> <!-- Activity -->
+            android:label="Saved PDFs" 
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" /> <!-- Activity -->
         <activity
             android:name=".Activity.ImageListActivity"
-            android:label="Saved Images" /> <!-- FileProvider — share માટે જરૂરી -->
+            android:label="Saved Images" 
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" /> <!-- FileProvider — share માટે જરૂરી -->
         <!--
  <provider
             android:name="androidx.core.content.FileProvider"
@@ -90,7 +99,8 @@
         <activity
             android:name=".Activity.LocationPickerActivity"
             android:label="Location પસંદ કરો"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize" 
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".Activity.PremiumActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
