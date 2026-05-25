@@ -120,7 +120,10 @@ public class MainActivity extends AppCompatActivity {
                 exportToJson();
                 finish();
             })
-            .setNegativeButton("Close", (d, w) -> finish())
+            .setNegativeButton("✕ Close", (d, w) -> {
+                finish();
+            })
+            .setCancelable(true)
             .show();
     }
 
