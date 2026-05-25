@@ -5620,13 +5620,6 @@ public class MainActivity extends AppCompatActivity {
             addNewSticker(imageUri);
         }
 
-        if (requestCode == 105 && resultCode == RESULT_OK && data != null) {
-            Uri selectedImageUri = data.getData();
-            if (selectedImageUri != null) {
-                removeBackgroundOffline(selectedImageUri);
-            }
-        }
-
         if (requestCode == REQUEST_STICKER_PICK && resultCode == RESULT_OK && data != null) {
 
             // ✅ "image" key — invite_sticker_lis_common.java જે send કરે છે
