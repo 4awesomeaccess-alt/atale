@@ -9567,6 +9567,11 @@ public class MainActivity extends AppCompatActivity {
         if (btnFont != null)
             btnFont.setOnClickListener(v -> showFontPickerDialog(targetView));
 
+        // ── Align button → showAlignPopup
+        View btnAlignText = cv.findViewById(R.id.btn_align_text);
+        if (btnAlignText != null)
+            btnAlignText.setOnClickListener(v -> showAlignPopup(cv));
+
         View btnStroke2 = cv.findViewById(R.id.btn_stroke_color);
         if (btnStroke2 != null)
             btnStroke2.setOnClickListener(v -> showStrokeDialog(targetView));
