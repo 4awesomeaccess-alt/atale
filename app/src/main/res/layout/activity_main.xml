@@ -16,6 +16,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"/>
+    </RelativeLayout>
+    
+
+
+    <RelativeLayout
+        android:id="@+id/main_layout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
 
         <include
             android:id="@+id/include_multi_select_toolbar"
@@ -69,17 +78,17 @@
                     android:elevation="6dp"/>
 
                 <LinearLayout
-                    android:id="@+id/btn_add_text"
-                    style="@style/BottomToolItem">
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_add_text"
-                        app:tint="@android:color/white"/>
-                    <TextView
-                        style="@style/BottomToolText"
-                        android:text="Add Text"/>
-                </LinearLayout>
+                      android:id="@+id/btn_add_text"
+                      style="@style/BottomToolItem">
+                      <ImageView
+                          android:layout_width="24dp"
+                          android:layout_height="24dp"
+                          android:src="@drawable/ic_add_text"
+                          app:tint="@android:color/white"/>
+                      <TextView
+                          style="@style/BottomToolText"
+                          android:text="Add Text"/>
+                  </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/btn_photo_frame"
@@ -270,10 +279,11 @@
                         style="@style/BottomToolText"
                         android:text="Save"/>
                 </LinearLayout>
-                </LinearLayout>
+            </LinearLayout>
         </HorizontalScrollView>
 
     </RelativeLayout>
+
 
     <!-- ══════════════════════════════════
          LEFT DRAWER — Locked Layers
