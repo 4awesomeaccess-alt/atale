@@ -306,6 +306,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // ✅ Status bar hide — full screen
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            getWindow().getInsetsController().hide(
+                android.view.WindowInsets.Type.statusBars());
+        } else {
+            getWindow().addFlags(
+                android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+
         // ── Subscription init
         SubscriptionManager.getInstance(this).startConnection();
 
