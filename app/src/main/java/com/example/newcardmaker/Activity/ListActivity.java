@@ -160,13 +160,15 @@ public class ListActivity extends AppCompatActivity {
                 }
             }
 
-            // MainActivity par moklo
-            Intent intent = new Intent(ListActivity.this, MainActivity.class);
-            intent.putExtra("loaded_json", jsonString);
+            // ✅ File copy to app directory
+            String fileName = "design_" + System.currentTimeMillis() + ".json";
+            File destFile = new File(getExternalFilesDir(null), fileName);
+            try (java.io.FileOutputStream fos = new java.io.FileOutputStream(destFile)) {
+                fos.write(jsonString.getBytes(StandardCharsets.UTF_8));
+            }
 
-            Log.d("DEBUG_JSON", "Starting MainActivity with JSON"); // Logcat ma check karo
-
-            startActivity(intent);
+            Toast.makeText(this, "✅ " + fileName + " add થઈ ગઈ!", Toast.LENGTH_SHORT).show();
+            loadFiles(); // List refresh
 
         } catch (Exception e) {
             Log.e("DEBUG_JSON", "Error: " + e.getMessage());
