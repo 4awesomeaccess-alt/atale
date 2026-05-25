@@ -14,16 +14,24 @@
         <ImageView
             android:id="@+id/main_image_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_above="@id/canvas_bottom_anchor"/>
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"/>
 
-        <View
-            android:id="@+id/canvas_bottom_anchor"
+        <include
+            android:id="@+id/include_multi_select_toolbar"
+            layout="@layout/layout_multi_select_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="130dp"
-            android:layout_alignParentBottom="true"
-            android:visibility="invisible"/>
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_above="@id/bottom_bt_scroll"/>
+
+        <include
+            android:id="@+id/include_page_liner"
+            layout="@layout/layout_page_liner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/bottom_bt_scroll"/>
+
 
         <HorizontalScrollView
             android:id="@+id/bottom_bt_scroll"
@@ -262,21 +270,6 @@
                 </LinearLayout>
                 </LinearLayout>
         </HorizontalScrollView>
-
-        <include
-            android:id="@+id/include_multi_select_toolbar"
-            layout="@layout/layout_multi_select_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_above="@id/bottom_bt_scroll"/>
-
-        <include
-            android:id="@+id/include_page_liner"
-            layout="@layout/layout_page_liner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/bottom_bt_scroll"/>
 
     </RelativeLayout>
 

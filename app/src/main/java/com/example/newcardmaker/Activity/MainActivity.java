@@ -306,6 +306,10 @@ public class MainActivity extends AppCompatActivity {
 
         mainLayout = findViewById(R.id.main_layout);
         main_image_view = findViewById(R.id.main_image_view);
+
+        // ✅ Bottom toolbar always on top
+        android.view.View bottomBar = findViewById(R.id.bottom_bt_scroll);
+        if (bottomBar != null) bottomBar.bringToFront();
         txtPageIndicator = findViewById(R.id.txt_page_indicator);
         btnMultiSelect = findViewById(R.id.bt_multiselect);
 
