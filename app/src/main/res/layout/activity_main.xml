@@ -42,8 +42,10 @@
             android:fillViewport="true"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
+            android:layout_marginLeft="55dp"
             android:scrollbars="none"
-            android:elevation="8dp">
+            android:elevation="16dp"
+            android:translationZ="16dp">
 
             <LinearLayout
                 android:id="@+id/bottom_controls"
