@@ -211,9 +211,11 @@ public class EditImageActivity extends AppCompatActivity {
     private void saveAndReturn() {
         if (editedBitmap == null) { finish(); return; }
         try {
+            // ✅ Trim transparent edges
+            Bitmap trimmed = trimBitmap(editedBitmap);
             File file = new File(getCacheDir(), "edited_" + System.currentTimeMillis() + ".png");
             FileOutputStream fos = new FileOutputStream(file);
-            editedBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            trimmed.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.close();
             Intent result = new Intent();
             result.putExtra(RESULT_EDITED_PATH, file.getAbsolutePath());
@@ -222,6 +224,26 @@ public class EditImageActivity extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(this, "Save error!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private Bitmap trimBitmap(Bitmap bmp) {
+        int w = bmp.getWidth(), h = bmp.getHeight();
+        int[] pixels = new int[w * h];
+        bmp.getPixels(pixels, 0, w, 0, 0, w, h);
+        int minX = w, minY = h, maxX = 0, maxY = 0;
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                int alpha = (pixels[y * w + x] >> 24) & 0xFF;
+                if (alpha > 0) {
+                    if (x < minX) minX = x;
+                    if (x > maxX) maxX = x;
+                    if (y < minY) minY = y;
+                    if (y > maxY) maxY = y;
+                }
+            }
+        }
+        if (maxX < minX || maxY < minY) return bmp;
+        return Bitmap.createBitmap(bmp, minX, minY, maxX - minX + 1, maxY - minY + 1);
     }
 
     @Override
