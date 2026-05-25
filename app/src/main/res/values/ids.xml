@@ -122,4 +122,5 @@
     <item name="panel_arc_controls" type="id" />
     <item name="btn_sel_align_center_h1" type="id" />
     <item name="btn_strikethrough" type="id" />
+    <item name="canvas_bottom_anchor" type="id" />
 </resources>

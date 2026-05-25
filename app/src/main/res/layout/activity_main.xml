@@ -14,8 +14,16 @@
         <ImageView
             android:id="@+id/main_image_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"/>
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_above="@id/canvas_bottom_anchor"/>
+
+        <View
+            android:id="@+id/canvas_bottom_anchor"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:layout_alignParentBottom="true"
+            android:visibility="invisible"/>
 
         <HorizontalScrollView
             android:id="@+id/bottom_bt_scroll"
