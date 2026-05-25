@@ -4,11 +4,15 @@ import android.content.Intent;
 import android.graphics.*;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.newcardmaker.R;
 import java.io.*;
+import java.net.*;
+import java.util.concurrent.*;
 
 public class EditImageActivity extends AppCompatActivity {
 
@@ -16,11 +20,17 @@ public class EditImageActivity extends AppCompatActivity {
     public static final String RESULT_EDITED_PATH = "edited_path";
     public static final int REQUEST_CODE = 2001;
 
+    private static final String BG_REMOVE_URL = "http://168.144.87.18/remove-bg";
+
     private ImageView ivPreview;
     private Bitmap originalBitmap, editedBitmap;
     private float brightness = 0f, contrast = 1f, saturation = 1f;
     private int rotation = 0;
     private boolean flipH = false, flipV = false;
+
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
+    private android.app.ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,14 +68,26 @@ public class EditImageActivity extends AppCompatActivity {
         findViewById(R.id.btn_rotate_right).setOnClickListener(v -> { rotation=(rotation+90)%360; applyEdits(); });
         findViewById(R.id.btn_flip_h).setOnClickListener(v -> { flipH=!flipH; applyEdits(); });
         findViewById(R.id.btn_flip_v).setOnClickListener(v -> { flipV=!flipV; applyEdits(); });
-        findViewById(R.id.btn_remove_bg).setOnClickListener(v -> removeBackground());
+
+        // ── Remove BG via API
+        findViewById(R.id.btn_remove_bg).setOnClickListener(v -> {
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Background Remove")
+                .setMessage("શું background remove કરવું છે?")
+                .setPositiveButton("હા, Remove કરો", (d, w) -> removeBackgroundAPI())
+                .setNegativeButton("ના", null)
+                .show();
+        });
+
         findViewById(R.id.btn_reset).setOnClickListener(v -> {
             brightness=0; contrast=1; saturation=1; rotation=0; flipH=false; flipV=false;
             ((SeekBar)findViewById(R.id.sb_brightness)).setProgress(100);
             ((SeekBar)findViewById(R.id.sb_contrast)).setProgress(100);
             ((SeekBar)findViewById(R.id.sb_saturation)).setProgress(100);
-            applyEdits();
+            editedBitmap = originalBitmap.copy(Bitmap.Config.ARGB_8888, true);
+            ivPreview.setImageBitmap(editedBitmap);
         });
+
         findViewById(R.id.btn_save_edit).setOnClickListener(v -> saveAndReturn());
         findViewById(R.id.btn_cancel_edit).setOnClickListener(v -> finish());
     }
@@ -94,13 +116,11 @@ public class EditImageActivity extends AppCompatActivity {
         matrix.postRotate(rotation);
         Bitmap rotated = Bitmap.createBitmap(originalBitmap, 0, 0,
             originalBitmap.getWidth(), originalBitmap.getHeight(), matrix, true);
-
         ColorMatrix cm = new ColorMatrix();
         cm.setSaturation(saturation);
         float c = contrast, b = brightness;
         float[] arr = { c,0,0,0,b, 0,c,0,0,b, 0,0,c,0,b, 0,0,0,1,0 };
         cm.postConcat(new ColorMatrix(arr));
-
         Paint paint = new Paint();
         paint.setColorFilter(new ColorMatrixColorFilter(cm));
         editedBitmap = Bitmap.createBitmap(rotated.getWidth(), rotated.getHeight(), Bitmap.Config.ARGB_8888);
@@ -108,21 +128,84 @@ public class EditImageActivity extends AppCompatActivity {
         ivPreview.setImageBitmap(editedBitmap);
     }
 
-    private void removeBackground() {
+    // ── API Background Remove (same as BgRemoveActivity)
+    private void removeBackgroundAPI() {
         if (editedBitmap == null) return;
-        Bitmap m = editedBitmap.copy(Bitmap.Config.ARGB_8888, true);
-        int bgColor = m.getPixel(0, 0);
-        for (int x = 0; x < m.getWidth(); x++)
-            for (int y = 0; y < m.getHeight(); y++)
-                if (colorDist(m.getPixel(x,y), bgColor) < 50)
-                    m.setPixel(x, y, Color.TRANSPARENT);
-        editedBitmap = m;
-        ivPreview.setImageBitmap(editedBitmap);
-    }
 
-    private float colorDist(int c1, int c2) {
-        int r=Color.red(c1)-Color.red(c2), g=Color.green(c1)-Color.green(c2), b=Color.blue(c1)-Color.blue(c2);
-        return (float)Math.sqrt(r*r+g*g+b*b);
+        progressDialog = new android.app.ProgressDialog(this);
+        progressDialog.setMessage("⏳ Background remove thaay che...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        final Bitmap bitmapToSend = editedBitmap.copy(Bitmap.Config.ARGB_8888, false);
+
+        executor.execute(() -> {
+            HttpURLConnection conn = null;
+            try {
+                // Convert bitmap to PNG bytes
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmapToSend.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                byte[] bytes = baos.toByteArray();
+
+                String boundary = "----Boundary" + System.currentTimeMillis();
+                URL url = new URL(BG_REMOVE_URL);
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setDoOutput(true);
+                conn.setDoInput(true);
+                conn.setUseCaches(false);
+                conn.setConnectTimeout(30000);
+                conn.setReadTimeout(180000);
+                conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+
+                OutputStream os = conn.getOutputStream();
+                java.io.PrintWriter writer = new java.io.PrintWriter(
+                    new java.io.OutputStreamWriter(os, "UTF-8"), true);
+                writer.append("--").append(boundary).append("\r\n");
+                writer.append("Content-Disposition: form-data; name=\"image\"; filename=\"image.png\"\r\n");
+                writer.append("Content-Type: image/png\r\n\r\n");
+                writer.flush();
+                os.write(bytes);
+                os.flush();
+                writer.append("\r\n");
+                writer.append("--").append(boundary).append("--").append("\r\n");
+                writer.flush();
+                writer.close();
+
+                int responseCode = conn.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    InputStream is = conn.getInputStream();
+                    final Bitmap result = BitmapFactory.decodeStream(is);
+                    is.close();
+
+                    mainHandler.post(() -> {
+                        if (progressDialog != null && progressDialog.isShowing())
+                            progressDialog.dismiss();
+                        if (result != null) {
+                            editedBitmap = result;
+                            ivPreview.setImageBitmap(editedBitmap);
+                            Toast.makeText(this, "✅ Background Remove Thaytu!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(this, "Image decode failed!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    mainHandler.post(() -> {
+                        if (progressDialog != null && progressDialog.isShowing())
+                            progressDialog.dismiss();
+                        Toast.makeText(this, "Error: " + responseCode, Toast.LENGTH_LONG).show();
+                    });
+                }
+            } catch (Exception e) {
+                mainHandler.post(() -> {
+                    if (progressDialog != null && progressDialog.isShowing())
+                        progressDialog.dismiss();
+                    Toast.makeText(this, "Failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
+            } finally {
+                if (conn != null) conn.disconnect();
+            }
+        });
     }
 
     private void saveAndReturn() {
@@ -139,5 +222,12 @@ public class EditImageActivity extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(this, "Save error!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        executor.shutdown();
+        if (progressDialog != null && progressDialog.isShowing()) progressDialog.dismiss();
     }
 }
