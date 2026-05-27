@@ -8682,46 +8682,10 @@ public class MainActivity extends AppCompatActivity {
             boolean isStrike2 = (targetView.getPaintFlags()
                     & android.graphics.Paint.STRIKE_THRU_TEXT_FLAG) != 0;
 
-            // ✅ Bold image src update
+            // ✅ Bold image src update only
             android.widget.ImageView ivBoldImg = cv.findViewById(R.id.iv_bold);
             if (ivBoldImg != null) {
                 ivBoldImg.setImageResource(isBold ? R.drawable.bold_click : R.drawable.bold);
-            }
-
-            android.graphics.drawable.GradientDrawable activeGd = new android.graphics.drawable.GradientDrawable();
-            activeGd.setColor(Color.parseColor("#1565C0"));
-            activeGd.setCornerRadius(dp(6));
-
-            android.graphics.drawable.GradientDrawable inactiveGd = new android.graphics.drawable.GradientDrawable();
-            inactiveGd.setColor(Color.parseColor("#F5F5F5"));
-            inactiveGd.setCornerRadius(dp(6));
-
-            java.util.Map<View, Boolean> stateMap = new java.util.LinkedHashMap<>();
-            stateMap.put(btnBold, isBold);
-            stateMap.put(btnItalic, isItalic2);
-            stateMap.put(btnUnderline, isUnder);
-            stateMap.put(btnStrike, isStrike2);
-
-            for (java.util.Map.Entry<View, Boolean> entry : stateMap.entrySet()) {
-                View btn = entry.getKey();
-                boolean active = entry.getValue();
-                if (btn == null) continue;
-                // Background
-                android.graphics.drawable.GradientDrawable gd = new android.graphics.drawable.GradientDrawable();
-                gd.setColor(active ? Color.parseColor("#1565C0") : Color.parseColor("#F5F5F5"));
-                gd.setCornerRadius(dp(6));
-                btn.setBackground(gd);
-                // ImageView tint
-                if (btn instanceof android.widget.LinearLayout) {
-                    for (int ci = 0; ci < ((android.widget.LinearLayout)btn).getChildCount(); ci++) {
-                        View child = ((android.widget.LinearLayout)btn).getChildAt(ci);
-                        if (child instanceof android.widget.ImageView) {
-                            ((android.widget.ImageView)child).setColorFilter(
-                                active ? Color.WHITE : Color.parseColor("#424242"),
-                                android.graphics.PorterDuff.Mode.SRC_IN);
-                        }
-                    }
-                }
             }
         };
         updateStyleBtns.run();
