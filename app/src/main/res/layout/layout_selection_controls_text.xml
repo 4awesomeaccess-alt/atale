@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -7,7 +8,17 @@
     android:elevation="12dp">
 
     <!-- ══ DRAG HANDLE ══ -->
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:gravity="center"
+        android:background="#F5F5F5"
+        android:id="@+id/drag_handle_sel">
+        <View
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:background="#CCCCCC"/>
+    </LinearLayout>
 
     <!-- Title row -->
     <LinearLayout
@@ -15,18 +26,18 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        >
-        <LinearLayout
-            android:layout_width="250dp"
-            android:layout_height="28dp"
-            android:gravity="center"
-            android:background="#F5F5F5"
-            android:id="@+id/drag_handle_sel">
-            <View
-                android:layout_width="40dp"
-                android:layout_height="4dp"
-                android:background="#CCCCCC"/>
-        </LinearLayout>
+        android:paddingStart="16dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Text Tools"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#212121"/>
         <TextView
             android:id="@+id/btn_close_controls"
             android:layout_width="36dp"
@@ -53,83 +64,85 @@
             android:paddingTop="4dp"
             android:paddingBottom="4dp">
 
-
-            <!-- Lock -->
-            <LinearLayout android:id="@+id/btn_sel_lock_text"
-                style="@style/IconActionBtn">
-                <TextView style="@style/IconActionIcon" android:text="🔒"/>
-                <TextView style="@style/IconActionLabel" android:text="Lock"/>
-            </LinearLayout>
-
-
-            <!-- Copy -->
-            <LinearLayout android:id="@+id/btn_copy_view"
-                style="@style/IconActionBtn">
-                <TextView style="@style/IconActionIcon" android:text="⧉"/>
-                <TextView style="@style/IconActionLabel" android:text="Copy"/>
-            </LinearLayout>
-
-            <!-- Delete -->
-            <LinearLayout android:id="@+id/btn_sel_delete_text"
-                style="@style/IconActionBtn">
-                <TextView style="@style/IconActionIcon" android:text="🗑"/>
-                <TextView style="@style/IconActionLabel" android:text="Delete"/>
-            </LinearLayout>
-
-            <!-- Center -->
-            <LinearLayout android:id="@+id/btn_center_text"
-                style="@style/IconActionBtn">
-                <TextView style="@style/IconActionIcon" android:text="≡"/>
-                <TextView style="@style/IconActionLabel" android:text="Center"/>
-            </LinearLayout>
-
-            <!-- Flip H -->
-            <LinearLayout android:id="@+id/btn_quick_flip_h"
-                style="@style/IconActionBtn">
-                <TextView style="@style/IconActionIcon" android:text="⇔"/>
-                <TextView style="@style/IconActionLabel" android:text="Flip H"/>
-            </LinearLayout>
-
-            <!-- Flip V -->
-            <LinearLayout android:id="@+id/btn_quick_flip_v"
-                style="@style/IconActionBtn">
-                <TextView style="@style/IconActionIcon" android:text="⇕"/>
-                <TextView style="@style/IconActionLabel" android:text="Flip V"/>
-            </LinearLayout>
-
             <!-- Bold -->
             <LinearLayout android:id="@+id/btn_bold"
                 style="@style/IconActionBtn">
-                <TextView style="@style/IconActionIcon" android:text="B" android:textStyle="bold"/>
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_bold" android:layout_gravity="center_horizontal" app:tint="#424242"/>
                 <TextView style="@style/IconActionLabel" android:text="Bold"/>
             </LinearLayout>
 
             <!-- Italic -->
             <LinearLayout android:id="@+id/btn_italic"
                 style="@style/IconActionBtn">
-                <TextView style="@style/IconActionIcon" android:text="I" android:textStyle="italic"/>
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_italic" android:layout_gravity="center_horizontal" app:tint="#424242"/>
                 <TextView style="@style/IconActionLabel" android:text="Italic"/>
             </LinearLayout>
 
             <!-- Underline -->
             <LinearLayout android:id="@+id/btn_underline"
                 style="@style/IconActionBtn">
-                <TextView style="@style/IconActionIcon" android:text="U̲"/>
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_underline" android:layout_gravity="center_horizontal" app:tint="#424242"/>
                 <TextView style="@style/IconActionLabel" android:text="Underline"/>
             </LinearLayout>
 
             <!-- Strikethrough -->
             <LinearLayout android:id="@+id/btn_strikethrough"
                 style="@style/IconActionBtn">
-                <TextView style="@style/IconActionIcon" android:text="S̶"/>
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_strikethrough" android:layout_gravity="center_horizontal" app:tint="#424242"/>
                 <TextView style="@style/IconActionLabel" android:text="Strike"/>
             </LinearLayout>
 
             <!-- Upperline -->
             <LinearLayout android:id="@+id/btn_overline"
                 style="@style/IconActionBtn">
-                <TextView style="@style/IconActionIcon" android:text="T̄"/>
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_overline" android:layout_gravity="center_horizontal" app:tint="#424242"/>
                 <TextView style="@style/IconActionLabel" android:text="Uperline"/>
+            </LinearLayout>
+
+            <!-- Flip H -->
+            <LinearLayout android:id="@+id/btn_quick_flip_h"
+                style="@style/IconActionBtn">
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_flip_h" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <TextView style="@style/IconActionLabel" android:text="Flip H"/>
+            </LinearLayout>
+
+            <!-- Flip V -->
+            <LinearLayout android:id="@+id/btn_quick_flip_v"
+                style="@style/IconActionBtn">
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_flip_v" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <TextView style="@style/IconActionLabel" android:text="Flip V"/>
+            </LinearLayout>
+
+            <!-- Delete -->
+            <LinearLayout android:id="@+id/btn_sel_delete_text"
+                style="@style/IconActionBtn">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_delete"
+                    android:layout_gravity="center_horizontal"/>
+                <TextView style="@style/IconActionLabel" android:text="Delete"/>
+            </LinearLayout>
+
+            <!-- Copy -->
+            <LinearLayout android:id="@+id/btn_copy_view"
+                style="@style/IconActionBtn">
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_copy" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <TextView style="@style/IconActionLabel" android:text="Copy"/>
+            </LinearLayout>
+
+            <!-- Lock -->
+            <LinearLayout android:id="@+id/btn_sel_lock_text"
+                style="@style/IconActionBtn">
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_lock" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <TextView style="@style/IconActionLabel" android:text="Lock"/>
+            </LinearLayout>
+
+            <!-- Center -->
+            <LinearLayout android:id="@+id/btn_center_text"
+                style="@style/IconActionBtn">
+                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_center" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <TextView style="@style/IconActionLabel" android:text="Center"/>
             </LinearLayout>
 
         </LinearLayout>
