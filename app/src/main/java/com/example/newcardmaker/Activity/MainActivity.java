@@ -8481,7 +8481,6 @@ public class MainActivity extends AppCompatActivity {
         View tabTransformTab = cv.findViewById(R.id.tab_transform);
         View tabEffects = cv.findViewById(R.id.tab_effects);
         View tabLayout = cv.findViewById(R.id.tab_layout);
-        final View tabTransform2 = cv.findViewById(R.id.tab_transform2);
         View tabVisual = cv.findViewById(R.id.tab_visual);
         View tabTypo = cv.findViewById(R.id.tab_typo);
 
@@ -8654,7 +8653,7 @@ public class MainActivity extends AppCompatActivity {
         if (tabLayout != null) tabLayout.setOnClickListener(v -> showLayoutPopup(targetView));
         if (tabVisual != null) tabVisual.setOnClickListener(v -> showVisualPopup(targetView));
         if (tabTypo != null) tabTypo.setOnClickListener(v -> showTypoPopup(targetView));
-        if (tabTransform2 != null) tabTransform2.setOnClickListener(v -> { dismissSelectionControls(); showTextPropertiesPopup(targetView, 1); });
+
 
         // ── Undo/Redo history
         final java.util.ArrayDeque<String> undoStack = new java.util.ArrayDeque<>();
