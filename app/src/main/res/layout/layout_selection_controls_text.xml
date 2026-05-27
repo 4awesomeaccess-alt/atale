@@ -4,40 +4,45 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="#FFFFFF"
-    android:elevation="12dp">
+    android:background="#FFFFFF">
 
-    <!-- ══ DRAG HANDLE ══ -->
+    <!-- ══ DRAG HANDLE HEADER ══ -->
     <LinearLayout
         android:id="@+id/drag_handle_sel"
         android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:gravity="center"
-        android:background="#F5F5F5">
-        <View
-            android:layout_width="40dp"
-            android:layout_height="4dp"
-            android:background="#CCCCCC"/>
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="12dp"
+        android:background="#FFFFFF">
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
             android:text="DRAG &amp; DROP"
-            android:textSize="11sp"
-            android:textColor="#9E9E9E"
-            android:textStyle="bold"/>
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="#111827"
+            android:letterSpacing="0.1"
+            android:gravity="center"/>
+
         <TextView
             android:id="@+id/btn_close_controls"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:gravity="center"
             android:text="✕"
             android:textSize="16sp"
-            android:textColor="#757575"/>
+            android:textColor="#6B7280"/>
+
     </LinearLayout>
 
-    <!-- ══ ROW 1: Icon buttons (scrollable) ══ -->
+    <!-- Divider -->
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E5E7EB"/>
+
+    <!-- ══ ROW 1: Icon Actions (HorizontalScrollView) ══ -->
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -46,157 +51,107 @@
         android:paddingEnd="8dp"
         android:paddingTop="6dp"
         android:paddingBottom="4dp">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
-            <!-- Lock -->
             <LinearLayout android:id="@+id/btn_sel_lock_text" style="@style/IconActionBtn">
-                <ImageView android:layout_width="22dp" android:layout_height="22dp"
-                    android:src="@drawable/ic_lock" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_lock" android:layout_gravity="center_horizontal"/>
                 <TextView style="@style/IconActionLabel" android:text="Lock"/>
             </LinearLayout>
 
-            <!-- Copy -->
             <LinearLayout android:id="@+id/btn_copy_view" style="@style/IconActionBtn">
-                <ImageView android:layout_width="22dp" android:layout_height="22dp"
-                    android:src="@drawable/ic_copy" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_copy" android:layout_gravity="center_horizontal"/>
                 <TextView style="@style/IconActionLabel" android:text="Copy"/>
             </LinearLayout>
 
-            <!-- Delete -->
             <LinearLayout android:id="@+id/btn_sel_delete_text" style="@style/IconActionBtn">
-                <ImageView android:layout_width="22dp" android:layout_height="22dp"
-                    android:src="@drawable/ic_delete" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_delete" android:layout_gravity="center_horizontal"/>
                 <TextView style="@style/IconActionLabel" android:text="Delete"/>
             </LinearLayout>
 
-            <!-- Center -->
             <LinearLayout android:id="@+id/btn_center_text" style="@style/IconActionBtn">
-                <ImageView android:layout_width="22dp" android:layout_height="22dp"
-                    android:src="@drawable/ic_center" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_center" android:layout_gravity="center_horizontal"/>
                 <TextView style="@style/IconActionLabel" android:text="Center"/>
             </LinearLayout>
 
-            <!-- Flip V -->
             <LinearLayout android:id="@+id/btn_quick_flip_v" style="@style/IconActionBtn">
-                <ImageView android:layout_width="22dp" android:layout_height="22dp"
-                    android:src="@drawable/ic_flip_v" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_flip_v" android:layout_gravity="center_horizontal"/>
                 <TextView style="@style/IconActionLabel" android:text="Flip - V"/>
             </LinearLayout>
 
-            <!-- Flip H -->
             <LinearLayout android:id="@+id/btn_quick_flip_h" style="@style/IconActionBtn">
-                <ImageView android:layout_width="22dp" android:layout_height="22dp"
-                    android:src="@drawable/ic_flip_h" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_flip_h" android:layout_gravity="center_horizontal"/>
                 <TextView style="@style/IconActionLabel" android:text="Flip - H"/>
             </LinearLayout>
 
-            <!-- Layer UP (hidden) -->
-            <LinearLayout android:id="@+id/btn_layer_up_text"
-                style="@style/IconActionBtn" android:visibility="gone">
-                <ImageView android:layout_width="22dp" android:layout_height="22dp"
-                    android:src="@drawable/ic_add_page" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+            <LinearLayout android:id="@+id/tab_layout" style="@style/IconActionBtn" android:visibility="gone">
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_overline" android:layout_gravity="center_horizontal"/>
                 <TextView style="@style/IconActionLabel" android:text="Layer UP"/>
             </LinearLayout>
 
-            <!-- Layer Down (hidden) -->
-            <LinearLayout android:id="@+id/btn_layer_down_text"
-                style="@style/IconActionBtn" android:visibility="gone">
-                <ImageView android:layout_width="22dp" android:layout_height="22dp"
-                    android:src="@drawable/ic_delete_page" android:layout_gravity="center_horizontal" app:tint="#424242"/>
-                <TextView style="@style/IconActionLabel" android:text="Layer Down"/>
-            </LinearLayout>
-
-            <!-- Bold -->
             <LinearLayout android:id="@+id/btn_bold" style="@style/IconActionBtn">
-                <ImageView
-                    android:id="@+id/iv_bold"
-                    android:layout_width="22dp" android:layout_height="22dp"
-                    android:src="@drawable/bold"
-                    android:layout_gravity="center_horizontal"/>
+                <ImageView android:id="@+id/iv_bold" android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/bold" android:layout_gravity="center_horizontal"/>
                 <TextView style="@style/IconActionLabel" android:text="Bold"/>
             </LinearLayout>
 
-            <!-- Underline -->
             <LinearLayout android:id="@+id/btn_underline" style="@style/IconActionBtn">
-                <ImageView android:layout_width="22dp" android:layout_height="22dp"
-                    android:src="@drawable/ic_underline" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_underline" android:layout_gravity="center_horizontal"/>
                 <TextView style="@style/IconActionLabel" android:text="UnerLine"/>
             </LinearLayout>
 
-            <!-- Overline -->
             <LinearLayout android:id="@+id/btn_overline" style="@style/IconActionBtn">
-                <ImageView android:layout_width="22dp" android:layout_height="22dp"
-                    android:src="@drawable/ic_overline" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_overline" android:layout_gravity="center_horizontal"/>
                 <TextView style="@style/IconActionLabel" android:text="UperLine"/>
             </LinearLayout>
 
-            <!-- Strikethrough -->
-            <LinearLayout android:id="@+id/btn_strikethrough" style="@style/IconActionBtn">
-                <ImageView android:layout_width="22dp" android:layout_height="22dp"
-                    android:src="@drawable/ic_strikethrough" android:layout_gravity="center_horizontal" app:tint="#424242"/>
-                <TextView style="@style/IconActionLabel" android:text="Strike"/>
+            <LinearLayout android:id="@+id/btn_italic" style="@style/IconActionBtn">
+                <ImageView android:id="@+id/iv_italic" android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_italic" android:layout_gravity="center_horizontal"/>
+                <TextView style="@style/IconActionLabel" android:text="Italic"/>
             </LinearLayout>
 
-            <!-- Italic -->
-            <LinearLayout android:id="@+id/btn_italic" style="@style/IconActionBtn">
-                <ImageView
-                    android:id="@+id/iv_italic"
-                    android:layout_width="22dp" android:layout_height="22dp"
-                    android:src="@drawable/ic_italic"
-                    android:layout_gravity="center_horizontal"/>
-                <TextView style="@style/IconActionLabel" android:text="Italic"/>
+            <LinearLayout android:id="@+id/btn_strikethrough" style="@style/IconActionBtn">
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_strikethrough" android:layout_gravity="center_horizontal"/>
+                <TextView style="@style/IconActionLabel" android:text="Strike"/>
             </LinearLayout>
 
         </LinearLayout>
     </HorizontalScrollView>
 
-    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
+    <!-- Divider -->
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E5E7EB" android:layout_marginStart="12dp" android:layout_marginEnd="12dp"/>
 
-    <!-- ══ SIZE ROW + MOVE BUTTONS ══ -->
+    <!-- ══ SIZE + MOVE ROW ══ -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingStart="10dp"
-        android:paddingEnd="6dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
         android:paddingTop="6dp"
-        android:paddingBottom="6dp">
+        android:paddingBottom="6dp"
+        android:gravity="center_vertical">
 
-        <!-- Size seekbar area -->
+        <!-- Size bar -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <!-- Size value -->
+            <!-- seekbar row -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
-                <TextView
-                    android:id="@+id/tv_text_size_val"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="50"
-                    android:textSize="13sp"
-                    android:textColor="#212121"
-                    android:textStyle="bold"
-                    android:layout_marginEnd="8dp"/>
-            </LinearLayout>
+                android:gravity="center_vertical"
+                android:background="#F9FAFB"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp">
 
-            <!-- Seekbar row -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
                 <TextView
                     android:id="@+id/btn_size_minus"
                     android:layout_width="28dp"
@@ -204,8 +159,9 @@
                     android:gravity="center"
                     android:text="−"
                     android:textSize="18sp"
-                    android:textColor="#424242"
-                    android:background="#EEEEEE"/>
+                    android:textColor="#374151"
+                    android:background="#E5E7EB"/>
+
                 <SeekBar
                     android:id="@+id/seek_text_size"
                     android:layout_width="0dp"
@@ -215,8 +171,19 @@
                     android:layout_marginEnd="6dp"
                     android:max="300"
                     android:progress="50"
-                    android:progressTint="#E57373"
-                    android:thumbTint="#E57373"/>
+                    android:progressTint="#EF4444"
+                    android:thumbTint="#EF4444"/>
+
+                <TextView
+                    android:id="@+id/tv_text_size_val"
+                    android:layout_width="28dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="50"
+                    android:textSize="12sp"
+                    android:textColor="#111827"
+                    android:textStyle="bold"/>
+
                 <TextView
                     android:id="@+id/btn_size_plus"
                     android:layout_width="28dp"
@@ -224,152 +191,125 @@
                     android:gravity="center"
                     android:text="+"
                     android:textSize="18sp"
-                    android:textColor="#424242"
-                    android:background="#EEEEEE"/>
+                    android:textColor="#374151"
+                    android:background="#E5E7EB"
+                    android:layout_marginStart="4dp"/>
+
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Move buttons grid -->
+        <!-- Move buttons 2x2 -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginStart="8dp">
+            android:layout_marginStart="6dp">
 
-            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content">
-                <TextView android:id="@+id/btn_move_up_text"
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal">
+                <TextView android:id="@+id/btn_move_up"
                     android:layout_width="36dp" android:layout_height="36dp"
-                    android:gravity="center" android:text="↑"
-                    android:textSize="16sp" android:textColor="#424242"
-                    android:background="#F0F0F0" android:layout_marginEnd="2dp"/>
-                <TextView android:id="@+id/btn_move_down_text"
+                    android:gravity="center" android:text="↑" android:textSize="16sp"
+                    android:textColor="#374151" android:background="#F3F4F6" android:layout_marginEnd="2dp"/>
+                <TextView android:id="@+id/btn_move_down"
                     android:layout_width="36dp" android:layout_height="36dp"
-                    android:gravity="center" android:text="↓"
-                    android:textSize="16sp" android:textColor="#424242"
-                    android:background="#F0F0F0"/>
+                    android:gravity="center" android:text="↓" android:textSize="16sp"
+                    android:textColor="#374151" android:background="#F3F4F6"/>
             </LinearLayout>
 
-            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:layout_marginTop="2dp">
-                <TextView android:id="@+id/btn_move_right_text"
+            <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="2dp">
+                <TextView android:id="@+id/btn_move_right"
                     android:layout_width="36dp" android:layout_height="36dp"
-                    android:gravity="center" android:text="→"
-                    android:textSize="16sp" android:textColor="#424242"
-                    android:background="#F0F0F0" android:layout_marginEnd="2dp"/>
-                <TextView android:id="@+id/btn_move_left_text"
+                    android:gravity="center" android:text="→" android:textSize="16sp"
+                    android:textColor="#374151" android:background="#F3F4F6" android:layout_marginEnd="2dp"/>
+                <TextView android:id="@+id/btn_move_left"
                     android:layout_width="36dp" android:layout_height="36dp"
-                    android:gravity="center" android:text="←"
-                    android:textSize="16sp" android:textColor="#424242"
-                    android:background="#F0F0F0"/>
+                    android:gravity="center" android:text="←" android:textSize="16sp"
+                    android:textColor="#374151" android:background="#F3F4F6"/>
             </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
 
-    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
+    <!-- Divider -->
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E5E7EB"/>
 
     <!-- ══ GRID: Feature buttons ══ -->
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="6dp">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="6dp">
 
-            <!-- Row 1 -->
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:orientation="horizontal" android:layout_marginBottom="6dp">
-                <LinearLayout android:id="@+id/btn_re_edit" style="@style/GridFeatureBtn">
-                    <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_edit" app:tint="#424242"/>
-                    <TextView style="@style/GridFeatureLabel" android:text="Re Edit"/>
-                </LinearLayout>
-                <LinearLayout android:id="@+id/btn_text_color" style="@style/GridFeatureBtn">
-                    <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_color" app:tint="#424242"/>
-                    <TextView style="@style/GridFeatureLabel" android:text="Color"/>
-                </LinearLayout>
-                <LinearLayout android:id="@+id/btn_font_pick" style="@style/GridFeatureBtn">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Aa" android:textSize="18sp" android:textColor="#424242" android:textStyle="bold"/>
-                    <TextView style="@style/GridFeatureLabel" android:text="Font"/>
-                </LinearLayout>
-                <LinearLayout android:id="@+id/btn_align_text" style="@style/GridFeatureBtn">
-                    <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_multiselect" app:tint="#424242"/>
-                    <TextView style="@style/GridFeatureLabel" android:text="Align"/>
-                </LinearLayout>
-                <LinearLayout android:id="@+id/tab_spacing" style="@style/GridFeatureBtn">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="↕≡" android:textSize="18sp" android:textColor="#424242"/>
-                    <TextView style="@style/GridFeatureLabel" android:text="Space"/>
-                </LinearLayout>
+        <!-- Row 1 -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:layout_marginBottom="4dp">
+            <LinearLayout android:id="@+id/btn_re_edit" style="@style/GridFeatureBtn">
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_edit" android:layout_gravity="center_horizontal"/>
+                <TextView style="@style/GridFeatureLabel" android:text="Re Edit"/>
             </LinearLayout>
-
-            <!-- Row 2 -->
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:orientation="horizontal" android:layout_marginBottom="6dp">
-                <LinearLayout android:id="@+id/tab_transform" style="@style/GridFeatureBtn">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="⬡" android:textSize="18sp" android:textColor="#424242"/>
-                    <TextView style="@style/GridFeatureLabel" android:text="Transform"/>
-                </LinearLayout>
-                <LinearLayout android:id="@+id/btn_bg_color" style="@style/GridFeatureBtn">
-                    <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_bg_color" app:tint="#424242"/>
-                    <TextView style="@style/GridFeatureLabel" android:text="BG"/>
-                </LinearLayout>
-                <LinearLayout android:id="@+id/btn_stroke_color" style="@style/GridFeatureBtn">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="T̲" android:textSize="18sp" android:textColor="#424242"/>
-                    <TextView style="@style/GridFeatureLabel" android:text="Text Stroke"/>
-                </LinearLayout>
-                <LinearLayout android:id="@+id/btn_text_size_panel" style="@style/GridFeatureBtn">
-                    <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_text_size" app:tint="#E57373"/>
-                    <TextView style="@style/GridFeatureLabel" android:text="Text Size" android:textColor="#E57373"/>
-                </LinearLayout>
-                <LinearLayout android:id="@+id/tab_effects" style="@style/GridFeatureBtn">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="◐" android:textSize="18sp" android:textColor="#424242"/>
-                    <TextView style="@style/GridFeatureLabel" android:text="Visual"/>
-                </LinearLayout>
+            <LinearLayout android:id="@+id/btn_text_size_panel" style="@style/GridFeatureBtn">
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_text_size" android:layout_gravity="center_horizontal"/>
+                <TextView style="@style/GridFeatureLabel" android:text="Text Size"/>
             </LinearLayout>
-
-            <!-- Row 3 -->
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <LinearLayout android:id="@+id/btn_bg_border" style="@style/GridFeatureBtn">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="⬜" android:textSize="18sp" android:textColor="#424242"/>
-                    <TextView style="@style/GridFeatureLabel" android:text="BG Border"/>
-                </LinearLayout>
-                <LinearLayout android:id="@+id/tab_visual" style="@style/GridFeatureBtn">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="☁" android:textSize="18sp" android:textColor="#424242"/>
-                    <TextView style="@style/GridFeatureLabel" android:text="Shadow"/>
-                </LinearLayout>
-                <LinearLayout android:id="@+id/tab_typo" style="@style/GridFeatureBtn">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Ω" android:textSize="18sp" android:textColor="#424242"/>
-                    <TextView style="@style/GridFeatureLabel" android:text="Typo"/>
-                </LinearLayout>
-                <LinearLayout android:id="@+id/tab_layout" style="@style/GridFeatureBtn" android:visibility="gone">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="⬆⬇" android:textSize="18sp" android:textColor="#424242"/>
-                    <TextView style="@style/GridFeatureLabel" android:text="Layer"/>
-                </LinearLayout>
-                <LinearLayout android:id="@+id/tab_transform2"
-                    android:layout_width="0dp" android:layout_height="0dp"
-                    android:layout_weight="1" android:visibility="gone"/>
+            <LinearLayout android:id="@+id/btn_text_color" style="@style/GridFeatureBtn">
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_color" android:layout_gravity="center_horizontal"/>
+                <TextView style="@style/GridFeatureLabel" android:text="Color"/>
             </LinearLayout>
-
+            <LinearLayout android:id="@+id/btn_bg_color" style="@style/GridFeatureBtn">
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_bg_color" android:layout_gravity="center_horizontal"/>
+                <TextView style="@style/GridFeatureLabel" android:text="BG"/>
+            </LinearLayout>
+            <LinearLayout android:id="@+id/btn_bg_border" style="@style/GridFeatureBtn">
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_add_image" android:layout_gravity="center_horizontal"/>
+                <TextView style="@style/GridFeatureLabel" android:text="BG Border"/>
+            </LinearLayout>
+            <LinearLayout android:id="@+id/btn_align_text" style="@style/GridFeatureBtn">
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_multiselect" android:layout_gravity="center_horizontal"/>
+                <TextView style="@style/GridFeatureLabel" android:text="Align"/>
+            </LinearLayout>
+            <LinearLayout android:id="@+id/btn_font_pick" style="@style/GridFeatureBtn">
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_add_text" android:layout_gravity="center_horizontal"/>
+                <TextView style="@style/GridFeatureLabel" android:text="Font"/>
+            </LinearLayout>
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+
+        <!-- Row 2 -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <LinearLayout android:id="@+id/tab_spacing" style="@style/GridFeatureBtn">
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_multiselect" android:layout_gravity="center_horizontal"/>
+                <TextView style="@style/GridFeatureLabel" android:text="Space"/>
+            </LinearLayout>
+            <LinearLayout android:id="@+id/tab_transform" style="@style/GridFeatureBtn">
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_cutnew" android:layout_gravity="center_horizontal"/>
+                <TextView style="@style/GridFeatureLabel" android:text="Transform"/>
+            </LinearLayout>
+            <LinearLayout android:id="@+id/tab_effects" style="@style/GridFeatureBtn">
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_color" android:layout_gravity="center_horizontal"/>
+                <TextView style="@style/GridFeatureLabel" android:text="Effects"/>
+            </LinearLayout>
+            <LinearLayout android:id="@+id/btn_stroke_color" style="@style/GridFeatureBtn">
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_edit" android:layout_gravity="center_horizontal"/>
+                <TextView style="@style/GridFeatureLabel" android:text="Stroke"/>
+            </LinearLayout>
+            <LinearLayout android:id="@+id/tab_visual" style="@style/GridFeatureBtn">
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_multiselect" android:layout_gravity="center_horizontal"/>
+                <TextView style="@style/GridFeatureLabel" android:text="Visual"/>
+            </LinearLayout>
+            <LinearLayout android:id="@+id/tab_typo" style="@style/GridFeatureBtn">
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_add_text" android:layout_gravity="center_horizontal"/>
+                <TextView style="@style/GridFeatureLabel" android:text="Typo"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
 
     <!-- Hidden panels -->
-    <LinearLayout android:id="@+id/panel_tab_action" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone"/>
-    <LinearLayout android:id="@+id/panel_tab_spacing" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone"/>
-    <LinearLayout android:id="@+id/panel_tab_effects" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone"/>
-    <LinearLayout android:id="@+id/panel_tab_layout" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone"/>
+    <LinearLayout android:id="@+id/panel_tab_action"    android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone"/>
+    <LinearLayout android:id="@+id/panel_tab_spacing"   android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone"/>
+    <LinearLayout android:id="@+id/panel_tab_effects"   android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone"/>
+    <LinearLayout android:id="@+id/panel_tab_layout"    android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone"/>
     <LinearLayout android:id="@+id/panel_tab_transform" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone"/>
 
 </LinearLayout>
