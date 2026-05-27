@@ -78,10 +78,12 @@
                 android:text="⬆Front" android:textSize="9sp" android:textColor="#FFFFFF"
                 android:gravity="center" android:background="#1B5E20" android:layout_marginEnd="3dp"/>
             <TextView android:id="@+id/btn_pop_layer_up"
+                android:visibility="gone"
                 android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1"
                 android:text="↑Up" android:textSize="9sp" android:textColor="#FFFFFF"
                 android:gravity="center" android:background="#2E7D32" android:layout_marginEnd="3dp"/>
             <TextView android:id="@+id/btn_pop_layer_down"
+                android:visibility="gone"
                 android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1"
                 android:text="↓Down" android:textSize="9sp" android:textColor="#FFFFFF"
                 android:gravity="center" android:background="#388E3C" android:layout_marginEnd="3dp"/>
