@@ -8687,6 +8687,11 @@ public class MainActivity extends AppCompatActivity {
             if (ivBoldImg != null) {
                 ivBoldImg.setImageResource(isBold ? R.drawable.bold_click : R.drawable.bold);
             }
+            // ✅ Italic image src update
+            android.widget.ImageView ivItalicImg = cv.findViewById(R.id.iv_italic);
+            if (ivItalicImg != null) {
+                ivItalicImg.setImageResource(isItalic2 ? R.drawable.ic_italic_click : R.drawable.ic_italic);
+            }
         };
         updateStyleBtns.run();
 
@@ -8724,6 +8729,12 @@ public class MainActivity extends AppCompatActivity {
                         : isBold ? android.graphics.Typeface.BOLD
                         : android.graphics.Typeface.NORMAL;
                 targetView.setTypeface(android.graphics.Typeface.defaultFromStyle(style));
+                // ✅ Image change
+                android.widget.ImageView ivItalic = cv.findViewById(R.id.iv_italic);
+                boolean nowItalic = !isItalic2;
+                if (ivItalic != null) {
+                    ivItalic.setImageResource(nowItalic ? R.drawable.ic_italic_click : R.drawable.ic_italic);
+                }
                 updateStyleBtns.run();
                 exportToJson();
             });
@@ -9841,6 +9852,17 @@ public class MainActivity extends AppCompatActivity {
                 btnReEdit.setOnClickListener(editClickListener);
             }
         }
+
+        // ── Move buttons
+        int moveStep = 5;
+        android.widget.TextView btnMoveUpT = cv.findViewById(R.id.btn_move_up_text);
+        android.widget.TextView btnMoveDownT = cv.findViewById(R.id.btn_move_down_text);
+        android.widget.TextView btnMoveLeftT = cv.findViewById(R.id.btn_move_left_text);
+        android.widget.TextView btnMoveRightT = cv.findViewById(R.id.btn_move_right_text);
+        if (btnMoveUpT != null) btnMoveUpT.setOnClickListener(v -> { targetView.setY(targetView.getY() - moveStep); exportToJson(); });
+        if (btnMoveDownT != null) btnMoveDownT.setOnClickListener(v -> { targetView.setY(targetView.getY() + moveStep); exportToJson(); });
+        if (btnMoveLeftT != null) btnMoveLeftT.setOnClickListener(v -> { targetView.setX(targetView.getX() - moveStep); exportToJson(); });
+        if (btnMoveRightT != null) btnMoveRightT.setOnClickListener(v -> { targetView.setX(targetView.getX() + moveStep); exportToJson(); });
 
         // ── Text Color
         View btnTextColor = cv.findViewById(R.id.btn_text_color);

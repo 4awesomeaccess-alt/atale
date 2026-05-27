@@ -123,4 +123,10 @@
     <item name="btn_sel_align_center_h1" type="id" />
     <item name="btn_strikethrough" type="id" />
     <item name="canvas_bottom_anchor" type="id" />
+    <item name="btn_move_up_text" type="id" />
+    <item name="btn_move_down_text" type="id" />
+    <item name="btn_move_left_text" type="id" />
+    <item name="btn_move_right_text" type="id" />
+    <item name="btn_layer_up_text" type="id" />
+    <item name="btn_layer_down_text" type="id" />
 </resources>
