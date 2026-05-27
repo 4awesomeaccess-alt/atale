@@ -8682,21 +8682,42 @@ public class MainActivity extends AppCompatActivity {
             boolean isStrike2 = (targetView.getPaintFlags()
                     & android.graphics.Paint.STRIKE_THRU_TEXT_FLAG) != 0;
 
-            if (btnBold != null)
-                btnBold.setBackgroundColor(isBold
-                        ? Color.parseColor("#1565C0") : Color.parseColor("#E3F2FD"));
+            // Helper: update LinearLayout bg + ImageView tint
+            android.graphics.drawable.GradientDrawable activeGd = new android.graphics.drawable.GradientDrawable();
+            activeGd.setColor(Color.parseColor("#1565C0"));
+            activeGd.setCornerRadius(dp(6));
 
-            if (btnItalic != null)
-                btnItalic.setBackgroundColor(isItalic2
-                        ? Color.parseColor("#1565C0") : Color.parseColor("#E3F2FD"));
+            android.graphics.drawable.GradientDrawable inactiveGd = new android.graphics.drawable.GradientDrawable();
+            inactiveGd.setColor(Color.parseColor("#F5F5F5"));
+            inactiveGd.setCornerRadius(dp(6));
 
-            if (btnUnderline != null)
-                btnUnderline.setBackgroundColor(isUnder
-                        ? Color.parseColor("#1565C0") : Color.parseColor("#E3F2FD"));
+            java.util.Map<View, Boolean> stateMap = new java.util.LinkedHashMap<>();
+            stateMap.put(btnBold, isBold);
+            stateMap.put(btnItalic, isItalic2);
+            stateMap.put(btnUnderline, isUnder);
+            stateMap.put(btnStrike, isStrike2);
 
-            if (btnStrike != null)
-                btnStrike.setBackgroundColor(isStrike2
-                        ? Color.parseColor("#1565C0") : Color.parseColor("#E3F2FD"));
+            for (java.util.Map.Entry<View, Boolean> entry : stateMap.entrySet()) {
+                View btn = entry.getKey();
+                boolean active = entry.getValue();
+                if (btn == null) continue;
+                // Background
+                android.graphics.drawable.GradientDrawable gd = new android.graphics.drawable.GradientDrawable();
+                gd.setColor(active ? Color.parseColor("#1565C0") : Color.parseColor("#F5F5F5"));
+                gd.setCornerRadius(dp(6));
+                btn.setBackground(gd);
+                // ImageView tint
+                if (btn instanceof android.widget.LinearLayout) {
+                    for (int ci = 0; ci < ((android.widget.LinearLayout)btn).getChildCount(); ci++) {
+                        View child = ((android.widget.LinearLayout)btn).getChildAt(ci);
+                        if (child instanceof android.widget.ImageView) {
+                            ((android.widget.ImageView)child).setColorFilter(
+                                active ? Color.WHITE : Color.parseColor("#424242"),
+                                android.graphics.PorterDuff.Mode.SRC_IN);
+                        }
+                    }
+                }
+            }
         };
         updateStyleBtns.run();
 
