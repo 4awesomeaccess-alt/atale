@@ -72,7 +72,7 @@
                 <ImageView
                     android:id="@+id/iv_bold"
                     android:layout_width="wrap_content"
-                    android:layout_height="20dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/bold" />
 
@@ -84,42 +84,42 @@
             <!-- Italic -->
             <LinearLayout android:id="@+id/btn_italic"
                 style="@style/IconActionBtn">
-                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_italic" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <ImageView android:layout_width="20dp" android:layout_height="wrap_content" android:src="@drawable/ic_italic" android:layout_gravity="center_horizontal" app:tint="#424242"/>
                 <TextView style="@style/IconActionLabel" android:text="Italic"/>
             </LinearLayout>
 
             <!-- Underline -->
             <LinearLayout android:id="@+id/btn_underline"
                 style="@style/IconActionBtn">
-                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_underline" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <ImageView android:layout_width="20dp" android:layout_height="wrap_content" android:src="@drawable/ic_underline" android:layout_gravity="center_horizontal" app:tint="#424242"/>
                 <TextView style="@style/IconActionLabel" android:text="Underline"/>
             </LinearLayout>
 
             <!-- Strikethrough -->
             <LinearLayout android:id="@+id/btn_strikethrough"
                 style="@style/IconActionBtn">
-                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_strikethrough" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <ImageView android:layout_width="20dp" android:layout_height="wrap_content" android:src="@drawable/ic_strikethrough" android:layout_gravity="center_horizontal" app:tint="#424242"/>
                 <TextView style="@style/IconActionLabel" android:text="Strike"/>
             </LinearLayout>
 
             <!-- Upperline -->
             <LinearLayout android:id="@+id/btn_overline"
                 style="@style/IconActionBtn">
-                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_overline" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <ImageView android:layout_width="20dp" android:layout_height="wrap_content" android:src="@drawable/ic_overline" android:layout_gravity="center_horizontal" app:tint="#424242"/>
                 <TextView style="@style/IconActionLabel" android:text="Uperline"/>
             </LinearLayout>
 
             <!-- Flip H -->
             <LinearLayout android:id="@+id/btn_quick_flip_h"
                 style="@style/IconActionBtn">
-                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_flip_h" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <ImageView android:layout_width="20dp" android:layout_height="wrap_content" android:src="@drawable/ic_flip_h" android:layout_gravity="center_horizontal" app:tint="#424242"/>
                 <TextView style="@style/IconActionLabel" android:text="Flip H"/>
             </LinearLayout>
 
             <!-- Flip V -->
             <LinearLayout android:id="@+id/btn_quick_flip_v"
                 style="@style/IconActionBtn">
-                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_flip_v" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <ImageView android:layout_width="20dp" android:layout_height="wrap_content" android:src="@drawable/ic_flip_v" android:layout_gravity="center_horizontal" app:tint="#424242"/>
                 <TextView style="@style/IconActionLabel" android:text="Flip V"/>
             </LinearLayout>
 
@@ -128,7 +128,7 @@
                 style="@style/IconActionBtn">
                 <ImageView
                     android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_height="wrap_content"
                     android:src="@drawable/ic_delete"
                     android:layout_gravity="center_horizontal"/>
                 <TextView style="@style/IconActionLabel" android:text="Delete"/>
@@ -137,21 +137,21 @@
             <!-- Copy -->
             <LinearLayout android:id="@+id/btn_copy_view"
                 style="@style/IconActionBtn">
-                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_copy" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <ImageView android:layout_width="20dp" android:layout_height="wrap_content" android:src="@drawable/ic_copy" android:layout_gravity="center_horizontal" app:tint="#424242"/>
                 <TextView style="@style/IconActionLabel" android:text="Copy"/>
             </LinearLayout>
 
             <!-- Lock -->
             <LinearLayout android:id="@+id/btn_sel_lock_text"
                 style="@style/IconActionBtn">
-                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_lock" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <ImageView android:layout_width="20dp" android:layout_height="wrap_content" android:src="@drawable/ic_lock" android:layout_gravity="center_horizontal" app:tint="#424242"/>
                 <TextView style="@style/IconActionLabel" android:text="Lock"/>
             </LinearLayout>
 
             <!-- Center -->
             <LinearLayout android:id="@+id/btn_center_text"
                 style="@style/IconActionBtn">
-                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_center" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <ImageView android:layout_width="20dp" android:layout_height="wrap_content" android:src="@drawable/ic_center" android:layout_gravity="center_horizontal" app:tint="#424242"/>
                 <TextView style="@style/IconActionLabel" android:text="Center"/>
             </LinearLayout>
 
