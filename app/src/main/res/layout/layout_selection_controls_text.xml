@@ -67,7 +67,12 @@
             <!-- Bold -->
             <LinearLayout android:id="@+id/btn_bold"
                 style="@style/IconActionBtn">
-                <ImageView android:layout_width="20dp" android:layout_height="20dp" android:src="@drawable/ic_bold" android:layout_gravity="center_horizontal" app:tint="#424242"/>
+                <ImageView
+                    android:id="@+id/iv_bold"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/bold"
+                    android:layout_gravity="center_horizontal"/>
                 <TextView style="@style/IconActionLabel" android:text="Bold"/>
             </LinearLayout>
 

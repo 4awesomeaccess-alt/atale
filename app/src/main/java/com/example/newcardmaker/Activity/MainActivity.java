@@ -8682,7 +8682,12 @@ public class MainActivity extends AppCompatActivity {
             boolean isStrike2 = (targetView.getPaintFlags()
                     & android.graphics.Paint.STRIKE_THRU_TEXT_FLAG) != 0;
 
-            // Helper: update LinearLayout bg + ImageView tint
+            // ✅ Bold image src update
+            android.widget.ImageView ivBoldImg = cv.findViewById(R.id.iv_bold);
+            if (ivBoldImg != null) {
+                ivBoldImg.setImageResource(isBold ? R.drawable.bold_click : R.drawable.bold);
+            }
+
             android.graphics.drawable.GradientDrawable activeGd = new android.graphics.drawable.GradientDrawable();
             activeGd.setColor(Color.parseColor("#1565C0"));
             activeGd.setCornerRadius(dp(6));
@@ -8733,6 +8738,12 @@ public class MainActivity extends AppCompatActivity {
                         : isItalic2 ? android.graphics.Typeface.ITALIC
                         : android.graphics.Typeface.NORMAL;
                 targetView.setTypeface(android.graphics.Typeface.defaultFromStyle(style));
+                // ✅ Image change based on state
+                android.widget.ImageView ivBold = cv.findViewById(R.id.iv_bold);
+                boolean nowBold = !isBold;
+                if (ivBold != null) {
+                    ivBold.setImageResource(nowBold ? R.drawable.bold_click : R.drawable.bold);
+                }
                 updateStyleBtns.run();
                 exportToJson();
             });
