@@ -8481,6 +8481,10 @@ public class MainActivity extends AppCompatActivity {
         View tabTransformTab = cv.findViewById(R.id.tab_transform);
         View tabEffects = cv.findViewById(R.id.tab_effects);
         View tabLayout = cv.findViewById(R.id.tab_layout);
+<<<<<<< Updated upstream
+=======
+        final View tabTransform2 = cv.findViewById(R.id.tab_transform2);
+>>>>>>> Stashed changes
         View tabVisual = cv.findViewById(R.id.tab_visual);
         View tabTypo = cv.findViewById(R.id.tab_typo);
 
