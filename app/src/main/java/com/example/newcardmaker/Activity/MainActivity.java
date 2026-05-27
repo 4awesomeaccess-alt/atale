@@ -13124,10 +13124,23 @@ public class MainActivity extends AppCompatActivity {
             else if (currentlySelectedView != null) targets.add(currentlySelectedView);
             for (View t : targets) {
                 int vid = v.getId();
-                if (vid == R.id.btn_move_left)       t.setX(t.getX() - moveStep);
-                else if (vid == R.id.btn_move_right)  t.setX(t.getX() + moveStep);
-                else if (vid == R.id.btn_move_up)     t.setY(t.getY() - moveStep);
-                else if (vid == R.id.btn_move_down)   t.setY(t.getY() + moveStep);
+                android.view.ViewGroup.MarginLayoutParams lp =
+                        (android.view.ViewGroup.MarginLayoutParams) t.getLayoutParams();
+                if (vid == R.id.btn_move_left) {
+                    lp.leftMargin -= moveStep;
+                    t.setX(t.getX() - moveStep);
+                } else if (vid == R.id.btn_move_right) {
+                    lp.leftMargin += moveStep;
+                    t.setX(t.getX() + moveStep);
+                } else if (vid == R.id.btn_move_up) {
+                    lp.topMargin -= moveStep;
+                    t.setY(t.getY() - moveStep);
+                } else if (vid == R.id.btn_move_down) {
+                    lp.topMargin += moveStep;
+                    t.setY(t.getY() + moveStep);
+                }
+                t.setLayoutParams(lp);
+                t.requestLayout();
             }
             exportToJson();
         };
