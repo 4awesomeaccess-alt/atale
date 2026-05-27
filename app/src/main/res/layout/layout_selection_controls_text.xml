@@ -7,17 +7,7 @@
     android:elevation="12dp">
 
     <!-- ══ DRAG HANDLE ══ -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="28dp"
-        android:gravity="center"
-        android:background="#F5F5F5"
-        android:id="@+id/drag_handle_sel">
-        <View
-            android:layout_width="40dp"
-            android:layout_height="4dp"
-            android:background="#CCCCCC"/>
-    </LinearLayout>
+
 
     <!-- Title row -->
     <LinearLayout
@@ -25,18 +15,18 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:paddingEnd="12dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Text Tools"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#212121"/>
+        >
+        <LinearLayout
+            android:layout_width="250dp"
+            android:layout_height="28dp"
+            android:gravity="center"
+            android:background="#F5F5F5"
+            android:id="@+id/drag_handle_sel">
+            <View
+                android:layout_width="40dp"
+                android:layout_height="4dp"
+                android:background="#CCCCCC"/>
+        </LinearLayout>
         <TextView
             android:id="@+id/btn_close_controls"
             android:layout_width="36dp"
@@ -62,6 +52,50 @@
             android:gravity="center_vertical"
             android:paddingTop="4dp"
             android:paddingBottom="4dp">
+
+
+            <!-- Lock -->
+            <LinearLayout android:id="@+id/btn_sel_lock_text"
+                style="@style/IconActionBtn">
+                <TextView style="@style/IconActionIcon" android:text="🔒"/>
+                <TextView style="@style/IconActionLabel" android:text="Lock"/>
+            </LinearLayout>
+
+
+            <!-- Copy -->
+            <LinearLayout android:id="@+id/btn_copy_view"
+                style="@style/IconActionBtn">
+                <TextView style="@style/IconActionIcon" android:text="⧉"/>
+                <TextView style="@style/IconActionLabel" android:text="Copy"/>
+            </LinearLayout>
+
+            <!-- Delete -->
+            <LinearLayout android:id="@+id/btn_sel_delete_text"
+                style="@style/IconActionBtn">
+                <TextView style="@style/IconActionIcon" android:text="🗑"/>
+                <TextView style="@style/IconActionLabel" android:text="Delete"/>
+            </LinearLayout>
+
+            <!-- Center -->
+            <LinearLayout android:id="@+id/btn_center_text"
+                style="@style/IconActionBtn">
+                <TextView style="@style/IconActionIcon" android:text="≡"/>
+                <TextView style="@style/IconActionLabel" android:text="Center"/>
+            </LinearLayout>
+
+            <!-- Flip H -->
+            <LinearLayout android:id="@+id/btn_quick_flip_h"
+                style="@style/IconActionBtn">
+                <TextView style="@style/IconActionIcon" android:text="⇔"/>
+                <TextView style="@style/IconActionLabel" android:text="Flip H"/>
+            </LinearLayout>
+
+            <!-- Flip V -->
+            <LinearLayout android:id="@+id/btn_quick_flip_v"
+                style="@style/IconActionBtn">
+                <TextView style="@style/IconActionIcon" android:text="⇕"/>
+                <TextView style="@style/IconActionLabel" android:text="Flip V"/>
+            </LinearLayout>
 
             <!-- Bold -->
             <LinearLayout android:id="@+id/btn_bold"
@@ -96,48 +130,6 @@
                 style="@style/IconActionBtn">
                 <TextView style="@style/IconActionIcon" android:text="T̄"/>
                 <TextView style="@style/IconActionLabel" android:text="Uperline"/>
-            </LinearLayout>
-
-            <!-- Flip H -->
-            <LinearLayout android:id="@+id/btn_quick_flip_h"
-                style="@style/IconActionBtn">
-                <TextView style="@style/IconActionIcon" android:text="⇔"/>
-                <TextView style="@style/IconActionLabel" android:text="Flip H"/>
-            </LinearLayout>
-
-            <!-- Flip V -->
-            <LinearLayout android:id="@+id/btn_quick_flip_v"
-                style="@style/IconActionBtn">
-                <TextView style="@style/IconActionIcon" android:text="⇕"/>
-                <TextView style="@style/IconActionLabel" android:text="Flip V"/>
-            </LinearLayout>
-
-            <!-- Delete -->
-            <LinearLayout android:id="@+id/btn_sel_delete_text"
-                style="@style/IconActionBtn">
-                <TextView style="@style/IconActionIcon" android:text="🗑"/>
-                <TextView style="@style/IconActionLabel" android:text="Delete"/>
-            </LinearLayout>
-
-            <!-- Copy -->
-            <LinearLayout android:id="@+id/btn_copy_view"
-                style="@style/IconActionBtn">
-                <TextView style="@style/IconActionIcon" android:text="⧉"/>
-                <TextView style="@style/IconActionLabel" android:text="Copy"/>
-            </LinearLayout>
-
-            <!-- Lock -->
-            <LinearLayout android:id="@+id/btn_sel_lock_text"
-                style="@style/IconActionBtn">
-                <TextView style="@style/IconActionIcon" android:text="🔒"/>
-                <TextView style="@style/IconActionLabel" android:text="Lock"/>
-            </LinearLayout>
-
-            <!-- Center -->
-            <LinearLayout android:id="@+id/btn_center_text"
-                style="@style/IconActionBtn">
-                <TextView style="@style/IconActionIcon" android:text="≡"/>
-                <TextView style="@style/IconActionLabel" android:text="Center"/>
             </LinearLayout>
 
         </LinearLayout>

@@ -1,11 +1,14 @@
 package com.example.newcardmaker.Activity;
 
+import static android.util.Log.ASSERT;
+
 import android.content.Intent;
 import android.graphics.*;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
@@ -200,6 +203,8 @@ public class EditImageActivity extends AppCompatActivity {
                 mainHandler.post(() -> {
                     if (progressDialog != null && progressDialog.isShowing())
                         progressDialog.dismiss();
+                    Log.println(ASSERT,"Error",e.getMessage()+"");
+
                     Toast.makeText(this, "Failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });
             } finally {

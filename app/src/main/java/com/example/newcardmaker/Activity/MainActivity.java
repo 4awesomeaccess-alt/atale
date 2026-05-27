@@ -191,33 +191,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private static final int REQUEST_TEXT_BG_IMAGE1 = 700;
-    private static final int REQUEST_BG_IMAGE_LIST  = 702;
-
-
-    // ── Selection controls last position
     private int selControlsLastX = 50;
     private int selControlsLastY = 400;
     private boolean isSelControlsMoved = false; // ✅ new
-
-
     private static final int REQUEST_IMAGE_CROP = 500;
     private ImageView pendingCropTarget = null;
-
     private Set<View> lockedViews = new HashSet<>();
-
     private static final int REQUEST_FRAME_GALLERY_IMAGE = 400;
     private static final int REQUEST_UCROP = 401;
-
     private AlertDialog framePickerDialog = null;
-
     private static final int REQUEST_STICKER_PICK = 300;
-
     private LinearLayout btnMultiSelect;
     public static ArrayList<String> all_data;
     private final OkHttpClient httpClient = new OkHttpClient();
     // આ existing fields ની નીચે ઉમેરો:
     private float dX, dY;  // already exist
-
     ArrayList<JSONObject> cellDataList = new ArrayList<>();
 
     // Fields — class top માં
@@ -291,12 +279,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvLockCount;
     private TextView tvLockEmpty;
     private LockedLayersAdapter lockedLayersAdapter;
-
-
-
-
-    private String selectedSwapShape = "ROUNDED";
-
     private ActivityResultLauncher<Intent> framePickerLauncher;
 
 
@@ -3911,8 +3893,6 @@ public class MainActivity extends AppCompatActivity {
         } else if (id.getId() == R.id.btn_photo_frame) {
             Intent intent = new Intent(this, FramePickerActivity.class);
             framePickerLauncher.launch(intent);
-
-//            showPhotoFrameDialog();
         }
     }
 
