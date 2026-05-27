@@ -13111,38 +13111,25 @@ public class MainActivity extends AppCompatActivity {
         TextView btnClose = popupView.findViewById(R.id.btn_align_close);
         if (btnClose != null) btnClose.setOnClickListener(v -> alignPopupWindow.dismiss());
 
-        // ── Move buttons
+        // ── Move buttons — capture selected views NOW (before currentlySelectedView gets nulled)
         int moveStep = 5;
+        final List<View> capturedTargets = new ArrayList<>();
+        if (!selectedViews.isEmpty()) capturedTargets.addAll(selectedViews);
+        else if (currentlySelectedView != null) capturedTargets.add(currentlySelectedView);
+
         View btnMoveLeft  = popupView.findViewById(R.id.btn_move_left);
         View btnMoveUp    = popupView.findViewById(R.id.btn_move_up);
         View btnMoveDown  = popupView.findViewById(R.id.btn_move_down);
         View btnMoveRight = popupView.findViewById(R.id.btn_move_right);
 
         View.OnClickListener moveListener = v -> {
-            List<View> targets = new ArrayList<>();
-            if (!selectedViews.isEmpty()) targets.addAll(selectedViews);
-            else if (currentlySelectedView != null) targets.add(currentlySelectedView);
-            for (View t : targets) {
-                int vid = v.getId();
-                android.view.ViewGroup.MarginLayoutParams lp =
-                        (android.view.ViewGroup.MarginLayoutParams) t.getLayoutParams();
-                if (vid == R.id.btn_move_left) {
-                    lp.leftMargin -= moveStep;
-                    t.setX(t.getX() - moveStep);
-                } else if (vid == R.id.btn_move_right) {
-                    lp.leftMargin += moveStep;
-                    t.setX(t.getX() + moveStep);
-                } else if (vid == R.id.btn_move_up) {
-                    lp.topMargin -= moveStep;
-                    t.setY(t.getY() - moveStep);
-                } else if (vid == R.id.btn_move_down) {
-                    lp.topMargin += moveStep;
-                    t.setY(t.getY() + moveStep);
-                }
-                t.setLayoutParams(lp);
-                t.requestLayout();
+            int vid = v.getId();
+            for (View t : capturedTargets) {
+                if (vid == R.id.btn_move_left)       moveSingleView(t, -moveStep, 0);
+                else if (vid == R.id.btn_move_right)  moveSingleView(t,  moveStep, 0);
+                else if (vid == R.id.btn_move_up)     moveSingleView(t, 0, -moveStep);
+                else if (vid == R.id.btn_move_down)   moveSingleView(t, 0,  moveStep);
             }
-            exportToJson();
         };
 
         if (btnMoveLeft  != null) btnMoveLeft.setOnClickListener(moveListener);
