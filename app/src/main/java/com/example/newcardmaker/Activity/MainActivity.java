@@ -9892,6 +9892,17 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+        // ── Layer buttons
+        View btnLayerUp2     = cv.findViewById(R.id.btn_layer_up);
+        View btnLayerDown2   = cv.findViewById(R.id.btn_layer_down);
+        View btnLayerTop2    = cv.findViewById(R.id.btn_layer_top);
+        View btnLayerBottom2 = cv.findViewById(R.id.btn_layer_bottom);
+
+        if (btnLayerUp2     != null) btnLayerUp2.setOnClickListener(v     -> { bringViewOneLayerUp(targetView);   exportToJson(); refreshLockedLayersPanel(); });
+        if (btnLayerDown2   != null) btnLayerDown2.setOnClickListener(v   -> { sendViewOneLayerDown(targetView);  exportToJson(); refreshLockedLayersPanel(); });
+        if (btnLayerTop2    != null) btnLayerTop2.setOnClickListener(v    -> { bringViewToFront(targetView);      exportToJson(); refreshLockedLayersPanel(); });
+        if (btnLayerBottom2 != null) btnLayerBottom2.setOnClickListener(v -> { sendViewToBack(targetView);        exportToJson(); refreshLockedLayersPanel(); });
+
         // ── Delete Text
         View btnDeleteText = cv.findViewById(R.id.btn_sel_delete_text);
         if (btnDeleteText != null) {

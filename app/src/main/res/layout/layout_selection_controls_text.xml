@@ -293,6 +293,58 @@
                     android:text="Strike" />
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/btn_layer_up"
+                style="@style/IconActionBtn">
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/bt_up" />
+                <TextView
+                    style="@style/IconActionLabel"
+                    android:text="Layer Up" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_layer_down"
+                style="@style/IconActionBtn">
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/bt_down" />
+                <TextView
+                    style="@style/IconActionLabel"
+                    android:text="Layer Down" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_layer_top"
+                style="@style/IconActionBtn">
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/bt_up" />
+                <TextView
+                    style="@style/IconActionLabel"
+                    android:text="Layer Top" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_layer_bottom"
+                style="@style/IconActionBtn">
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/bt_down" />
+                <TextView
+                    style="@style/IconActionLabel"
+                    android:text="Layer Bottom" />
+            </LinearLayout>
+
 
 
 
