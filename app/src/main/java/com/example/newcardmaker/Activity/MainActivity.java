@@ -8873,10 +8873,6 @@ public class MainActivity extends AppCompatActivity {
                 exportToJson();
             });
         }
-                }
-                exportToJson();
-            });
-        }
 
         // ════════════════════════════
         // TEXT ALIGNMENT
