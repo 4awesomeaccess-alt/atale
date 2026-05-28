@@ -9875,6 +9875,23 @@ public class MainActivity extends AppCompatActivity {
             btnTextColor.setOnClickListener(v -> showTextColorPopup(targetView));
         }
 
+        // ── Center Text on Canvas
+        View btnCenterText = cv.findViewById(R.id.btn_center_text);
+        if (btnCenterText != null) {
+            btnCenterText.setOnClickListener(v -> {
+                if (mainLayout != null) {
+                    float canvasW = mainLayout.getWidth();
+                    float canvasH = mainLayout.getHeight();
+                    float viewW = targetView.getWidth();
+                    float viewH = targetView.getHeight();
+                    targetView.setX((canvasW - viewW) / 2f);
+                    targetView.setY((canvasH - viewH) / 2f);
+                    exportToJson();
+                    Toast.makeText(this, "Center!", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
         // ── Delete Text
         View btnDeleteText = cv.findViewById(R.id.btn_sel_delete_text);
         if (btnDeleteText != null) {
