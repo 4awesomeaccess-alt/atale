@@ -293,20 +293,7 @@
                     android:text="Strike" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/btn_curve_text"
-                style="@style/IconActionBtn">
 
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_arc" />
-
-                <TextView
-                    style="@style/IconActionLabel"
-                    android:text="Arc" />
-            </LinearLayout>
 
 
 
@@ -499,18 +486,18 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/btn_text_size_panel"
+                android:id="@+id/btn_curve_text"
                 style="@style/GridFeatureBtn">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="22dp"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_text_size" />
+                    android:src="@drawable/ic_arc" />
 
                 <TextView
                     style="@style/GridFeatureLabel"
-                    android:text="Text Size" />
+                    android:text="Arc" />
 
             </LinearLayout>
 
