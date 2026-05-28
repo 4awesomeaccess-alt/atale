@@ -167,7 +167,7 @@ public class invite_AppConstants {
     public static final String METHOD_CAT_PHOTOWALL_main = "get_visiting_card";
     public static final String METHOD_CAT_PHOTOWALL1 = "get_sub_visiting_card";
     //public static final String METHOD_CAT_PHOTOWALL = "get_visiting_card";
-    public static final String METHOD_CAT_PHOTOWALL = "get_sub_wallpaper_frame";
+    public static final String METHOD_CAT_PHOTOWALL = "get_visiting_card";
     public static final String METHOD_RELESECAT_PHOTOWALL= "get_sub_wallpaper_relese";
     public static final String METHOD_IMAGE_PHOTOWALL = "get_image_wallpaper_frame";
 
