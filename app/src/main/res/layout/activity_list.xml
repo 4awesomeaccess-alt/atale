@@ -70,6 +70,19 @@
                 android:textSize="11sp"
                 android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/btn_category"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:background="#E65100"
+                android:gravity="center"
+                android:paddingHorizontal="12dp"
+                android:text="📂 Category"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
         </LinearLayout>
 
     </LinearLayout>

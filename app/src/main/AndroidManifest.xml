@@ -79,6 +79,10 @@
             android:name=".Activity.ImageListActivity"
             android:label="Saved Images" 
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" /> <!-- FileProvider — share માટે જરૂરી -->
+        <activity
+            android:name=".Activity.CategoryActivity"
+            android:label="Categories"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <!--
  <provider
             android:name="androidx.core.content.FileProvider"

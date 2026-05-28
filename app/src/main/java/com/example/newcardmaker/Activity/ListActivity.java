@@ -62,6 +62,14 @@ public class ListActivity extends AppCompatActivity {
             });
         }
 
+        // Category button
+        View btnCategory = findViewById(R.id.btn_category);
+        if (btnCategory != null) {
+            btnCategory.setOnClickListener(v -> {
+                startActivity(new Intent(this, CategoryActivity.class));
+            });
+        }
+
         loadFiles();
     }
 
