@@ -278,8 +278,8 @@ public class SingleListActivity extends AppCompatActivity {
         }
 
         requestBody = home_methods.getAPIRequest(
-                invite_AppConstants.METHOD_IMAGE_PHOTOGREETING,
-                home_page, "", "", "", subCatId, "", "", "", "", "", "", "", "",
+                invite_AppConstants.METHOD_IMAGE_All_PHOTOGREETING11,
+                home_page, "", "", "", "", "", "", "", "", "", "", "", "",
                 "", invite_AppConstants.itemUser.getId(), "", null);
 
         loadQuotes = new invite_Load_OneImages(new invite_OneImagesListener() {
