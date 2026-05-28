@@ -151,7 +151,7 @@ public class CategoryActivity extends AppCompatActivity {
                         }
                     }
                 },
-                methods.getAPIRequest(invite_AppConstants.METHOD_CAT_PHOTOWALL,
+                methods.getAPIRequest(invite_AppConstants.METHOD_CAT_PHOTOWALL1,
                         0, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", null)
         );
         loader.execute();

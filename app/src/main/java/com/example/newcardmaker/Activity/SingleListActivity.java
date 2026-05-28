@@ -140,6 +140,8 @@ public class SingleListActivity extends AppCompatActivity {
         home_methods = new invite_Methods(this);
         home_selectmethod = invite_AppConstants.METHOD_IMAGE_PHOTOGREETING;
 
+        android.util.Log.e("#SingleList_method", "method=" + home_selectmethod + " cid=" + cid);
+
         loadQuotesByCat(home_selectmethod);
 
         // ── Endless scroll
