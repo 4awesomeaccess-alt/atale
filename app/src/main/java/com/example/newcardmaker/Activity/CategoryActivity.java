@@ -231,7 +231,7 @@ public class CategoryActivity extends AppCompatActivity {
                         ).start();
 
                 Intent intent = new Intent(CategoryActivity.this,
-                        invite_sticker_main_category.class);
+                        SingleListActivity.class);
                 intent.putExtra("cid", item.getId());
                 intent.putExtra("name", item.getName());
                 intent.putExtra("sticker_typo", item.getdetail());
