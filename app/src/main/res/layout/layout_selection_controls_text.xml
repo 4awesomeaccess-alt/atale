@@ -293,6 +293,21 @@
                     android:text="Strike" />
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/btn_curve_text"
+                style="@style/IconActionBtn">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_arc" />
+
+                <TextView
+                    style="@style/IconActionLabel"
+                    android:text="Arc" />
+            </LinearLayout>
+
 
 
         </LinearLayout>
