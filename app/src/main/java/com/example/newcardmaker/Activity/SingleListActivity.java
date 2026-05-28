@@ -66,6 +66,7 @@ public class SingleListActivity extends AppCompatActivity {
 
         cid = getIntent().getStringExtra("cid");
         categoryName = getIntent().getStringExtra("name");
+        android.util.Log.e("#SingleList_CID", "cid=" + cid + " name=" + categoryName);
 
         // ── Root
         LinearLayout root = new LinearLayout(this);

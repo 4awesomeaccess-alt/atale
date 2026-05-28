@@ -230,6 +230,8 @@ public class CategoryActivity extends AppCompatActivity {
                                 holder.itemView.animate().scaleX(1f).scaleY(1f).setDuration(80).start()
                         ).start();
 
+                android.util.Log.e("#CategoryClick", "id=" + item.getId() + " name=" + item.getName());
+
                 Intent intent = new Intent(CategoryActivity.this,
                         SingleListActivity.class);
                 intent.putExtra("cid", item.getId());
