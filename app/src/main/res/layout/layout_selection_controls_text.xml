@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/drag_handle_sel"
         android:layout_width="match_parent"
-        android:layout_height="28dp"
+        android:layout_height="22dp"
         android:background="#FFFFFF"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -314,8 +314,8 @@
 
                 <ImageView
                     android:id="@+id/btn_move_up"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_marginEnd="2dp"
                     android:background="#F3F4F6"
                     android:padding="6dp"
@@ -324,8 +324,8 @@
 
                 <ImageView
                     android:id="@+id/btn_move_down"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:background="#F3F4F6"
                     android:padding="6dp"
                     android:src="@drawable/selector_move_bottom"
@@ -340,8 +340,8 @@
 
                 <ImageView
                     android:id="@+id/btn_move_right"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_marginEnd="2dp"
                     android:background="#F3F4F6"
                     android:padding="6dp"
@@ -350,8 +350,8 @@
 
                 <ImageView
                     android:id="@+id/btn_move_left"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:background="#F3F4F6"
                     android:padding="6dp"
                     android:src="@drawable/selector_move_left"
