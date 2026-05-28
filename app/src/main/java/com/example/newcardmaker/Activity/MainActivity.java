@@ -12164,12 +12164,6 @@ public class MainActivity extends AppCompatActivity {
         final float[] lastTY = {0};
         final boolean[] dragging = {false};
 
-        View dragHandle = cv.findViewById(R.id.drag_handle_sel);
-        if (dragHandle == null) {
-            // Fallback: use root view
-            dragHandle = cv;
-        }
-
         final float[] dragStartX = {0};
         final float[] dragStartY = {0};
 
@@ -12207,7 +12201,14 @@ public class MainActivity extends AppCompatActivity {
             return false;
         };
 
-        dragHandle.setOnTouchListener(dragListener);
+        // આખા dialog ને drag કરી શકાય
+        cv.setOnTouchListener(dragListener);
+
+        // Drag handle પર પણ set કરો
+        View dragHandle = cv.findViewById(R.id.drag_handle_sel);
+        if (dragHandle != null) {
+            dragHandle.setOnTouchListener(dragListener);
+        }
     }
 
 
