@@ -1,13 +1,10 @@
 package com.example.newcardmaker.Activity;
 
-import static android.util.Log.ASSERT;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -25,9 +23,12 @@ import com.bumptech.glide.Glide;
 import com.example.newcardmaker.invite_online_database.invite_AppConstants;
 import com.example.newcardmaker.invite_online_database.invite_EndlessRecyclerViewScrollListener1;
 import com.example.newcardmaker.invite_online_database.invite_Item_OneImages;
+import com.example.newcardmaker.invite_online_database.invite_ItemSubCat_main;
 import com.example.newcardmaker.invite_online_database.invite_Load_OneImages;
+import com.example.newcardmaker.invite_online_database.invite_LoadSubCat_main;
 import com.example.newcardmaker.invite_online_database.invite_Methods;
 import com.example.newcardmaker.invite_online_database.invite_OneImagesListener;
+import com.example.newcardmaker.invite_online_database.invite_SubCategoryListener_main;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -44,21 +45,29 @@ import okhttp3.RequestBody;
 
 public class SingleListActivity extends AppCompatActivity {
 
+    // ── Sub-category mode
+    RecyclerView subCatRecycler;
+    ArrayList<invite_ItemSubCat_main> subCatList = new ArrayList<>();
+
+    // ── Image mode
     RecyclerView home_recyclerView;
-    invite_Methods home_methods;
-    String home_selectmethod;
     StaggeredGridLayoutManager home_lLayout;
     Boolean home_isOver = false, home_isScroll = false;
     int home_page = 1;
-    ArrayList<invite_Item_OneImages> home_arrayList, home_arrayListTemp;
-    Bundle bb;
-    LinearLayout home_ll_empty;
-    String cid, categoryName;
+    ArrayList<invite_Item_OneImages> home_arrayList = new ArrayList<>();
+    ArrayList<invite_Item_OneImages> home_arrayListTemp = new ArrayList<>();
     ImageAdapter home_adapterImageQuotes;
+    invite_Load_OneImages loadQuotes;
+    RequestBody requestBody;
+
+    // ── Common
+    invite_Methods home_methods;
+    LinearLayout home_ll_empty;
     ProgressBar home_progressBar;
     TextView home_tv_empty;
-    RequestBody requestBody;
-    invite_Load_OneImages loadQuotes;
+    Bundle bb;
+    String cid, categoryName;
+    String currentSubCatId = null; // null = show sub-cats, non-null = show images
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +75,6 @@ public class SingleListActivity extends AppCompatActivity {
 
         cid = getIntent().getStringExtra("cid");
         categoryName = getIntent().getStringExtra("name");
-        android.util.Log.e("#SingleList_CID", "cid=" + cid + " name=" + categoryName);
 
         // ── Root
         LinearLayout root = new LinearLayout(this);
@@ -85,7 +93,16 @@ public class SingleListActivity extends AppCompatActivity {
         btnBack.setTextSize(22);
         btnBack.setTextColor(Color.WHITE);
         btnBack.setPadding(0, 0, 20, 0);
-        btnBack.setOnClickListener(v -> finish());
+        btnBack.setOnClickListener(v -> {
+            if (currentSubCatId != null) {
+                // Go back to sub-categories
+                currentSubCatId = null;
+                home_recyclerView.setVisibility(View.GONE);
+                subCatRecycler.setVisibility(View.VISIBLE);
+            } else {
+                finish();
+            }
+        });
 
         TextView tvTitle = new TextView(this);
         tvTitle.setText(categoryName != null ? categoryName : "Cards");
@@ -111,7 +128,7 @@ public class SingleListActivity extends AppCompatActivity {
         home_progressBar.setLayoutParams(pbLp);
         root.addView(home_progressBar);
 
-        // ── Empty layout
+        // ── Empty
         home_ll_empty = new LinearLayout(this);
         home_ll_empty.setGravity(Gravity.CENTER);
         home_ll_empty.setVisibility(View.GONE);
@@ -122,7 +139,16 @@ public class SingleListActivity extends AppCompatActivity {
         home_ll_empty.addView(home_tv_empty);
         root.addView(home_ll_empty);
 
-        // ── RecyclerView
+        // ── Sub-category RecyclerView (2 column grid)
+        subCatRecycler = new RecyclerView(this);
+        subCatRecycler.setLayoutManager(new GridLayoutManager(this, 2));
+        subCatRecycler.setPadding(8, 8, 8, 8);
+        LinearLayout.LayoutParams scLp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
+        subCatRecycler.setLayoutParams(scLp);
+        root.addView(subCatRecycler);
+
+        // ── Image RecyclerView
         home_recyclerView = new RecyclerView(this);
         home_lLayout = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         home_recyclerView.setLayoutManager(home_lLayout);
@@ -130,21 +156,77 @@ public class SingleListActivity extends AppCompatActivity {
         LinearLayout.LayoutParams rvLp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
         home_recyclerView.setLayoutParams(rvLp);
+        home_recyclerView.setVisibility(View.GONE);
         root.addView(home_recyclerView);
 
         setContentView(root);
 
-        home_page = 1;
-        home_arrayList = new ArrayList<>();
-        home_arrayListTemp = new ArrayList<>();
         home_methods = new invite_Methods(this);
-        home_selectmethod = invite_AppConstants.METHOD_IMAGE_All_PHOTOGREETING11;
 
-        android.util.Log.e("#SingleList_method", "method=" + home_selectmethod + " cid=" + cid);
+        // Load sub-categories first
+        loadSubCategories();
+    }
 
-        loadQuotesByCat(home_selectmethod);
+    // ════════════════════════════════
+    // Load Sub-Categories
+    // ════════════════════════════════
+    private void loadSubCategories() {
+        if (!home_methods.isConnectingToInternet()) {
+            setEmpty("Internet connection નથી");
+            return;
+        }
 
-        // ── Endless scroll
+        home_progressBar.setVisibility(View.VISIBLE);
+        subCatRecycler.setVisibility(View.GONE);
+
+        invite_LoadSubCat_main loader = new invite_LoadSubCat_main(
+                new invite_SubCategoryListener_main() {
+                    @Override
+                    public void onStart() { subCatList.clear(); }
+
+                    @Override
+                    public void onEnd(String success, String verifyStatus, String message,
+                                      ArrayList<invite_ItemSubCat_main> imageCat,
+                                      ArrayList<invite_ItemSubCat_main> textCat) {
+                        home_progressBar.setVisibility(View.GONE);
+                        if ("1".equals(success) && !"-1".equals(verifyStatus)) {
+                            subCatList.addAll(imageCat);
+                            if (subCatList.isEmpty()) {
+                                setEmpty("કોઈ sub-category નથી");
+                            } else {
+                                home_ll_empty.setVisibility(View.GONE);
+                                subCatRecycler.setVisibility(View.VISIBLE);
+                                subCatRecycler.setAdapter(new SubCatAdapter());
+                            }
+                        } else {
+                            setEmpty("Error loading categories");
+                        }
+                    }
+                },
+                home_methods.getAPIRequest(invite_AppConstants.METHOD_CAT_PHOTOWALL1,
+                        0, "", "", "", cid, "", "", "", "", "", "", "", "", "", "", "", null)
+        );
+        loader.execute();
+    }
+
+    // ════════════════════════════════
+    // Load Images by Sub-Category
+    // ════════════════════════════════
+    private void loadImages(String subCatId) {
+        currentSubCatId = subCatId;
+        home_isOver = false;
+        home_isScroll = false;
+        home_page = 1;
+        home_arrayList.clear();
+        home_arrayListTemp.clear();
+
+        subCatRecycler.setVisibility(View.GONE);
+        home_recyclerView.setVisibility(View.VISIBLE);
+        home_progressBar.setVisibility(View.VISIBLE);
+
+        fetchImages(subCatId);
+
+        // Endless scroll
         home_recyclerView.addOnScrollListener(
                 new invite_EndlessRecyclerViewScrollListener1(home_lLayout) {
                     @Override
@@ -152,13 +234,13 @@ public class SingleListActivity extends AppCompatActivity {
                         if (!home_isOver) {
                             new Handler().postDelayed(() -> {
                                 home_isScroll = true;
-                                loadQuotesByCat(home_selectmethod);
+                                fetchImages(subCatId);
                             }, 500);
                         }
                     }
                 });
 
-        // ── Item click
+        // Item click
         home_recyclerView.addOnItemTouchListener(
                 new invite_AppConstants.RecyclerTouchListener(this, home_recyclerView,
                         new invite_AppConstants.RecyclerTouchListener.ClickListener() {
@@ -167,12 +249,75 @@ public class SingleListActivity extends AppCompatActivity {
                                 if (position < 0 || position >= home_arrayList.size()) return;
                                 openCard(position);
                             }
-
                             @Override
                             public void onLongClick(View view, int position) {}
                         }));
     }
 
+    private void fetchImages(String subCatId) {
+        if (!home_methods.isConnectingToInternet()) {
+            setEmpty("Internet connection નથી");
+            return;
+        }
+
+        requestBody = home_methods.getAPIRequest(
+                invite_AppConstants.METHOD_IMAGE_PHOTOGREETING,
+                home_page, "", "", "", subCatId, "", "", "", "", "", "", "", "",
+                "", invite_AppConstants.itemUser.getId(), "", null);
+
+        loadQuotes = new invite_Load_OneImages(new invite_OneImagesListener() {
+            @Override
+            public void onStart() {
+                if (home_arrayList.isEmpty()) {
+                    home_recyclerView.setVisibility(View.GONE);
+                    home_ll_empty.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onEnd(String success, String verifyStatus, String message,
+                              ArrayList<invite_Item_OneImages> arrayListQuotes, int total_records) {
+                home_progressBar.setVisibility(View.GONE);
+                if ("1".equals(success) && !"-1".equals(verifyStatus) && !"-2".equals(verifyStatus)) {
+                    if (arrayListQuotes.isEmpty()) {
+                        home_isOver = true;
+                        if (home_arrayList.isEmpty()) setEmpty("No cards found");
+                    } else {
+                        home_arrayList.addAll(arrayListQuotes);
+                        home_arrayListTemp.addAll(arrayListQuotes);
+                        home_page++;
+                        setImageAdapter();
+                    }
+                } else {
+                    setEmpty("Error loading cards");
+                }
+            }
+        }, requestBody);
+        loadQuotes.execute();
+    }
+
+    private void setImageAdapter() {
+        if (!home_isScroll) {
+            home_adapterImageQuotes = new ImageAdapter();
+            home_recyclerView.setAdapter(home_adapterImageQuotes);
+        } else {
+            if (home_adapterImageQuotes != null)
+                home_adapterImageQuotes.notifyDataSetChanged();
+        }
+        home_ll_empty.setVisibility(View.GONE);
+        home_recyclerView.setVisibility(View.VISIBLE);
+    }
+
+    private void setEmpty(String msg) {
+        home_tv_empty.setText(msg);
+        home_ll_empty.setVisibility(View.VISIBLE);
+        subCatRecycler.setVisibility(View.GONE);
+        home_recyclerView.setVisibility(View.GONE);
+    }
+
+    // ════════════════════════════════
+    // Open Card
+    // ════════════════════════════════
     private void openCard(int position) {
         invite_Item_OneImages item = home_arrayList.get(position);
         bb = new Bundle();
@@ -207,7 +352,6 @@ public class SingleListActivity extends AppCompatActivity {
         bb.putString("image_array", TextUtils.join("!--!", data));
         bb.putString("duration_array", item.getFont2());
 
-        // Download JSON and open MainActivity
         String jsonUrl = "https://crytonixinvitesan.gardenphoto.in/images/" + item.getquote_imagejson();
         new DownloadJsonTask(bb).execute(jsonUrl);
     }
@@ -222,68 +366,84 @@ public class SingleListActivity extends AppCompatActivity {
         }
     }
 
-    private void loadQuotesByCat(String method) {
-        if (!home_methods.isConnectingToInternet()) {
-            setEmpty(false, "Internet connection નથી");
-            home_progressBar.setVisibility(View.GONE);
-            return;
+    // ════════════════════════════════
+    // Sub-Category Adapter
+    // ════════════════════════════════
+    private class SubCatAdapter extends RecyclerView.Adapter<SubCatAdapter.SCHolder> {
+
+        @Override
+        public SCHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            FrameLayout card = new FrameLayout(SingleListActivity.this);
+            RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(
+                    RecyclerView.LayoutParams.MATCH_PARENT,
+                    RecyclerView.LayoutParams.WRAP_CONTENT);
+            lp.setMargins(6, 6, 6, 6);
+            card.setLayoutParams(lp);
+
+            android.graphics.drawable.GradientDrawable bg =
+                    new android.graphics.drawable.GradientDrawable();
+            bg.setColor(Color.WHITE);
+            bg.setCornerRadius(10f);
+            card.setBackground(bg);
+            card.setElevation(3f);
+
+            ImageView imageView = new ImageView(SingleListActivity.this);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            FrameLayout.LayoutParams imgLp = new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT, 350);
+            imageView.setLayoutParams(imgLp);
+            card.addView(imageView);
+
+            TextView tvName = new TextView(SingleListActivity.this);
+            tvName.setTextSize(13);
+            tvName.setTextColor(Color.WHITE);
+            tvName.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
+            tvName.setBackgroundColor(Color.parseColor("#AA000000"));
+            tvName.setPadding(12, 8, 12, 10);
+            tvName.setGravity(Gravity.CENTER);
+            FrameLayout.LayoutParams nameLp = new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT);
+            nameLp.gravity = Gravity.BOTTOM;
+            nameLp.setMargins(0, 350, 0, 0);
+            tvName.setLayoutParams(nameLp);
+            card.addView(tvName);
+
+            return new SCHolder(card, imageView, tvName);
         }
 
-        requestBody = home_methods.getAPIRequest(method, home_page, "", "", "",
-                cid, "", "", "", "", "", "", "", "",
-                "", invite_AppConstants.itemUser.getId(), "", null);
+        @Override
+        public void onBindViewHolder(SCHolder holder, int position) {
+            invite_ItemSubCat_main item = subCatList.get(position);
 
-        loadQuotes = new invite_Load_OneImages(new invite_OneImagesListener() {
-            @Override
-            public void onStart() {
-                if (home_arrayList.isEmpty()) {
-                    home_recyclerView.setVisibility(View.GONE);
-                    home_ll_empty.setVisibility(View.GONE);
-                    home_progressBar.setVisibility(View.VISIBLE);
-                }
-            }
+            Glide.with(SingleListActivity.this)
+                    .load(item.getImageBig())
+                    .centerCrop()
+                    .placeholder(android.R.drawable.ic_menu_gallery)
+                    .into(holder.imageView);
 
-            @Override
-            public void onEnd(String success, String verifyStatus, String message,
-                              ArrayList<invite_Item_OneImages> arrayListQuotes, int total_records) {
-                home_progressBar.setVisibility(View.GONE);
-                if ("1".equals(success) && !"-1".equals(verifyStatus) && !"-2".equals(verifyStatus)) {
-                    if (arrayListQuotes.isEmpty()) {
-                        home_isOver = true;
-                        setEmpty(true, "Not Found");
-                    } else {
-                        home_arrayList.addAll(arrayListQuotes);
-                        home_arrayListTemp.addAll(arrayListQuotes);
-                        home_page++;
-                        setAdapter();
-                    }
-                } else {
-                    setEmpty(false, "Error loading cards");
-                }
-            }
-        }, requestBody);
-        loadQuotes.execute();
-    }
+            holder.tvName.setText(item.getName());
 
-    private void setAdapter() {
-        if (!home_isScroll) {
-            home_adapterImageQuotes = new ImageAdapter();
-            home_recyclerView.setAdapter(home_adapterImageQuotes);
-        } else {
-            if (home_adapterImageQuotes != null)
-                home_adapterImageQuotes.notifyDataSetChanged();
+            holder.itemView.setOnClickListener(v -> {
+                holder.itemView.animate().scaleX(0.95f).scaleY(0.95f).setDuration(80)
+                        .withEndAction(() ->
+                                holder.itemView.animate().scaleX(1f).scaleY(1f).setDuration(80).start()
+                        ).start();
+                loadImages(item.getId());
+            });
         }
-        setEmpty(true, "Not Found");
-    }
 
-    private void setEmpty(boolean isSuccess, String msg) {
-        if (isSuccess && !home_arrayList.isEmpty()) {
-            home_ll_empty.setVisibility(View.GONE);
-            home_recyclerView.setVisibility(View.VISIBLE);
-        } else {
-            home_tv_empty.setText(msg);
-            home_ll_empty.setVisibility(View.VISIBLE);
-            home_recyclerView.setVisibility(View.GONE);
+        @Override
+        public int getItemCount() { return subCatList.size(); }
+
+        class SCHolder extends RecyclerView.ViewHolder {
+            ImageView imageView;
+            TextView tvName;
+            SCHolder(View itemView, ImageView imageView, TextView tvName) {
+                super(itemView);
+                this.imageView = imageView;
+                this.tvName = tvName;
+            }
         }
     }
 
@@ -356,9 +516,7 @@ public class SingleListActivity extends AppCompatActivity {
         private Bundle bundle;
         private String savedPath;
 
-        DownloadJsonTask(Bundle bundle) {
-            this.bundle = bundle;
-        }
+        DownloadJsonTask(Bundle bundle) { this.bundle = bundle; }
 
         @Override
         protected Boolean doInBackground(String... urls) {
@@ -366,15 +524,14 @@ public class SingleListActivity extends AppCompatActivity {
                 File dir = new File(getFilesDir() + "/invites_amantran_bundle");
                 if (!dir.exists()) dir.mkdir();
 
-                Random random = new Random();
-                savedPath = getFilesDir() + "/invites_amantran_bundle/bundle_data" + random.nextInt(1000000) + ".json";
+                savedPath = getFilesDir() + "/invites_amantran_bundle/bundle_data"
+                        + new Random().nextInt(1000000) + ".json";
 
                 URL url = new URL(urls[0]);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setConnectTimeout(10000);
                 conn.setReadTimeout(10000);
                 conn.connect();
-
                 if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) return false;
 
                 InputStream is = new BufferedInputStream(conn.getInputStream());
@@ -382,18 +539,11 @@ public class SingleListActivity extends AppCompatActivity {
                 StringBuilder sb = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null) sb.append(line);
-                reader.close();
-                is.close();
-                conn.disconnect();
+                reader.close(); is.close(); conn.disconnect();
 
-                FileOutputStream fos = new FileOutputStream(savedPath);
-                fos.write(sb.toString().getBytes());
-                fos.close();
+                new FileOutputStream(savedPath).write(sb.toString().getBytes());
                 return true;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
+            } catch (Exception e) { e.printStackTrace(); return false; }
         }
 
         @Override
