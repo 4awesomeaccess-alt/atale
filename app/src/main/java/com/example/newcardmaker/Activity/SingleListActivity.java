@@ -373,7 +373,7 @@ public class SingleListActivity extends AppCompatActivity {
         bb.putString("image_array", TextUtils.join("!--!", data));
         bb.putString("duration_array", item.getFont2());
 
-        String jsonUrl = "https://crytonixinvitesan.gardenphoto.in/images/" + item.getquote_imagejson();
+        String jsonUrl = invite_AppConstants.SERVER_URL + "images/" + item.getquote_imagejson();
         new DownloadJsonTask(bb).execute(jsonUrl);
     }
 
@@ -536,10 +536,10 @@ public class SingleListActivity extends AppCompatActivity {
     // Download JSON & Open MainActivity
     // ════════════════════════════════
     private class DownloadJsonTask extends android.os.AsyncTask<String, Void, Boolean> {
-        private Bundle bundle;
+        private final Bundle taskBundle;
         private String savedPath;
 
-        DownloadJsonTask(Bundle bundle) { this.bundle = bundle; }
+        DownloadJsonTask(Bundle bundle) { this.taskBundle = bundle; }
 
         @Override
         protected Boolean doInBackground(String... urls) {
@@ -572,15 +572,15 @@ public class SingleListActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean success) {
             if (success && savedPath != null) {
-                bundle.putString("file", savedPath);
-                bundle.putString("all_data_bg_array", "");
-                bundle.putString("dlet_arraylist", "");
-                bundle.putString("save_page_delet_array", "");
-                bundle.putString("save_page_bg_delet_array", "");
-                bundle.putString("save_page_delet_iamge_array", "");
+                taskBundle.putString("file", savedPath);
+                taskBundle.putString("all_data_bg_array", "");
+                taskBundle.putString("dlet_arraylist", "");
+                taskBundle.putString("save_page_delet_array", "");
+                taskBundle.putString("save_page_bg_delet_array", "");
+                taskBundle.putString("save_page_delet_iamge_array", "");
 
                 Intent intent = new Intent(SingleListActivity.this, MainActivity.class);
-                intent.putExtra("online_data", bundle);
+                intent.putExtra("online_data", taskBundle);
                 intent.putExtra("main_cid", cid != null ? cid : "23");
                 intent.putExtra("main_cid_vector", "8");
                 startActivityForResult(intent, 1234567);
