@@ -170,6 +170,24 @@
                     style="@style/IconActionLabel"
                     android:text="Flip - H" />
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_bold"
+                style="@style/IconActionBtn">
+
+                <ImageView
+                    android:id="@+id/iv_bold"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/bold" />
+
+                <TextView
+                    style="@style/IconActionLabel"
+                    android:text="Bold" />
+            </LinearLayout>
+
+
         </LinearLayout>
     </HorizontalScrollView>
 
@@ -204,21 +222,6 @@
                     android:text="Layer UP" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/btn_bold"
-                style="@style/IconActionBtn">
-
-                <ImageView
-                    android:id="@+id/iv_bold"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/bold" />
-
-                <TextView
-                    style="@style/IconActionLabel"
-                    android:text="Bold" />
-            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/btn_underline"
@@ -700,6 +703,21 @@
             <LinearLayout
                 android:id="@+id/tab_typo"
                 style="@style/GridFeatureBtn">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_add_text" />
+
+                <TextView
+                    style="@style/GridFeatureLabel"
+                    android:text="Typo" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tab_typo"
+                style="@style/GridFeatureBtn11">
 
                 <ImageView
                     android:layout_width="16dp"
