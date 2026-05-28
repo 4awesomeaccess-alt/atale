@@ -8443,36 +8443,8 @@ public class MainActivity extends AppCompatActivity {
         // ════════════════════════════
 // HIDE/SHOW TOGGLE
 // ════════════════════════════
-        TextView btnPanelToggle = cv.findViewById(R.id.btn_panel_toggle);
-        LinearLayout panelMainContent = cv.findViewById(R.id.panel_main_content);
+
         final boolean[] isPanelVisible = {true};
-
-        if (btnPanelToggle != null && panelMainContent != null) {
-            btnPanelToggle.setOnClickListener(v -> {
-                isPanelVisible[0] = !isPanelVisible[0];
-                if (isPanelVisible[0]) {
-                    // ✅ Show with animation
-                    panelMainContent.setVisibility(View.VISIBLE);
-                    panelMainContent.animate()
-                            .alpha(1f)
-                            .scaleY(1f)
-                            .setDuration(200)
-                            .start();
-                    btnPanelToggle.setText("▼");
-                } else {
-                    // ✅ Hide with animation
-                    panelMainContent.animate()
-                            .alpha(0f)
-                            .scaleY(0f)
-                            .setDuration(200)
-                            .withEndAction(() ->
-                                    panelMainContent.setVisibility(View.GONE))
-                            .start();
-                    btnPanelToggle.setText("▲");
-                }
-            });
-        }
-
 // ════════════════════════════
 // TAB SWITCHING LOGIC
 // ════════════════════════════
@@ -8506,6 +8478,34 @@ public class MainActivity extends AppCompatActivity {
         android.widget.TextView tvPadYLbl = cv.findViewById(R.id.tv_padding_y_label);
         android.widget.TextView btnPadYM = cv.findViewById(R.id.btn_pad_y_minus);
         android.widget.TextView btnPadYP = cv.findViewById(R.id.btn_pad_y_plus);
+
+
+
+          int moveStep = 5;
+        final List<View> capturedTargets = new ArrayList<>();
+        if (!selectedViews.isEmpty()) capturedTargets.addAll(selectedViews);
+        else if (currentlySelectedView != null) capturedTargets.add(currentlySelectedView);
+
+        View btnMoveLeft  = cv.findViewById(R.id.btn_move_left);
+        View btnMoveUp    = cv.findViewById(R.id.btn_move_up);
+        View btnMoveDown  = cv.findViewById(R.id.btn_move_down);
+        View btnMoveRight = cv.findViewById(R.id.btn_move_right);
+
+        View.OnClickListener moveListener = v -> {
+            int vid = v.getId();
+            for (View t : capturedTargets) {
+                if (vid == R.id.btn_move_left)       moveSingleView(t, -moveStep, 0);
+                else if (vid == R.id.btn_move_right)  moveSingleView(t,  moveStep, 0);
+                else if (vid == R.id.btn_move_up)     moveSingleView(t, 0, -moveStep);
+                else if (vid == R.id.btn_move_down)   moveSingleView(t, 0,  moveStep);
+            }
+        };
+
+        if (btnMoveLeft  != null) btnMoveLeft.setOnClickListener(moveListener);
+        if (btnMoveUp    != null) btnMoveUp.setOnClickListener(moveListener);
+        if (btnMoveDown  != null) btnMoveDown.setOnClickListener(moveListener);
+        if (btnMoveRight != null) btnMoveRight.setOnClickListener(moveListener);
+
 
 // ── Current padding set
         int strokeE = (int) Math.ceil(targetView.getStrokeWidth()) + 4;
@@ -8691,6 +8691,12 @@ public class MainActivity extends AppCompatActivity {
             if (ivItalicImg != null) {
                 ivItalicImg.setImageResource(isItalic2 ? R.drawable.ic_italic_click : R.drawable.ic_italic);
             }
+
+            android.widget.ImageView iv_UnderImg = cv.findViewById(R.id.iv_line);
+            if (iv_UnderImg != null) {
+                iv_UnderImg.setImageResource(isBold ? R.drawable.underline_click : R.drawable.underline);
+            }
+
         };
         updateStyleBtns.run();
 
@@ -9853,7 +9859,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // ── Move buttons
-        int moveStep = 5;
+
         android.widget.TextView btnMoveUpT = cv.findViewById(R.id.btn_move_up_text);
         android.widget.TextView btnMoveDownT = cv.findViewById(R.id.btn_move_down_text);
         android.widget.TextView btnMoveLeftT = cv.findViewById(R.id.btn_move_left_text);
