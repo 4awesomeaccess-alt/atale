@@ -8429,7 +8429,7 @@ public class MainActivity extends AppCompatActivity {
 
         int screenW = getResources().getDisplayMetrics().widthPixels;
         int density = (int) getResources().getDisplayMetrics().density;
-        int popupW = screenW - (10 * density * 2); // 10dp each side
+        int popupW = screenW - (25 * density * 2); // 25dp each side
         selectionControlsPopup = new PopupWindow(cv,
                 popupW,
                 LinearLayout.LayoutParams.WRAP_CONTENT, false);
