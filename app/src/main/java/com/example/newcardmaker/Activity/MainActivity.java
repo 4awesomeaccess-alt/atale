@@ -8839,21 +8839,41 @@ public class MainActivity extends AppCompatActivity {
         }
         if (btnSizeMinus != null) {
             btnSizeMinus.setOnClickListener(v -> {
+                // Button scale animation
+                v.animate().scaleX(0.85f).scaleY(0.85f).setDuration(80).withEndAction(() ->
+                    v.animate().scaleX(1f).scaleY(1f).setDuration(80).start()
+                ).start();
                 float cur = targetView.getTextSize() / getResources().getDisplayMetrics().scaledDensity;
                 float nv = Math.max(6, cur - 1);
                 targetView.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, nv);
                 if (seekTextSize != null) seekTextSize.setProgress((int) nv);
-                if (tvTextSizeVal != null) tvTextSizeVal.setText(String.valueOf((int) nv));
+                if (tvTextSizeVal != null) {
+                    tvTextSizeVal.setText(String.valueOf((int) nv));
+                    // Text bounce animation
+                    tvTextSizeVal.animate().scaleX(1.3f).scaleY(1.3f).setDuration(80).withEndAction(() ->
+                        tvTextSizeVal.animate().scaleX(1f).scaleY(1f).setDuration(80).start()
+                    ).start();
+                }
                 exportToJson();
             });
         }
         if (btnSizePlus != null) {
             btnSizePlus.setOnClickListener(v -> {
+                // Button scale animation
+                v.animate().scaleX(0.85f).scaleY(0.85f).setDuration(80).withEndAction(() ->
+                    v.animate().scaleX(1f).scaleY(1f).setDuration(80).start()
+                ).start();
                 float cur = targetView.getTextSize() / getResources().getDisplayMetrics().scaledDensity;
                 float nv = Math.min(300, cur + 1);
                 targetView.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, nv);
                 if (seekTextSize != null) seekTextSize.setProgress((int) nv);
-                if (tvTextSizeVal != null) tvTextSizeVal.setText(String.valueOf((int) nv));
+                if (tvTextSizeVal != null) {
+                    tvTextSizeVal.setText(String.valueOf((int) nv));
+                    // Text bounce animation
+                    tvTextSizeVal.animate().scaleX(1.3f).scaleY(1.3f).setDuration(80).withEndAction(() ->
+                        tvTextSizeVal.animate().scaleX(1f).scaleY(1f).setDuration(80).start()
+                    ).start();
+                }
                 exportToJson();
             });
         }
