@@ -8694,7 +8694,7 @@ public class MainActivity extends AppCompatActivity {
 
             android.widget.ImageView iv_UnderImg = cv.findViewById(R.id.iv_line);
             if (iv_UnderImg != null) {
-                iv_UnderImg.setImageResource(isBold ? R.drawable.underline_click : R.drawable.underline);
+                iv_UnderImg.setImageResource(isUnder ? R.drawable.underline_click : R.drawable.underline);
             }
 
         };
