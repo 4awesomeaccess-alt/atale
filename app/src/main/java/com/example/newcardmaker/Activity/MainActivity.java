@@ -12216,7 +12216,6 @@ public class MainActivity extends AppCompatActivity {
         final boolean[] dragging = {false};
         final float[] dragStartX = {0};
         final float[] dragStartY = {0};
-        final int[] popupPos = {0, 0}; // current popup x, y
 
         View.OnTouchListener dragListener = (v2, event) -> {
             switch (event.getAction()) {
@@ -12224,12 +12223,12 @@ public class MainActivity extends AppCompatActivity {
                     dragStartX[0] = event.getRawX();
                     dragStartY[0] = event.getRawY();
                     dragging[0] = true;
-                    // Get current popup position
+                    // First touch — get actual position from screen
                     if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) {
                         int[] loc = new int[2];
                         selectionControlsPopup.getContentView().getLocationOnScreen(loc);
-                        popupPos[0] = loc[0];
-                        popupPos[1] = loc[1];
+                        selControlsLastX = loc[0];
+                        selControlsLastY = loc[1];
                     }
                     return true;
 
@@ -12239,16 +12238,14 @@ public class MainActivity extends AppCompatActivity {
                     int dy = (int)(event.getRawY() - dragStartY[0]);
                     dragStartX[0] = event.getRawX();
                     dragStartY[0] = event.getRawY();
-                    popupPos[0] += dx;
-                    popupPos[1] += dy;
+                    selControlsLastX += dx;
+                    selControlsLastY += dy;
                     int screenW2 = getResources().getDisplayMetrics().widthPixels;
                     int screenH2 = getResources().getDisplayMetrics().heightPixels;
-                    popupPos[0] = Math.max(0, Math.min(popupPos[0], screenW2 - 100));
-                    popupPos[1] = Math.max(0, Math.min(popupPos[1], screenH2 - 100));
-                    selControlsLastX = popupPos[0];
-                    selControlsLastY = popupPos[1];
+                    selControlsLastX = Math.max(0, Math.min(selControlsLastX, screenW2 - 100));
+                    selControlsLastY = Math.max(0, Math.min(selControlsLastY, screenH2 - 100));
                     if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) {
-                        selectionControlsPopup.update(popupPos[0], popupPos[1], -1, -1);
+                        selectionControlsPopup.update(selControlsLastX, selControlsLastY, -1, -1);
                     }
                     isSelControlsMoved = true;
                     return true;
@@ -13249,6 +13246,13 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // First time — bottom center ma show karo
             selectionControlsPopup.showAtLocation(mainLayout, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+            // Post kari ne actual position read karo drag mate
+            selectionControlsPopup.getContentView().post(() -> {
+                int[] loc = new int[2];
+                selectionControlsPopup.getContentView().getLocationOnScreen(loc);
+                selControlsLastX = loc[0];
+                selControlsLastY = loc[1];
+            });
         }
     }
 
