@@ -8435,6 +8435,7 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT, false);
         selectionControlsPopup.setOutsideTouchable(false);
         selectionControlsPopup.setTouchable(true);
+        selectionControlsPopup.setElevation(16f);
         selectionControlsPopup.setBackgroundDrawable(
                 new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
 
