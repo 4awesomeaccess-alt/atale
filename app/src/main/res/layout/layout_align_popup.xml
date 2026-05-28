@@ -210,7 +210,7 @@
                 android:orientation="vertical" android:gravity="center"
                 android:background="#374151" android:layout_marginEnd="3dp">
                 <ImageView android:layout_width="24dp" android:layout_height="24dp"
-                    android:src="@drawable/ic_left" android:scaleType="fitCenter"/>
+                    android:src="@drawable/selector_move_left" android:scaleType="fitCenter"/>
             </LinearLayout>
 
             <LinearLayout android:id="@+id/btn_move_up"
@@ -218,7 +218,7 @@
                 android:orientation="vertical" android:gravity="center"
                 android:background="#374151" android:layout_marginEnd="3dp">
                 <ImageView android:layout_width="24dp" android:layout_height="24dp"
-                    android:src="@drawable/ic_top" android:scaleType="fitCenter"/>
+                    android:src="@drawable/selector_move_top" android:scaleType="fitCenter"/>
             </LinearLayout>
 
             <LinearLayout android:id="@+id/btn_move_down"
@@ -226,7 +226,7 @@
                 android:orientation="vertical" android:gravity="center"
                 android:background="#374151" android:layout_marginEnd="3dp">
                 <ImageView android:layout_width="24dp" android:layout_height="24dp"
-                    android:src="@drawable/ic_bottom" android:scaleType="fitCenter"/>
+                    android:src="@drawable/selector_move_bottom" android:scaleType="fitCenter"/>
             </LinearLayout>
 
             <LinearLayout android:id="@+id/btn_move_right"
@@ -234,7 +234,7 @@
                 android:orientation="vertical" android:gravity="center"
                 android:background="#374151">
                 <ImageView android:layout_width="24dp" android:layout_height="24dp"
-                    android:src="@drawable/ic_right" android:scaleType="fitCenter"/>
+                    android:src="@drawable/selector_move_right" android:scaleType="fitCenter"/>
             </LinearLayout>
 
         </LinearLayout>

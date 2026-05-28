@@ -317,7 +317,7 @@
                     android:layout_marginEnd="2dp"
                     android:background="#F3F4F6"
                     android:padding="6dp"
-                    android:src="@drawable/ic_top"
+                    android:src="@drawable/selector_move_top"
                     android:scaleType="fitCenter" />
 
                 <ImageView
@@ -326,7 +326,7 @@
                     android:layout_height="36dp"
                     android:background="#F3F4F6"
                     android:padding="6dp"
-                    android:src="@drawable/ic_bottom"
+                    android:src="@drawable/selector_move_bottom"
                     android:scaleType="fitCenter" />
             </LinearLayout>
 
@@ -343,7 +343,7 @@
                     android:layout_marginEnd="2dp"
                     android:background="#F3F4F6"
                     android:padding="6dp"
-                    android:src="@drawable/ic_right"
+                    android:src="@drawable/selector_move_right"
                     android:scaleType="fitCenter" />
 
                 <ImageView
@@ -352,7 +352,7 @@
                     android:layout_height="36dp"
                     android:background="#F3F4F6"
                     android:padding="6dp"
-                    android:src="@drawable/ic_left"
+                    android:src="@drawable/selector_move_left"
                     android:scaleType="fitCenter" />
             </LinearLayout>
 
