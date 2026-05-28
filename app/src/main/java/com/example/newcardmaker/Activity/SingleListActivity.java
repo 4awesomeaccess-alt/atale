@@ -163,8 +163,8 @@ public class SingleListActivity extends AppCompatActivity {
 
         home_methods = new invite_Methods(this);
 
-        // Load sub-categories first
-        loadSubCategories();
+        // Load all images directly
+        loadImages("");
     }
 
     // ════════════════════════════════
@@ -278,10 +278,10 @@ public class SingleListActivity extends AppCompatActivity {
         }
 
         requestBody = home_methods.getAPIRequest(
-                invite_AppConstants.METHOD_IMAGE_PHOTOGREETING,
-                home_page, "", "", "", subCatId, "", "", "", "", "", "", "", "",
+                invite_AppConstants.METHOD_IMAGE_All_PHOTOGREETING11,
+                home_page, "", "", "", "", "", "", "", "", "", "", "", "",
                 "", invite_AppConstants.itemUser.getId(), "", null);
-        android.util.Log.e("#fetchImages_cid", "subCatId=" + subCatId);
+        android.util.Log.e("#fetchImages_cid", "loading all images page=" + home_page);
 
         loadQuotes = new invite_Load_OneImages(new invite_OneImagesListener() {
             @Override
