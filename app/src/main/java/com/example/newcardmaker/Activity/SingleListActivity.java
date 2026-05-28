@@ -302,6 +302,7 @@ public class SingleListActivity extends AppCompatActivity {
                         if (home_arrayList.isEmpty()) setEmpty("No cards found");
                     } else {
                         for (invite_Item_OneImages imgItem : arrayListQuotes) {
+                            android.util.Log.e("#imgCatId", "imgCatId=" + imgItem.getCatId() + " subCatId=" + subCatId);
                             if (subCatId == null || subCatId.isEmpty() || imgItem.getCatId().equals(subCatId)) {
                                 home_arrayList.add(imgItem);
                                 home_arrayListTemp.add(imgItem);
