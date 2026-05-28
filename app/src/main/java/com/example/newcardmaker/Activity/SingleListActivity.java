@@ -366,6 +366,7 @@ public class SingleListActivity extends AppCompatActivity {
 
         // JSON download karo and external files dir ma save karo
         String jsonUrl = invite_AppConstants.SERVER_URL + "images/" + item.getquote_imagejson();
+        android.util.Log.e("#JSON_URL", "url=" + jsonUrl);
         new android.os.AsyncTask<String, Void, String>() {
             @Override
             protected String doInBackground(String... urls) {
@@ -394,6 +395,7 @@ public class SingleListActivity extends AppCompatActivity {
                     fos.close();
                     return outFile.getAbsolutePath();
                 } catch (Exception e) {
+                    android.util.Log.e("#JSON_err", e.getMessage() + "");
                     e.printStackTrace();
                     return null;
                 }
