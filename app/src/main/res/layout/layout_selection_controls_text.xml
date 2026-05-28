@@ -279,21 +279,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/btn_strikethrough11"
-                style="@style/IconActionBtn">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_strikethrough" />
-
-                <TextView
-                    style="@style/IconActionLabel"
-                    android:text="Strike" />
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/btn_layer_up"
                 style="@style/IconActionBtn">
                 <ImageView
