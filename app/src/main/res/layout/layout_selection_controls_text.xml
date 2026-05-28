@@ -714,21 +714,6 @@
                     style="@style/GridFeatureLabel"
                     android:text="Typo" />
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/tab_typo"
-                style="@style/GridFeatureBtn11">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_add_text" />
-
-                <TextView
-                    style="@style/GridFeatureLabel"
-                    android:text="Typo" />
-            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
