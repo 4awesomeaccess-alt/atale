@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/drag_handle_sel"
         android:layout_width="match_parent"
-        android:layout_height="22dp"
+        android:layout_height="16dp"
         android:background="#FFFFFF"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -97,8 +97,8 @@
                 style="@style/IconActionBtn">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_copy" />
 
@@ -112,8 +112,8 @@
                 style="@style/IconActionBtn">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_delete" />
 
@@ -127,8 +127,8 @@
                 style="@style/IconActionBtn">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_center" />
 
@@ -142,8 +142,8 @@
                 style="@style/IconActionBtn">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_verticle" />
 
@@ -157,8 +157,8 @@
                 style="@style/IconActionBtn">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_horizental" />
 
@@ -190,8 +190,8 @@
                 android:visibility="gone">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_overline" />
 
@@ -206,8 +206,8 @@
 
                 <ImageView
                     android:id="@+id/iv_bold"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/bold" />
 
@@ -222,8 +222,8 @@
 
                 <ImageView
                     android:id="@+id/iv_line"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_underline" />
 
@@ -237,8 +237,8 @@
                 style="@style/IconActionBtn">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_underline" />
 
@@ -253,8 +253,8 @@
 
                 <ImageView
                     android:id="@+id/iv_italic"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_italic" />
 
@@ -268,8 +268,8 @@
                 style="@style/IconActionBtn">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_strikethrough" />
 
@@ -283,8 +283,8 @@
                 style="@style/IconActionBtn">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_strikethrough" />
 
@@ -475,8 +475,8 @@
                 style="@style/GridFeatureBtn">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_edit" />
 
@@ -491,7 +491,7 @@
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="22dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_arc" />
 
@@ -506,8 +506,8 @@
                 style="@style/GridFeatureBtn">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_color" />
 
@@ -521,8 +521,8 @@
                 style="@style/GridFeatureBtn">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_backgroud" />
 
@@ -536,8 +536,8 @@
                 style="@style/GridFeatureBtn">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_bg_border" />
 
@@ -551,8 +551,8 @@
                 style="@style/GridFeatureBtn">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_align" />
 
@@ -566,8 +566,8 @@
                 style="@style/GridFeatureBtn">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_font" />
 
@@ -588,8 +588,8 @@
                 style="@style/GridFeatureBtn">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_space" />
 
@@ -603,8 +603,8 @@
                 style="@style/GridFeatureBtn">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_transfrom" />
 
@@ -618,8 +618,8 @@
                 style="@style/GridFeatureBtn">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_color" />
 
@@ -633,8 +633,8 @@
                 style="@style/GridFeatureBtn">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_edit" />
 
@@ -648,8 +648,8 @@
                 style="@style/GridFeatureBtn">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_multiselect" />
 
@@ -663,8 +663,8 @@
                 style="@style/GridFeatureBtn">
 
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/ic_add_text" />
 

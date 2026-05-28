@@ -208,28 +208,28 @@
     </style>
     <style name="GridFeatureBtn">
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">46dp</item>
+        <item name="android:layout_height">38dp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:orientation">vertical</item>
         <item name="android:gravity">center</item>
-        <item name="android:layout_margin">2dp</item>
+        <item name="android:layout_margin">1dp</item>
         <item name="android:background">#FFFFFF</item>
         <item name="android:elevation">1dp</item>
     </style>
     <style name="GridFeatureIcon">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">11sp</item>
         <item name="android:textColor">#424242</item>
         <item name="android:gravity">center</item>
     </style>
     <style name="GridFeatureLabel">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">6sp</item>
+        <item name="android:textSize">5sp</item>
         <item name="android:textColor">#616161</item>
         <item name="android:gravity">center</item>
-        <item name="android:layout_marginTop">1dp</item>
+        <item name="android:layout_marginTop">0dp</item>
     </style>
 
 </resources>
