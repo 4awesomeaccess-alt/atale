@@ -102,6 +102,10 @@ public class invite_Item_OneImages implements Serializable {
         return id;
     }
 
+    public String getCatId() {
+        return catId != null ? catId : "";
+    }
+
     public String getcard_background() {
         return card_background;
     }

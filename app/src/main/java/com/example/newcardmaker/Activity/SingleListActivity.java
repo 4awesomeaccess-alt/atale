@@ -278,8 +278,8 @@ public class SingleListActivity extends AppCompatActivity {
         }
 
         requestBody = home_methods.getAPIRequest(
-                invite_AppConstants.METHOD_IMAGE_PHOTOGREETING,
-                home_page, "", "", "", subCatId, "", "", "", "", "", "", "", "",
+                invite_AppConstants.METHOD_IMAGE_All_PHOTOGREETING11,
+                home_page, "", "", "", "", "", "", "", "", "", "", "", "",
                 "", invite_AppConstants.itemUser.getId(), "", null);
         android.util.Log.e("#fetchImages_cid", "subCatId=" + subCatId);
 
@@ -301,8 +301,16 @@ public class SingleListActivity extends AppCompatActivity {
                         home_isOver = true;
                         if (home_arrayList.isEmpty()) setEmpty("No cards found");
                     } else {
-                        home_arrayList.addAll(arrayListQuotes);
-                        home_arrayListTemp.addAll(arrayListQuotes);
+                        for (invite_Item_OneImages imgItem : arrayListQuotes) {
+                            if (subCatId == null || subCatId.isEmpty() || imgItem.getCatId().equals(subCatId)) {
+                                home_arrayList.add(imgItem);
+                                home_arrayListTemp.add(imgItem);
+                            }
+                        }
+                        if (home_arrayList.isEmpty()) {
+                            home_arrayList.addAll(arrayListQuotes);
+                            home_arrayListTemp.addAll(arrayListQuotes);
+                        }
                         home_page++;
                         setImageAdapter();
                     }
