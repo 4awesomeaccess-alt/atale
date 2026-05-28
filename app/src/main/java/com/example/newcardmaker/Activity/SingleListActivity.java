@@ -30,16 +30,7 @@ import com.example.newcardmaker.invite_online_database.invite_Methods;
 import com.example.newcardmaker.invite_online_database.invite_OneImagesListener;
 import com.example.newcardmaker.invite_online_database.invite_SubCategoryListener_main;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Random;
 
 import okhttp3.RequestBody;
 
@@ -373,8 +364,11 @@ public class SingleListActivity extends AppCompatActivity {
         bb.putString("image_array", TextUtils.join("!--!", data));
         bb.putString("duration_array", item.getFont2());
 
-        String jsonUrl = invite_AppConstants.SERVER_URL + "images/" + item.getquote_imagejson();
-        new DownloadJsonTask(bb).execute(jsonUrl);
+        Intent intent = new Intent(SingleListActivity.this, MainActivity.class);
+        intent.putExtra("online_data", bb);
+        intent.putExtra("main_cid", cid != null ? cid : "23");
+        intent.putExtra("main_cid_vector", "8");
+        startActivityForResult(intent, 1234567);
     }
 
     private void addIfImage(ArrayList<String> data, String url, String fallback) {
@@ -532,59 +526,4 @@ public class SingleListActivity extends AppCompatActivity {
         }
     }
 
-    // ════════════════════════════════
-    // Download JSON & Open MainActivity
-    // ════════════════════════════════
-    private class DownloadJsonTask extends android.os.AsyncTask<String, Void, Boolean> {
-        private final Bundle taskBundle;
-        private String savedPath;
-
-        DownloadJsonTask(Bundle bundle) { this.taskBundle = bundle; }
-
-        @Override
-        protected Boolean doInBackground(String... urls) {
-            try {
-                File dir = new File(getFilesDir() + "/invites_amantran_bundle");
-                if (!dir.exists()) dir.mkdir();
-
-                savedPath = getFilesDir() + "/invites_amantran_bundle/bundle_data"
-                        + new Random().nextInt(1000000) + ".json";
-
-                URL url = new URL(urls[0]);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setConnectTimeout(10000);
-                conn.setReadTimeout(10000);
-                conn.connect();
-                if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) return false;
-
-                InputStream is = new BufferedInputStream(conn.getInputStream());
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) sb.append(line);
-                reader.close(); is.close(); conn.disconnect();
-
-                new FileOutputStream(savedPath).write(sb.toString().getBytes());
-                return true;
-            } catch (Exception e) { e.printStackTrace(); return false; }
-        }
-
-        @Override
-        protected void onPostExecute(Boolean success) {
-            if (success && savedPath != null) {
-                taskBundle.putString("file", savedPath);
-                taskBundle.putString("all_data_bg_array", "");
-                taskBundle.putString("dlet_arraylist", "");
-                taskBundle.putString("save_page_delet_array", "");
-                taskBundle.putString("save_page_bg_delet_array", "");
-                taskBundle.putString("save_page_delet_iamge_array", "");
-
-                Intent intent = new Intent(SingleListActivity.this, MainActivity.class);
-                intent.putExtra("online_data", taskBundle);
-                intent.putExtra("main_cid", cid != null ? cid : "23");
-                intent.putExtra("main_cid_vector", "8");
-                startActivityForResult(intent, 1234567);
-            }
-        }
-    }
 }
