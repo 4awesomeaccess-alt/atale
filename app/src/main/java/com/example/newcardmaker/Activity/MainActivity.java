@@ -13186,13 +13186,8 @@ public class MainActivity extends AppCompatActivity {
         if (isSelControlsMoved) {
             selectionControlsPopup.showAtLocation(mainLayout, Gravity.TOP | Gravity.LEFT, selControlsLastX, selControlsLastY);
         } else {
-            // First time — measure karvi pachhi bottom-center ma TOP|LEFT coordinates thi show
-            cv.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-            int popupW = cv.getMeasuredWidth();
-            int popupH = cv.getMeasuredHeight();
-            selControlsLastX = Math.max(0, (mainLayout.getWidth() - popupW) / 2);
-            selControlsLastY = Math.max(0, mainLayout.getHeight() - popupH - 25);
-            selectionControlsPopup.showAtLocation(mainLayout, Gravity.TOP | Gravity.LEFT, selControlsLastX, selControlsLastY);
+            // First time — bottom center ma show karo
+            selectionControlsPopup.showAtLocation(mainLayout, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
         }
     }
 
