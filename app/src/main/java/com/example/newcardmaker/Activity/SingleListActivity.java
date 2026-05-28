@@ -365,7 +365,8 @@ public class SingleListActivity extends AppCompatActivity {
         bb.putString("duration_array", item.getFont2());
 
         // JSON download karo and external files dir ma save karo
-        String jsonUrl = invite_AppConstants.SERVER_URL + "images/" + item.getquote_imagejson();
+        String baseUrl = invite_AppConstants.SERVER_URL.replace("api.php", "");
+        String jsonUrl = baseUrl + "images/" + item.getquote_imagejson();
         android.util.Log.e("#JSON_URL", "url=" + jsonUrl);
         new android.os.AsyncTask<String, Void, String>() {
             @Override
