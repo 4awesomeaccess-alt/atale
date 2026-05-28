@@ -310,26 +310,24 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <TextView
+                <ImageView
                     android:id="@+id/btn_move_up"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_marginEnd="2dp"
                     android:background="#F3F4F6"
-                    android:gravity="center"
-                    android:text="↑"
-                    android:textColor="#374151"
-                    android:textSize="16sp" />
+                    android:padding="6dp"
+                    android:src="@drawable/ic_top"
+                    android:scaleType="fitCenter" />
 
-                <TextView
+                <ImageView
                     android:id="@+id/btn_move_down"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:background="#F3F4F6"
-                    android:gravity="center"
-                    android:text="↓"
-                    android:textColor="#374151"
-                    android:textSize="16sp" />
+                    android:padding="6dp"
+                    android:src="@drawable/ic_bottom"
+                    android:scaleType="fitCenter" />
             </LinearLayout>
 
             <LinearLayout
@@ -338,26 +336,24 @@
                 android:layout_marginTop="2dp"
                 android:orientation="horizontal">
 
-                <TextView
+                <ImageView
                     android:id="@+id/btn_move_right"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_marginEnd="2dp"
                     android:background="#F3F4F6"
-                    android:gravity="center"
-                    android:text="→"
-                    android:textColor="#374151"
-                    android:textSize="16sp" />
+                    android:padding="6dp"
+                    android:src="@drawable/ic_right"
+                    android:scaleType="fitCenter" />
 
-                <TextView
+                <ImageView
                     android:id="@+id/btn_move_left"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:background="#F3F4F6"
-                    android:gravity="center"
-                    android:text="←"
-                    android:textColor="#374151"
-                    android:textSize="16sp" />
+                    android:padding="6dp"
+                    android:src="@drawable/ic_left"
+                    android:scaleType="fitCenter" />
             </LinearLayout>
 
         </LinearLayout>
