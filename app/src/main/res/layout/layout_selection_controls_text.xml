@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/drag_handle_sel"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="28dp"
         android:background="#FFFFFF"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -51,9 +51,9 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingStart="8dp"
-        android:paddingTop="6dp"
+        android:paddingTop="3dp"
         android:paddingEnd="8dp"
-        android:paddingBottom="6dp">
+        android:paddingBottom="3dp">
 
         <!-- Size bar -->
         <LinearLayout
@@ -65,9 +65,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="8dp"
-        android:paddingTop="6dp"
+        android:paddingTop="3dp"
         android:paddingEnd="8dp"
-        android:paddingBottom="4dp"
+        android:paddingBottom="2dp"
         android:scrollbars="none">
 
         <LinearLayout
@@ -173,9 +173,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="8dp"
-        android:paddingTop="6dp"
+        android:paddingTop="3dp"
         android:paddingEnd="8dp"
-        android:paddingBottom="4dp"
+        android:paddingBottom="2dp"
         android:scrollbars="none">
 
         <LinearLayout
@@ -314,8 +314,8 @@
 
                 <ImageView
                     android:id="@+id/btn_move_up"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:layout_marginEnd="2dp"
                     android:background="#F3F4F6"
                     android:padding="6dp"
@@ -324,8 +324,8 @@
 
                 <ImageView
                     android:id="@+id/btn_move_down"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:background="#F3F4F6"
                     android:padding="6dp"
                     android:src="@drawable/selector_move_bottom"
@@ -340,8 +340,8 @@
 
                 <ImageView
                     android:id="@+id/btn_move_right"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:layout_marginEnd="2dp"
                     android:background="#F3F4F6"
                     android:padding="6dp"
@@ -350,8 +350,8 @@
 
                 <ImageView
                     android:id="@+id/btn_move_left"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
                     android:background="#F3F4F6"
                     android:padding="6dp"
                     android:src="@drawable/selector_move_left"
@@ -377,9 +377,9 @@
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingStart="8dp"
-        android:paddingTop="6dp"
+        android:paddingTop="3dp"
         android:paddingEnd="8dp"
-        android:paddingBottom="6dp">
+        android:paddingBottom="3dp">
 
         <!-- Size bar -->
         <LinearLayout
