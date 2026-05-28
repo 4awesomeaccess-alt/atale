@@ -188,6 +188,7 @@ public class SingleListActivity extends AppCompatActivity {
                     public void onEnd(String success, String verifyStatus, String message,
                                       ArrayList<invite_ItemSubCat_main> imageCat,
                                       ArrayList<invite_ItemSubCat_main> textCat) {
+                        android.util.Log.e("#SubCat_response", "success=" + success + " verify=" + verifyStatus + " imageCat=" + imageCat.size() + " textCat=" + textCat.size());
                         home_progressBar.setVisibility(View.GONE);
                         if ("1".equals(success) && !"-1".equals(verifyStatus)) {
                             subCatList.addAll(imageCat);
