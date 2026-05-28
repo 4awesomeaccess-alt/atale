@@ -285,7 +285,7 @@
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/bt_up" />
+                    android:src="@drawable/selector_layer_up" />
                 <TextView
                     style="@style/IconActionLabel"
                     android:text="Layer Up" />
@@ -298,7 +298,7 @@
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/bt_down" />
+                    android:src="@drawable/selector_layer_down" />
                 <TextView
                     style="@style/IconActionLabel"
                     android:text="Layer Down" />
@@ -311,7 +311,7 @@
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/bt_up" />
+                    android:src="@drawable/selector_layer_up" />
                 <TextView
                     style="@style/IconActionLabel"
                     android:text="Layer Top" />
@@ -324,7 +324,7 @@
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/bt_down" />
+                    android:src="@drawable/selector_layer_down" />
                 <TextView
                     style="@style/IconActionLabel"
                     android:text="Layer Bottom" />
