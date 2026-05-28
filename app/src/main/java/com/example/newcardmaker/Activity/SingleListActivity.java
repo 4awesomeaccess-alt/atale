@@ -278,9 +278,10 @@ public class SingleListActivity extends AppCompatActivity {
         }
 
         requestBody = home_methods.getAPIRequest(
-                invite_AppConstants.METHOD_IMAGE_All_PHOTOGREETING11,
-                home_page, "", "", "", "", "", "", "", "", "", "", "", "",
+                invite_AppConstants.METHOD_IMAGE_PHOTOGREETING,
+                home_page, "", "", "", subCatId, "", "", "", "", "", "", "", "",
                 "", invite_AppConstants.itemUser.getId(), "", null);
+        android.util.Log.e("#fetchImages_cid", "subCatId=" + subCatId);
 
         loadQuotes = new invite_Load_OneImages(new invite_OneImagesListener() {
             @Override
@@ -446,10 +447,9 @@ public class SingleListActivity extends AppCompatActivity {
                         .withEndAction(() ->
                                 holder.itemView.animate().scaleX(1f).scaleY(1f).setDuration(80).start()
                         ).start();
-                // Use detail field as actual sub-category ID for image loading
-                String imgCatId = item.getdetail().isEmpty() ? item.getId() : item.getdetail();
+                // Use sub-category cid directly
                 android.util.Log.e("#loadImages", "cid=" + item.getId() + " detail=" + item.getdetail());
-                loadImages(imgCatId);
+                loadImages(item.getId());
             });
         }
 
