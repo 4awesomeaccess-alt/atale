@@ -8673,6 +8673,23 @@ public class MainActivity extends AppCompatActivity {
         View btnFlipH = cv.findViewById(R.id.btn_quick_flip_h);
         View btnFlipV = cv.findViewById(R.id.btn_quick_flip_v);
 
+        // ── Press animation for all icon buttons
+        for (View btn : new View[]{btnBold, btnItalic, btnUnderline, btnStrike, btnFlipH, btnFlipV,
+                cv.findViewById(R.id.btn_sel_lock_text),
+                cv.findViewById(R.id.btn_copy_view),
+                cv.findViewById(R.id.btn_sel_delete_text),
+                cv.findViewById(R.id.btn_center_text),
+                cv.findViewById(R.id.btn_layer_up),
+                cv.findViewById(R.id.btn_layer_down),
+                cv.findViewById(R.id.btn_layer_top),
+                cv.findViewById(R.id.btn_layer_bottom),
+                cv.findViewById(R.id.btn_move_up),
+                cv.findViewById(R.id.btn_move_down),
+                cv.findViewById(R.id.btn_move_left),
+                cv.findViewById(R.id.btn_move_right)}) {
+            if (btn != null) applyPressAnimation(btn);
+        }
+
         // ── Helper: update toggle button highlight
         Runnable updateStyleBtns = () -> {
             boolean isBold = targetView.getTypeface() != null
@@ -12160,6 +12177,21 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Drag handle setup — pure delta tracking, no getLocationOnScreen
      */
+    private void applyPressAnimation(View v) {
+        v.setOnTouchListener((view, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    view.animate().scaleX(0.92f).scaleY(0.92f).setDuration(80).start();
+                    break;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    view.animate().scaleX(1f).scaleY(1f).setDuration(80).start();
+                    break;
+            }
+            return false; // click event pass through karvo
+        });
+    }
+
     private void setupDragHandle(View cv) {
         final boolean[] dragging = {false};
         final float[] dragStartX = {0};

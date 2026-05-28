@@ -358,8 +358,8 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginEnd="2dp"
-                    android:background="#F3F4F6"
-                    android:padding="6dp"
+                    android:background="@drawable/selector_move_btn"
+                    android:padding="5dp"
                     android:src="@drawable/selector_move_top"
                     android:scaleType="fitCenter" />
 
@@ -367,8 +367,8 @@
                     android:id="@+id/btn_move_down"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:background="#F3F4F6"
-                    android:padding="6dp"
+                    android:background="@drawable/selector_move_btn"
+                    android:padding="5dp"
                     android:src="@drawable/selector_move_bottom"
                     android:scaleType="fitCenter" />
             </LinearLayout>
@@ -384,8 +384,8 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginEnd="2dp"
-                    android:background="#F3F4F6"
-                    android:padding="6dp"
+                    android:background="@drawable/selector_move_btn"
+                    android:padding="5dp"
                     android:src="@drawable/selector_move_right"
                     android:scaleType="fitCenter" />
 
@@ -393,8 +393,8 @@
                     android:id="@+id/btn_move_left"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:background="#F3F4F6"
-                    android:padding="6dp"
+                    android:background="@drawable/selector_move_btn"
+                    android:padding="5dp"
                     android:src="@drawable/selector_move_left"
                     android:scaleType="fitCenter" />
             </LinearLayout>
