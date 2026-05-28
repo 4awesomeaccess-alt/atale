@@ -179,35 +179,51 @@ public class SingleListActivity extends AppCompatActivity {
         home_progressBar.setVisibility(View.VISIBLE);
         subCatRecycler.setVisibility(View.GONE);
 
-        invite_LoadSubCat_main loader = new invite_LoadSubCat_main(
-                new invite_SubCategoryListener_main() {
-                    @Override
-                    public void onStart() { subCatList.clear(); }
+        okhttp3.RequestBody reqBody = home_methods.getAPIRequest(
+                invite_AppConstants.METHOD_CAT_PHOTOWALL1,
+                0, "", "", "", cid, "", "", "", "", "", "", "", "", "", "", "", null);
 
-                    @Override
-                    public void onEnd(String success, String verifyStatus, String message,
-                                      ArrayList<invite_ItemSubCat_main> imageCat,
-                                      ArrayList<invite_ItemSubCat_main> textCat) {
-                        android.util.Log.e("#SubCat_response", "success=" + success + " verify=" + verifyStatus + " imageCat=" + imageCat.size() + " textCat=" + textCat.size());
-                        home_progressBar.setVisibility(View.GONE);
-                        if ("1".equals(success) && !"-1".equals(verifyStatus)) {
-                            subCatList.addAll(imageCat);
-                            if (subCatList.isEmpty()) {
-                                setEmpty("કોઈ sub-category નથી");
-                            } else {
-                                home_ll_empty.setVisibility(View.GONE);
-                                subCatRecycler.setVisibility(View.VISIBLE);
-                                subCatRecycler.setAdapter(new SubCatAdapter());
-                            }
-                        } else {
-                            setEmpty("Error loading categories");
-                        }
+        new android.os.AsyncTask<Void, Void, ArrayList<invite_ItemSubCat_main>>() {
+            @Override
+            protected ArrayList<invite_ItemSubCat_main> doInBackground(Void... v) {
+                ArrayList<invite_ItemSubCat_main> list = new ArrayList<>();
+                try {
+                    String json = com.example.newcardmaker.invite_online_database.invite_JSONParser
+                            .okhttpPost(invite_AppConstants.SERVER_URL, reqBody);
+                    android.util.Log.e("#SubCat_raw", json + "");
+                    org.json.JSONObject root = new org.json.JSONObject(json);
+                    org.json.JSONObject diary = root.getJSONObject("QUOTES_DIARY");
+                    org.json.JSONArray arr = diary.getJSONArray("image_quotes_cat");
+                    for (int i = 0; i < arr.length(); i++) {
+                        org.json.JSONObject c = arr.getJSONObject(i);
+                        String id = c.optString("cid", "");
+                        String name = c.optString("category_name", "");
+                        String image = c.optString("category_image", "").replace(" ", "%20");
+                        String detail = c.optString("detail", "");
+                        String detail1 = c.optString("detail1", "");
+                        list.add(new invite_ItemSubCat_main(id, name, image, detail, detail1));
                     }
-                },
-                home_methods.getAPIRequest(invite_AppConstants.METHOD_CAT_PHOTOWALL1,
-                        0, "", "", "", cid, "", "", "", "", "", "", "", "", "", "", "", null)
-        );
-        loader.execute();
+                } catch (Exception e) {
+                    android.util.Log.e("#SubCat_err", e.getMessage() + "");
+                }
+                return list;
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList<invite_ItemSubCat_main> result) {
+                home_progressBar.setVisibility(View.GONE);
+                android.util.Log.e("#SubCat_count", "count=" + result.size());
+                if (result.isEmpty()) {
+                    setEmpty("કોઈ sub-category નથી");
+                } else {
+                    subCatList.clear();
+                    subCatList.addAll(result);
+                    home_ll_empty.setVisibility(View.GONE);
+                    subCatRecycler.setVisibility(View.VISIBLE);
+                    subCatRecycler.setAdapter(new SubCatAdapter());
+                }
+            }
+        }.execute();
     }
 
     // ════════════════════════════════
