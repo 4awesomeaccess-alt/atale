@@ -138,7 +138,7 @@ public class SingleListActivity extends AppCompatActivity {
         home_arrayList = new ArrayList<>();
         home_arrayListTemp = new ArrayList<>();
         home_methods = new invite_Methods(this);
-        home_selectmethod = invite_AppConstants.METHOD_IMAGE_PHOTOGREETING;
+        home_selectmethod = invite_AppConstants.METHOD_IMAGE_PHOTOGREETING10;
 
         android.util.Log.e("#SingleList_method", "method=" + home_selectmethod + " cid=" + cid);
 
