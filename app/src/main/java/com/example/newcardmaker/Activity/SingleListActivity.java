@@ -446,7 +446,10 @@ public class SingleListActivity extends AppCompatActivity {
                         .withEndAction(() ->
                                 holder.itemView.animate().scaleX(1f).scaleY(1f).setDuration(80).start()
                         ).start();
-                loadImages(item.getId());
+                // Use detail field as actual sub-category ID for image loading
+                String imgCatId = item.getdetail().isEmpty() ? item.getId() : item.getdetail();
+                android.util.Log.e("#loadImages", "cid=" + item.getId() + " detail=" + item.getdetail());
+                loadImages(imgCatId);
             });
         }
 
