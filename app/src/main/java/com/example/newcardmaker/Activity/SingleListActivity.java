@@ -364,11 +364,56 @@ public class SingleListActivity extends AppCompatActivity {
         bb.putString("image_array", TextUtils.join("!--!", data));
         bb.putString("duration_array", item.getFont2());
 
-        Intent intent = new Intent(SingleListActivity.this, MainActivity.class);
-        intent.putExtra("online_data", bb);
-        intent.putExtra("main_cid", cid != null ? cid : "23");
-        intent.putExtra("main_cid_vector", "8");
-        startActivityForResult(intent, 1234567);
+        // JSON download karo and external files dir ma save karo
+        String jsonUrl = invite_AppConstants.SERVER_URL + "images/" + item.getquote_imagejson();
+        new android.os.AsyncTask<String, Void, String>() {
+            @Override
+            protected String doInBackground(String... urls) {
+                try {
+                    java.net.URL url = new java.net.URL(urls[0]);
+                    java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                    conn.setConnectTimeout(10000);
+                    conn.setReadTimeout(10000);
+                    conn.connect();
+                    if (conn.getResponseCode() != java.net.HttpURLConnection.HTTP_OK) return null;
+
+                    java.io.InputStream is = new java.io.BufferedInputStream(conn.getInputStream());
+                    java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(is));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) sb.append(line);
+                    reader.close(); is.close(); conn.disconnect();
+
+                    // getExternalFilesDir(null) ma save karo
+                    java.io.File dir = getExternalFilesDir(null);
+                    if (dir != null && !dir.exists()) dir.mkdirs();
+                    String fileName = item.getquote_imagejson().replace("/", "_");
+                    java.io.File outFile = new java.io.File(dir, fileName);
+                    java.io.FileOutputStream fos = new java.io.FileOutputStream(outFile);
+                    fos.write(sb.toString().getBytes());
+                    fos.close();
+                    return outFile.getAbsolutePath();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String savedPath) {
+                if (savedPath != null) {
+                    android.util.Log.e("#JSON_saved", "path=" + savedPath);
+                    android.widget.Toast.makeText(SingleListActivity.this,
+                            "Design save થઈ!", android.widget.Toast.LENGTH_SHORT).show();
+                    // ListActivity reload karo
+                    setResult(RESULT_OK);
+                    finish();
+                } else {
+                    android.widget.Toast.makeText(SingleListActivity.this,
+                            "Download failed", android.widget.Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.execute(jsonUrl);
     }
 
     private void addIfImage(ArrayList<String> data, String url, String fallback) {
