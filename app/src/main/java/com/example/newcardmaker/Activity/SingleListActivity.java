@@ -406,11 +406,9 @@ public class SingleListActivity extends AppCompatActivity {
             protected void onPostExecute(String savedPath) {
                 if (savedPath != null) {
                     android.util.Log.e("#JSON_saved", "path=" + savedPath);
-                    android.widget.Toast.makeText(SingleListActivity.this,
-                            "Design save થઈ!", android.widget.Toast.LENGTH_SHORT).show();
-                    // ListActivity reload karo
-                    setResult(RESULT_OK);
-                    finish();
+                    Intent intent = new Intent(SingleListActivity.this, MainActivity.class);
+                    intent.putExtra("FILE_PATH", savedPath);
+                    startActivity(intent);
                 } else {
                     android.widget.Toast.makeText(SingleListActivity.this,
                             "Download failed", android.widget.Toast.LENGTH_SHORT).show();
