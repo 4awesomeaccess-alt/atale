@@ -18400,18 +18400,21 @@ public class MainActivity extends AppCompatActivity {
         // Drag to move
         final int[] popupXY = {0, 0};
         final float[] downXY = {0, 0};
+        final boolean[] dragging = {false};
         popupView.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     downXY[0] = event.getRawX();
                     downXY[1] = event.getRawY();
-                    // Get actual current position
+                    dragging[0] = true;
+                    // Get window location (excludes status bar)
                     int[] loc = new int[2];
-                    popupView.getLocationOnScreen(loc);
+                    popupView.getLocationInWindow(loc);
                     popupXY[0] = loc[0];
                     popupXY[1] = loc[1];
                     return true;
                 case MotionEvent.ACTION_MOVE:
+                    if (!dragging[0]) return false;
                     int dx = (int)(event.getRawX() - downXY[0]);
                     int dy = (int)(event.getRawY() - downXY[1]);
                     downXY[0] = event.getRawX();
@@ -18422,6 +18425,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
+                    dragging[0] = false;
                     return true;
             }
             return false;
