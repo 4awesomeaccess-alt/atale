@@ -3773,14 +3773,8 @@ public class MainActivity extends AppCompatActivity {
             addNewTextView();
         } else if (id.getId() == R.id.btn_set_background) {
 
-            Dialog_Detail_Bottom dialog = Dialog_Detail_Bottom.newInstanceFromArrayList();
-
-            dialog.setOnWallpaperSelectedListener(imageUrl -> {
-                Log.e("BG_SET", "Background set: " + imageUrl);
-                setBackgroundFromUrl(imageUrl);
-            });
-
-            dialog.show(getSupportFragmentManager(), "Dialog_Detail_Bottom");
+            // Show background color/gradient popup for canvas
+            showCanvasBgPopup();
 
 
         } else if (id.getId() == R.id.btn_save_json) {
@@ -10453,6 +10447,108 @@ public class MainActivity extends AppCompatActivity {
 
         // ── Text Controls restore when color popup closes ──
         popup.setOnDismissListener(() -> showSelectionControlsForText(targetView));
+    }
+
+    private void showCanvasBgPopup() {
+        android.view.View popupView = getLayoutInflater().inflate(R.layout.popup_gradient_picker, null);
+
+        int screenW  = getResources().getDisplayMetrics().widthPixels;
+        int density  = (int) getResources().getDisplayMetrics().density;
+        int margin25 = 25 * density;
+        int popupW   = screenW - (margin25 * 2);
+        int popupH   = (int)(230 * getResources().getDisplayMetrics().density);
+
+        android.widget.PopupWindow popup = new android.widget.PopupWindow(
+                popupView, popupW, popupH, true);
+        popup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+        popup.setElevation(16f);
+        popup.setOutsideTouchable(true);
+
+        // Color wheel + hex
+        android.widget.TextView tabSolid    = popupView.findViewById(R.id.gp_tab_solid);
+        android.widget.TextView btnClose    = popupView.findViewById(R.id.gp_btn_close);
+        android.widget.TextView btnDone     = popupView.findViewById(R.id.gp_btn_done);
+        android.widget.LinearLayout panelSolid = popupView.findViewById(R.id.gp_panel_solid);
+        android.widget.LinearLayout panelGradient = popupView.findViewById(R.id.gp_panel_gradient);
+        android.view.View solidHexPreview   = popupView.findViewById(R.id.gp_solid_hex_preview);
+        android.widget.EditText solidEtHex  = popupView.findViewById(R.id.gp_solid_hex);
+        com.example.newcardmaker.ColorWheelView solidWheel = popupView.findViewById(R.id.gp_solid_wheel);
+        android.widget.SeekBar solidOpacity = popupView.findViewById(R.id.gp_solid_opacity);
+
+        final int[] solidColor = {Color.WHITE};
+        final int[] solidAlpha = {255};
+
+        // Default white
+        setPreviewColorRounded(solidHexPreview, Color.WHITE);
+        if (solidWheel != null) solidWheel.setColor(Color.WHITE);
+        if (solidEtHex != null) solidEtHex.setText("FFFFFF");
+
+        Runnable applyCanvasBg = () -> {
+            int color = (solidAlpha[0] << 24) | (solidColor[0] & 0x00FFFFFF);
+            mainLayout.setBackgroundColor(color);
+            exportToJson();
+        };
+
+        if (solidWheel != null) {
+            solidWheel.setOnColorChangedListener(color -> {
+                solidColor[0] = color;
+                setPreviewColorRounded(solidHexPreview, color);
+                if (solidEtHex != null)
+                    solidEtHex.setText(String.format("%06X", 0xFFFFFF & color));
+                applyCanvasBg.run();
+            });
+        }
+
+        if (solidOpacity != null) {
+            solidOpacity.setMax(255);
+            solidOpacity.setProgress(255);
+            solidOpacity.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+                @Override public void onProgressChanged(android.widget.SeekBar s, int p, boolean fromUser) {
+                    if (!fromUser) return;
+                    solidAlpha[0] = p;
+                    applyCanvasBg.run();
+                }
+                @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+                @Override public void onStopTrackingTouch(android.widget.SeekBar s) {}
+            });
+        }
+
+        if (btnClose != null) btnClose.setOnClickListener(v -> popup.dismiss());
+        if (btnDone  != null) btnDone.setOnClickListener(v -> { applyCanvasBg.run(); popup.dismiss(); });
+
+        // Drag
+        android.view.View dragHandle = popupView.findViewById(R.id.gp_drag_handle);
+        if (dragHandle != null) {
+            final int[] lastXY = {0, 0};
+            dragHandle.setOnTouchListener((v, event) -> {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        lastXY[0] = (int) event.getRawX();
+                        lastXY[1] = (int) event.getRawY();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        int dx = (int) event.getRawX() - lastXY[0];
+                        int dy = (int) event.getRawY() - lastXY[1];
+                        int[] loc = new int[2]; popupView.getLocationOnScreen(loc);
+                        popup.update(loc[0] + dx, loc[1] + dy, popupW, popupH);
+                        lastXY[0] = (int) event.getRawX();
+                        lastXY[1] = (int) event.getRawY();
+                        break;
+                }
+                return true;
+            });
+        }
+
+        int screenH = getResources().getDisplayMetrics().heightPixels;
+        popup.showAtLocation(getWindow().getDecorView().getRootView(),
+                Gravity.TOP | Gravity.LEFT, margin25, screenH - popupH);
+    }
+
+    private void setPreviewColorRounded(android.view.View view, int color) {
+        android.graphics.drawable.GradientDrawable gd = new android.graphics.drawable.GradientDrawable();
+        gd.setColor(color);
+        gd.setCornerRadius(16f);
+        view.setBackground(gd);
     }
 
     private void showBgColorGradientPopup(StrokeTextView targetView) {
