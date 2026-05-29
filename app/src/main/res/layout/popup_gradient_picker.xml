@@ -177,7 +177,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="26dp"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp">
 
                 <SeekBar
                     android:id="@+id/gp_solid_opacity"
@@ -187,16 +189,6 @@
                     android:progress="255"
                     android:progressTint="#4CAF50"
                     android:thumbTint="#4CAF50" />
-
-                <TextView
-                    android:id="@+id/gp_solid_opacity_val"
-                    android:layout_width="22dp"
-                    android:layout_height="wrap_content"
-                    android:text="255"
-                    android:textColor="#CFD8DC"
-                    android:textSize="8sp"
-                    android:gravity="end"
-                    android:layout_marginStart="2dp" />
 
             </LinearLayout>
 
