@@ -12212,6 +12212,7 @@ public class MainActivity extends AppCompatActivity {
         final boolean[] dragging = {false};
         final float[] dragStartX = {0};
         final float[] dragStartY = {0};
+        final boolean[] posInit = {false};
 
         View.OnTouchListener dragListener = (v2, event) -> {
             switch (event.getAction()) {
@@ -12219,11 +12220,16 @@ public class MainActivity extends AppCompatActivity {
                     dragStartX[0] = event.getRawX();
                     dragStartY[0] = event.getRawY();
                     dragging[0] = true;
-                    if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) {
+                    // First touch — get actual popup position
+                    if (!posInit[0] && selectionControlsPopup != null && selectionControlsPopup.isShowing()) {
                         int[] loc = new int[2];
-                        selectionControlsPopup.getContentView().getLocationOnScreen(loc);
+                        selectionControlsPopup.getContentView().getLocationInWindow(loc);
+                        // Window offset add karo
+                        int[] rootLoc = new int[2];
+                        mainLayout.getLocationOnScreen(rootLoc);
                         selControlsLastX = loc[0];
                         selControlsLastY = loc[1];
+                        posInit[0] = true;
                     }
                     return true;
 
@@ -12253,12 +12259,11 @@ public class MainActivity extends AppCompatActivity {
             return false;
         };
 
-        // માત્ર drag_handle_sel પર drag — buttons click intact
+        // માત્ર drag_handle_sel પર drag
         View dragHandle = cv.findViewById(R.id.drag_handle_sel);
         if (dragHandle != null) {
             dragHandle.setOnTouchListener(dragListener);
         } else {
-            // Fallback: root view
             cv.setOnTouchListener(dragListener);
         }
     }
