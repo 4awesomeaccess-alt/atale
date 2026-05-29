@@ -38,6 +38,13 @@ public class LanguageActivity extends AppCompatActivity {
         // Restore saved language
         SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
         selectedLang = prefs.getString(KEY_LANG, "");
+
+        // Restore server URL
+        String savedUrl = prefs.getString("server_url", "");
+        if (!savedUrl.isEmpty()) {
+            com.example.newcardmaker.invite_online_database.invite_AppConstants.setServerUrl(savedUrl);
+        }
+
         updateSelection();
 
         btnGujarati.setOnClickListener(v -> {
@@ -60,11 +67,30 @@ public class LanguageActivity extends AppCompatActivity {
                 Toast.makeText(this, "કૃપા કરી ભાષા પસંદ કરો", Toast.LENGTH_SHORT).show();
                 return;
             }
+
+            // Language wise server URL
+            String serverUrl;
+            switch (selectedLang) {
+                case "hindi":
+                    serverUrl = "https://hindi.gardenphoto.in/api.php";
+                    break;
+                case "english":
+                    serverUrl = "https://english.gardenphoto.in/api.php";
+                    break;
+                default: // gujarati
+                    serverUrl = "https://democrecrytonixinvitesan.gardenphoto.in/api.php";
+                    break;
+            }
+
             // Save selection
             getSharedPreferences(PREF_NAME, MODE_PRIVATE)
                     .edit()
                     .putString(KEY_LANG, selectedLang)
+                    .putString("server_url", serverUrl)
                     .apply();
+
+            // Set dynamic server URL
+            com.example.newcardmaker.invite_online_database.invite_AppConstants.setServerUrl(serverUrl);
 
             // Open ListActivity
             startActivity(new Intent(this, ListActivity.class));

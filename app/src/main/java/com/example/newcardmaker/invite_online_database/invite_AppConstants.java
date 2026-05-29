@@ -12,7 +12,11 @@ import com.example.newcardmaker.BuildConfig;
 
 public class invite_AppConstants {
 
-    public static final String SERVER_URL = BuildConfig.SERVER_URL + "api.php";
+    public static String SERVER_URL = BuildConfig.SERVER_URL + "api.php";
+
+    public static void setServerUrl(String url) {
+        SERVER_URL = url;
+    }
 
     public static final String METHOD_HOME = "get_home";
 
