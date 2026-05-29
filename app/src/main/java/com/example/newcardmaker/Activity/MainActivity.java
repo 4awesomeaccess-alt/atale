@@ -18450,11 +18450,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void applyBrightness(View targetView, int value) {
-        float brightness = (value - 100) / 100.0f;
+        // value: 0-200, 100=normal
+        float scale = value / 100.0f; // 0.0 to 2.0
         android.graphics.ColorMatrix cm = new android.graphics.ColorMatrix(new float[]{
-            1, 0, 0, 0, brightness * 255,
-            0, 1, 0, 0, brightness * 255,
-            0, 0, 1, 0, brightness * 255,
+            scale, 0, 0, 0, 0,
+            0, scale, 0, 0, 0,
+            0, 0, scale, 0, 0,
             0, 0, 0, 1, 0
         });
         android.graphics.ColorMatrixColorFilter filter = new android.graphics.ColorMatrixColorFilter(cm);
@@ -18464,7 +18465,6 @@ public class MainActivity extends AppCompatActivity {
             ((android.widget.TextView) targetView).getPaint().setColorFilter(filter);
             targetView.invalidate();
         }
-        // Tag save — exportToJson will pick this up
         targetView.setTag(R.id.tag_brightness, value);
     }
 
