@@ -142,6 +142,22 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/btn_italic"
+                        style="@style/IconActionBtn">
+
+                        <ImageView
+                            android:id="@+id/iv_italic"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_italic" />
+
+                        <TextView
+                            style="@style/IconActionLabel"
+                            android:text="Italic" />
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/btn_quick_flip_v"
                         style="@style/IconActionBtn">
 
@@ -170,23 +186,6 @@
                             style="@style/IconActionLabel"
                             android:text="Flip - H" />
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/btn_bold"
-                        style="@style/IconActionBtn">
-
-                        <ImageView
-                            android:id="@+id/iv_bold"
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:layout_gravity="center_horizontal"
-                            android:src="@drawable/ic_bold" />
-
-                        <TextView
-                            style="@style/IconActionLabel"
-                            android:text="Bold" />
-                    </LinearLayout>
-
 
                 </LinearLayout>
             </HorizontalScrollView>
@@ -222,67 +221,20 @@
                             android:text="Layer UP" />
                     </LinearLayout>
 
-
                     <LinearLayout
-                        android:id="@+id/btn_underline"
+                        android:id="@+id/btn_bold"
                         style="@style/IconActionBtn">
 
                         <ImageView
-                            android:id="@+id/iv_line"
-                            android:layout_width="13dp"
-                            android:layout_height="16dp"
-                            android:layout_gravity="center_horizontal"
-                            android:src="@drawable/ic_underline_click" />
-
-                        <TextView
-                            style="@style/IconActionLabel"
-                            android:text="UnerLine" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/btn_overline"
-                        style="@style/IconActionBtn">
-
-                        <ImageView
+                            android:id="@+id/iv_bold"
                             android:layout_width="16dp"
                             android:layout_height="16dp"
                             android:layout_gravity="center_horizontal"
-                            android:src="@drawable/ic_uperline_click" />
+                            android:src="@drawable/ic_bold" />
 
                         <TextView
                             style="@style/IconActionLabel"
-                            android:text="UperLine" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/btn_italic"
-                        style="@style/IconActionBtn">
-
-                        <ImageView
-                            android:id="@+id/iv_italic"
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:layout_gravity="center_horizontal"
-                            android:src="@drawable/ic_italic" />
-
-                        <TextView
-                            style="@style/IconActionLabel"
-                            android:text="Italic" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/btn_strikethrough"
-                        style="@style/IconActionBtn">
-
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:layout_gravity="center_horizontal"
-                            android:src="@drawable/ic_strikethrough" />
-
-                        <TextView
-                            style="@style/IconActionLabel"
-                            android:text="Strike" />
+                            android:text="Bold" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -345,6 +297,52 @@
                             android:text="Layer Bottom" />
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/btn_underline"
+                        style="@style/IconActionBtn">
+
+                        <ImageView
+                            android:id="@+id/iv_line"
+                            android:layout_width="13dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_underline_click" />
+
+                        <TextView
+                            style="@style/IconActionLabel"
+                            android:text="UnerLine" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btn_overline"
+                        style="@style/IconActionBtn">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_uperline_click" />
+
+                        <TextView
+                            style="@style/IconActionLabel"
+                            android:text="UperLine" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/btn_strikethrough"
+                        style="@style/IconActionBtn">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_strikethrough" />
+
+                        <TextView
+                            style="@style/IconActionLabel"
+                            android:text="Strike" />
+                    </LinearLayout>
 
                 </LinearLayout>
             </HorizontalScrollView>
