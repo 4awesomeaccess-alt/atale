@@ -72,8 +72,10 @@ public class SubCategoryActivity extends AppCompatActivity {
                     okhttp3.RequestBody reqBody = methods.getAPIRequest(
                             invite_AppConstants.METHOD_CAT_PHOTOWALL1,
                             0, "", "", "", cid, "", "", "", "", "", "", "", "", "", "", "", null);
+                    android.util.Log.e("#SubCat_cid", "cid=" + cid + " url=" + invite_AppConstants.SERVER_URL);
                     String json = com.example.newcardmaker.invite_online_database.invite_JSONParser
                             .okhttpPost(invite_AppConstants.SERVER_URL, reqBody);
+                    android.util.Log.e("#SubCat_json", "json=" + json);
                     org.json.JSONObject root = new org.json.JSONObject(json);
                     org.json.JSONObject diary = root.getJSONObject("QUOTES_DIARY");
                     org.json.JSONArray arr = diary.getJSONArray("image_quotes_cat");
