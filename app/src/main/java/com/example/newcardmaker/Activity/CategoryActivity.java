@@ -182,7 +182,7 @@ public class CategoryActivity extends AppCompatActivity {
 
             // Image
             ImageView imageView = new ImageView(CategoryActivity.this);
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             android.widget.FrameLayout.LayoutParams imgLp =
                     new android.widget.FrameLayout.LayoutParams(
                             android.widget.FrameLayout.LayoutParams.MATCH_PARENT, 350);

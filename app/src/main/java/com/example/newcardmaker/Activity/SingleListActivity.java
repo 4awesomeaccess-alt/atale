@@ -459,7 +459,7 @@ public class SingleListActivity extends AppCompatActivity {
             card.setElevation(3f);
 
             ImageView imageView = new ImageView(SingleListActivity.this);
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             FrameLayout.LayoutParams imgLp = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.MATCH_PARENT, 350);
             imageView.setLayoutParams(imgLp);
@@ -542,7 +542,7 @@ public class SingleListActivity extends AppCompatActivity {
             card.setElevation(3f);
 
             ImageView imageView = new ImageView(SingleListActivity.this);
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             FrameLayout.LayoutParams imgLp = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.MATCH_PARENT, 380);
             imageView.setLayoutParams(imgLp);
