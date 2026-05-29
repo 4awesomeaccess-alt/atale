@@ -389,8 +389,9 @@ public class SingleListActivity extends AppCompatActivity {
                     // getExternalFilesDir(null) ma save karo
                     java.io.File dir = getExternalFilesDir(null);
                     if (dir != null && !dir.exists()) dir.mkdirs();
-                    String fileName = item.getquote_imagejson().replace("/", "_");
-                    java.io.File outFile = new java.io.File(dir, fileName);
+                    // Always unique name with timestamp
+                    String uniqueName = "design_" + System.currentTimeMillis() + ".json";
+                    java.io.File outFile = new java.io.File(dir, uniqueName);
                     java.io.FileOutputStream fos = new java.io.FileOutputStream(outFile);
                     fos.write(sb.toString().getBytes());
                     fos.close();
