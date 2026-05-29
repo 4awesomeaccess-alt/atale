@@ -18357,9 +18357,9 @@ public class MainActivity extends AppCompatActivity {
         android.widget.TextView btnMinus = popupView.findViewById(R.id.btn_brightness_minus);
         android.widget.TextView btnPlus = popupView.findViewById(R.id.btn_brightness_plus);
 
-        // Current brightness from tag
+        // Current opacity from tag (default 255 = fully visible)
         Object brightnessTag = targetView.getTag(R.id.tag_brightness);
-        final int[] currentVal = {(brightnessTag instanceof Integer) ? (int) brightnessTag : 100};
+        final int[] currentVal = {(brightnessTag instanceof Integer) ? (int) brightnessTag : 255};
 
         if (seekBrightness != null) {
             seekBrightness.setProgress(currentVal[0]);
@@ -18377,7 +18377,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (btnMinus != null) {
             btnMinus.setOnClickListener(v -> {
-                int nv = Math.max(0, currentVal[0] - 5);
+                int nv = Math.max(0, currentVal[0] - 10);
                 currentVal[0] = nv;
                 if (seekBrightness != null) seekBrightness.setProgress(nv);
                 if (tvVal != null) tvVal.setText(String.valueOf(nv));
@@ -18387,7 +18387,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (btnPlus != null) {
             btnPlus.setOnClickListener(v -> {
-                int nv = Math.min(200, currentVal[0] + 5);
+                int nv = Math.min(255, currentVal[0] + 10);
                 currentVal[0] = nv;
                 if (seekBrightness != null) seekBrightness.setProgress(nv);
                 if (tvVal != null) tvVal.setText(String.valueOf(nv));
@@ -18450,21 +18450,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void applyBrightness(View targetView, int value) {
-        // value: 0-200, 100=normal
-        float scale = value / 100.0f; // 0.0 to 2.0
-        android.graphics.ColorMatrix cm = new android.graphics.ColorMatrix(new float[]{
-            scale, 0, 0, 0, 0,
-            0, scale, 0, 0, 0,
-            0, 0, scale, 0, 0,
-            0, 0, 0, 1, 0
-        });
-        android.graphics.ColorMatrixColorFilter filter = new android.graphics.ColorMatrixColorFilter(cm);
-        if (targetView instanceof android.widget.ImageView) {
-            ((android.widget.ImageView) targetView).setColorFilter(filter);
-        } else if (targetView instanceof android.widget.TextView) {
-            ((android.widget.TextView) targetView).getPaint().setColorFilter(filter);
-            targetView.invalidate();
-        }
+        // value: 0-255, 255=fully visible
+        targetView.setAlpha(value / 255.0f);
         targetView.setTag(R.id.tag_brightness, value);
     }
 

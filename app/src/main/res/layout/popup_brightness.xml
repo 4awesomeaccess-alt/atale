@@ -11,7 +11,7 @@
         android:id="@+id/brightness_drag_handle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="☀ Brightness  ⠿"
+        android:text="◈ Opacity  ⠿"
         android:textSize="14sp"
         android:textStyle="bold"
         android:textColor="#111827"
@@ -42,10 +42,10 @@
             android:layout_weight="1"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:max="200"
-            android:progress="100"
-            android:progressTint="#F59E0B"
-            android:thumbTint="#F59E0B" />
+            android:max="255"
+            android:progress="255"
+            android:progressTint="#6366F1"
+            android:thumbTint="#6366F1" />
 
         <TextView
             android:id="@+id/tv_brightness_val"

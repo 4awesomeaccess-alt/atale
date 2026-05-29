@@ -677,7 +677,7 @@
 
                     <TextView
                         style="@style/GridFeatureLabel"
-                        android:text="Brightness" />
+                        android:text="Opacity" />
                 </LinearLayout>
 
                 <LinearLayout
