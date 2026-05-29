@@ -12219,7 +12219,6 @@ public class MainActivity extends AppCompatActivity {
                     dragStartX[0] = event.getRawX();
                     dragStartY[0] = event.getRawY();
                     dragging[0] = true;
-                    // First touch — get actual position from screen
                     if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) {
                         int[] loc = new int[2];
                         selectionControlsPopup.getContentView().getLocationOnScreen(loc);
@@ -12254,13 +12253,13 @@ public class MainActivity extends AppCompatActivity {
             return false;
         };
 
-        // આખા dialog ને drag કરી શકાય
-        cv.setOnTouchListener(dragListener);
-
-        // Drag handle પર પણ set કરો
+        // માત્ર drag_handle_sel પર drag — buttons click intact
         View dragHandle = cv.findViewById(R.id.drag_handle_sel);
         if (dragHandle != null) {
             dragHandle.setOnTouchListener(dragListener);
+        } else {
+            // Fallback: root view
+            cv.setOnTouchListener(dragListener);
         }
     }
 
