@@ -408,6 +408,7 @@ public class SingleListActivity extends AppCompatActivity {
                     android.util.Log.e("#JSON_saved", "path=" + savedPath);
                     Intent intent = new Intent(SingleListActivity.this, MainActivity.class);
                     intent.putExtra("FILE_PATH", savedPath);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                 } else {
                     android.widget.Toast.makeText(SingleListActivity.this,
