@@ -18401,34 +18401,39 @@ public class MainActivity extends AppCompatActivity {
         View dragHandle = popupView.findViewById(R.id.brightness_drag_handle);
         View dragTarget = dragHandle != null ? dragHandle : popupView;
 
-        // Drag to move
         final int[] popupXY = {0, 0};
         final float[] downXY = {0, 0};
-        final boolean[] dragging = {false};
+        final boolean[] initialized = {false};
+
         dragTarget.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     downXY[0] = event.getRawX();
                     downXY[1] = event.getRawY();
-                    dragging[0] = true;
-                    int[] loc = new int[2];
-                    popupView.getLocationOnScreen(loc);
-                    popupXY[0] = loc[0];
-                    popupXY[1] = loc[1];
+                    if (!initialized[0]) {
+                        // First time — calculate from show position
+                        int sw = getResources().getDisplayMetrics().widthPixels;
+                        int pw2 = (int)(sw * 0.85f);
+                        popupXY[0] = (sw - pw2) / 2;
+                        // Bottom + 100 offset
+                        int sh = getResources().getDisplayMetrics().heightPixels;
+                        int[] loc = new int[2];
+                        popupView.getLocationOnScreen(loc);
+                        popupXY[1] = loc[1];
+                        initialized[0] = true;
+                    }
                     return true;
                 case MotionEvent.ACTION_MOVE:
-                    if (!dragging[0]) return false;
-                    int dx = (int)(event.getRawX() - downXY[0]);
-                    int dy = (int)(event.getRawY() - downXY[1]);
-                    downXY[0] = event.getRawX();
-                    downXY[1] = event.getRawY();
-                    popupXY[0] += dx;
-                    popupXY[1] += dy;
+                    float rawX = event.getRawX();
+                    float rawY = event.getRawY();
+                    popupXY[0] += (int)(rawX - downXY[0]);
+                    popupXY[1] += (int)(rawY - downXY[1]);
+                    downXY[0] = rawX;
+                    downXY[1] = rawY;
                     pw.update(popupXY[0], popupXY[1], -1, -1);
                     return true;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
-                    dragging[0] = false;
                     return true;
             }
             return false;
