@@ -11062,9 +11062,12 @@ public class MainActivity extends AppCompatActivity {
 
         // ── PopupWindow ──
         int screenW = getResources().getDisplayMetrics().widthPixels;
+        int density = (int) getResources().getDisplayMetrics().density;
+        int margin25 = 25 * density;
+        int popupW  = screenW - (margin25 * 2);
         int popupH  = (int)(230 * getResources().getDisplayMetrics().density);
         android.widget.PopupWindow popup = new android.widget.PopupWindow(
-                root, screenW, popupH, true);
+                root, popupW, popupH, true);
         popup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
         popup.setElevation(16f);
         popup.setOutsideTouchable(true);
@@ -11076,7 +11079,7 @@ public class MainActivity extends AppCompatActivity {
 
         int screenH = getResources().getDisplayMetrics().heightPixels;
         popup.showAtLocation(getWindow().getDecorView().getRootView(),
-            Gravity.TOP | Gravity.START, 0, screenH - popupH);
+            Gravity.TOP | Gravity.START, margin25, screenH - popupH);
 
         // Text Controls restore
         popup.setOnDismissListener(() -> {
