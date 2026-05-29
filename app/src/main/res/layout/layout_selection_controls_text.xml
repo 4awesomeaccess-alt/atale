@@ -50,6 +50,7 @@
 
     <!-- ══ ROW 1: Icon Actions (HorizontalScrollView) ══ -->
     <LinearLayout
+        android:id="@+id/main_liner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
