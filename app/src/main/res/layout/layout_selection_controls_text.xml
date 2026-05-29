@@ -5,8 +5,8 @@
     android:layout_marginStart="5dp"
     android:layout_marginEnd="5dp"
     android:background="@drawable/bg_text_tool_popup"
-    android:elevation="4dp"
     android:clipToOutline="true"
+    android:elevation="4dp"
     android:orientation="vertical">
 
     <!-- ══ DRAG HANDLE HEADER ══ -->
@@ -46,7 +46,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#E5E7EB" />
+        android:background="#98999B" />
 
     <!-- ══ ROW 1: Icon Actions (HorizontalScrollView) ══ -->
     <LinearLayout
@@ -63,287 +63,293 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/rounded_white_bg"
             android:layout_weight="1"
             android:orientation="vertical">
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="8dp"
-        android:paddingTop="3dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="2dp"
-        android:scrollbars="none">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="8dp"
+                android:paddingTop="3dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="2dp"
+                android:scrollbars="none">
 
-            <LinearLayout
-                android:id="@+id/btn_sel_lock_text"
-                style="@style/IconActionBtn">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/iv_lock"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_lock" />
+                    <LinearLayout
+                        android:id="@+id/btn_sel_lock_text"
+                        style="@style/IconActionBtn">
 
-                <TextView
-                    style="@style/IconActionLabel"
-                    android:text="Lock" />
-            </LinearLayout>
+                        <ImageView
+                            android:id="@+id/iv_lock"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_lock" />
 
-            <LinearLayout
-                android:id="@+id/btn_copy_view"
-                style="@style/IconActionBtn">
+                        <TextView
+                            style="@style/IconActionLabel"
+                            android:text="Lock" />
+                    </LinearLayout>
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_copy" />
+                    <LinearLayout
+                        android:id="@+id/btn_copy_view"
+                        style="@style/IconActionBtn">
 
-                <TextView
-                    style="@style/IconActionLabel"
-                    android:text="Copy" />
-            </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_copy" />
 
-            <LinearLayout
-                android:id="@+id/btn_sel_delete_text"
-                style="@style/IconActionBtn">
+                        <TextView
+                            style="@style/IconActionLabel"
+                            android:text="Copy" />
+                    </LinearLayout>
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_delete" />
+                    <LinearLayout
+                        android:id="@+id/btn_sel_delete_text"
+                        style="@style/IconActionBtn">
 
-                <TextView
-                    style="@style/IconActionLabel"
-                    android:text="Delete" />
-            </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_delete" />
 
-            <LinearLayout
-                android:id="@+id/btn_center_text"
-                style="@style/IconActionBtn">
+                        <TextView
+                            style="@style/IconActionLabel"
+                            android:text="Delete" />
+                    </LinearLayout>
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_center" />
+                    <LinearLayout
+                        android:id="@+id/btn_center_text"
+                        style="@style/IconActionBtn">
 
-                <TextView
-                    style="@style/IconActionLabel"
-                    android:text="Center" />
-            </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_center" />
 
-            <LinearLayout
-                android:id="@+id/btn_quick_flip_v"
-                style="@style/IconActionBtn">
+                        <TextView
+                            style="@style/IconActionLabel"
+                            android:text="Center" />
+                    </LinearLayout>
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_verticle" />
+                    <LinearLayout
+                        android:id="@+id/btn_quick_flip_v"
+                        style="@style/IconActionBtn">
 
-                <TextView
-                    style="@style/IconActionLabel"
-                    android:text="Flip - V" />
-            </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_verticle" />
 
-            <LinearLayout
-                android:id="@+id/btn_quick_flip_h"
-                style="@style/IconActionBtn">
+                        <TextView
+                            style="@style/IconActionLabel"
+                            android:text="Flip - V" />
+                    </LinearLayout>
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_horizental" />
+                    <LinearLayout
+                        android:id="@+id/btn_quick_flip_h"
+                        style="@style/IconActionBtn">
 
-                <TextView
-                    style="@style/IconActionLabel"
-                    android:text="Flip - H" />
-            </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_horizental" />
 
-            <LinearLayout
-                android:id="@+id/btn_bold"
-                style="@style/IconActionBtn">
+                        <TextView
+                            style="@style/IconActionLabel"
+                            android:text="Flip - H" />
+                    </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/iv_bold"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_bold" />
+                    <LinearLayout
+                        android:id="@+id/btn_bold"
+                        style="@style/IconActionBtn">
 
-                <TextView
-                    style="@style/IconActionLabel"
-                    android:text="Bold" />
-            </LinearLayout>
+                        <ImageView
+                            android:id="@+id/iv_bold"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_bold" />
 
-
-        </LinearLayout>
-    </HorizontalScrollView>
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="8dp"
-        android:paddingTop="3dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="2dp"
-        android:scrollbars="none">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/tab_layout"
-                style="@style/IconActionBtn"
-                android:visibility="gone">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_overline" />
-
-                <TextView
-                    style="@style/IconActionLabel"
-                    android:text="Layer UP" />
-            </LinearLayout>
+                        <TextView
+                            style="@style/IconActionLabel"
+                            android:text="Bold" />
+                    </LinearLayout>
 
 
-            <LinearLayout
-                android:id="@+id/btn_underline"
-                style="@style/IconActionBtn">
+                </LinearLayout>
+            </HorizontalScrollView>
 
-                <ImageView
-                    android:id="@+id/iv_line"
-                    android:layout_width="13dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_underline_click" />
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="8dp"
+                android:paddingTop="3dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="2dp"
+                android:scrollbars="none">
 
-                <TextView
-                    style="@style/IconActionLabel"
-                    android:text="UnerLine" />
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/btn_overline"
-                style="@style/IconActionBtn">
+                    <LinearLayout
+                        android:id="@+id/tab_layout"
+                        style="@style/IconActionBtn"
+                        android:visibility="gone">
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_uperline_click" />
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_overline" />
 
-                <TextView
-                    style="@style/IconActionLabel"
-                    android:text="UperLine" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn_italic"
-                style="@style/IconActionBtn">
-
-                <ImageView
-                    android:id="@+id/iv_italic"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_italic" />
-
-                <TextView
-                    style="@style/IconActionLabel"
-                    android:text="Italic" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn_strikethrough"
-                style="@style/IconActionBtn">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_strikethrough" />
-
-                <TextView
-                    style="@style/IconActionLabel"
-                    android:text="Strike" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn_layer_up"
-                style="@style/IconActionBtn">
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/selector_layer_up" />
-                <TextView
-                    style="@style/IconActionLabel"
-                    android:text="Layer Up" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn_layer_down"
-                style="@style/IconActionBtn">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_l_up" />
-                <TextView
-                    style="@style/IconActionLabel"
-                    android:text="Layer Down" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn_layer_top"
-                style="@style/IconActionBtn">
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/selector_layer_up" />
-                <TextView
-                    style="@style/IconActionLabel"
-                    android:text="Layer Top" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn_layer_bottom"
-                style="@style/IconActionBtn">
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_layr_down" />
-                <TextView
-                    style="@style/IconActionLabel"
-                    android:text="Layer Bottom" />
-            </LinearLayout>
+                        <TextView
+                            style="@style/IconActionLabel"
+                            android:text="Layer UP" />
+                    </LinearLayout>
 
 
+                    <LinearLayout
+                        android:id="@+id/btn_underline"
+                        style="@style/IconActionBtn">
+
+                        <ImageView
+                            android:id="@+id/iv_line"
+                            android:layout_width="13dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_underline_click" />
+
+                        <TextView
+                            style="@style/IconActionLabel"
+                            android:text="UnerLine" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btn_overline"
+                        style="@style/IconActionBtn">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_uperline_click" />
+
+                        <TextView
+                            style="@style/IconActionLabel"
+                            android:text="UperLine" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btn_italic"
+                        style="@style/IconActionBtn">
+
+                        <ImageView
+                            android:id="@+id/iv_italic"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_italic" />
+
+                        <TextView
+                            style="@style/IconActionLabel"
+                            android:text="Italic" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btn_strikethrough"
+                        style="@style/IconActionBtn">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_strikethrough" />
+
+                        <TextView
+                            style="@style/IconActionLabel"
+                            android:text="Strike" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btn_layer_up"
+                        style="@style/IconActionBtn">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/selector_layer_up" />
+
+                        <TextView
+                            style="@style/IconActionLabel"
+                            android:text="Layer Up" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btn_layer_down"
+                        style="@style/IconActionBtn">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_l_up" />
+
+                        <TextView
+                            style="@style/IconActionLabel"
+                            android:text="Layer Down" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btn_layer_top"
+                        style="@style/IconActionBtn">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/selector_layer_up" />
+
+                        <TextView
+                            style="@style/IconActionLabel"
+                            android:text="Layer Top" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btn_layer_bottom"
+                        style="@style/IconActionBtn">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/ic_layr_down" />
+
+                        <TextView
+                            style="@style/IconActionLabel"
+                            android:text="Layer Bottom" />
+                    </LinearLayout>
 
 
-
-        </LinearLayout>
-    </HorizontalScrollView>
+                </LinearLayout>
+            </HorizontalScrollView>
         </LinearLayout>
 
     </LinearLayout>
@@ -372,6 +378,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/bg_seekbar_container"
             android:orientation="vertical"
             android:padding="4dp">
 
@@ -379,7 +386,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@drawable/bg_seekbar_container"
+
                 android:elevation="3dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -400,9 +407,9 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginStart="6dp"
                     android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
@@ -445,8 +452,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/btn_move_up"
@@ -455,8 +462,8 @@
                 android:layout_marginEnd="2dp"
                 android:background="@drawable/selector_move_btn"
                 android:padding="7dp"
-                android:src="@drawable/selector_move_top"
-                android:scaleType="fitCenter" />
+                android:scaleType="fitCenter"
+                android:src="@drawable/selector_move_top" />
 
             <ImageView
                 android:id="@+id/btn_move_down"
@@ -465,8 +472,8 @@
                 android:layout_marginEnd="2dp"
                 android:background="@drawable/selector_move_btn"
                 android:padding="7dp"
-                android:src="@drawable/selector_move_bottom"
-                android:scaleType="fitCenter" />
+                android:scaleType="fitCenter"
+                android:src="@drawable/selector_move_bottom" />
 
             <ImageView
                 android:id="@+id/btn_move_left"
@@ -475,8 +482,8 @@
                 android:layout_marginEnd="2dp"
                 android:background="@drawable/selector_move_btn"
                 android:padding="7dp"
-                android:src="@drawable/selector_move_left"
-                android:scaleType="fitCenter" />
+                android:scaleType="fitCenter"
+                android:src="@drawable/selector_move_left" />
 
             <ImageView
                 android:id="@+id/btn_move_right"
@@ -484,8 +491,8 @@
                 android:layout_height="32dp"
                 android:background="@drawable/selector_move_btn"
                 android:padding="7dp"
-                android:src="@drawable/selector_move_right"
-                android:scaleType="fitCenter" />
+                android:scaleType="fitCenter"
+                android:src="@drawable/selector_move_right" />
 
         </LinearLayout>
 
@@ -694,7 +701,7 @@
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_multiselect" />
+                    android:src="@drawable/ic_transfrom" />
 
                 <TextView
                     style="@style/GridFeatureLabel"
@@ -709,7 +716,7 @@
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_add_text" />
+                    android:src="@drawable/ic_align" />
 
                 <TextView
                     style="@style/GridFeatureLabel"
