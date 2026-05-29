@@ -10669,7 +10669,7 @@ public class MainActivity extends AppCompatActivity {
             @Override public void onProgressChanged(android.widget.SeekBar s, int progress, boolean fromUser) {
                 if (!fromUser) return;
                 solidAlpha[0] = progress;
-                solidOpacityVal.setText(String.valueOf(progress));
+                if (solidOpacityVal != null) solidOpacityVal.setText(String.valueOf(progress));
                 applySolid.run();
             }
         });
