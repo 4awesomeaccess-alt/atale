@@ -8459,10 +8459,16 @@ public class MainActivity extends AppCompatActivity {
         View tabVisual = cv.findViewById(R.id.tab_visual);
         View tabTypo = cv.findViewById(R.id.tab_typo);
 
-        // ── Brightness button
+        // ── Opacity button
+        View btnOpacity = cv.findViewById(R.id.btn_opacity);
+        if (btnOpacity != null) {
+            btnOpacity.setOnClickListener(v -> showBrightnessPopup(targetView));
+        }
+
+        // ── Move popup button
         View btnBrightness = cv.findViewById(R.id.btn_brightness);
         if (btnBrightness != null) {
-            btnBrightness.setOnClickListener(v -> showBrightnessPopup(targetView));
+            btnBrightness.setOnClickListener(v -> showMovePopup(targetView));
         }
 
         LinearLayout panelAction = cv.findViewById(R.id.panel_tab_action);
@@ -18340,6 +18346,78 @@ public class MainActivity extends AppCompatActivity {
         btnDone.setOnClickListener(v -> { exportToJson(); popup.dismiss(); });
     }
 
+    private void showMovePopup(final StrokeTextView targetView) {
+        View popupView = LayoutInflater.from(this).inflate(R.layout.popup_move, null);
+
+        android.widget.PopupWindow pw = new android.widget.PopupWindow(
+                popupView,
+                (int)(getResources().getDisplayMetrics().widthPixels * 0.7f),
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
+                true);
+        pw.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+        pw.setElevation(8f);
+        pw.setOutsideTouchable(true);
+
+        android.widget.SeekBar seekSpeed = popupView.findViewById(R.id.seek_move_speed);
+        android.widget.TextView tvSpeed = popupView.findViewById(R.id.tv_move_speed_val);
+        final int[] moveStep = {5};
+
+        if (seekSpeed != null) {
+            seekSpeed.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(android.widget.SeekBar s, int p, boolean fromUser) {
+                    moveStep[0] = Math.max(1, p);
+                    if (tvSpeed != null) tvSpeed.setText(String.valueOf(moveStep[0]));
+                }
+                @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+                @Override public void onStopTrackingTouch(android.widget.SeekBar s) {}
+            });
+        }
+
+        View popMoveUp    = popupView.findViewById(R.id.popup_btn_move_up);
+        View popMoveDown  = popupView.findViewById(R.id.popup_btn_move_down);
+        View popMoveLeft  = popupView.findViewById(R.id.popup_btn_move_left);
+        View popMoveRight = popupView.findViewById(R.id.popup_btn_move_right);
+
+        if (popMoveUp    != null) popMoveUp.setOnClickListener(v    -> { moveSingleView(targetView, 0, -moveStep[0]); exportToJson(); });
+        if (popMoveDown  != null) popMoveDown.setOnClickListener(v  -> { moveSingleView(targetView, 0,  moveStep[0]); exportToJson(); });
+        if (popMoveLeft  != null) popMoveLeft.setOnClickListener(v  -> { moveSingleView(targetView, -moveStep[0], 0); exportToJson(); });
+        if (popMoveRight != null) popMoveRight.setOnClickListener(v -> { moveSingleView(targetView,  moveStep[0], 0); exportToJson(); });
+
+        // Show
+        int sw = getResources().getDisplayMetrics().widthPixels;
+        int sh = getResources().getDisplayMetrics().heightPixels;
+        int popW = (int)(sw * 0.7f);
+        pw.showAtLocation(mainLayout, android.view.Gravity.TOP | android.view.Gravity.LEFT,
+                (sw - popW) / 2, sh - 500);
+
+        // Drag
+        View dragHandle = popupView.findViewById(R.id.move_drag_handle);
+        View dragTarget = dragHandle != null ? dragHandle : popupView;
+        final int[] popXY = {(sw - popW) / 2, sh - 500};
+        final float[] dxy = {0, 0};
+        dragTarget.setOnTouchListener((v, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    dxy[0] = event.getRawX(); dxy[1] = event.getRawY();
+                    int[] loc = new int[2];
+                    popupView.getLocationOnScreen(loc);
+                    popXY[0] = loc[0]; popXY[1] = loc[1];
+                    return true;
+                case MotionEvent.ACTION_MOVE:
+                    popXY[0] += (int)(event.getRawX() - dxy[0]);
+                    popXY[1] += (int)(event.getRawY() - dxy[1]);
+                    dxy[0] = event.getRawX(); dxy[1] = event.getRawY();
+                    pw.update(popXY[0], popXY[1], -1, -1);
+                    return true;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    return true;
+            }
+            return false;
+        });
+    }
+
     private void showBrightnessPopup(final StrokeTextView targetView) {
         View popupView = LayoutInflater.from(this).inflate(R.layout.popup_brightness, null);
 
@@ -18375,34 +18453,6 @@ public class MainActivity extends AppCompatActivity {
                 @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
             });
         }
-
-        // Move speed seekbar
-        android.widget.SeekBar seekSpeed = popupView.findViewById(R.id.seek_move_speed);
-        android.widget.TextView tvSpeed = popupView.findViewById(R.id.tv_move_speed_val);
-        final int[] moveStep = {5};
-        if (seekSpeed != null) {
-            seekSpeed.setProgress(5);
-            seekSpeed.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(android.widget.SeekBar s, int p, boolean fromUser) {
-                    moveStep[0] = Math.max(1, p);
-                    if (tvSpeed != null) tvSpeed.setText(String.valueOf(moveStep[0]));
-                }
-                @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
-                @Override public void onStopTrackingTouch(android.widget.SeekBar s) {}
-            });
-        }
-
-        // Move buttons
-        View popMoveUp    = popupView.findViewById(R.id.popup_btn_move_up);
-        View popMoveDown  = popupView.findViewById(R.id.popup_btn_move_down);
-        View popMoveLeft  = popupView.findViewById(R.id.popup_btn_move_left);
-        View popMoveRight = popupView.findViewById(R.id.popup_btn_move_right);
-
-        if (popMoveUp    != null) popMoveUp.setOnClickListener(v    -> { moveSingleView(targetView, 0, -moveStep[0]); exportToJson(); });
-        if (popMoveDown  != null) popMoveDown.setOnClickListener(v  -> { moveSingleView(targetView, 0,  moveStep[0]); exportToJson(); });
-        if (popMoveLeft  != null) popMoveLeft.setOnClickListener(v  -> { moveSingleView(targetView, -moveStep[0], 0); exportToJson(); });
-        if (popMoveRight != null) popMoveRight.setOnClickListener(v -> { moveSingleView(targetView,  moveStep[0], 0); exportToJson(); });
 
         if (btnMinus != null) {
             btnMinus.setOnClickListener(v -> {

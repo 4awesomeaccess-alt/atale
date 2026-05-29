@@ -644,7 +644,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/btn_brightness"
+                    android:id="@+id/btn_opacity"
                     style="@style/GridFeatureBtn">
 
                     <ImageView
@@ -652,6 +652,21 @@
                         android:layout_height="16dp"
                         android:layout_gravity="center_horizontal"
                         android:src="@android:drawable/ic_menu_manage" />
+
+                    <TextView
+                        style="@style/GridFeatureLabel"
+                        android:text="Opacity" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_brightness"
+                    style="@style/GridFeatureBtn">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_top" />
 
                     <TextView
                         style="@style/GridFeatureLabel"
