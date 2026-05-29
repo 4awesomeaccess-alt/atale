@@ -11099,7 +11099,7 @@ public class MainActivity extends AppCompatActivity {
                     int dx = (int) event.getRawX() - lastXY[0];
                     int dy = (int) event.getRawY() - lastXY[1];
                     int[] loc = new int[2]; root.getLocationOnScreen(loc);
-                    popup.update(loc[0] + dx, loc[1] + dy, screenW, popupH);
+                    popup.update(loc[0] + dx, loc[1] + dy, popupW, popupH);
                     lastXY[0] = (int) event.getRawX(); lastXY[1] = (int) event.getRawY(); break;
             }
             return true;
