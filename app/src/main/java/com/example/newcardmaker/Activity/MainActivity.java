@@ -18395,7 +18395,13 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        pw.showAtLocation(mainLayout, android.view.Gravity.BOTTOM | android.view.Gravity.CENTER_HORIZONTAL, 0, 100);
+        // Show at bottom center using TOP|LEFT
+        int sw = getResources().getDisplayMetrics().widthPixels;
+        int sh = getResources().getDisplayMetrics().heightPixels;
+        int popW = (int)(sw * 0.85f);
+        int startX = (sw - popW) / 2;
+        int startY = sh - 350; // approximate from bottom
+        pw.showAtLocation(mainLayout, android.view.Gravity.TOP | android.view.Gravity.LEFT, startX, startY);
 
         // Drag handle only - title bar
         View dragHandle = popupView.findViewById(R.id.brightness_drag_handle);
@@ -18403,33 +18409,35 @@ public class MainActivity extends AppCompatActivity {
 
         final int[] popupXY = {0, 0};
         final float[] downXY = {0, 0};
-        final boolean[] initialized = {false};
+
+        // Post kari ne actual position read
+        popupView.post(() -> {
+            int[] loc = new int[2];
+            popupView.getLocationOnScreen(loc);
+            popupXY[0] = loc[0];
+            popupXY[1] = loc[1];
+        });
 
         dragTarget.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     downXY[0] = event.getRawX();
                     downXY[1] = event.getRawY();
-                    if (!initialized[0]) {
-                        // First time — calculate from show position
-                        int sw = getResources().getDisplayMetrics().widthPixels;
-                        int pw2 = (int)(sw * 0.85f);
-                        popupXY[0] = (sw - pw2) / 2;
-                        // Bottom + 100 offset
-                        int sh = getResources().getDisplayMetrics().heightPixels;
-                        int[] loc = new int[2];
-                        popupView.getLocationOnScreen(loc);
-                        popupXY[1] = loc[1];
-                        initialized[0] = true;
-                    }
+                    // Fresh position read
+                    int[] loc = new int[2];
+                    popupView.getLocationOnScreen(loc);
+                    popupXY[0] = loc[0];
+                    popupXY[1] = loc[1];
                     return true;
                 case MotionEvent.ACTION_MOVE:
                     float rawX = event.getRawX();
                     float rawY = event.getRawY();
-                    popupXY[0] += (int)(rawX - downXY[0]);
-                    popupXY[1] += (int)(rawY - downXY[1]);
+                    int dx = (int)(rawX - downXY[0]);
+                    int dy = (int)(rawY - downXY[1]);
                     downXY[0] = rawX;
                     downXY[1] = rawY;
+                    popupXY[0] += dx;
+                    popupXY[1] += dy;
                     pw.update(popupXY[0], popupXY[1], -1, -1);
                     return true;
                 case MotionEvent.ACTION_UP:
