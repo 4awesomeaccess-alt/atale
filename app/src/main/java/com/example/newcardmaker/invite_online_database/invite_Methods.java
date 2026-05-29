@@ -363,7 +363,6 @@ public class invite_Methods {
 
             case invite_AppConstants.METHOD_IMAGE_PHOTOGREETING:
                 jsObj.addProperty("user_id", userID);
-                jsObj.addProperty("image_quotes_cat_id", catID);
                 jsObj.addProperty("page", page);
                 break;
             case invite_AppConstants.METHOD_IMAGE_PHOTOGREETING10:
