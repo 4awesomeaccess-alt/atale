@@ -10598,8 +10598,9 @@ public class MainActivity extends AppCompatActivity {
         final int[] gradColor2   = {0xFF0000FF};
         final int[] gradDirection = {0};
 
-        // ── Solid initial ──
-        solidHexPreview.setBackgroundColor(initColor);
+        // ── Solid initial — default WHITE ──
+        solidHexPreview.setBackgroundColor(Color.WHITE);
+        solidColor[0] = Color.WHITE;
 
         // ── Solid apply helper ──
         Runnable applySolid = () -> {
@@ -10619,8 +10620,8 @@ public class MainActivity extends AppCompatActivity {
 
         // ── Pick Color — ColorWheelView popup ──
         // ── Solid Wheel: initial + listeners ──
-        solidWheel.setColor(solidColor[0]);
-        solidEtHex.setText(String.format("%06X", 0xFFFFFF & solidColor[0]));
+        solidWheel.setColor(Color.WHITE);
+        solidEtHex.setText("FFFFFF");
 
         solidWheel.setOnColorChangedListener(c -> {
             solidColor[0] = c;
