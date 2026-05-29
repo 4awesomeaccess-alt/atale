@@ -18358,7 +18358,6 @@ public class MainActivity extends AppCompatActivity {
         android.widget.TextView btnPlus = popupView.findViewById(R.id.btn_brightness_plus);
 
         // Current brightness
-        android.graphics.ColorFilter cf = targetView.getColorFilter();
         final int[] currentVal = {100};
 
         if (seekBrightness != null) {
@@ -18408,7 +18407,11 @@ public class MainActivity extends AppCompatActivity {
             0, 0, 1, 0, brightness * 255,
             0, 0, 0, 1, 0
         });
-        targetView.setColorFilter(new android.graphics.ColorMatrixColorFilter(cm));
+        if (targetView instanceof android.widget.TextView) {
+            ((android.widget.TextView) targetView).getPaint()
+                    .setColorFilter(new android.graphics.ColorMatrixColorFilter(cm));
+            targetView.invalidate();
+        }
     }
 
     private void showCurvePopup(final StrokeTextView targetText) {
