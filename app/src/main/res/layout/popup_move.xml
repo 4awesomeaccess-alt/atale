@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
-            android:max="50"
+            android:max="100"
             android:progress="5"
             android:progressTint="#10B981"
             android:thumbTint="#10B981" />
