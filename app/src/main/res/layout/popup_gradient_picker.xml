@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="🎨 Background Color"
-            android:textColor="#F3F4F6"
+            android:textColor="#111827"
             android:textSize="11sp"
             android:textStyle="bold" />
 
@@ -39,17 +39,17 @@
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:text="✕"
-            android:textColor="#111827"
+            android:textColor="#FFFFFF"
             android:textSize="11sp"
             android:gravity="center"
-            android:background="#374151" />
+            android:background="#EF4444" />
 
         <TextView
             android:id="@+id/gp_btn_done"
             android:layout_width="wrap_content"
             android:layout_height="26dp"
             android:text="Done ✓"
-            android:textColor="#111827"
+            android:textColor="#FFFFFF"
             android:textSize="11sp"
             android:gravity="center"
             android:paddingHorizontal="10dp"
@@ -71,11 +71,11 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="⬛ Solid"
-            android:textColor="#111827"
+            android:textColor="#FFFFFF"
             android:textSize="11sp"
             android:textStyle="bold"
             android:gravity="center"
-            android:background="#607D8B" />
+            android:background="#1565C0" />
 
         <TextView
             android:id="@+id/gp_tab_gradient"
@@ -83,7 +83,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="🌈 Gradient"
-            android:textColor="#9CA3AF"
+            android:textColor="#6B7280"
             android:textSize="11sp"
             android:gravity="center"
             android:background="#FFFFFF" />
@@ -94,7 +94,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="🖼 Image"
-            android:textColor="#9CA3AF"
+            android:textColor="#6B7280"
             android:textSize="11sp"
             android:gravity="center"
             android:background="#FFFFFF" />
@@ -105,7 +105,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="✕ None"
-            android:textColor="#9CA3AF"
+            android:textColor="#6B7280"
             android:textSize="11sp"
             android:gravity="center"
             android:background="#FFFFFF" />
@@ -163,7 +163,7 @@
                     android:textColor="#111827"
                     android:textColorHint="#6B7280"
                     android:textSize="9sp"
-                    android:background="#374151"
+                    android:background="#F3F4F6"
                     android:paddingHorizontal="4dp"
                     android:inputType="text"
                     android:maxLength="6"
@@ -269,7 +269,7 @@
                 android:text="FF0000"
                 android:textColor="#111827"
                 android:textSize="10sp"
-                android:background="#374151"
+                android:background="#F3F4F6"
                 android:paddingHorizontal="4dp"
                 android:inputType="text"
                 android:maxLength="6"
@@ -299,7 +299,7 @@
                 android:text="0000FF"
                 android:textColor="#111827"
                 android:textSize="10sp"
-                android:background="#374151"
+                android:background="#F3F4F6"
                 android:paddingHorizontal="4dp"
                 android:inputType="text"
                 android:maxLength="6"
@@ -323,10 +323,10 @@
                 android:textSize="10sp"
                 android:layout_marginEnd="6dp" />
 
-            <TextView android:id="@+id/gp_dir_lr" android:layout_width="wrap_content" android:layout_height="26dp" android:text="→" android:textColor="#111827" android:textSize="13sp" android:gravity="center" android:paddingHorizontal="8dp" android:background="#607D8B" android:layout_marginEnd="4dp" />
-            <TextView android:id="@+id/gp_dir_tb" android:layout_width="wrap_content" android:layout_height="26dp" android:text="↓" android:textColor="#9CA3AF" android:textSize="13sp" android:gravity="center" android:paddingHorizontal="8dp" android:background="#374151" android:layout_marginEnd="4dp" />
-            <TextView android:id="@+id/gp_dir_diag" android:layout_width="wrap_content" android:layout_height="26dp" android:text="↘" android:textColor="#9CA3AF" android:textSize="13sp" android:gravity="center" android:paddingHorizontal="8dp" android:background="#374151" android:layout_marginEnd="4dp" />
-            <TextView android:id="@+id/gp_dir_rad" android:layout_width="wrap_content" android:layout_height="26dp" android:text="◎" android:textColor="#9CA3AF" android:textSize="13sp" android:gravity="center" android:paddingHorizontal="8dp" android:background="#374151" />
+            <TextView android:id="@+id/gp_dir_lr" android:layout_width="wrap_content" android:layout_height="26dp" android:text="→" android:textColor="#111827" android:textSize="13sp" android:gravity="center" android:paddingHorizontal="8dp" android:background="#1565C0" android:layout_marginEnd="4dp" />
+            <TextView android:id="@+id/gp_dir_tb" android:layout_width="wrap_content" android:layout_height="26dp" android:text="↓" android:textColor="#9CA3AF" android:textSize="13sp" android:gravity="center" android:paddingHorizontal="8dp" android:background="#F3F4F6" android:layout_marginEnd="4dp" />
+            <TextView android:id="@+id/gp_dir_diag" android:layout_width="wrap_content" android:layout_height="26dp" android:text="↘" android:textColor="#9CA3AF" android:textSize="13sp" android:gravity="center" android:paddingHorizontal="8dp" android:background="#F3F4F6" android:layout_marginEnd="4dp" />
+            <TextView android:id="@+id/gp_dir_rad" android:layout_width="wrap_content" android:layout_height="26dp" android:text="◎" android:textColor="#9CA3AF" android:textSize="13sp" android:gravity="center" android:paddingHorizontal="8dp" android:background="#F3F4F6" />
 
         </LinearLayout>
 
@@ -405,7 +405,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:scaleType="centerCrop"
-                android:background="#374151"
+                android:background="#F3F4F6"
                 android:layout_marginBottom="4dp" />
 
             <!-- Select + Remove buttons -->
@@ -480,7 +480,7 @@
                     android:textColor="#111827"
                     android:textColorHint="#6B7280"
                     android:textSize="10sp"
-                    android:background="#374151"
+                    android:background="#F3F4F6"
                     android:paddingHorizontal="4dp"
                     android:inputType="text"
                     android:maxLength="6"
