@@ -8459,6 +8459,12 @@ public class MainActivity extends AppCompatActivity {
         View tabVisual = cv.findViewById(R.id.tab_visual);
         View tabTypo = cv.findViewById(R.id.tab_typo);
 
+        // ── Brightness button
+        View btnBrightness = cv.findViewById(R.id.btn_brightness);
+        if (btnBrightness != null) {
+            btnBrightness.setOnClickListener(v -> showBrightnessPopup(targetView));
+        }
+
         LinearLayout panelAction = cv.findViewById(R.id.panel_tab_action);
         LinearLayout panelSpacing = cv.findViewById(R.id.panel_tab_spacing);
         LinearLayout panelTransformP = cv.findViewById(R.id.panel_tab_transform);
@@ -18332,6 +18338,77 @@ public class MainActivity extends AppCompatActivity {
         });
         btnClose.setOnClickListener(v -> popup.dismiss());
         btnDone.setOnClickListener(v -> { exportToJson(); popup.dismiss(); });
+    }
+
+    private void showBrightnessPopup(final StrokeTextView targetView) {
+        View popupView = LayoutInflater.from(this).inflate(R.layout.popup_brightness, null);
+
+        android.widget.PopupWindow pw = new android.widget.PopupWindow(
+                popupView,
+                (int)(getResources().getDisplayMetrics().widthPixels * 0.85f),
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT,
+                true);
+        pw.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+        pw.setElevation(8f);
+        pw.setOutsideTouchable(true);
+
+        android.widget.SeekBar seekBrightness = popupView.findViewById(R.id.seek_brightness);
+        android.widget.TextView tvVal = popupView.findViewById(R.id.tv_brightness_val);
+        android.widget.TextView btnMinus = popupView.findViewById(R.id.btn_brightness_minus);
+        android.widget.TextView btnPlus = popupView.findViewById(R.id.btn_brightness_plus);
+
+        // Current brightness
+        android.graphics.ColorFilter cf = targetView.getColorFilter();
+        final int[] currentVal = {100};
+
+        if (seekBrightness != null) {
+            seekBrightness.setProgress(currentVal[0]);
+            seekBrightness.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(android.widget.SeekBar s, int p, boolean fromUser) {
+                    currentVal[0] = p;
+                    if (tvVal != null) tvVal.setText(String.valueOf(p));
+                    applyBrightness(targetView, p);
+                }
+                @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+                @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
+            });
+        }
+
+        if (btnMinus != null) {
+            btnMinus.setOnClickListener(v -> {
+                int nv = Math.max(0, currentVal[0] - 5);
+                currentVal[0] = nv;
+                if (seekBrightness != null) seekBrightness.setProgress(nv);
+                if (tvVal != null) tvVal.setText(String.valueOf(nv));
+                applyBrightness(targetView, nv);
+                exportToJson();
+            });
+        }
+        if (btnPlus != null) {
+            btnPlus.setOnClickListener(v -> {
+                int nv = Math.min(200, currentVal[0] + 5);
+                currentVal[0] = nv;
+                if (seekBrightness != null) seekBrightness.setProgress(nv);
+                if (tvVal != null) tvVal.setText(String.valueOf(nv));
+                applyBrightness(targetView, nv);
+                exportToJson();
+            });
+        }
+
+        pw.showAtLocation(mainLayout, android.view.Gravity.BOTTOM | android.view.Gravity.CENTER_HORIZONTAL, 0, 100);
+    }
+
+    private void applyBrightness(View targetView, int value) {
+        float brightness = (value - 100) / 100.0f;
+        android.graphics.ColorMatrix cm = new android.graphics.ColorMatrix();
+        cm.set(new float[]{
+            1, 0, 0, 0, brightness * 255,
+            0, 1, 0, 0, brightness * 255,
+            0, 0, 1, 0, brightness * 255,
+            0, 0, 0, 1, 0
+        });
+        targetView.setColorFilter(new android.graphics.ColorMatrixColorFilter(cm));
     }
 
     private void showCurvePopup(final StrokeTextView targetText) {

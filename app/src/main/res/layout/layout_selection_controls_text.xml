@@ -666,6 +666,21 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/btn_brightness"
+                    style="@style/GridFeatureBtn">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@android:drawable/ic_menu_manage" />
+
+                    <TextView
+                        style="@style/GridFeatureLabel"
+                        android:text="Brightness" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/tab_transform"
                     style="@style/GridFeatureBtn">
 
