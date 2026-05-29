@@ -459,7 +459,7 @@ public class SingleListActivity extends AppCompatActivity {
             card.setElevation(3f);
 
             ImageView imageView = new ImageView(SingleListActivity.this);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             FrameLayout.LayoutParams imgLp = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.MATCH_PARENT, 350);
             imageView.setLayoutParams(imgLp);
@@ -489,7 +489,7 @@ public class SingleListActivity extends AppCompatActivity {
 
             Glide.with(SingleListActivity.this)
                     .load(item.getImageBig())
-                    .centerCrop()
+                    .fitCenter()
                     .placeholder(android.R.drawable.ic_menu_gallery)
                     .into(holder.imageView);
 
@@ -542,7 +542,7 @@ public class SingleListActivity extends AppCompatActivity {
             card.setElevation(3f);
 
             ImageView imageView = new ImageView(SingleListActivity.this);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             FrameLayout.LayoutParams imgLp = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.MATCH_PARENT, 380);
             imageView.setLayoutParams(imgLp);
@@ -557,7 +557,7 @@ public class SingleListActivity extends AppCompatActivity {
 
             Glide.with(SingleListActivity.this)
                     .load(item.getImageBig())
-                    .centerCrop()
+                    .fitCenter()
                     .placeholder(android.R.drawable.ic_menu_gallery)
                     .into(holder.imageView);
 
