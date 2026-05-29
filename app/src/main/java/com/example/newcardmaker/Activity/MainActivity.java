@@ -18357,8 +18357,9 @@ public class MainActivity extends AppCompatActivity {
         android.widget.TextView btnMinus = popupView.findViewById(R.id.btn_brightness_minus);
         android.widget.TextView btnPlus = popupView.findViewById(R.id.btn_brightness_plus);
 
-        // Current brightness
-        final int[] currentVal = {100};
+        // Current brightness from tag
+        Object brightnessTag = targetView.getTag(R.id.tag_brightness);
+        final int[] currentVal = {(brightnessTag instanceof Integer) ? (int) brightnessTag : 100};
 
         if (seekBrightness != null) {
             seekBrightness.setProgress(currentVal[0]);
@@ -18450,18 +18451,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void applyBrightness(View targetView, int value) {
         float brightness = (value - 100) / 100.0f;
-        android.graphics.ColorMatrix cm = new android.graphics.ColorMatrix();
-        cm.set(new float[]{
+        android.graphics.ColorMatrix cm = new android.graphics.ColorMatrix(new float[]{
             1, 0, 0, 0, brightness * 255,
             0, 1, 0, 0, brightness * 255,
             0, 0, 1, 0, brightness * 255,
             0, 0, 0, 1, 0
         });
-        if (targetView instanceof android.widget.TextView) {
-            ((android.widget.TextView) targetView).getPaint()
-                    .setColorFilter(new android.graphics.ColorMatrixColorFilter(cm));
+        android.graphics.ColorMatrixColorFilter filter = new android.graphics.ColorMatrixColorFilter(cm);
+        if (targetView instanceof android.widget.ImageView) {
+            ((android.widget.ImageView) targetView).setColorFilter(filter);
+        } else if (targetView instanceof android.widget.TextView) {
+            ((android.widget.TextView) targetView).getPaint().setColorFilter(filter);
             targetView.invalidate();
         }
+        // Tag save — exportToJson will pick this up
+        targetView.setTag(R.id.tag_brightness, value);
     }
 
     private void showCurvePopup(final StrokeTextView targetText) {
