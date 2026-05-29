@@ -3,9 +3,12 @@
     android:id="@+id/gp_root"
     android:layout_width="match_parent"
     android:layout_height="230dp"
+    android:layout_marginStart="25dp"
+    android:layout_marginEnd="25dp"
     android:orientation="vertical"
-    android:background="#FFFFFF"
-    android:elevation="16dp">
+    android:background="@drawable/bg_text_tool_popup"
+    android:elevation="16dp"
+    android:clipToOutline="true">
 
     <!-- ── Drag Handle ── -->
     <LinearLayout
