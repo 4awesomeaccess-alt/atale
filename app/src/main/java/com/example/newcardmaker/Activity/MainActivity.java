@@ -18363,6 +18363,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (seekBrightness != null) {
             seekBrightness.setProgress(currentVal[0]);
+            if (tvVal != null) tvVal.setText(String.valueOf(currentVal[0]));
             seekBrightness.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(android.widget.SeekBar s, int p, boolean fromUser) {
@@ -18374,6 +18375,34 @@ public class MainActivity extends AppCompatActivity {
                 @Override public void onStopTrackingTouch(android.widget.SeekBar s) { exportToJson(); }
             });
         }
+
+        // Move speed seekbar
+        android.widget.SeekBar seekSpeed = popupView.findViewById(R.id.seek_move_speed);
+        android.widget.TextView tvSpeed = popupView.findViewById(R.id.tv_move_speed_val);
+        final int[] moveStep = {5};
+        if (seekSpeed != null) {
+            seekSpeed.setProgress(5);
+            seekSpeed.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(android.widget.SeekBar s, int p, boolean fromUser) {
+                    moveStep[0] = Math.max(1, p);
+                    if (tvSpeed != null) tvSpeed.setText(String.valueOf(moveStep[0]));
+                }
+                @Override public void onStartTrackingTouch(android.widget.SeekBar s) {}
+                @Override public void onStopTrackingTouch(android.widget.SeekBar s) {}
+            });
+        }
+
+        // Move buttons
+        View popMoveUp    = popupView.findViewById(R.id.popup_btn_move_up);
+        View popMoveDown  = popupView.findViewById(R.id.popup_btn_move_down);
+        View popMoveLeft  = popupView.findViewById(R.id.popup_btn_move_left);
+        View popMoveRight = popupView.findViewById(R.id.popup_btn_move_right);
+
+        if (popMoveUp    != null) popMoveUp.setOnClickListener(v    -> { moveSingleView(targetView, 0, -moveStep[0]); exportToJson(); });
+        if (popMoveDown  != null) popMoveDown.setOnClickListener(v  -> { moveSingleView(targetView, 0,  moveStep[0]); exportToJson(); });
+        if (popMoveLeft  != null) popMoveLeft.setOnClickListener(v  -> { moveSingleView(targetView, -moveStep[0], 0); exportToJson(); });
+        if (popMoveRight != null) popMoveRight.setOnClickListener(v -> { moveSingleView(targetView,  moveStep[0], 0); exportToJson(); });
 
         if (btnMinus != null) {
             btnMinus.setOnClickListener(v -> {
