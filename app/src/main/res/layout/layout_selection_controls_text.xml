@@ -13,7 +13,7 @@
     <LinearLayout
         android:id="@+id/drag_handle_sel"
         android:layout_width="match_parent"
-        android:layout_height="16dp"
+        android:layout_height="25dp"
         android:background="#FFFFFF"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -23,12 +23,14 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:gravity="center"
             android:letterSpacing="0.1"
             android:text="DRAG &amp; DROP"
             android:textColor="#111827"
             android:textSize="13sp"
+            android:layout_margin="5dp"
+            android:layout_marginTop="5dp"
             android:textStyle="bold" />
 
         <TextView
@@ -42,11 +44,6 @@
 
     </LinearLayout>
 
-    <!-- Divider -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#98999B" />
 
     <!-- ══ ROW 1: Icon Actions (HorizontalScrollView) ══ -->
     <LinearLayout
@@ -58,14 +55,14 @@
         android:paddingStart="8dp"
         android:paddingTop="3dp"
         android:paddingEnd="8dp"
-        android:paddingBottom="3dp">
+       >
 
         <!-- Size bar -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_white_bg"
             android:layout_weight="1"
+            android:background="@drawable/rounded_white_bg"
             android:orientation="vertical">
 
             <HorizontalScrollView
@@ -353,17 +350,79 @@
             </HorizontalScrollView>
         </LinearLayout>
 
+
+        <LinearLayout
+            android:id="@+id/move_liner"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="4dp"
+            android:background="@drawable/rounded_white_bg"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/move_liner1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/rounded_white_bg"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/btn_move_up"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="2dp"
+                    android:background="@drawable/selector_move_btn"
+                    android:padding="7dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/selector_move_top" />
+
+                <ImageView
+                    android:id="@+id/btn_move_down"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="2dp"
+                    android:background="@drawable/selector_move_btn"
+                    android:padding="7dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/selector_move_bottom" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/move_liner2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/rounded_white_bg"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/btn_move_left"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="2dp"
+                    android:background="@drawable/selector_move_btn"
+                    android:padding="7dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/selector_move_left" />
+
+                <ImageView
+                    android:id="@+id/btn_move_right"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/selector_move_btn"
+                    android:padding="7dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/selector_move_right" />
+            </LinearLayout>
+        </LinearLayout>
+
+
     </LinearLayout>
 
-    <!-- Divider -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:background="#E5E7EB" />
-
-    <!-- ══ SIZE + MOVE ROW ══ -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -372,7 +431,7 @@
         android:paddingStart="8dp"
         android:paddingTop="3dp"
         android:paddingEnd="8dp"
-        android:paddingBottom="3dp">
+       >
 
         <!-- Size bar -->
         <LinearLayout
@@ -449,286 +508,243 @@
         </LinearLayout>
 
         <!-- Move buttons single line beside seekbar -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/move_liner"
-            android:background="@drawable/rounded_white_bg"
-            android:layout_marginStart="4dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/btn_move_up"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginEnd="2dp"
-                android:background="@drawable/selector_move_btn"
-                android:padding="7dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/selector_move_top" />
-
-            <ImageView
-                android:id="@+id/btn_move_down"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginEnd="2dp"
-                android:background="@drawable/selector_move_btn"
-                android:padding="7dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/selector_move_bottom" />
-
-            <ImageView
-                android:id="@+id/btn_move_left"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginEnd="2dp"
-                android:background="@drawable/selector_move_btn"
-                android:padding="7dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/selector_move_left" />
-
-            <ImageView
-                android:id="@+id/btn_move_right"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="@drawable/selector_move_btn"
-                android:padding="7dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/selector_move_right" />
-
-        </LinearLayout>
 
 
     </LinearLayout>
 
     <!-- Divider -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#E5E7EB" />
 
-    <!-- ══ GRID: Feature buttons ══ -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="6dp">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingTop="3dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="5dp">
 
-
-        <!-- Row 1 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:orientation="horizontal">
+            android:background="@drawable/rounded_white_bg"
+            android:orientation="vertical"
+            android:padding="6dp">
 
+
+            <!-- Row 1 -->
             <LinearLayout
-                android:id="@+id/btn_re_edit"
-                style="@style/GridFeatureBtn">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_edit" />
+                <LinearLayout
+                    android:id="@+id/btn_re_edit"
+                    style="@style/GridFeatureBtn">
 
-                <TextView
-                    style="@style/GridFeatureLabel"
-                    android:text="Re Edit" />
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_edit" />
+
+                    <TextView
+                        style="@style/GridFeatureLabel"
+                        android:text="Re Edit" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_curve_text"
+                    style="@style/GridFeatureBtn">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_arc" />
+
+                    <TextView
+                        style="@style/GridFeatureLabel"
+                        android:text="Arc" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_text_color"
+                    style="@style/GridFeatureBtn">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_color" />
+
+                    <TextView
+                        style="@style/GridFeatureLabel"
+                        android:text="Color" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_bg_color"
+                    style="@style/GridFeatureBtn">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_backgroud" />
+
+                    <TextView
+                        style="@style/GridFeatureLabel"
+                        android:text="BG" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_bg_border"
+                    style="@style/GridFeatureBtn">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_bg_border" />
+
+                    <TextView
+                        style="@style/GridFeatureLabel"
+                        android:text="BG Border" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_align_text"
+                    style="@style/GridFeatureBtn">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_align" />
+
+                    <TextView
+                        style="@style/GridFeatureLabel"
+                        android:text="Align" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_font_pick"
+                    style="@style/GridFeatureBtn">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_font" />
+
+                    <TextView
+                        style="@style/GridFeatureLabel"
+                        android:text="Font" />
+                </LinearLayout>
             </LinearLayout>
 
+            <!-- Row 2 -->
             <LinearLayout
-                android:id="@+id/btn_curve_text"
-                style="@style/GridFeatureBtn">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_arc" />
+                <LinearLayout
+                    android:id="@+id/tab_spacing"
+                    style="@style/GridFeatureBtn">
 
-                <TextView
-                    style="@style/GridFeatureLabel"
-                    android:text="Arc" />
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_space" />
 
+                    <TextView
+                        style="@style/GridFeatureLabel"
+                        android:text="Space" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tab_transform"
+                    style="@style/GridFeatureBtn">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_transfrom" />
+
+                    <TextView
+                        style="@style/GridFeatureLabel"
+                        android:text="Transform" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tab_effects"
+                    style="@style/GridFeatureBtn">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_color" />
+
+                    <TextView
+                        style="@style/GridFeatureLabel"
+                        android:text="Effects" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/btn_stroke_color"
+                    style="@style/GridFeatureBtn">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_edit" />
+
+                    <TextView
+                        style="@style/GridFeatureLabel"
+                        android:text="Stroke" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tab_visual"
+                    style="@style/GridFeatureBtn">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_transfrom" />
+
+                    <TextView
+                        style="@style/GridFeatureLabel"
+                        android:text="Visual" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tab_typo"
+                    style="@style/GridFeatureBtn">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_align" />
+
+                    <TextView
+                        style="@style/GridFeatureLabel"
+                        android:text="Typo" />
+                </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/btn_text_color"
-                style="@style/GridFeatureBtn">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_color" />
-
-                <TextView
-                    style="@style/GridFeatureLabel"
-                    android:text="Color" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn_bg_color"
-                style="@style/GridFeatureBtn">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_backgroud" />
-
-                <TextView
-                    style="@style/GridFeatureLabel"
-                    android:text="BG" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn_bg_border"
-                style="@style/GridFeatureBtn">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_bg_border" />
-
-                <TextView
-                    style="@style/GridFeatureLabel"
-                    android:text="BG Border" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn_align_text"
-                style="@style/GridFeatureBtn">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_align" />
-
-                <TextView
-                    style="@style/GridFeatureLabel"
-                    android:text="Align" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn_font_pick"
-                style="@style/GridFeatureBtn">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_font" />
-
-                <TextView
-                    style="@style/GridFeatureLabel"
-                    android:text="Font" />
-            </LinearLayout>
         </LinearLayout>
-
-        <!-- Row 2 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/tab_spacing"
-                style="@style/GridFeatureBtn">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_space" />
-
-                <TextView
-                    style="@style/GridFeatureLabel"
-                    android:text="Space" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/tab_transform"
-                style="@style/GridFeatureBtn">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_transfrom" />
-
-                <TextView
-                    style="@style/GridFeatureLabel"
-                    android:text="Transform" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/tab_effects"
-                style="@style/GridFeatureBtn">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_color" />
-
-                <TextView
-                    style="@style/GridFeatureLabel"
-                    android:text="Effects" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/btn_stroke_color"
-                style="@style/GridFeatureBtn">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_edit" />
-
-                <TextView
-                    style="@style/GridFeatureLabel"
-                    android:text="Stroke" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/tab_visual"
-                style="@style/GridFeatureBtn">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_transfrom" />
-
-                <TextView
-                    style="@style/GridFeatureLabel"
-                    android:text="Visual" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/tab_typo"
-                style="@style/GridFeatureBtn">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_align" />
-
-                <TextView
-                    style="@style/GridFeatureLabel"
-                    android:text="Typo" />
-            </LinearLayout>
-        </LinearLayout>
-
     </LinearLayout>
-
     <!-- Hidden panels -->
     <LinearLayout
         android:id="@+id/panel_tab_action"
