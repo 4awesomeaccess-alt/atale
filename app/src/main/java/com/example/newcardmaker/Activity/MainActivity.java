@@ -3773,8 +3773,14 @@ public class MainActivity extends AppCompatActivity {
             addNewTextView();
         } else if (id.getId() == R.id.btn_set_background) {
 
-            // Show background color/gradient popup for canvas
-            showCanvasBgPopup();
+            Dialog_Detail_Bottom dialog = Dialog_Detail_Bottom.newInstanceFromArrayList();
+
+            dialog.setOnWallpaperSelectedListener(imageUrl -> {
+                Log.e("BG_SET", "Background set: " + imageUrl);
+                setBackgroundFromUrl(imageUrl);
+            });
+
+            dialog.show(getSupportFragmentManager(), "Dialog_Detail_Bottom");
 
 
         } else if (id.getId() == R.id.btn_save_json) {
