@@ -10571,7 +10571,7 @@ public class MainActivity extends AppCompatActivity {
         android.view.View solidHexPreview     = root.findViewById(R.id.gp_solid_hex_preview);
         android.widget.EditText solidEtHex    = root.findViewById(R.id.gp_solid_et_hex);
         android.widget.SeekBar solidOpacity   = root.findViewById(R.id.gp_solid_opacity);
-        android.widget.TextView solidOpacityVal = root.findViewById(R.id.gp_solid_opacity_val);
+        android.widget.TextView solidOpacityVal = null; // removed from XML
         com.example.newcardmaker.ColorWheelView solidWheel = root.findViewById(R.id.gp_solid_wheel);
 
         final int[] solidAlpha = {255};
