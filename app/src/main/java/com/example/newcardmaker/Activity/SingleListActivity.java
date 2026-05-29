@@ -367,6 +367,7 @@ public class SingleListActivity extends AppCompatActivity {
         // JSON download karo and external files dir ma save karo
         String baseUrl = invite_AppConstants.SERVER_URL.replace("api.php", "");
         String jsonUrl = baseUrl + "images/" + item.getquote_imagejson();
+        String imageUrl = item.getImageBig();
         android.util.Log.e("#JSON_URL", "url=" + jsonUrl);
         new android.os.AsyncTask<String, Void, String>() {
             @Override
@@ -386,15 +387,22 @@ public class SingleListActivity extends AppCompatActivity {
                     while ((line = reader.readLine()) != null) sb.append(line);
                     reader.close(); is.close(); conn.disconnect();
 
-                    // getExternalFilesDir(null) ma save karo
                     java.io.File dir = getExternalFilesDir(null);
                     if (dir != null && !dir.exists()) dir.mkdirs();
-                    // Always unique name with timestamp
-                    String uniqueName = "design_" + System.currentTimeMillis() + ".json";
-                    java.io.File outFile = new java.io.File(dir, uniqueName);
+                    String uniqueName = "design_" + System.currentTimeMillis();
+
+                    // JSON save
+                    java.io.File outFile = new java.io.File(dir, uniqueName + ".json");
                     java.io.FileOutputStream fos = new java.io.FileOutputStream(outFile);
                     fos.write(sb.toString().getBytes());
                     fos.close();
+
+                    // Image URL .img file ma save
+                    java.io.File imgFile = new java.io.File(dir, uniqueName + ".img");
+                    java.io.FileOutputStream imgFos = new java.io.FileOutputStream(imgFile);
+                    imgFos.write(imageUrl.getBytes());
+                    imgFos.close();
+
                     return outFile.getAbsolutePath();
                 } catch (Exception e) {
                     android.util.Log.e("#JSON_err", e.getMessage() + "");

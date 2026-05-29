@@ -96,9 +96,17 @@ public class ListActivity extends AppCompatActivity {
 
         if (files != null) {
             for (File file : files) {
-                // Fakhali JSON files j list ma lo
                 if (file.getName().endsWith(".json")) {
-                    designList.add(new DesignModel(file.getName(), file.getAbsolutePath()));
+                    // Same name .img file check karo
+                    String imgPath = "";
+                    File imgFile = new File(file.getParent(),
+                            file.getName().replace(".json", ".img"));
+                    if (imgFile.exists()) {
+                        try {
+                            imgPath = new String(java.nio.file.Files.readAllBytes(imgFile.toPath())).trim();
+                        } catch (Exception e) { e.printStackTrace(); }
+                    }
+                    designList.add(new DesignModel(file.getName(), file.getAbsolutePath(), imgPath));
                 }
             }
         }

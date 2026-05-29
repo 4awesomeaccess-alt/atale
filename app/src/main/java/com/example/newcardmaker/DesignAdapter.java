@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.newcardmaker.Activity.MainActivity;
 
 import java.io.File;
@@ -37,6 +38,20 @@ public class DesignAdapter extends RecyclerView.Adapter<DesignAdapter.MyViewHold
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         DesignModel model = designList.get(position);
         holder.fileName.setText(model.getFileName());
+
+        // Thumbnail load
+        if (holder.ivThumbnail != null) {
+            String imgPath = model.getImagePath();
+            if (!imgPath.isEmpty()) {
+                Glide.with(holder.itemView.getContext())
+                        .load(imgPath)
+                        .centerCrop()
+                        .placeholder(android.R.drawable.ic_menu_gallery)
+                        .into(holder.ivThumbnail);
+            } else {
+                holder.ivThumbnail.setImageResource(android.R.drawable.ic_menu_gallery);
+            }
+        }
 
         // 1. EDIT: Click on item to Edit
         holder.itemView.setOnClickListener(v -> {
@@ -147,13 +162,14 @@ public class DesignAdapter extends RecyclerView.Adapter<DesignAdapter.MyViewHold
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView fileName;
-        ImageView btnShare, btnDelete;
+        ImageView btnShare, btnDelete, ivThumbnail;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             fileName = itemView.findViewById(R.id.txt_file_name);
-            btnShare = itemView.findViewById(R.id.btn_share_item); // Check ID in XML
+            btnShare = itemView.findViewById(R.id.btn_share_item);
             btnDelete = itemView.findViewById(R.id.btn_delete_item);
+            ivThumbnail = itemView.findViewById(R.id.iv_thumbnail);
         }
     }
 
