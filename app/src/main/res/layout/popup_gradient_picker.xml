@@ -121,9 +121,16 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="8dp"
         android:visibility="visible">
+
+        <!-- Top: Color preview + HEX + Color Wheel -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
         <!-- Left: Color preview + HEX -->
         <LinearLayout
@@ -175,26 +182,6 @@
 
             </LinearLayout>
 
-            <!-- Opacity -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="26dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp">
-
-                <SeekBar
-                    android:id="@+id/gp_solid_opacity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:max="255"
-                    android:progress="255"
-                    android:progressTint="#4CAF50"
-                    android:thumbTint="#4CAF50" />
-
-            </LinearLayout>
-
         </LinearLayout>
 
         <!-- Right: Color Wheel -->
@@ -203,6 +190,19 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <!-- Bottom: Full width Opacity SeekBar -->
+        <SeekBar
+            android:id="@+id/gp_solid_opacity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:max="255"
+            android:progress="255"
+            android:progressTint="#4CAF50"
+            android:thumbTint="#4CAF50" />
 
     </LinearLayout>
 
