@@ -182,7 +182,7 @@ public class CategoryActivity extends AppCompatActivity {
 
             // Image
             ImageView imageView = new ImageView(CategoryActivity.this);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             android.widget.FrameLayout.LayoutParams imgLp =
                     new android.widget.FrameLayout.LayoutParams(
                             android.widget.FrameLayout.LayoutParams.MATCH_PARENT, 350);
@@ -216,7 +216,7 @@ public class CategoryActivity extends AppCompatActivity {
             // Load image
             Glide.with(CategoryActivity.this)
                     .load(item.getImageBig())
-                    .centerCrop()
+                    .fitCenter()
                     .placeholder(android.R.drawable.ic_menu_gallery)
                     .into(holder.imageView);
 
