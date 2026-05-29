@@ -18400,19 +18400,16 @@ public class MainActivity extends AppCompatActivity {
         // Drag to move
         final int[] popupXY = {0, 0};
         final float[] downXY = {0, 0};
-        final boolean[] posInited = {false};
         popupView.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     downXY[0] = event.getRawX();
                     downXY[1] = event.getRawY();
-                    if (!posInited[0]) {
-                        int[] loc = new int[2];
-                        popupView.getLocationOnScreen(loc);
-                        popupXY[0] = loc[0];
-                        popupXY[1] = loc[1];
-                        posInited[0] = true;
-                    }
+                    // Get actual current position
+                    int[] loc = new int[2];
+                    popupView.getLocationOnScreen(loc);
+                    popupXY[0] = loc[0];
+                    popupXY[1] = loc[1];
                     return true;
                 case MotionEvent.ACTION_MOVE:
                     int dx = (int)(event.getRawX() - downXY[0]);
