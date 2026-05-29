@@ -10471,7 +10471,7 @@ public class MainActivity extends AppCompatActivity {
         android.widget.LinearLayout panelSolid = popupView.findViewById(R.id.gp_panel_solid);
         android.widget.LinearLayout panelGradient = popupView.findViewById(R.id.gp_panel_gradient);
         android.view.View solidHexPreview   = popupView.findViewById(R.id.gp_solid_hex_preview);
-        android.widget.EditText solidEtHex  = popupView.findViewById(R.id.gp_solid_hex);
+        android.widget.EditText solidEtHex  = popupView.findViewById(R.id.gp_solid_et_hex);
         com.example.newcardmaker.ColorWheelView solidWheel = popupView.findViewById(R.id.gp_solid_wheel);
         android.widget.SeekBar solidOpacity = popupView.findViewById(R.id.gp_solid_opacity);
 
