@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F5F5F5">
+
+    <!-- Toolbar -->
+    <LinearLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:backgroundColor="#1565C0"
+        android:background="#1565C0"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="48dp"
+        android:paddingBottom="16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="←"
+            android:textSize="22sp"
+            android:textColor="#FFFFFF"
+            android:paddingEnd="20dp" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Categories"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- Progress -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:visibility="gone" />
+
+    <!-- Empty -->
+    <TextView
+        android:id="@+id/tv_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="કોઈ category મળી નહીં"
+        android:textSize="16sp"
+        android:textColor="#9E9E9E"
+        android:gravity="center"
+        android:padding="40dp"
+        android:visibility="gone" />
+
+    <!-- Grid -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp"
+        android:clipToPadding="false" />
+
+</LinearLayout>

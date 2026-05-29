@@ -81,6 +81,10 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" /> <!-- FileProvider — share માટે જરૂરી -->
         <activity
             android:name=".Activity.CategoryActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".Activity.SubCategoryActivity"
             android:label="Categories"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
