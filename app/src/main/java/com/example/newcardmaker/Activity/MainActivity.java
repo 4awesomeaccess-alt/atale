@@ -10602,6 +10602,16 @@ public class MainActivity extends AppCompatActivity {
         solidHexPreview.setBackgroundColor(Color.WHITE);
         solidColor[0] = Color.WHITE;
 
+        // Helper: set rounded color preview
+        java.util.function.Consumer<Integer> setPreviewColor = color -> {
+            android.graphics.drawable.GradientDrawable previewBg = new android.graphics.drawable.GradientDrawable();
+            previewBg.setColor(color);
+            previewBg.setCornerRadius(16f);
+            solidHexPreview.setBackground(previewBg);
+        };
+
+        setPreviewColor.accept(Color.WHITE);
+
         // ── Solid apply helper ──
         Runnable applySolid = () -> {
             int c = solidColor[0];
@@ -10625,7 +10635,7 @@ public class MainActivity extends AppCompatActivity {
 
         solidWheel.setOnColorChangedListener(c -> {
             solidColor[0] = c;
-            solidHexPreview.setBackgroundColor(c);
+            setPreviewColor.accept(c);
             String hex = String.format("%06X", 0xFFFFFF & c);
             if (!solidEtHex.getText().toString().equalsIgnoreCase(hex)) {
                 solidEtHex.setText(hex);
@@ -10644,7 +10654,7 @@ public class MainActivity extends AppCompatActivity {
                     if (hex.length() == 6) {
                         int parsed = Color.parseColor("#" + hex);
                         solidColor[0] = parsed;
-                        solidHexPreview.setBackgroundColor(parsed);
+                        setPreviewColor.accept(parsed);
                         solidWheel.setColor(parsed);
                         applySolid.run();
                     }
