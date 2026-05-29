@@ -18397,19 +18397,22 @@ public class MainActivity extends AppCompatActivity {
 
         pw.showAtLocation(mainLayout, android.view.Gravity.BOTTOM | android.view.Gravity.CENTER_HORIZONTAL, 0, 100);
 
+        // Drag handle only - title bar
+        View dragHandle = popupView.findViewById(R.id.brightness_drag_handle);
+        View dragTarget = dragHandle != null ? dragHandle : popupView;
+
         // Drag to move
         final int[] popupXY = {0, 0};
         final float[] downXY = {0, 0};
         final boolean[] dragging = {false};
-        popupView.setOnTouchListener((v, event) -> {
+        dragTarget.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     downXY[0] = event.getRawX();
                     downXY[1] = event.getRawY();
                     dragging[0] = true;
-                    // Get window location (excludes status bar)
                     int[] loc = new int[2];
-                    popupView.getLocationInWindow(loc);
+                    popupView.getLocationOnScreen(loc);
                     popupXY[0] = loc[0];
                     popupXY[1] = loc[1];
                     return true;
