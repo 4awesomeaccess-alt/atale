@@ -156,8 +156,8 @@ public class CategoryActivity extends AppCompatActivity {
 
                 android.util.Log.e("#CategoryClick", "id=" + item.getId() + " name=" + item.getName());
 
-                // SubCategoryActivity open
-                Intent intent = new Intent(CategoryActivity.this, SubCategoryActivity.class);
+                // Directly open SingleListActivity
+                Intent intent = new Intent(CategoryActivity.this, SingleListActivity.class);
                 intent.putExtra("cid", item.getId());
                 intent.putExtra("name", item.getName());
                 startActivity(intent);

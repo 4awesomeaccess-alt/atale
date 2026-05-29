@@ -24,6 +24,7 @@ public class invite_JSONParser {
             Response response = client.newCall(request).execute();
             return response.body().string();
         } catch (Exception e) {
+            android.util.Log.e("#okhttp_err", e.getMessage() + "");
             e.printStackTrace();
             return "";
         }
