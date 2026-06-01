@@ -49,10 +49,10 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="2dp"
                     android:src="@drawable/ic_delete" />
-                            <TextView
+                <TextView
                     style="@style/GridFeatureLabel"
                     android:text="Delete" />
-</LinearLayout>
+            </LinearLayout>
 
             <!-- Duplicate -->
             <LinearLayout
@@ -66,10 +66,10 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="2dp"
                     android:src="@drawable/ic_copy" />
-                            <TextView
+                <TextView
                     style="@style/GridFeatureLabel"
                     android:text="Copy" />
-</LinearLayout>
+            </LinearLayout>
 
             <!-- Layer Up -->
             <LinearLayout
@@ -83,10 +83,10 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="2dp"
                     android:src="@drawable/selector_layer_up" />
-                            <TextView
+                <TextView
                     style="@style/GridFeatureLabel"
                     android:text="Layer+" />
-</LinearLayout>
+            </LinearLayout>
 
             <!-- Layer Down -->
             <LinearLayout
@@ -100,10 +100,10 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="2dp"
                     android:src="@drawable/selector_layer_down" />
-                            <TextView
+                <TextView
                     style="@style/GridFeatureLabel"
                     android:text="Layer-" />
-</LinearLayout>
+            </LinearLayout>
 
             <!-- Layer Top -->
             <LinearLayout
@@ -117,10 +117,10 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="2dp"
                     android:src="@drawable/ic_layer_up" />
-                            <TextView
+                <TextView
                     style="@style/GridFeatureLabel"
                     android:text="Top" />
-</LinearLayout>
+            </LinearLayout>
 
             <!-- Layer Bottom -->
             <LinearLayout
@@ -134,10 +134,10 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="2dp"
                     android:src="@drawable/ic_layer_down" />
-                            <TextView
+                <TextView
                     style="@style/GridFeatureLabel"
                     android:text="Bottom" />
-</LinearLayout>
+            </LinearLayout>
 
             <!-- Flip H -->
             <LinearLayout
@@ -151,10 +151,10 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="2dp"
                     android:src="@android:drawable/ic_menu_rotate" />
-                            <TextView
+                <TextView
                     style="@style/GridFeatureLabel"
                     android:text="Flip" />
-</LinearLayout>
+            </LinearLayout>
 
             <!-- Opacity -->
             <LinearLayout
@@ -168,10 +168,10 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="2dp"
                     android:src="@android:drawable/ic_menu_manage" />
-                            <TextView
+                <TextView
                     style="@style/GridFeatureLabel"
                     android:text="Opacity" />
-</LinearLayout>
+            </LinearLayout>
 
             <!-- Move -->
             <LinearLayout
@@ -185,16 +185,16 @@
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="2dp"
                     android:src="@drawable/ic_top" />
-                            <TextView
+                <TextView
                     style="@style/GridFeatureLabel"
                     android:text="Move" />
-</LinearLayout>
+            </LinearLayout>
 
         </LinearLayout>
 
     </HorizontalScrollView>
 
-    <!-- Size Seekbar Row -->
+    <!-- Size + D-pad Row -->
     <LinearLayout
         android:id="@+id/main_liner"
         android:layout_width="match_parent"
@@ -225,7 +225,6 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
-                <!-- Size label -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -234,7 +233,6 @@
                     android:textColor="#6B7280"
                     android:layout_marginEnd="4dp" />
 
-                <!-- Size value -->
                 <TextView
                     android:id="@+id/tv_sel_size_label"
                     android:layout_width="wrap_content"
@@ -253,32 +251,29 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
-                <!-- Minus -->
                 <TextView
                     android:id="@+id/btn_sel_size_minus"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:background="@drawable/bg_seekbar_btn"
                     android:gravity="center"
-                    android:text="−"
+                    android:text="&#8722;"
                     android:textColor="#EF4444"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <!-- SeekBar -->
                 <SeekBar
                     android:id="@+id/seek_sel_size"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
                     android:max="500"
                     android:progress="250"
                     android:progressTint="#1565C0"
                     android:thumbTint="#1565C0" />
 
-                <!-- Plus -->
                 <TextView
                     android:id="@+id/btn_sel_size_plus"
                     android:layout_width="28dp"
@@ -294,7 +289,7 @@
 
         </LinearLayout>
 
-        <!-- Move Buttons -->
+        <!-- D-pad Move Buttons -->
         <LinearLayout
             android:id="@+id/move_liner"
             android:layout_width="wrap_content"
@@ -305,7 +300,6 @@
             android:padding="6dp"
             android:gravity="center">
 
-            <!-- Up -->
             <ImageView
                 android:id="@+id/btn_sel_up"
                 android:layout_width="34dp"
@@ -316,7 +310,6 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/selector_move_top" />
 
-            <!-- Middle Row: Left + Right -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -334,7 +327,6 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/selector_move_left" />
 
-                <!-- Center dot -->
                 <View
                     android:layout_width="10dp"
                     android:layout_height="10dp"
@@ -354,7 +346,6 @@
 
             </LinearLayout>
 
-            <!-- Down -->
             <ImageView
                 android:id="@+id/btn_sel_down"
                 android:layout_width="34dp"
