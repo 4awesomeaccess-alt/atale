@@ -10372,12 +10372,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // ── PopupWindow — full content height ──
+        // ── PopupWindow — 25dp margin both sides ──
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
         int tcScreenHeight = getResources().getDisplayMetrics().heightPixels;
+        int tcMargin = (int)(25 * getResources().getDisplayMetrics().density);
+        int tcPopupW = screenWidth - (tcMargin * 2);
         int popupHeight = android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
         final PopupWindow popup = new PopupWindow(root,
-                screenWidth,
+                tcPopupW,
                 popupHeight, true);
         popup.setOutsideTouchable(true);
         popup.setElevation(16f);
@@ -10398,7 +10400,7 @@ public class MainActivity extends AppCompatActivity {
                     int dy2 = (int) event.getRawY() - lastY[0];
                     int[] loc = new int[2];
                     root.getLocationOnScreen(loc);
-                    popup.update(loc[0] + dx2, loc[1] + dy2, screenWidth, popupHeight);
+                    popup.update(loc[0] + dx2, loc[1] + dy2, tcPopupW, popupHeight);
                     lastX[0] = (int) event.getRawX();
                     lastY[0] = (int) event.getRawY();
                     return true;
@@ -10450,7 +10452,7 @@ public class MainActivity extends AppCompatActivity {
         View anchor = getWindow().getDecorView().getRootView();
         int screenHeight = getResources().getDisplayMetrics().heightPixels;
         int yOffset = screenHeight - popupHeight;
-        popup.showAtLocation(anchor, Gravity.TOP | Gravity.START, 0, yOffset);
+        popup.showAtLocation(anchor, Gravity.TOP | Gravity.START, tcMargin, yOffset);
 
         // ── Text Controls restore when color popup closes ──
         popup.setOnDismissListener(() -> showSelectionControlsForText(targetView));
