@@ -12476,7 +12476,7 @@ public class MainActivity extends AppCompatActivity {
         bindToggleRows(cv);
 
         // ── Copy Image
-        View btnCopyImage = cv.findViewById(R.id.btn_copy_image);
+        View btnCopyImage = cv.findViewById(R.id.btn_duplicate_view);
         if (btnCopyImage != null) {
             btnCopyImage.setOnClickListener(v -> {
                 try {
