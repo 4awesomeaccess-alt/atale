@@ -10328,9 +10328,9 @@ public class MainActivity extends AppCompatActivity {
         // Color wheel initial color
         colorWheel.setColor(targetView.getCurrentTextColor());
 
-        // Hex initial value (without #)
-        etHex.setText(String.format("%06X", (0xFFFFFF & targetView.getCurrentTextColor())));
-        hexPreview.setBackgroundColor(targetView.getCurrentTextColor());
+        // Hex initial value (with #)
+        etHex.setText("#" + String.format("%06X", (0xFFFFFF & targetView.getCurrentTextColor())));
+        setPreviewColorRounded(hexPreview, targetView.getCurrentTextColor());
 
         final int[] selectedColor = {targetView.getCurrentTextColor()};
 
@@ -10338,8 +10338,8 @@ public class MainActivity extends AppCompatActivity {
         Runnable updateAll = () -> {
             int c = selectedColor[0];
             targetView.setTextColor(c);
-            hexPreview.setBackgroundColor(c);
-            String hex = String.format("%06X", (0xFFFFFF & c));
+            setPreviewColorRounded(hexPreview, c);
+            String hex = "#" + String.format("%06X", (0xFFFFFF & c));
             if (!etHex.getText().toString().equalsIgnoreCase(hex)) {
                 etHex.setText(hex);
                 etHex.setSelection(hex.length());
