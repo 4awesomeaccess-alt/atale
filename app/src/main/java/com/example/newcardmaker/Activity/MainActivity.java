@@ -10093,7 +10093,8 @@ public class MainActivity extends AppCompatActivity {
         // ── XML Inflate ──
         View root = getLayoutInflater().inflate(R.layout.popup_text_color, null);
 
-        LinearLayout colorRow = root.findViewById(R.id.color_row);
+        androidx.recyclerview.widget.RecyclerView colorRow = root.findViewById(R.id.color_row);
+        colorRow.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 6));
         TextView btnCancel    = root.findViewById(R.id.btn_color_cancel);
         TextView btnDone      = root.findViewById(R.id.btn_color_done);
         View btnClose         = root.findViewById(R.id.btn_color_close);
@@ -10321,43 +10322,41 @@ public class MainActivity extends AppCompatActivity {
             updateAll.run();
         });
 
-        // ── Color Grid — 6 columns × 7 rows ──
+        // ── Color Grid — RecyclerView 6 columns ──
         float dp = getResources().getDisplayMetrics().density;
         int btnSize = (int)(36 * dp);
-        int gap     = (int)(8 * dp);
+        int gap = (int)(6 * dp);
 
-        colorRow.setOrientation(LinearLayout.VERTICAL);
-        colorRow.setPadding((int)(4*dp), (int)(4*dp), (int)(4*dp), (int)(4*dp));
+        java.util.List<Integer> colorList = new java.util.ArrayList<>();
+        for (int[] row : colorGrid) for (int c : row) colorList.add(c);
 
-        for (int[] row : colorGrid) {
-            LinearLayout rowLayout = new LinearLayout(this);
-            rowLayout.setOrientation(LinearLayout.HORIZONTAL);
-            LinearLayout.LayoutParams rowLp = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            rowLp.setMargins(0, 0, 0, gap);
-            rowLayout.setLayoutParams(rowLp);
-
-            for (int color : row) {
-                final int c = color;
-                View colorBtn = new View(this);
+        colorRow.setAdapter(new androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
+            @Override
+            public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup parent, int viewType) {
+                View v = new View(MainActivity.this);
+                androidx.recyclerview.widget.RecyclerView.LayoutParams lp =
+                    new androidx.recyclerview.widget.RecyclerView.LayoutParams(btnSize, btnSize);
+                lp.setMargins(gap/2, gap/2, gap/2, gap/2);
+                v.setLayoutParams(lp);
+                return new androidx.recyclerview.widget.RecyclerView.ViewHolder(v) {};
+            }
+            @Override
+            public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder holder, int position) {
+                int color = colorList.get(position);
                 GradientDrawable gd = new GradientDrawable();
                 gd.setShape(GradientDrawable.OVAL);
-                gd.setColor(c);
+                gd.setColor(color);
                 gd.setStroke(1, Color.parseColor("#DDDDDD"));
-                colorBtn.setBackground(gd);
-                LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(btnSize, btnSize);
-                bp.setMargins(0, 0, gap, 0);
-                colorBtn.setLayoutParams(bp);
-                colorBtn.setOnClickListener(v2 -> {
-                    selectedColor[0] = c;
-                    colorWheel.setColor(c);
+                holder.itemView.setBackground(gd);
+                holder.itemView.setOnClickListener(v2 -> {
+                    selectedColor[0] = color;
+                    colorWheel.setColor(color);
                     updateAll.run();
                 });
-                rowLayout.addView(colorBtn);
             }
-            colorRow.addView(rowLayout);
-        }
+            @Override
+            public int getItemCount() { return colorList.size(); }
+        });
 
         // ── Hex Apply button ──
         btnHexApply.setOnClickListener(v2 -> {
