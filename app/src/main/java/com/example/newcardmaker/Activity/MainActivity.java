@@ -12416,7 +12416,9 @@ public class MainActivity extends AppCompatActivity {
         // ✅ IMAGE-specific XML
         View cv = inflater.inflate(R.layout.layout_selection_controls_image, null);
 
-        selectionControlsPopup = new PopupWindow(cv, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, false);
+        int margin25px = (int)(25 * getResources().getDisplayMetrics().density);
+        int popupW = getResources().getDisplayMetrics().widthPixels - (margin25px * 2);
+        selectionControlsPopup = new PopupWindow(cv, popupW, LinearLayout.LayoutParams.WRAP_CONTENT, false);
         selectionControlsPopup.setOutsideTouchable(false);
         selectionControlsPopup.setTouchable(true);
         selectionControlsPopup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -12692,13 +12694,11 @@ public class MainActivity extends AppCompatActivity {
         int screenH = getResources().getDisplayMetrics().heightPixels;
 
         if (isSelControlsMoved) {
-            // User moved popup — same position par show
             selectionControlsPopup.showAtLocation(mainLayout, Gravity.TOP | Gravity.START, selControlsLastX, selControlsLastY);
         } else {
-            // First time — bottom center
-            selControlsLastX = 0;
+            selControlsLastX = margin25px;
             selControlsLastY = screenH - popupH;
-            selectionControlsPopup.showAtLocation(mainLayout, Gravity.TOP | Gravity.START, 0, selControlsLastY);
+            selectionControlsPopup.showAtLocation(mainLayout, Gravity.TOP | Gravity.START, margin25px, selControlsLastY);
         }
     }
 
