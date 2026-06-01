@@ -10079,22 +10079,22 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void showTextColorPopup(StrokeTextView targetView) {
-        // Photo match: 6 columns × 7 rows
+        // Photo match: 4 columns × 7 rows
         int[][] colorGrid = {
-            {0xFF4472C4, 0xFF00B0F0, 0xFFFF6B6B, 0xFFE91E8C, 0xFF70AD47, 0xFFFFC000},
-            {0xFF203864, 0xFF0070C0, 0xFFFF0000, 0xFFAD1457, 0xFF375623, 0xFFFFA500},
-            {0xFF2F5496, 0xFF00B0F0, 0xFFFF5733, 0xFF880E4F, 0xFF548235, 0xFFFFD700},
-            {0xFF4472C4, 0xFF0070C0, 0xFFE53935, 0xFF9C27B0, 0xFF2E7D32, 0xFFFFC107},
-            {0xFF5B9BD5, 0xFF29B6F6, 0xFFEF9A9A, 0xFFCE93D8, 0xFFA5D6A7, 0xFFFFF176},
-            {0xFF9DC3E6, 0xFF81D4FA, 0xFFFFCDD2, 0xFFF3E5F5, 0xFFC8E6C9, 0xFFFFFDE7},
-            {0xFFFFFFFF, 0xFF9E9E9E, 0xFF616161, 0xFF212121, 0xFF795548, 0xFF000000},
+            {0xFF4472C4, 0xFF00B0F0, 0xFFFF6B6B, 0xFFE91E8C},
+            {0xFF203864, 0xFF0070C0, 0xFFFF0000, 0xFFAD1457},
+            {0xFF2F5496, 0xFF00B0F0, 0xFFFF5733, 0xFF880E4F},
+            {0xFF4472C4, 0xFF0070C0, 0xFFE53935, 0xFF9C27B0},
+            {0xFF70AD47, 0xFFFFC000, 0xFF2E7D32, 0xFFFFC107},
+            {0xFFA5D6A7, 0xFFFFF176, 0xFF548235, 0xFFFFD700},
+            {0xFFFFFFFF, 0xFF9E9E9E, 0xFF212121, 0xFF000000},
         };
 
         // ── XML Inflate ──
         View root = getLayoutInflater().inflate(R.layout.popup_text_color, null);
 
         androidx.recyclerview.widget.RecyclerView colorRow = root.findViewById(R.id.color_row);
-        colorRow.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 6));
+        colorRow.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 4));
         TextView btnCancel    = root.findViewById(R.id.btn_color_cancel);
         TextView btnDone      = root.findViewById(R.id.btn_color_done);
         View btnClose         = root.findViewById(R.id.btn_color_close);
