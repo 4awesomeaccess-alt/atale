@@ -222,99 +222,202 @@
         android:paddingBottom="12dp"
         android:visibility="gone">
 
-        <!-- Gradient Preview -->
+        <!-- Top: Preview + Direction buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="10dp">
+
+            <!-- Gradient Preview -->
+            <View
+                android:id="@+id/tc_grad_preview"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_color_preview"
+                android:layout_marginEnd="10dp" />
+
+            <!-- Direction buttons -->
+            <TextView
+                android:id="@+id/tc_dir_lr"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="→"
+                android:textColor="#374151"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:background="@drawable/bg_lang_btn"
+                android:layout_marginEnd="6dp" />
+
+            <TextView
+                android:id="@+id/tc_dir_tb"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="↓"
+                android:textColor="#374151"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:background="@drawable/bg_lang_btn"
+                android:layout_marginEnd="6dp" />
+
+            <TextView
+                android:id="@+id/tc_dir_diag"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:text="↘"
+                android:textColor="#374151"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:background="@drawable/bg_lang_btn" />
+
+        </LinearLayout>
+
+        <!-- Middle: Color rows + Color Wheel -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <!-- Left: Color 1 + Color 2 rows -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginEnd="10dp">
+
+                <!-- Color 1 Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_lang_btn"
+                    android:layout_marginBottom="8dp"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp">
+
+                    <RadioButton
+                        android:id="@+id/tc_grad_radio1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:layout_marginEnd="6dp" />
+
+                    <View
+                        android:id="@+id/tc_grad_c1_box"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="#FF69B4"
+                        android:layout_marginEnd="6dp" />
+
+                    <TextView
+                        android:id="@+id/tc_grad_c1_hex"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="#000000"
+                        android:textColor="#111827"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tc_grad_c1_ok"
+                        android:layout_width="36dp"
+                        android:layout_height="28dp"
+                        android:text="OK"
+                        android:textColor="#FFFFFF"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:background="@drawable/bg_continue_btn" />
+
+                </LinearLayout>
+
+                <!-- Color 2 Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_lang_btn"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp">
+
+                    <RadioButton
+                        android:id="@+id/tc_grad_radio2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:layout_marginEnd="6dp" />
+
+                    <View
+                        android:id="@+id/tc_grad_c2_box"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="#FF69B4"
+                        android:layout_marginEnd="6dp" />
+
+                    <TextView
+                        android:id="@+id/tc_grad_c2_hex"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="#000000"
+                        android:textColor="#111827"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tc_grad_c2_ok"
+                        android:layout_width="36dp"
+                        android:layout_height="28dp"
+                        android:text="OK"
+                        android:textColor="#FFFFFF"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:background="@drawable/bg_continue_btn" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Right: Color Wheel -->
+            <com.example.newcardmaker.ColorWheelView
+                android:id="@+id/tc_grad_wheel"
+                android:layout_width="120dp"
+                android:layout_height="100dp" />
+
+        </LinearLayout>
+
+        <!-- Divider -->
         <View
-            android:id="@+id/tc_grad_preview"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@drawable/bg_color_preview"
-            android:layout_marginBottom="8dp" />
+            android:layout_height="1dp"
+            android:background="#E5E7EB"
+            android:layout_marginBottom="10dp" />
 
-        <!-- Color 1 -->
-        <LinearLayout
+        <!-- Bottom: Color Grid 10 cols × 3 rows -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tc_grad_color_grid"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="6dp">
+            android:layout_height="130dp" />
 
-            <View
-                android:id="@+id/tc_grad_c1_box"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
-                android:background="#FF0000"
-                android:layout_marginEnd="4dp" />
-
-            <EditText
-                android:id="@+id/tc_grad_c1_hex"
-                android:layout_width="0dp"
-                android:layout_height="26dp"
-                android:layout_weight="1"
-                android:text="FF0000"
-                android:textColor="#111827"
-                android:textSize="10sp"
-                android:background="@drawable/bg_lang_btn"
-                android:paddingHorizontal="4dp"
-                android:inputType="text"
-                android:maxLength="6"
-                android:singleLine="true" />
-
-            <View
-                android:id="@+id/tc_grad_c2_box"
-                android:layout_width="26dp"
-                android:layout_height="26dp"
-                android:background="#0000FF"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="4dp" />
-
-            <EditText
-                android:id="@+id/tc_grad_c2_hex"
-                android:layout_width="0dp"
-                android:layout_height="26dp"
-                android:layout_weight="1"
-                android:text="0000FF"
-                android:textColor="#111827"
-                android:textSize="10sp"
-                android:background="@drawable/bg_lang_btn"
-                android:paddingHorizontal="4dp"
-                android:inputType="text"
-                android:maxLength="6"
-                android:singleLine="true" />
-
-        </LinearLayout>
-
-        <!-- Presets -->
-        <LinearLayout
-            android:id="@+id/tc_preset_row"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
-
-            <View android:id="@+id/tc_preset_theme"   android:layout_width="0dp" android:layout_height="28dp" android:layout_weight="1" android:layout_marginEnd="4dp" android:background="#FF6B6B" />
-            <View android:id="@+id/tc_preset_sunset"  android:layout_width="0dp" android:layout_height="28dp" android:layout_weight="1" android:layout_marginEnd="4dp" android:background="#FFA07A" />
-            <View android:id="@+id/tc_preset_ocean"   android:layout_width="0dp" android:layout_height="28dp" android:layout_weight="1" android:layout_marginEnd="4dp" android:background="#4FC3F7" />
-            <View android:id="@+id/tc_preset_gold"    android:layout_width="0dp" android:layout_height="28dp" android:layout_weight="1" android:layout_marginEnd="4dp" android:background="#FFD700" />
-            <View android:id="@+id/tc_preset_forest"  android:layout_width="0dp" android:layout_height="28dp" android:layout_weight="1" android:layout_marginEnd="4dp" android:background="#66BB6A" />
-            <View android:id="@+id/tc_preset_fire"    android:layout_width="0dp" android:layout_height="28dp" android:layout_weight="1" android:background="#FF4500" />
-
-        </LinearLayout>
-
-        <!-- Direction -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView android:id="@+id/tc_dir_lr"   android:layout_width="40dp" android:layout_height="30dp" android:text="→" android:textColor="#FFFFFF" android:textSize="13sp" android:gravity="center" android:background="@drawable/bg_continue_btn" android:layout_marginEnd="4dp" />
-            <TextView android:id="@+id/tc_dir_tb"   android:layout_width="40dp" android:layout_height="30dp" android:text="↓" android:textColor="#6B7280" android:textSize="13sp" android:gravity="center" android:background="@drawable/bg_lang_btn" android:layout_marginEnd="4dp" />
-            <TextView android:id="@+id/tc_dir_diag" android:layout_width="40dp" android:layout_height="30dp" android:text="↘" android:textColor="#6B7280" android:textSize="13sp" android:gravity="center" android:background="@drawable/bg_lang_btn" android:layout_marginEnd="4dp" />
-
-        </LinearLayout>
-
-        <!-- Hidden buttons -->
+        <!-- Hidden views (keep IDs for Java compatibility) -->
         <TextView android:id="@+id/btn_color_cancel" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
         <TextView android:id="@+id/btn_hex_apply2"   android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+        <LinearLayout android:id="@+id/tc_preset_row" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone">
+            <View android:id="@+id/tc_preset_theme"  android:layout_width="1dp" android:layout_height="1dp" />
+            <View android:id="@+id/tc_preset_sunset" android:layout_width="1dp" android:layout_height="1dp" />
+            <View android:id="@+id/tc_preset_ocean"  android:layout_width="1dp" android:layout_height="1dp" />
+            <View android:id="@+id/tc_preset_gold"   android:layout_width="1dp" android:layout_height="1dp" />
+            <View android:id="@+id/tc_preset_forest" android:layout_width="1dp" android:layout_height="1dp" />
+            <View android:id="@+id/tc_preset_fire"   android:layout_width="1dp" android:layout_height="1dp" />
+        </LinearLayout>
+        <EditText android:id="@+id/tc_grad_c1_hex_edit" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
+        <EditText android:id="@+id/tc_grad_c2_hex_edit" android:layout_width="0dp" android:layout_height="0dp" android:visibility="gone" />
 
     </LinearLayout>
 

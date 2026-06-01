@@ -10106,17 +10106,24 @@ public class MainActivity extends AppCompatActivity {
         View tcGradPreview    = root.findViewById(R.id.tc_grad_preview);
         View tcGradC1Box      = root.findViewById(R.id.tc_grad_c1_box);
         View tcGradC2Box      = root.findViewById(R.id.tc_grad_c2_box);
-        android.widget.EditText tcGradC1Hex = root.findViewById(R.id.tc_grad_c1_hex);
-        android.widget.EditText tcGradC2Hex = root.findViewById(R.id.tc_grad_c2_hex);
+        TextView tcGradC1Hex  = root.findViewById(R.id.tc_grad_c1_hex);
+        TextView tcGradC2Hex  = root.findViewById(R.id.tc_grad_c2_hex);
+        TextView tcGradC1Ok   = root.findViewById(R.id.tc_grad_c1_ok);
+        TextView tcGradC2Ok   = root.findViewById(R.id.tc_grad_c2_ok);
+        android.widget.RadioButton tcRadio1 = root.findViewById(R.id.tc_grad_radio1);
+        android.widget.RadioButton tcRadio2 = root.findViewById(R.id.tc_grad_radio2);
+        com.example.newcardmaker.ColorWheelView tcGradWheel = root.findViewById(R.id.tc_grad_wheel);
+        androidx.recyclerview.widget.RecyclerView tcGradGrid = root.findViewById(R.id.tc_grad_color_grid);
         TextView tcDirLR      = root.findViewById(R.id.tc_dir_lr);
         TextView tcDirTB      = root.findViewById(R.id.tc_dir_tb);
         TextView tcDirDiag    = root.findViewById(R.id.tc_dir_diag);
         TextView tcGradApply  = root.findViewById(R.id.btn_color_done); // reuse done button
 
         // ── Gradient state ──
-        final int[] gradC1 = {0xFFFF0000};
+        final int[] gradC1 = {0xFFFF69B4};
         final int[] gradC2 = {0xFF0000FF};
         final int[] gradDir = {0}; // 0=LR,1=TB,2=Diag
+        final boolean[] isC1Selected = {true}; // radio state
 
         // Gradient preview update
         Runnable updateGradPreview = () -> {
@@ -10128,6 +10135,48 @@ public class MainActivity extends AppCompatActivity {
             tcGradPreview.setBackground(new GradientDrawable(orient,
                 new int[]{gradC1[0], gradC2[0]}));
         };
+
+        // ── Initial colors in boxes ──
+        tcGradC1Box.setBackgroundColor(gradC1[0]);
+        tcGradC2Box.setBackgroundColor(gradC2[0]);
+        if (tcGradC1Hex != null) tcGradC1Hex.setText(String.format("#%06X", 0xFFFFFF & gradC1[0]));
+        if (tcGradC2Hex != null) tcGradC2Hex.setText(String.format("#%06X", 0xFFFFFF & gradC2[0]));
+
+        // ── Gradient Color Wheel ──
+        com.example.newcardmaker.ColorWheelView tcGradWheel2 = root.findViewById(R.id.tc_grad_wheel);
+        if (tcGradWheel2 != null) {
+            tcGradWheel2.setColor(gradC1[0]);
+            tcGradWheel2.setOnColorChangedListener(c2 -> {
+                if (isC1Selected[0]) { gradC1[0]=c2; tcGradC1Box.setBackgroundColor(c2); if(tcGradC1Hex!=null)tcGradC1Hex.setText(String.format("#%06X",0xFFFFFF&c2)); }
+                else { gradC2[0]=c2; tcGradC2Box.setBackgroundColor(c2); if(tcGradC2Hex!=null)tcGradC2Hex.setText(String.format("#%06X",0xFFFFFF&c2)); }
+                updateGradPreview.run();
+            });
+        }
+
+        // ── Radio buttons ──
+        android.widget.RadioButton tcRadio1b = root.findViewById(R.id.tc_grad_radio1);
+        android.widget.RadioButton tcRadio2b = root.findViewById(R.id.tc_grad_radio2);
+        if (tcRadio1b != null) tcRadio1b.setOnClickListener(v2 -> { isC1Selected[0]=true; tcRadio1b.setChecked(true); tcRadio2b.setChecked(false); if(tcGradWheel2!=null)tcGradWheel2.setColor(gradC1[0]); });
+        if (tcRadio2b != null) tcRadio2b.setOnClickListener(v2 -> { isC1Selected[0]=false; tcRadio1b.setChecked(false); tcRadio2b.setChecked(true); if(tcGradWheel2!=null)tcGradWheel2.setColor(gradC2[0]); });
+
+        // ── OK buttons ──
+        TextView tcGradC1Ok2 = root.findViewById(R.id.tc_grad_c1_ok);
+        TextView tcGradC2Ok2 = root.findViewById(R.id.tc_grad_c2_ok);
+        if (tcGradC1Ok2 != null) tcGradC1Ok2.setOnClickListener(v2 -> { try { String h=tcGradC1Hex.getText().toString().trim().replace("#",""); gradC1[0]=Color.parseColor("#"+h); tcGradC1Box.setBackgroundColor(gradC1[0]); updateGradPreview.run(); } catch(Exception ig){} });
+        if (tcGradC2Ok2 != null) tcGradC2Ok2.setOnClickListener(v2 -> { try { String h=tcGradC2Hex.getText().toString().trim().replace("#",""); gradC2[0]=Color.parseColor("#"+h); tcGradC2Box.setBackgroundColor(gradC2[0]); updateGradPreview.run(); } catch(Exception ig){} });
+
+        // ── Gradient Color Grid ──
+        androidx.recyclerview.widget.RecyclerView tcGradGrid2 = root.findViewById(R.id.tc_grad_color_grid);
+        if (tcGradGrid2 != null) {
+            int[] gColors = {0xFF1565C0,0xFF00897B,0xFFE53935,0xFF8E24AA,0xFF43A047,0xFFFFD600,0xFFFF0000,0xFFE91E8C,0xFF3F51B5,0xFF827717,0xFF0D47A1,0xFF004D40,0xFFB71C1C,0xFF4A148C,0xFF1B5E20,0xFFF57F17,0xFFD50000,0xFFAD1457,0xFF283593,0xFF33691E,0xFF42A5F5,0xFF26C6DA,0xFFEF9A9A,0xFFCE93D8,0xFFA5D6A7,0xFFFFF176,0xFFFF8A80,0xFFF48FB1,0xFF82B1FF,0xFFCCFF90};
+            tcGradGrid2.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 10));
+            float dpG2=(float)getResources().getDisplayMetrics().density; int bsG2=(int)(30*dpG2); int gG2=(int)(3*dpG2);
+            tcGradGrid2.setAdapter(new androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>(){
+                public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup p,int vt){View v=new View(MainActivity.this);androidx.recyclerview.widget.RecyclerView.LayoutParams lp=new androidx.recyclerview.widget.RecyclerView.LayoutParams(bsG2,bsG2);lp.setMargins(gG2/2,gG2/2,gG2/2,gG2/2);v.setLayoutParams(lp);return new androidx.recyclerview.widget.RecyclerView.ViewHolder(v){};}
+                public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder h,int pos){int color=gColors[pos];GradientDrawable g2=new GradientDrawable();g2.setShape(GradientDrawable.OVAL);g2.setColor(color);h.itemView.setBackground(g2);h.itemView.setOnClickListener(v2->{if(isC1Selected[0]){gradC1[0]=color;tcGradC1Box.setBackgroundColor(color);if(tcGradC1Hex!=null)tcGradC1Hex.setText(String.format("#%06X",0xFFFFFF&color));}else{gradC2[0]=color;tcGradC2Box.setBackgroundColor(color);if(tcGradC2Hex!=null)tcGradC2Hex.setText(String.format("#%06X",0xFFFFFF&color));}if(tcGradWheel2!=null)tcGradWheel2.setColor(isC1Selected[0]?gradC1[0]:gradC2[0]);updateGradPreview.run();});}
+                public int getItemCount(){return gColors.length;}
+            });
+        }
         updateGradPreview.run();
 
         // Direction buttons
@@ -10237,21 +10286,6 @@ public class MainActivity extends AppCompatActivity {
         if (tcPresetGold   != null) tcPresetGold.setOnClickListener(v   -> applyPreset.accept(0xFFF7971E, 0xFFFFD200));
         if (tcPresetForest != null) tcPresetForest.setOnClickListener(v -> applyPreset.accept(0xFF11998E, 0xFF38EF7D));
         if (tcPresetFire   != null) tcPresetFire.setOnClickListener(v   -> applyPreset.accept(0xFFFF416C, 0xFFFF4B2B));
-
-        tcGradC1Hex.addTextChangedListener(new android.text.TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
-            @Override public void afterTextChanged(android.text.Editable s) {}
-            @Override public void onTextChanged(CharSequence s, int a, int b, int c) {
-                try { if (s.toString().length()==6) { int p=Color.parseColor("#"+s); gradC1[0]=p; tcGradC1Box.setBackgroundColor(p); updateGradPreview.run(); } } catch(Exception ignored){}
-            }
-        });
-        tcGradC2Hex.addTextChangedListener(new android.text.TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
-            @Override public void afterTextChanged(android.text.Editable s) {}
-            @Override public void onTextChanged(CharSequence s, int a, int b, int c) {
-                try { if (s.toString().length()==6) { int p=Color.parseColor("#"+s); gradC2[0]=p; tcGradC2Box.setBackgroundColor(p); updateGradPreview.run(); } } catch(Exception ignored){}
-            }
-        });
 
         // Apply gradient to text
         tcGradApply.setOnClickListener(v -> {
