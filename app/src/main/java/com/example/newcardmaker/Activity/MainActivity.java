@@ -10079,28 +10079,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void showTextColorPopup(StrokeTextView targetView) {
-        int[] colors = {
-            getColor(R.color.md_black),
-            getColor(R.color.md_white),
-            getColor(R.color.md_red),
-            getColor(R.color.md_pink),
-            getColor(R.color.md_purple),
-            getColor(R.color.md_deep_purple),
-            getColor(R.color.md_indigo),
-            getColor(R.color.md_blue),
-            getColor(R.color.md_light_blue),
-            getColor(R.color.md_cyan),
-            getColor(R.color.md_teal),
-            getColor(R.color.md_green),
-            getColor(R.color.md_light_green),
-            getColor(R.color.md_lime),
-            getColor(R.color.md_yellow),
-            getColor(R.color.md_amber),
-            getColor(R.color.md_orange),
-            getColor(R.color.md_deep_orange),
-            getColor(R.color.md_brown),
-            getColor(R.color.md_grey),
-            getColor(R.color.md_blue_grey),
+        // Photo match: 6 columns × 7 rows
+        int[][] colorGrid = {
+            {0xFF4472C4, 0xFF00B0F0, 0xFFFF6B6B, 0xFFE91E8C, 0xFF70AD47, 0xFFFFC000},
+            {0xFF203864, 0xFF0070C0, 0xFFFF0000, 0xFFAD1457, 0xFF375623, 0xFFFFA500},
+            {0xFF2F5496, 0xFF00B0F0, 0xFFFF5733, 0xFF880E4F, 0xFF548235, 0xFFFFD700},
+            {0xFF4472C4, 0xFF0070C0, 0xFFE53935, 0xFF9C27B0, 0xFF2E7D32, 0xFFFFC107},
+            {0xFF5B9BD5, 0xFF29B6F6, 0xFFEF9A9A, 0xFFCE93D8, 0xFFA5D6A7, 0xFFFFF176},
+            {0xFF9DC3E6, 0xFF81D4FA, 0xFFFFCDD2, 0xFFF3E5F5, 0xFFC8E6C9, 0xFFFFFDE7},
+            {0xFFFFFFFF, 0xFF9E9E9E, 0xFF616161, 0xFF212121, 0xFF795548, 0xFF000000},
         };
 
         // ── XML Inflate ──
@@ -10334,28 +10321,42 @@ public class MainActivity extends AppCompatActivity {
             updateAll.run();
         });
 
-        // ── Quick color buttons ──
+        // ── Color Grid — 6 columns × 7 rows ──
         float dp = getResources().getDisplayMetrics().density;
         int btnSize = (int)(36 * dp);
         int gap     = (int)(8 * dp);
 
-        for (int c : colors) {
-            final int color = c;
-            View colorBtn = new View(this);
-            GradientDrawable gd = new GradientDrawable();
-            gd.setShape(GradientDrawable.OVAL);
-            gd.setColor(color);
-            gd.setStroke(2, Color.parseColor("#CCCCCC"));
-            colorBtn.setBackground(gd);
-            LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(btnSize, btnSize);
-            bp.setMargins(0, 0, gap, 0);
-            colorBtn.setLayoutParams(bp);
-            colorBtn.setOnClickListener(v2 -> {
-                selectedColor[0] = color;
-                colorWheel.setColor(color);
-                updateAll.run();
-            });
-            colorRow.addView(colorBtn);
+        colorRow.setOrientation(LinearLayout.VERTICAL);
+        colorRow.setPadding((int)(4*dp), (int)(4*dp), (int)(4*dp), (int)(4*dp));
+
+        for (int[] row : colorGrid) {
+            LinearLayout rowLayout = new LinearLayout(this);
+            rowLayout.setOrientation(LinearLayout.HORIZONTAL);
+            LinearLayout.LayoutParams rowLp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            rowLp.setMargins(0, 0, 0, gap);
+            rowLayout.setLayoutParams(rowLp);
+
+            for (int color : row) {
+                final int c = color;
+                View colorBtn = new View(this);
+                GradientDrawable gd = new GradientDrawable();
+                gd.setShape(GradientDrawable.OVAL);
+                gd.setColor(c);
+                gd.setStroke(1, Color.parseColor("#DDDDDD"));
+                colorBtn.setBackground(gd);
+                LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(btnSize, btnSize);
+                bp.setMargins(0, 0, gap, 0);
+                colorBtn.setLayoutParams(bp);
+                colorBtn.setOnClickListener(v2 -> {
+                    selectedColor[0] = c;
+                    colorWheel.setColor(c);
+                    updateAll.run();
+                });
+                rowLayout.addView(colorBtn);
+            }
+            colorRow.addView(rowLayout);
         }
 
         // ── Hex Apply button ──
