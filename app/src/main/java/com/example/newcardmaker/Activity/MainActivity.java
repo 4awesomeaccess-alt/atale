@@ -10168,8 +10168,8 @@ public class MainActivity extends AppCompatActivity {
         // ── Gradient Color Grid ──
         androidx.recyclerview.widget.RecyclerView tcGradGrid2 = root.findViewById(R.id.tc_grad_color_grid);
         if (tcGradGrid2 != null) {
-            int[] gColors = {0xFF1565C0,0xFF00897B,0xFFE53935,0xFF8E24AA,0xFF43A047,0xFFFFD600,0xFFFF0000,0xFFE91E8C,0xFF3F51B5,0xFF827717,0xFF0D47A1,0xFF004D40,0xFFB71C1C,0xFF4A148C,0xFF1B5E20,0xFFF57F17,0xFFD50000,0xFFAD1457,0xFF283593,0xFF33691E,0xFF42A5F5,0xFF26C6DA,0xFFEF9A9A,0xFFCE93D8,0xFFA5D6A7,0xFFFFF176,0xFFFF8A80,0xFFF48FB1,0xFF82B1FF,0xFFCCFF90};
-            tcGradGrid2.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 10));
+            int[] gColors = {0xFF1565C0,0xFF00897B,0xFFE53935,0xFF8E24AA,0xFF43A047,0xFFFFD600,0xFFFF0000,0xFF0D47A1,0xFF004D40,0xFFB71C1C,0xFF4A148C,0xFF1B5E20,0xFFF57F17,0xFFD50000};
+            tcGradGrid2.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 7));
             float dpG2=(float)getResources().getDisplayMetrics().density; int bsG2=(int)(30*dpG2); int gG2=(int)(3*dpG2);
             tcGradGrid2.setAdapter(new androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>(){
                 public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup p,int vt){View v=new View(MainActivity.this);androidx.recyclerview.widget.RecyclerView.LayoutParams lp=new androidx.recyclerview.widget.RecyclerView.LayoutParams(bsG2,bsG2);lp.setMargins(gG2/2,gG2/2,gG2/2,gG2/2);v.setLayoutParams(lp);return new androidx.recyclerview.widget.RecyclerView.ViewHolder(v){};}
