@@ -10372,9 +10372,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // ── PopupWindow — display width, 180dp height ──
+        // ── PopupWindow — full content height ──
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
-        int popupHeight = (int)(210 * getResources().getDisplayMetrics().density);
+        int screenHeight = getResources().getDisplayMetrics().heightPixels;
+        int popupHeight = (int)(screenHeight * 0.65f); // 65% screen height
         final PopupWindow popup = new PopupWindow(root,
                 screenWidth,
                 popupHeight, true);
