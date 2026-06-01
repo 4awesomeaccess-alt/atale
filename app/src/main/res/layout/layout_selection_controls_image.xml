@@ -209,10 +209,11 @@
         <!-- Seekbar container -->
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/bg_seekbar_container"
             android:orientation="vertical"
+            android:gravity="center_vertical"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:paddingTop="4dp"
@@ -297,7 +298,7 @@
         <LinearLayout
             android:id="@+id/move_liner"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_marginStart="8dp"
             android:background="@drawable/bg_seekbar_container"
