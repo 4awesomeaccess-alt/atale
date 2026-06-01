@@ -39,8 +39,8 @@
 
             <!-- Delete -->
             <LinearLayout
-                android:id="@+id/btn_delete_view"
-                style="@style/IconActionBtn">
+                android:id="@+id/btn_pop_delete"
+                style="@style/GridFeatureBtn">
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
@@ -50,7 +50,7 @@
             <!-- Duplicate -->
             <LinearLayout
                 android:id="@+id/btn_duplicate_view"
-                style="@style/IconActionBtn">
+                style="@style/GridFeatureBtn">
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
@@ -60,7 +60,7 @@
             <!-- Layer Up -->
             <LinearLayout
                 android:id="@+id/btn_layer_up"
-                style="@style/IconActionBtn">
+                style="@style/GridFeatureBtn">
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
@@ -70,7 +70,7 @@
             <!-- Layer Down -->
             <LinearLayout
                 android:id="@+id/btn_layer_down"
-                style="@style/IconActionBtn">
+                style="@style/GridFeatureBtn">
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
@@ -80,7 +80,7 @@
             <!-- Layer Top -->
             <LinearLayout
                 android:id="@+id/btn_layer_top"
-                style="@style/IconActionBtn">
+                style="@style/GridFeatureBtn">
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
@@ -90,7 +90,7 @@
             <!-- Layer Bottom -->
             <LinearLayout
                 android:id="@+id/btn_layer_bottom"
-                style="@style/IconActionBtn">
+                style="@style/GridFeatureBtn">
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
@@ -99,8 +99,8 @@
 
             <!-- Flip H -->
             <LinearLayout
-                android:id="@+id/btn_flip_horizontal"
-                style="@style/IconActionBtn">
+                android:id="@+id/btn_flip_h"
+                style="@style/GridFeatureBtn">
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
@@ -110,7 +110,7 @@
             <!-- Opacity -->
             <LinearLayout
                 android:id="@+id/btn_opacity"
-                style="@style/IconActionBtn">
+                style="@style/GridFeatureBtn">
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
@@ -120,7 +120,7 @@
             <!-- Move -->
             <LinearLayout
                 android:id="@+id/btn_brightness"
-                style="@style/IconActionBtn">
+                style="@style/GridFeatureBtn">
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
@@ -172,7 +172,7 @@
 
                 <!-- Size value -->
                 <TextView
-                    android:id="@+id/tv_img_size_val"
+                    android:id="@+id/tv_sel_size_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="100"
@@ -191,7 +191,7 @@
 
                 <!-- Minus -->
                 <TextView
-                    android:id="@+id/btn_img_size_minus"
+                    android:id="@+id/btn_sel_size_minus"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:background="@drawable/bg_seekbar_btn"
@@ -203,7 +203,7 @@
 
                 <!-- SeekBar -->
                 <SeekBar
-                    android:id="@+id/seek_img_size"
+                    android:id="@+id/seek_sel_size"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -216,7 +216,7 @@
 
                 <!-- Plus -->
                 <TextView
-                    android:id="@+id/btn_img_size_plus"
+                    android:id="@+id/btn_sel_size_plus"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:background="@drawable/bg_seekbar_btn"
@@ -240,7 +240,7 @@
             android:gravity="center_vertical">
 
             <ImageView
-                android:id="@+id/btn_move_left"
+                android:id="@+id/btn_sel_left"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="@drawable/selector_move_btn"
@@ -254,7 +254,7 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/btn_move_top"
+                    android:id="@+id/btn_sel_up"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:background="@drawable/selector_move_btn"
@@ -263,7 +263,7 @@
                     android:src="@drawable/selector_move_top" />
 
                 <ImageView
-                    android:id="@+id/btn_move_bottom"
+                    android:id="@+id/btn_sel_down"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:background="@drawable/selector_move_btn"
@@ -274,7 +274,7 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/btn_move_right"
+                android:id="@+id/btn_sel_right"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="@drawable/selector_move_btn"
