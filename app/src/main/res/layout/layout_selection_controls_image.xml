@@ -237,7 +237,7 @@
                     android:layout_marginStart="6dp"
                     android:layout_marginEnd="6dp"
                     android:max="500"
-                    android:progress="100"
+                    android:progress="250"
                     android:progressTint="#1565C0"
                     android:thumbTint="#1565C0" />
 

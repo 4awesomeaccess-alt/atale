@@ -12429,6 +12429,9 @@ public class MainActivity extends AppCompatActivity {
         selOriginalW = (lp != null && lp.width > 0) ? lp.width : targetView.getWidth();
         selOriginalH = (lp != null && lp.height > 0) ? lp.height : targetView.getHeight();
 
+        // ── Image padding set
+        targetView.setPadding(8, 8, 8, 8);
+
         // ── Size label shows W/H
         TextView tvLbl = cv.findViewById(R.id.tv_sel_size_label);
         if (tvLbl != null) {
@@ -12436,6 +12439,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         android.widget.SeekBar seekSize = cv.findViewById(R.id.seek_sel_size);
+
+        // ── Set seekbar to medium position (250 = mid of 500)
+        if (seekSize != null) {
+            seekSize.setMax(500);
+            seekSize.setProgress(250);
+        }
 
         if (seekSize != null) {
             seekSize.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
