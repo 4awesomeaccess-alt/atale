@@ -10079,15 +10079,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void showTextColorPopup(StrokeTextView targetView) {
-        // 3 columns × 7 rows
+        // 3 columns × 3 rows
         int[][] colorGrid = {
             {0xFF4472C4, 0xFF00B0F0, 0xFFFF6B6B},
-            {0xFF203864, 0xFF0070C0, 0xFFFF0000},
-            {0xFFE91E8C, 0xFFAD1457, 0xFF880E4F},
-            {0xFF70AD47, 0xFF548235, 0xFF375623},
-            {0xFFFFC000, 0xFFFFA500, 0xFFFFD700},
-            {0xFF9E9E9E, 0xFF616161, 0xFF212121},
-            {0xFFFFFFFF, 0xFF795548, 0xFF000000},
+            {0xFFE91E8C, 0xFF70AD47, 0xFFFFC000},
+            {0xFFFFFFFF, 0xFF9E9E9E, 0xFF000000},
         };
 
         // ── XML Inflate ──
