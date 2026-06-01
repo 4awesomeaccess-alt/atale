@@ -10109,8 +10109,8 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout colorRow = root.findViewById(R.id.color_row);
         TextView btnCancel    = root.findViewById(R.id.btn_color_cancel);
         TextView btnDone      = root.findViewById(R.id.btn_color_done);
-        TextView btnClose     = root.findViewById(R.id.btn_color_close);
-        TextView btnScreenPick = root.findViewById(R.id.btn_screen_pick);
+        View btnClose         = root.findViewById(R.id.btn_color_close);
+        View btnScreenPick    = root.findViewById(R.id.btn_screen_pick);
 
         // ── Tab views ──
         TextView tcTabSolid    = root.findViewById(R.id.tc_tab_solid);
