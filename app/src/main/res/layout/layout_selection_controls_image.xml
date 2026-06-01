@@ -298,52 +298,71 @@
             android:id="@+id/move_liner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginStart="8dp"
-            android:gravity="center_vertical">
+            android:background="@drawable/bg_seekbar_container"
+            android:padding="6dp"
+            android:gravity="center">
 
+            <!-- Up -->
             <ImageView
-                android:id="@+id/btn_sel_left"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:id="@+id/btn_sel_up"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_gravity="center_horizontal"
                 android:background="@drawable/selector_move_btn"
-                android:padding="7dp"
+                android:padding="6dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/selector_move_left" />
+                android:src="@drawable/selector_move_top" />
 
+            <!-- Middle Row: Left + Right -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp">
 
                 <ImageView
-                    android:id="@+id/btn_sel_up"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:id="@+id/btn_sel_left"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
                     android:background="@drawable/selector_move_btn"
-                    android:padding="7dp"
+                    android:padding="6dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/selector_move_top" />
+                    android:src="@drawable/selector_move_left" />
+
+                <!-- Center dot -->
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:background="@drawable/bg_dpad_center"
+                    android:layout_gravity="center" />
 
                 <ImageView
-                    android:id="@+id/btn_sel_down"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:id="@+id/btn_sel_right"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
                     android:background="@drawable/selector_move_btn"
-                    android:padding="7dp"
+                    android:padding="6dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/selector_move_bottom" />
+                    android:src="@drawable/selector_move_right" />
 
             </LinearLayout>
 
+            <!-- Down -->
             <ImageView
-                android:id="@+id/btn_sel_right"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:id="@+id/btn_sel_down"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_gravity="center_horizontal"
                 android:background="@drawable/selector_move_btn"
-                android:padding="7dp"
+                android:padding="6dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/selector_move_right" />
+                android:src="@drawable/selector_move_bottom" />
 
         </LinearLayout>
 
