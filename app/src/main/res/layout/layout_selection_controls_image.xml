@@ -22,14 +22,20 @@
 
     </LinearLayout>
 
-    <!-- Row 1: Action Buttons -->
-    <HorizontalScrollView
+    <!-- Row 1: Action Buttons + Close -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:paddingTop="4dp">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <HorizontalScrollView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scrollbars="none"
+            android:paddingStart="8dp"
+            android:paddingTop="4dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -193,6 +199,26 @@
         </LinearLayout>
 
     </HorizontalScrollView>
+
+        <!-- Close Button -->
+        <LinearLayout
+            android:id="@+id/btn_sel_close"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:gravity="center"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/bg_seekbar_btn"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                android:layout_gravity="center" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <!-- Size + D-pad Row -->
     <LinearLayout
