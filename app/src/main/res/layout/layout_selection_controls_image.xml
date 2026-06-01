@@ -45,7 +45,10 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_delete" />
-            </LinearLayout>
+                            <TextView
+                    style="@style/GridFeatureLabel"
+                    android:text="Delete" />
+</LinearLayout>
 
             <!-- Duplicate -->
             <LinearLayout
@@ -55,7 +58,10 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_copy" />
-            </LinearLayout>
+                            <TextView
+                    style="@style/GridFeatureLabel"
+                    android:text="Copy" />
+</LinearLayout>
 
             <!-- Layer Up -->
             <LinearLayout
@@ -65,7 +71,10 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/selector_layer_up" />
-            </LinearLayout>
+                            <TextView
+                    style="@style/GridFeatureLabel"
+                    android:text="Layer+" />
+</LinearLayout>
 
             <!-- Layer Down -->
             <LinearLayout
@@ -75,7 +84,10 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/selector_layer_down" />
-            </LinearLayout>
+                            <TextView
+                    style="@style/GridFeatureLabel"
+                    android:text="Layer-" />
+</LinearLayout>
 
             <!-- Layer Top -->
             <LinearLayout
@@ -85,7 +97,10 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_layer_up" />
-            </LinearLayout>
+                            <TextView
+                    style="@style/GridFeatureLabel"
+                    android:text="Top" />
+</LinearLayout>
 
             <!-- Layer Bottom -->
             <LinearLayout
@@ -95,7 +110,10 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_layer_down" />
-            </LinearLayout>
+                            <TextView
+                    style="@style/GridFeatureLabel"
+                    android:text="Bottom" />
+</LinearLayout>
 
             <!-- Flip H -->
             <LinearLayout
@@ -105,7 +123,10 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@android:drawable/ic_menu_rotate" />
-            </LinearLayout>
+                            <TextView
+                    style="@style/GridFeatureLabel"
+                    android:text="Flip" />
+</LinearLayout>
 
             <!-- Opacity -->
             <LinearLayout
@@ -115,7 +136,10 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@android:drawable/ic_menu_manage" />
-            </LinearLayout>
+                            <TextView
+                    style="@style/GridFeatureLabel"
+                    android:text="Opacity" />
+</LinearLayout>
 
             <!-- Move -->
             <LinearLayout
@@ -125,7 +149,10 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_top" />
-            </LinearLayout>
+                            <TextView
+                    style="@style/GridFeatureLabel"
+                    android:text="Move" />
+</LinearLayout>
 
         </LinearLayout>
 
