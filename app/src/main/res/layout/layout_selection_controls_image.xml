@@ -44,7 +44,10 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_margin="3dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
                     android:src="@drawable/ic_delete" />
                             <TextView
                     style="@style/GridFeatureLabel"
@@ -58,7 +61,10 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_margin="3dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
                     android:src="@drawable/ic_copy" />
                             <TextView
                     style="@style/GridFeatureLabel"
@@ -72,7 +78,10 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_margin="3dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
                     android:src="@drawable/selector_layer_up" />
                             <TextView
                     style="@style/GridFeatureLabel"
@@ -86,7 +95,10 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_margin="3dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
                     android:src="@drawable/selector_layer_down" />
                             <TextView
                     style="@style/GridFeatureLabel"
@@ -100,7 +112,10 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_margin="3dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
                     android:src="@drawable/ic_layer_up" />
                             <TextView
                     style="@style/GridFeatureLabel"
@@ -114,7 +129,10 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_margin="3dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
                     android:src="@drawable/ic_layer_down" />
                             <TextView
                     style="@style/GridFeatureLabel"
@@ -128,7 +146,10 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_margin="3dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
                     android:src="@android:drawable/ic_menu_rotate" />
                             <TextView
                     style="@style/GridFeatureLabel"
@@ -142,7 +163,10 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_margin="3dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
                     android:src="@android:drawable/ic_menu_manage" />
                             <TextView
                     style="@style/GridFeatureLabel"
@@ -156,7 +180,10 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_margin="3dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
                     android:src="@drawable/ic_top" />
                             <TextView
                     style="@style/GridFeatureLabel"
