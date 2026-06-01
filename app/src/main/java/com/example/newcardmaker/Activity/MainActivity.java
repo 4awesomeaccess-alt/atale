@@ -10127,7 +10127,7 @@ public class MainActivity extends AppCompatActivity {
         TextView tcDirLR      = root.findViewById(R.id.tc_dir_lr);
         TextView tcDirTB      = root.findViewById(R.id.tc_dir_tb);
         TextView tcDirDiag    = root.findViewById(R.id.tc_dir_diag);
-        TextView tcGradApply  = root.findViewById(R.id.tc_grad_apply);
+        TextView tcGradApply  = root.findViewById(R.id.btn_color_done); // reuse done button
 
         // ── Gradient state ──
         final int[] gradC1 = {0xFFFF0000};
