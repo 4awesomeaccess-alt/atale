@@ -19973,6 +19973,19 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        // ✅ BitmapDrawable background preserve
+        android.graphics.drawable.Drawable currentBgCheck = tv.getBackground();
+        if (currentBgCheck instanceof android.graphics.drawable.BitmapDrawable) {
+            // Keep existing bitmap background - restore padding only
+            Object padTagCheck = tv.getTag(R.id.btn_location);
+            if (padTagCheck instanceof int[]) {
+                int[] up = (int[]) padTagCheck;
+                int se2 = (int) Math.ceil(tv.getStrokeWidth()) + 4;
+                tv.setPadding(se2 + up[0], se2 + up[1], se2 + up[0], se2 + up[1]);
+            }
+            return;
+        }
+
         Object bgImageTag = tv.getTag(R.id.btn_sticker_gallery);
         String bgImageUri = bgImageTag != null ?
                 bgImageTag.toString() : "";
