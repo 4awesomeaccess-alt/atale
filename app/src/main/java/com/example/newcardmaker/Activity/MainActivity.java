@@ -11550,6 +11550,16 @@ public class MainActivity extends AppCompatActivity {
             gpImgTintWheel.setOnColorChangedListener(c -> {
                 gpSelectedTint[0] = c;
                 if (gpImgPreview != null) gpImgPreview.setColorFilter(c, android.graphics.PorterDuff.Mode.MULTIPLY);
+                // Direct apply tint to background
+                if (gpSelectedBmp[0] != null) {
+                    android.graphics.Bitmap result = gpSelectedBmp[0].copy(android.graphics.Bitmap.Config.ARGB_8888, true);
+                    android.graphics.Canvas cv2 = new android.graphics.Canvas(result);
+                    android.graphics.Paint pt = new android.graphics.Paint();
+                    pt.setColorFilter(new android.graphics.PorterDuffColorFilter(c, android.graphics.PorterDuff.Mode.MULTIPLY));
+                    cv2.drawBitmap(gpSelectedBmp[0], 0, 0, pt);
+                    targetView.setBackground(new android.graphics.drawable.BitmapDrawable(getResources(), result));
+                    exportToJson();
+                }
             });
         }
 
