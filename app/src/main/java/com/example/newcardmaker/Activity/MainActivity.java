@@ -11639,7 +11639,7 @@ public class MainActivity extends AppCompatActivity {
         int popupH  = android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
         android.widget.PopupWindow popup = new android.widget.PopupWindow(
                 root, popupW, popupH, true);
-        popup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+        popup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.WHITE));
         popup.setElevation(16f);
         popup.setOutsideTouchable(true);
 
