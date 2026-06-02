@@ -11568,6 +11568,8 @@ public class MainActivity extends AppCompatActivity {
         android.widget.TextView tabGallery = root.findViewById(R.id.gp_tab_gallery);
         android.widget.LinearLayout panelGallery = root.findViewById(R.id.gp_panel_gallery);
         android.widget.LinearLayout gpGalleryOpen = root.findViewById(R.id.gp_gallery_open);
+        final int[] padX = {0}, padY = {0};
+
         androidx.recyclerview.widget.RecyclerView gpBrushGrid = root.findViewById(R.id.gp_brush_grid);
         android.widget.LinearLayout gpImgColorRow = root.findViewById(R.id.gp_img_color_row);
         android.widget.ImageView gpImgPreview = root.findViewById(R.id.gp_img_preview);
@@ -11682,7 +11684,7 @@ public class MainActivity extends AppCompatActivity {
         android.widget.TextView btnPadYM = root.findViewById(R.id.gp_pad_y_minus);
         android.widget.TextView btnPadYP = root.findViewById(R.id.gp_pad_y_plus);
 
-        final int[] padX = {0}, padY = {0};
+
 
         Runnable applyPadding = () -> {
             float dpF = getResources().getDisplayMetrics().density;
