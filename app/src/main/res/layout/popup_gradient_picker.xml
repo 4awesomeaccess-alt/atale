@@ -130,8 +130,7 @@
     <LinearLayout
         android:id="@+id/gp_panel_solid"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="8dp"
         android:visibility="visible">
@@ -139,14 +138,13 @@
         <!-- Top: Color preview + HEX + Color Wheel -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
         <!-- Left: Color preview + HEX -->
         <LinearLayout
             android:layout_width="80dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
             android:paddingEnd="6dp">
@@ -198,7 +196,7 @@
         <com.example.newcardmaker.ColorWheelView
             android:id="@+id/gp_solid_wheel"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="220dp"
             android:layout_weight="1" />
 
         </LinearLayout>
