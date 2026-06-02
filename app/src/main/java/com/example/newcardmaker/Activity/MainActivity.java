@@ -11546,6 +11546,32 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Color wheel
+        // ── Pick Color button ──
+        android.widget.TextView gpBtnPickColor = root.findViewById(R.id.gp_btn_pick_color);
+        if (gpBtnPickColor != null) {
+            gpBtnPickColor.setOnClickListener(vv -> {
+                new com.example.newcardmaker.ScreenColorPickerOverlay(MainActivity.this,
+                    new com.example.newcardmaker.ScreenColorPickerOverlay.OnColorPickedListener() {
+                        @Override public void onColorPreview(int color) {}
+                        @Override public void onColorPicked(int color) {
+                            gpSelectedTint[0] = color;
+                            if (gpImgTintWheel != null) gpImgTintWheel.setColor(color);
+                            if (gpImgPreview != null) gpImgPreview.setColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY);
+                            if (gpSelectedBmp[0] != null) {
+                                android.graphics.Bitmap res2 = gpSelectedBmp[0].copy(android.graphics.Bitmap.Config.ARGB_8888, true);
+                                android.graphics.Canvas cv3 = new android.graphics.Canvas(res2);
+                                android.graphics.Paint pt2 = new android.graphics.Paint();
+                                pt2.setColorFilter(new android.graphics.PorterDuffColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY));
+                                cv3.drawBitmap(gpSelectedBmp[0], 0, 0, pt2);
+                                targetView.setBackground(new android.graphics.drawable.BitmapDrawable(getResources(), res2));
+                                exportToJson();
+                            }
+                        }
+                        @Override public void onCancelled() {}
+                    }).show();
+            });
+        }
+
         if (gpImgTintWheel != null) {
             gpImgTintWheel.setOnColorChangedListener(c -> {
                 gpSelectedTint[0] = c;

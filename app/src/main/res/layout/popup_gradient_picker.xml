@@ -611,11 +611,33 @@
                 android:scaleType="centerCrop"
                 android:layout_marginBottom="8dp" />
 
-            <com.example.newcardmaker.ColorWheelView
-                android:id="@+id/gp_img_tint_wheel"
+            <!-- Color Wheel + Pick Color button row -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:layout_marginBottom="8dp" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <com.example.newcardmaker.ColorWheelView
+                    android:id="@+id/gp_img_tint_wheel"
+                    android:layout_width="0dp"
+                    android:layout_height="160dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/gp_btn_pick_color"
+                    android:layout_width="70dp"
+                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:text="🎨 Pick"
+                    android:textSize="11sp"
+                    android:textColor="#1565C0"
+                    android:textStyle="bold"
+                    android:background="@drawable/bg_lang_btn"
+                    android:layout_marginStart="8dp" />
+
+            </LinearLayout>
 
             <!-- Padding X -->
             <LinearLayout
