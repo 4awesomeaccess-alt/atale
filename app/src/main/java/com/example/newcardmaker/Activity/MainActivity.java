@@ -11525,13 +11525,11 @@ public class MainActivity extends AppCompatActivity {
                         src.getPixels(px, 0, w2, 0, 0, w2, ht2);
                         for (int i=0; i<px.length; i++) { int r=(px[i]>>16)&0xFF,g=(px[i]>>8)&0xFF,b2=px[i]&0xFF; if(r<60&&g<60&&b2<60) px[i]=0; }
                         src.setPixels(px, 0, w2, 0, 0, w2, ht2);
-                        gpSelectedBmp[0] = src;
-                        gpSelectedTint[0] = android.graphics.Color.TRANSPARENT;
-                        if (gpBrushGrid != null) gpBrushGrid.setVisibility(android.view.View.GONE);
-                        if (gpGalleryOpen != null) gpGalleryOpen.setVisibility(android.view.View.GONE);
-                        if (gpImgPreview != null) { gpImgPreview.setImageBitmap(src); gpImgPreview.setColorFilter(null); }
-                        if (gpImgTintWheel != null) gpImgTintWheel.setColor(0xFFFF0000);
-                        if (gpImgColorRow != null) gpImgColorRow.setVisibility(android.view.View.VISIBLE);
+
+                        // Direct apply to background
+                        android.graphics.drawable.BitmapDrawable bd = new android.graphics.drawable.BitmapDrawable(getResources(), src);
+                        targetView.setBackground(bd);
+                        exportToJson();
                     });
                 }
                 public int getItemCount() { return brushRes.length; }
