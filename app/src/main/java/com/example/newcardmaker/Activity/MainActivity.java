@@ -11496,10 +11496,130 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // ── Tab switching ──
+        android.widget.TextView tabGallery = root.findViewById(R.id.gp_tab_gallery);
+        android.widget.LinearLayout panelGallery = root.findViewById(R.id.gp_panel_gallery);
+        android.widget.LinearLayout gpGalleryOpen = root.findViewById(R.id.gp_gallery_open);
+        androidx.recyclerview.widget.RecyclerView gpBrushGrid = root.findViewById(R.id.gp_brush_grid);
+        android.widget.LinearLayout gpImgColorRow = root.findViewById(R.id.gp_img_color_row);
+        android.widget.ImageView gpImgPreview = root.findViewById(R.id.gp_img_preview);
+        com.example.newcardmaker.ColorWheelView gpImgTintWheel = root.findViewById(R.id.gp_img_tint_wheel);
+        android.widget.TextView gpBtnImgApply = root.findViewById(R.id.gp_btn_img_apply);
+        android.widget.TextView gpBtnShowImages = root.findViewById(R.id.gp_btn_show_images);
+
+        final android.graphics.Bitmap[] gpSelectedBmp = {null};
+        final int[] gpSelectedTint = {android.graphics.Color.TRANSPARENT};
+
+        // Brush grid setup
+        if (gpBrushGrid != null) {
+            int[] brushRes = {
+                R.drawable.ic_brush_5, R.drawable.ic_brush_6, R.drawable.ic_brush_7,
+                R.drawable.ic_brush_8, R.drawable.ic_brush_9, R.drawable.ic_brush_10,
+                R.drawable.ic_brush_11, R.drawable.ic_brush_12, R.drawable.ic_brush_13,
+                R.drawable.ic_brush_14, R.drawable.ic_brush_15, R.drawable.ic_brush_16,
+                R.drawable.ic_brush_17, R.drawable.ic_brush_18, R.drawable.ic_brush_19,
+                R.drawable.ic_brush_20, R.drawable.ic_brush_21,
+            };
+            gpBrushGrid.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 3));
+            float dpB = getResources().getDisplayMetrics().density;
+            int cellW2 = (getResources().getDisplayMetrics().widthPixels - (int)(24*dpB)) / 3;
+            int cellH2 = (int)(targetView.getHeight() > 0 ? targetView.getHeight() : 80*dpB);
+            gpBrushGrid.setAdapter(new androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
+                public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup p, int vt) {
+                    android.widget.ImageView iv = new android.widget.ImageView(MainActivity.this);
+                    androidx.recyclerview.widget.RecyclerView.LayoutParams lp = new androidx.recyclerview.widget.RecyclerView.LayoutParams(cellW2, cellH2);
+                    lp.setMargins((int)(4*dpB),(int)(4*dpB),(int)(4*dpB),(int)(4*dpB));
+                    iv.setLayoutParams(lp);
+                    iv.setScaleType(android.widget.ImageView.ScaleType.CENTER_CROP);
+                    return new androidx.recyclerview.widget.RecyclerView.ViewHolder(iv) {};
+                }
+                public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder h, int pos) {
+                    android.widget.ImageView iv = (android.widget.ImageView) h.itemView;
+                    iv.setImageResource(brushRes[pos]);
+                    iv.setOnClickListener(vv -> {
+                        android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeResource(getResources(), brushRes[h.getAdapterPosition()]);
+                        int tw = targetView.getWidth() > 0 ? targetView.getWidth() : 200;
+                        int th2 = targetView.getHeight() > 0 ? targetView.getHeight() : 80;
+                        android.graphics.Bitmap scaled = android.graphics.Bitmap.createScaledBitmap(bmp, tw, th2, true);
+                        android.graphics.Bitmap src = scaled.copy(android.graphics.Bitmap.Config.ARGB_8888, true);
+                        int w2 = src.getWidth(), ht2 = src.getHeight();
+                        int[] px = new int[w2*ht2];
+                        src.getPixels(px, 0, w2, 0, 0, w2, ht2);
+                        for (int i=0; i<px.length; i++) { int r=(px[i]>>16)&0xFF,g=(px[i]>>8)&0xFF,b2=px[i]&0xFF; if(r<60&&g<60&&b2<60) px[i]=0; }
+                        src.setPixels(px, 0, w2, 0, 0, w2, ht2);
+                        gpSelectedBmp[0] = src;
+                        gpSelectedTint[0] = android.graphics.Color.TRANSPARENT;
+                        if (gpBrushGrid != null) gpBrushGrid.setVisibility(android.view.View.GONE);
+                        if (gpGalleryOpen != null) gpGalleryOpen.setVisibility(android.view.View.GONE);
+                        if (gpImgPreview != null) { gpImgPreview.setImageBitmap(src); gpImgPreview.setColorFilter(null); }
+                        if (gpImgTintWheel != null) gpImgTintWheel.setColor(0xFFFF0000);
+                        if (gpImgColorRow != null) gpImgColorRow.setVisibility(android.view.View.VISIBLE);
+                    });
+                }
+                public int getItemCount() { return brushRes.length; }
+            });
+        }
+
+        // Color wheel
+        if (gpImgTintWheel != null) {
+            gpImgTintWheel.setOnColorChangedListener(c -> {
+                gpSelectedTint[0] = c;
+                if (gpImgPreview != null) gpImgPreview.setColorFilter(c, android.graphics.PorterDuff.Mode.MULTIPLY);
+            });
+        }
+
+        // Show images back
+        if (gpBtnShowImages != null) {
+            gpBtnShowImages.setOnClickListener(vv -> {
+                if (gpImgColorRow != null) gpImgColorRow.setVisibility(android.view.View.GONE);
+                if (gpBrushGrid != null) gpBrushGrid.setVisibility(android.view.View.VISIBLE);
+                if (gpGalleryOpen != null) gpGalleryOpen.setVisibility(android.view.View.VISIBLE);
+            });
+        }
+
+        // Gallery open
+        if (gpGalleryOpen != null) {
+            gpGalleryOpen.setOnClickListener(vv -> {
+                android.content.Intent gi = new android.content.Intent(android.content.Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(gi, 9999);
+                pendingGalleryTarget = targetView;
+            });
+        }
+
+        // Apply button
+        if (gpBtnImgApply != null) {
+            gpBtnImgApply.setOnClickListener(vv -> {
+                if (gpSelectedBmp[0] == null) return;
+                android.graphics.Bitmap result2;
+                if (gpSelectedTint[0] != android.graphics.Color.TRANSPARENT) {
+                    result2 = gpSelectedBmp[0].copy(android.graphics.Bitmap.Config.ARGB_8888, true);
+                    android.graphics.Canvas c3 = new android.graphics.Canvas(result2);
+                    android.graphics.Paint p3 = new android.graphics.Paint();
+                    p3.setColorFilter(new android.graphics.PorterDuffColorFilter(gpSelectedTint[0], android.graphics.PorterDuff.Mode.MULTIPLY));
+                    c3.drawBitmap(gpSelectedBmp[0], 0, 0, p3);
+                } else { result2 = gpSelectedBmp[0]; }
+                android.graphics.drawable.BitmapDrawable bdd = new android.graphics.drawable.BitmapDrawable(getResources(), result2);
+                targetView.setBackground(bdd);
+                exportToJson();
+            });
+        }
+
+        if (tabGallery != null) tabGallery.setOnClickListener(v -> {
+            panelSolid.setVisibility(android.view.View.GONE);
+            panelGradient.setVisibility(android.view.View.GONE);
+            panelImage.setVisibility(android.view.View.GONE);
+            if (panelGallery != null) panelGallery.setVisibility(android.view.View.VISIBLE);
+            tabSolid.setBackgroundColor(0xFF2A3439);    tabSolid.setTextColor(0xFF9CA3AF);
+            tabGradient.setBackgroundColor(0xFF2A3439); tabGradient.setTextColor(0xFF9CA3AF);
+            tabImage.setBackgroundColor(0xFF2A3439);    tabImage.setTextColor(0xFF9CA3AF);
+            tabNone.setBackgroundColor(0xFF2A3439);     tabNone.setTextColor(0xFF9CA3AF);
+            tabGallery.setBackgroundColor(0xFF607D8B);  tabGallery.setTextColor(0xFFFFFFFF);
+        });
+
         tabSolid.setOnClickListener(v -> {
             panelSolid.setVisibility(android.view.View.VISIBLE);
             panelGradient.setVisibility(android.view.View.GONE);
             panelImage.setVisibility(android.view.View.GONE);
+            if (panelGallery != null) panelGallery.setVisibility(android.view.View.GONE);
             tabSolid.setBackgroundColor(0xFF607D8B);    tabSolid.setTextColor(0xFFFFFFFF);
             tabGradient.setBackgroundColor(0xFF2A3439); tabGradient.setTextColor(0xFF9CA3AF);
             tabImage.setBackgroundColor(0xFF2A3439);    tabImage.setTextColor(0xFF9CA3AF);

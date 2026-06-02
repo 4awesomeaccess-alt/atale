@@ -113,6 +113,17 @@
             android:gravity="center"
             android:background="#FFFFFF" />
 
+        <TextView
+            android:id="@+id/gp_tab_gallery"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="🖼 Gallery"
+            android:textColor="#6B7280"
+            android:textSize="11sp"
+            android:gravity="center"
+            android:background="#FFFFFF" />
+
     </LinearLayout>
 
     <!-- ── Solid Panel ── -->
@@ -544,6 +555,92 @@
                     android:layout_marginStart="3dp" />
 
             </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- ── Gallery Panel ── -->
+    <LinearLayout
+        android:id="@+id/gp_panel_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="8dp">
+
+        <!-- Gallery button -->
+        <LinearLayout
+            android:id="@+id/gp_gallery_open"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/bg_lang_btn"
+            android:layout_marginBottom="8dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📷  Gallery માંથી image select"
+                android:textSize="13sp"
+                android:textColor="#1565C0"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Brush image grid -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/gp_brush_grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Color row (after image select) -->
+        <LinearLayout
+            android:id="@+id/gp_img_color_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/gp_btn_show_images"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="← Images"
+                android:textColor="#1565C0"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_lang_btn"
+                android:layout_marginBottom="6dp" />
+
+            <ImageView
+                android:id="@+id/gp_img_preview"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:scaleType="centerCrop"
+                android:layout_marginBottom="8dp" />
+
+            <com.example.newcardmaker.ColorWheelView
+                android:id="@+id/gp_img_tint_wheel"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/gp_btn_img_apply"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:text="Apply"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_continue_btn" />
 
         </LinearLayout>
 
