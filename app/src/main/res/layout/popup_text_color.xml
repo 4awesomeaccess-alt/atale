@@ -472,6 +472,53 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <!-- Color selector row (shown after image select) -->
+        <LinearLayout
+            android:id="@+id/img_color_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="10dp">
+
+            <!-- Selected image preview -->
+            <android.widget.ImageView
+                android:id="@+id/img_selected_preview"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:scaleType="centerCrop"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Color circles horizontal scroll -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:layout_marginBottom="8dp">
+
+                <LinearLayout
+                    android:id="@+id/img_tint_colors"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="4dp" />
+
+            </HorizontalScrollView>
+
+            <!-- Apply button -->
+            <TextView
+                android:id="@+id/btn_img_apply"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:text="Apply"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_continue_btn" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

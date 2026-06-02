@@ -10483,8 +10483,67 @@ public class MainActivity extends AppCompatActivity {
             if (tcPanelImage != null) tcPanelImage.setVisibility(android.view.View.VISIBLE);
         });
 
-        // ── Gallery open ──
-        if (btnGalleryOpen != null) {
+        // ── Image panel color row setup ──
+        android.widget.LinearLayout imgColorRow = root.findViewById(R.id.img_color_row);
+        android.widget.ImageView imgSelectedPreview = root.findViewById(R.id.img_selected_preview);
+        android.widget.LinearLayout imgTintColors = root.findViewById(R.id.img_tint_colors);
+        TextView btnImgApply = root.findViewById(R.id.btn_img_apply);
+
+        final android.graphics.Bitmap[] selectedBmp = {null};
+        final int[] selectedTint = {android.graphics.Color.TRANSPARENT};
+
+        // Tint color presets
+        int[] tintPresets = {
+            android.graphics.Color.TRANSPARENT,
+            0xFFFF0000, 0xFF00CC00, 0xFF0000FF, 0xFFFFFF00,
+            0xFFFF00FF, 0xFF00FFFF, 0xFFFF8C00, 0xFF800080,
+            0xFFFFFFFF, 0xFF000000, 0xFFFF69B4, 0xFF00CED1
+        };
+        float dpI = getResources().getDisplayMetrics().density;
+        int szI = (int)(32 * dpI);
+        for (int tc : tintPresets) {
+            android.view.View btn = new android.view.View(this);
+            android.graphics.drawable.GradientDrawable gd = new android.graphics.drawable.GradientDrawable();
+            gd.setShape(android.graphics.drawable.GradientDrawable.OVAL);
+            gd.setColor(tc == android.graphics.Color.TRANSPARENT ? 0xFFEEEEEE : tc);
+            gd.setStroke(2, 0xFFCCCCCC);
+            btn.setBackground(gd);
+            android.widget.LinearLayout.LayoutParams bp = new android.widget.LinearLayout.LayoutParams(szI, szI);
+            bp.setMargins(0, 0, (int)(8*dpI), 0);
+            btn.setLayoutParams(bp);
+            final int tColor = tc;
+            btn.setOnClickListener(v -> {
+                selectedTint[0] = tColor;
+                if (imgSelectedPreview != null) {
+                    if (tColor == android.graphics.Color.TRANSPARENT) {
+                        imgSelectedPreview.setColorFilter(null);
+                    } else {
+                        imgSelectedPreview.setColorFilter(tColor, android.graphics.PorterDuff.Mode.MULTIPLY);
+                    }
+                }
+            });
+            if (imgTintColors != null) imgTintColors.addView(btn);
+        }
+
+        // Apply button
+        if (btnImgApply != null) {
+            btnImgApply.setOnClickListener(v -> {
+                if (selectedBmp[0] == null) return;
+                android.graphics.Bitmap result;
+                if (selectedTint[0] != android.graphics.Color.TRANSPARENT) {
+                    result = selectedBmp[0].copy(android.graphics.Bitmap.Config.ARGB_8888, true);
+                    android.graphics.Canvas c2 = new android.graphics.Canvas(result);
+                    android.graphics.Paint p2 = new android.graphics.Paint();
+                    p2.setColorFilter(new android.graphics.PorterDuffColorFilter(selectedTint[0], android.graphics.PorterDuff.Mode.MULTIPLY));
+                    c2.drawBitmap(selectedBmp[0], 0, 0, p2);
+                } else {
+                    result = selectedBmp[0];
+                }
+                android.graphics.drawable.BitmapDrawable bd = new android.graphics.drawable.BitmapDrawable(getResources(), result);
+                targetView.setBackground(bd);
+                exportToJson();
+            });
+        }
             btnGalleryOpen.setOnClickListener(v -> {
                 popup.dismiss();
                 android.content.Intent galleryIntent = new android.content.Intent(
@@ -10557,8 +10616,16 @@ public class MainActivity extends AppCompatActivity {
                         }
                         src.setPixels(pixels, 0, w, 0, 0, w, ht);
 
-                        // Tint picker open
-                        showImageTintPicker(targetView, src, popup);
+                        // Store selected bitmap
+                        selectedBmp[0] = src;
+                        selectedTint[0] = android.graphics.Color.TRANSPARENT;
+
+                        // Show preview + color row
+                        if (imgSelectedPreview != null) {
+                            imgSelectedPreview.setImageBitmap(src);
+                            imgSelectedPreview.setColorFilter(null);
+                        }
+                        if (imgColorRow != null) imgColorRow.setVisibility(android.view.View.VISIBLE);
                     });
                 }
                 @Override public int getItemCount() { return presetRes.length; }
