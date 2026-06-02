@@ -10528,6 +10528,8 @@ public class MainActivity extends AppCompatActivity {
                 @Override public int getItemCount() { return presetRes.length; }
             });
         }
+
+        if (btnScreenPick != null) btnScreenPick.setOnClickListener(v2 -> {
             new com.example.newcardmaker.ScreenColorPickerOverlay(this,
                 new com.example.newcardmaker.ScreenColorPickerOverlay.OnColorPickedListener() {
                     @Override
