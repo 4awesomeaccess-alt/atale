@@ -10622,27 +10622,6 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        if (btnScreenPick != null) btnScreenPick.setOnClickListener(v2 -> {
-            new com.example.newcardmaker.ScreenColorPickerOverlay(this,
-                new com.example.newcardmaker.ScreenColorPickerOverlay.OnColorPickedListener() {
-                    @Override
-                    public void onColorPreview(int color) {
-                        targetView.setTextColor(color);
-                    }
-                    @Override
-                    public void onColorPicked(int color) {
-                        targetView.setTextColor(color);
-                        exportToJson();
-                        showTextColorPopup(targetView);
-                    }
-                    @Override
-                    public void onCancelled() {
-                        targetView.setTextColor(originalColor);
-                        // controls already show થઈ ગયા છે dismiss listener થી
-                    }
-                }).show();
-        });
-
         btnClose.setOnClickListener(v2 -> {
             targetView.setTextColor(originalColor);
             popup.dismiss();
