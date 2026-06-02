@@ -10557,10 +10557,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                         src.setPixels(pixels, 0, w, 0, 0, w, ht);
 
-                        android.graphics.drawable.BitmapDrawable bd = new android.graphics.drawable.BitmapDrawable(getResources(), src);
-                        targetView.setBackground(bd);
-                        exportToJson();
-                        popup.dismiss();
+                        // Tint picker open
+                        showImageTintPicker(targetView, src, popup);
                     });
                 }
                 @Override public int getItemCount() { return presetRes.length; }
