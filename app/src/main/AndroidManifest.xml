@@ -93,6 +93,11 @@
             android:name=".Activity.SingleListActivity"
             android:label="Cards"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <activity
+            android:name=".Activity.ShapeActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <!--
  <provider
             android:name="androidx.core.content.FileProvider"
