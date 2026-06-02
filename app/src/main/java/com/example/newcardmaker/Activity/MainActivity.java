@@ -11530,6 +11530,15 @@ public class MainActivity extends AppCompatActivity {
                         android.graphics.drawable.BitmapDrawable bd = new android.graphics.drawable.BitmapDrawable(getResources(), src);
                         targetView.setBackground(bd);
                         exportToJson();
+
+                        // Store selected + show color row
+                        gpSelectedBmp[0] = src;
+                        gpSelectedTint[0] = android.graphics.Color.TRANSPARENT;
+                        if (gpBrushGrid != null) gpBrushGrid.setVisibility(android.view.View.GONE);
+                        if (gpGalleryOpen != null) gpGalleryOpen.setVisibility(android.view.View.GONE);
+                        if (gpImgPreview != null) { gpImgPreview.setImageBitmap(src); gpImgPreview.setColorFilter(null); }
+                        if (gpImgTintWheel != null) gpImgTintWheel.setColor(0xFFFF0000);
+                        if (gpImgColorRow != null) gpImgColorRow.setVisibility(android.view.View.VISIBLE);
                     });
                 }
                 public int getItemCount() { return brushRes.length; }
@@ -11543,6 +11552,41 @@ public class MainActivity extends AppCompatActivity {
                 if (gpImgPreview != null) gpImgPreview.setColorFilter(c, android.graphics.PorterDuff.Mode.MULTIPLY);
             });
         }
+
+        // ── Padding X/Y seekbars ──
+        android.widget.SeekBar seekPadX = root.findViewById(R.id.gp_seek_pad_x);
+        android.widget.SeekBar seekPadY = root.findViewById(R.id.gp_seek_pad_y);
+        android.widget.TextView tvPadX  = root.findViewById(R.id.gp_pad_x_val);
+        android.widget.TextView tvPadY  = root.findViewById(R.id.gp_pad_y_val);
+        android.widget.TextView btnPadXM = root.findViewById(R.id.gp_pad_x_minus);
+        android.widget.TextView btnPadXP = root.findViewById(R.id.gp_pad_x_plus);
+        android.widget.TextView btnPadYM = root.findViewById(R.id.gp_pad_y_minus);
+        android.widget.TextView btnPadYP = root.findViewById(R.id.gp_pad_y_plus);
+
+        final int[] padX = {0}, padY = {0};
+
+        Runnable applyPadding = () -> {
+            float dpF = getResources().getDisplayMetrics().density;
+            int px2 = (int)(padX[0] * dpF);
+            int py2 = (int)(padY[0] * dpF);
+            targetView.setPadding(px2, py2, px2, py2);
+            exportToJson();
+        };
+
+        if (seekPadX != null) seekPadX.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) { padX[0]=p; if(tvPadX!=null)tvPadX.setText(String.valueOf(p)); applyPadding.run(); }
+            public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            public void onStopTrackingTouch(android.widget.SeekBar s) {}
+        });
+        if (seekPadY != null) seekPadY.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+            public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) { padY[0]=p; if(tvPadY!=null)tvPadY.setText(String.valueOf(p)); applyPadding.run(); }
+            public void onStartTrackingTouch(android.widget.SeekBar s) {}
+            public void onStopTrackingTouch(android.widget.SeekBar s) {}
+        });
+        if (btnPadXM != null) btnPadXM.setOnClickListener(v -> { if(seekPadX!=null&&seekPadX.getProgress()>0){seekPadX.setProgress(seekPadX.getProgress()-1);} });
+        if (btnPadXP != null) btnPadXP.setOnClickListener(v -> { if(seekPadX!=null){seekPadX.setProgress(seekPadX.getProgress()+1);} });
+        if (btnPadYM != null) btnPadYM.setOnClickListener(v -> { if(seekPadY!=null&&seekPadY.getProgress()>0){seekPadY.setProgress(seekPadY.getProgress()-1);} });
+        if (btnPadYP != null) btnPadYP.setOnClickListener(v -> { if(seekPadY!=null){seekPadY.setProgress(seekPadY.getProgress()+1);} });
 
         // Show images back
         if (gpBtnShowImages != null) {

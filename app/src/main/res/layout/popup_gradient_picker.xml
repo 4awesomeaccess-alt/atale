@@ -617,6 +617,122 @@
                 android:layout_height="160dp"
                 android:layout_marginBottom="8dp" />
 
+            <!-- Padding X -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="6dp">
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="Pad X"
+                    android:textSize="11sp"
+                    android:textColor="#374151" />
+
+                <TextView
+                    android:id="@+id/gp_pad_x_minus"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:gravity="center"
+                    android:text="−"
+                    android:textColor="#EF4444"
+                    android:textSize="16sp"
+                    android:background="@drawable/bg_seekbar_btn" />
+
+                <SeekBar
+                    android:id="@+id/gp_seek_pad_x"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:max="100"
+                    android:progress="0"
+                    android:progressTint="#1565C0"
+                    android:thumbTint="#1565C0" />
+
+                <TextView
+                    android:id="@+id/gp_pad_x_plus"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:gravity="center"
+                    android:text="+"
+                    android:textColor="#374151"
+                    android:textSize="16sp"
+                    android:background="@drawable/bg_seekbar_btn" />
+
+                <TextView
+                    android:id="@+id/gp_pad_x_val"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="11sp"
+                    android:textColor="#374151"
+                    android:gravity="center" />
+
+            </LinearLayout>
+
+            <!-- Padding Y -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:text="Pad Y"
+                    android:textSize="11sp"
+                    android:textColor="#374151" />
+
+                <TextView
+                    android:id="@+id/gp_pad_y_minus"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:gravity="center"
+                    android:text="−"
+                    android:textColor="#EF4444"
+                    android:textSize="16sp"
+                    android:background="@drawable/bg_seekbar_btn" />
+
+                <SeekBar
+                    android:id="@+id/gp_seek_pad_y"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:max="100"
+                    android:progress="0"
+                    android:progressTint="#1565C0"
+                    android:thumbTint="#1565C0" />
+
+                <TextView
+                    android:id="@+id/gp_pad_y_plus"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:gravity="center"
+                    android:text="+"
+                    android:textColor="#374151"
+                    android:textSize="16sp"
+                    android:background="@drawable/bg_seekbar_btn" />
+
+                <TextView
+                    android:id="@+id/gp_pad_y_val"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="11sp"
+                    android:textColor="#374151"
+                    android:gravity="center" />
+
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/gp_btn_img_apply"
                 android:layout_width="match_parent"
