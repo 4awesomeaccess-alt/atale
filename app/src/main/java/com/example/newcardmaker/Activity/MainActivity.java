@@ -10804,6 +10804,96 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void setupGpBrushAdapter(
+            androidx.recyclerview.widget.RecyclerView rv,
+            int[] brushRes,
+            java.util.List<String> serverUrls,
+            StrokeTextView targetView,
+            int cellW, int cellH, float dpB,
+            android.graphics.Bitmap[] selectedBmp,
+            int[] selectedTint,
+            androidx.recyclerview.widget.RecyclerView brushGrid,
+            android.view.View galleryOpen,
+            android.widget.ImageView imgPreview,
+            com.example.newcardmaker.ColorWheelView tintWheel,
+            android.widget.LinearLayout colorRow,
+            int[] padX, int[] padY) {
+
+        // Combine: local brush + server images
+        int localCount = brushRes.length;
+        int serverCount = serverUrls.size();
+        int total = localCount + serverCount;
+
+        rv.setAdapter(new androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
+            public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup p, int vt) {
+                android.widget.ImageView iv = new android.widget.ImageView(MainActivity.this);
+                androidx.recyclerview.widget.RecyclerView.LayoutParams lp = new androidx.recyclerview.widget.RecyclerView.LayoutParams(cellW, cellH);
+                lp.setMargins((int)(4*dpB),(int)(4*dpB),(int)(4*dpB),(int)(4*dpB));
+                iv.setLayoutParams(lp);
+                iv.setScaleType(android.widget.ImageView.ScaleType.CENTER_CROP);
+                return new androidx.recyclerview.widget.RecyclerView.ViewHolder(iv) {};
+            }
+            public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder h, int pos) {
+                android.widget.ImageView iv = (android.widget.ImageView) h.itemView;
+                if (pos < localCount) {
+                    // Local brush image
+                    iv.setImageResource(brushRes[pos]);
+                    iv.setOnClickListener(vv -> {
+                        android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeResource(getResources(), brushRes[h.getAdapterPosition()]);
+                        applyGpImage(bmp, null, targetView, selectedBmp, selectedTint, brushGrid, galleryOpen, imgPreview, tintWheel, colorRow);
+                    });
+                } else {
+                    // Server image
+                    String url = serverUrls.get(pos - localCount);
+                    com.bumptech.glide.Glide.with(MainActivity.this).load(url).into(iv);
+                    iv.setOnClickListener(vv -> {
+                        com.bumptech.glide.Glide.with(MainActivity.this).asBitmap().load(url)
+                            .into(new com.bumptech.glide.request.target.CustomTarget<android.graphics.Bitmap>() {
+                                public void onResourceReady(android.graphics.Bitmap res, com.bumptech.glide.request.transition.Transition<? super android.graphics.Bitmap> t) {
+                                    applyGpImage(res, url, targetView, selectedBmp, selectedTint, brushGrid, galleryOpen, imgPreview, tintWheel, colorRow);
+                                }
+                                public void onLoadCleared(android.graphics.drawable.Drawable d) {}
+                            });
+                    });
+                }
+            }
+            public int getItemCount() { return total; }
+        });
+    }
+
+    private void applyGpImage(android.graphics.Bitmap bmp, String urlTag,
+            StrokeTextView targetView,
+            android.graphics.Bitmap[] selectedBmp, int[] selectedTint,
+            androidx.recyclerview.widget.RecyclerView brushGrid,
+            android.view.View galleryOpen,
+            android.widget.ImageView imgPreview,
+            com.example.newcardmaker.ColorWheelView tintWheel,
+            android.widget.LinearLayout colorRow) {
+        int tw = targetView.getWidth() > 0 ? targetView.getWidth() : 200;
+        int th = targetView.getHeight() > 0 ? targetView.getHeight() : 80;
+        android.graphics.Bitmap scaled = android.graphics.Bitmap.createScaledBitmap(bmp, tw, th, true);
+        android.graphics.Bitmap src = scaled.copy(android.graphics.Bitmap.Config.ARGB_8888, true);
+        // Black → transparent (for brush images only)
+        if (urlTag == null) {
+            int w2 = src.getWidth(), ht2 = src.getHeight();
+            int[] px = new int[w2*ht2];
+            src.getPixels(px, 0, w2, 0, 0, w2, ht2);
+            for (int i=0; i<px.length; i++) { int r=(px[i]>>16)&0xFF,g=(px[i]>>8)&0xFF,b2=px[i]&0xFF; if(r<60&&g<60&&b2<60) px[i]=0; }
+            src.setPixels(px, 0, w2, 0, 0, w2, ht2);
+        }
+        // Apply
+        targetView.setBackground(new android.graphics.drawable.BitmapDrawable(getResources(), src));
+        exportToJson();
+        // Show color row
+        selectedBmp[0] = src;
+        selectedTint[0] = android.graphics.Color.TRANSPARENT;
+        if (brushGrid != null) brushGrid.setVisibility(android.view.View.GONE);
+        if (galleryOpen != null) galleryOpen.setVisibility(android.view.View.GONE);
+        if (imgPreview != null) { imgPreview.setImageBitmap(src); imgPreview.setColorFilter(null); }
+        if (tintWheel != null) tintWheel.setColor(0xFFFF0000);
+        if (colorRow != null) colorRow.setVisibility(android.view.View.VISIBLE);
+    }
+
     private void showCanvasBgPopup() {
         android.view.View popupView = getLayoutInflater().inflate(R.layout.popup_gradient_picker, null);
 
@@ -11502,51 +11592,38 @@ public class MainActivity extends AppCompatActivity {
             float dpB = getResources().getDisplayMetrics().density;
             int cellW2 = (getResources().getDisplayMetrics().widthPixels - (int)(24*dpB)) / 3;
             int cellH2 = (int)(targetView.getHeight() > 0 ? targetView.getHeight() : 80*dpB);
-            gpBrushGrid.setAdapter(new androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
-                public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup p, int vt) {
-                    android.widget.ImageView iv = new android.widget.ImageView(MainActivity.this);
-                    androidx.recyclerview.widget.RecyclerView.LayoutParams lp = new androidx.recyclerview.widget.RecyclerView.LayoutParams(cellW2, cellH2);
-                    lp.setMargins((int)(4*dpB),(int)(4*dpB),(int)(4*dpB),(int)(4*dpB));
-                    iv.setLayoutParams(lp);
-                    iv.setScaleType(android.widget.ImageView.ScaleType.CENTER_CROP);
-                    return new androidx.recyclerview.widget.RecyclerView.ViewHolder(iv) {};
+
+            // Load server images via API
+            java.util.List<String> serverUrls = new java.util.ArrayList<>();
+            new Thread(() -> {
+                try {
+                    String apiUrl = com.example.newcardmaker.invite_online_database.invite_AppConstants.SERVER_URL;
+                    String baseUrl = apiUrl.replace("api.php", "");
+                    java.net.URL url = new java.net.URL(apiUrl);
+                    java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setDoOutput(true);
+                    String params = "method=" + com.example.newcardmaker.invite_online_database.invite_AppConstants.METHOD_ALL_SQUARE_FRAME;
+                    conn.getOutputStream().write(params.getBytes());
+                    java.io.InputStream is = conn.getInputStream();
+                    String resp = new java.util.Scanner(is).useDelimiter("\\A").next();
+                    org.json.JSONObject json = new org.json.JSONObject(resp);
+                    org.json.JSONArray arr = json.optJSONArray("data");
+                    if (arr != null) {
+                        for (int i = 0; i < arr.length(); i++) {
+                            org.json.JSONObject item = arr.getJSONObject(i);
+                            String img = item.optString("image", item.optString("img", item.optString("photo", "")));
+                            if (!img.isEmpty()) {
+                                serverUrls.add(baseUrl + "images/" + img);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    android.util.Log.e("#GalleryAPI", "Error: " + e.getMessage());
                 }
-                public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder h, int pos) {
-                    android.widget.ImageView iv = (android.widget.ImageView) h.itemView;
-                    iv.setImageResource(brushRes[pos]);
-                    iv.setOnClickListener(vv -> {
-                        android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeResource(getResources(), brushRes[h.getAdapterPosition()]);
-                        int tw = targetView.getWidth() > 0 ? targetView.getWidth() : 200;
-                        int th2 = targetView.getHeight() > 0 ? targetView.getHeight() : 80;
-                        android.graphics.Bitmap scaled = android.graphics.Bitmap.createScaledBitmap(bmp, tw, th2, true);
-                        android.graphics.Bitmap src = scaled.copy(android.graphics.Bitmap.Config.ARGB_8888, true);
-                        int w2 = src.getWidth(), ht2 = src.getHeight();
-                        int[] px = new int[w2*ht2];
-                        src.getPixels(px, 0, w2, 0, 0, w2, ht2);
-                        for (int i=0; i<px.length; i++) { int r=(px[i]>>16)&0xFF,g=(px[i]>>8)&0xFF,b2=px[i]&0xFF; if(r<60&&g<60&&b2<60) px[i]=0; }
-                        src.setPixels(px, 0, w2, 0, 0, w2, ht2);
-
-                        // Direct apply to background
-                        android.graphics.drawable.BitmapDrawable bd = new android.graphics.drawable.BitmapDrawable(getResources(), src);
-                        targetView.setBackground(bd);
-                        exportToJson();
-
-                        // Store selected + show color row
-                        gpSelectedBmp[0] = src;
-                        gpSelectedTint[0] = android.graphics.Color.TRANSPARENT;
-                        if (gpBrushGrid != null) gpBrushGrid.setVisibility(android.view.View.GONE);
-                        if (gpGalleryOpen != null) gpGalleryOpen.setVisibility(android.view.View.GONE);
-                        if (gpImgPreview != null) { gpImgPreview.setImageBitmap(src); gpImgPreview.setColorFilter(null); }
-                        if (gpImgTintWheel != null) gpImgTintWheel.setColor(0xFFFF0000);
-                        if (gpImgColorRow != null) gpImgColorRow.setVisibility(android.view.View.VISIBLE);
-                    });
-                }
-                public int getItemCount() { return brushRes.length; }
-            });
-        }
-
-        // Color wheel
-        // ── Pick Color button ──
+                runOnUiThread(() -> setupGpBrushAdapter(gpBrushGrid, brushRes, serverUrls, targetView, cellW2, cellH2, dpB,
+                        gpSelectedBmp, gpSelectedTint, gpBrushGrid, gpGalleryOpen, gpImgPreview, gpImgTintWheel, gpImgColorRow, padX, padY));
+            }).start();
         android.widget.TextView gpBtnPickColor = root.findViewById(R.id.gp_btn_pick_color);
         if (gpBtnPickColor != null) {
             gpBtnPickColor.setOnClickListener(vv -> {

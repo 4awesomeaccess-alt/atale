@@ -40,6 +40,7 @@ public class invite_AppConstants {
     public static final String METHOD_CAT_PHOTOFRAME = "get_sub_photo_frame";
     public static final String METHOD_RELESECAT_PHOTOFRAME = "get_sub_photo_frame_relese";
     public static final String METHOD_IMAGE_PHOTOFRAME = "get_image_photo_frame";
+    public static final String METHOD_ALL_SQUARE_FRAME = "get_all_square_photo_frame_frame";
 
     /*................Photo Frame Top VIEW - DOWNLOAD.............*/
 
