@@ -11751,8 +11751,14 @@ public class MainActivity extends AppCompatActivity {
 
         btnClose.setOnClickListener(v -> popup.dismiss());
         btnDone.setOnClickListener(v -> {
-            // Preserve padding tag before save
-            if (!(targetView.getTag(R.id.btn_location) instanceof int[])) {
+            // Apply current padding values before save
+            float dpFD = getResources().getDisplayMetrics().density;
+            int pxD = (int)(padX[0] * dpFD);
+            int pyD = (int)(padY[0] * dpFD);
+            if (pxD > 0 || pyD > 0) {
+                targetView.setPadding(pxD, pyD, pxD, pyD);
+                targetView.setTag(R.id.btn_location, new int[]{pxD, pyD});
+            } else if (!(targetView.getTag(R.id.btn_location) instanceof int[])) {
                 targetView.setTag(R.id.btn_location, new int[]{targetView.getPaddingLeft(), targetView.getPaddingTop()});
             }
             exportToJson();
