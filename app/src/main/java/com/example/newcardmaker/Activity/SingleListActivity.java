@@ -3,6 +3,7 @@ package com.example.newcardmaker.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import com.example.newcardmaker.R;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.Gravity;
