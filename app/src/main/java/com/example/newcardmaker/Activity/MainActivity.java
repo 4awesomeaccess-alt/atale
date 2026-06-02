@@ -152,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_TEXT_BG_IMAGE = 701;
     private StrokeTextView pendingTextBgTarget = null;
+    private StrokeTextView pendingGalleryTarget = null;
 
     PopupWindow applyTouchListener;
 
@@ -5545,6 +5546,26 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable android.content.Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        // ── Gallery image for text background ──
+        if (requestCode == 9999 && resultCode == RESULT_OK && data != null && pendingGalleryTarget != null) {
+            android.net.Uri uri = data.getData();
+            if (uri != null) {
+                try {
+                    android.graphics.Bitmap bmp = android.provider.MediaStore.Images.Media
+                            .getBitmap(getContentResolver(), uri);
+                    android.graphics.drawable.BitmapDrawable bd = new android.graphics.drawable.BitmapDrawable(getResources(), bmp);
+                    bd.setTileModeXY(android.graphics.Shader.TileMode.CLAMP, android.graphics.Shader.TileMode.CLAMP);
+                    pendingGalleryTarget.setBackground(bd);
+                    exportToJson();
+                } catch (Exception e) {
+                    android.util.Log.e("#GalleryPick", "Error: " + e.getMessage());
+                }
+            }
+            pendingGalleryTarget = null;
+            return;
+        }
+
         if (requestCode == PICK_STICKER_IMAGE && resultCode == RESULT_OK && data != null) {
             android.net.Uri imageUri = data.getData();
             addNewSticker(imageUri);
@@ -10095,6 +10116,7 @@ public class MainActivity extends AppCompatActivity {
         TextView btnDone      = root.findViewById(R.id.btn_color_done);
         View btnClose         = root.findViewById(R.id.btn_color_close);
         View btnScreenPick    = root.findViewById(R.id.btn_screen_pick);
+        View btnGalleryPick   = root.findViewById(R.id.btn_gallery_pick);
 
         // ── Tab views ──
         TextView tcTabSolid    = root.findViewById(R.id.tc_tab_solid);
@@ -10442,6 +10464,20 @@ public class MainActivity extends AppCompatActivity {
         final int originalColor = targetView.getCurrentTextColor();
 
         // ── Screen Color Picker ──
+        if (btnGalleryPick != null) {
+            btnGalleryPick.setOnClickListener(v2 -> {
+                popup.dismiss();
+                // Gallery open karo
+                android.content.Intent galleryIntent = new android.content.Intent(
+                        android.content.Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                galleryIntent.putExtra("targetViewTag", System.identityHashCode(targetView));
+                startActivityForResult(galleryIntent, 9999);
+                // Store target view for onActivityResult
+                pendingGalleryTarget = targetView;
+            });
+        }
+
         btnScreenPick.setOnClickListener(v2 -> {
             android.util.Log.e("#ImagePicker", "Image picker clicked!");
             popup.dismiss();

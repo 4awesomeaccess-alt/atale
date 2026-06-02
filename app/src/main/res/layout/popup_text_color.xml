@@ -117,6 +117,19 @@
             android:textColor="#6B7280"
             android:background="@drawable/bg_lang_btn" />
 
+        <TextView
+            android:id="@+id/btn_gallery_pick"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginStart="8dp"
+            android:text="🖼 Gallery"
+            android:textSize="12sp"
+            android:textColor="#6B7280"
+            android:background="@drawable/bg_lang_btn" />
+
     </LinearLayout>
 
     <!-- ── Solid Panel ── -->
