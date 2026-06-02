@@ -10515,12 +10515,14 @@ public class MainActivity extends AppCompatActivity {
                     android.widget.ImageView iv = (android.widget.ImageView) h.itemView;
                     iv.setImageResource(presetRes[pos]);
                     iv.setOnClickListener(v -> {
-                        android.graphics.drawable.BitmapDrawable bd = new android.graphics.drawable.BitmapDrawable(
-                                getResources(),
-                                android.graphics.BitmapFactory.decodeResource(getResources(), presetRes[h.getAdapterPosition()]));
-                        targetView.setBackground(bd);
-                        exportToJson();
-                        popup.dismiss();
+                        int resId = presetRes[h.getAdapterPosition()];
+                        android.graphics.Bitmap bmp = android.graphics.BitmapFactory.decodeResource(getResources(), resId);
+                        int tw = targetView.getWidth() > 0 ? targetView.getWidth() : 200;
+                        int th = targetView.getHeight() > 0 ? targetView.getHeight() : 80;
+                        android.graphics.Bitmap scaled = android.graphics.Bitmap.createScaledBitmap(bmp, tw, th, true);
+
+                        // Tint color picker popup show
+                        showImageTintPicker(targetView, scaled, popup);
                     });
                 }
                 @Override public int getItemCount() { return presetRes.length; }
@@ -10568,6 +10570,137 @@ public class MainActivity extends AppCompatActivity {
 
         // ── Text Controls restore when color popup closes ──
         popup.setOnDismissListener(() -> showSelectionControlsForText(targetView));
+    }
+
+    private void showImageTintPicker(StrokeTextView targetView, android.graphics.Bitmap originalBmp, android.widget.PopupWindow parentPopup) {
+        // Tint popup
+        android.widget.LinearLayout layout = new android.widget.LinearLayout(this);
+        layout.setOrientation(android.widget.LinearLayout.VERTICAL);
+        layout.setBackgroundColor(android.graphics.Color.WHITE);
+        layout.setPadding(32, 24, 32, 24);
+
+        // Title
+        android.widget.TextView title = new android.widget.TextView(this);
+        title.setText("Image Tint Color");
+        title.setTextSize(15);
+        title.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
+        title.setTextColor(android.graphics.Color.parseColor("#111827"));
+        layout.addView(title);
+
+        // Preview
+        android.widget.ImageView preview = new android.widget.ImageView(this);
+        preview.setImageBitmap(originalBmp);
+        android.widget.LinearLayout.LayoutParams pvLp = new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 80);
+        pvLp.setMargins(0, 12, 0, 12);
+        preview.setLayoutParams(pvLp);
+        preview.setScaleType(android.widget.ImageView.ScaleType.CENTER_CROP);
+        layout.addView(preview);
+
+        // Color Wheel
+        com.example.newcardmaker.ColorWheelView tintWheel = new com.example.newcardmaker.ColorWheelView(this);
+        android.widget.LinearLayout.LayoutParams wLp = new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 220);
+        wLp.setMargins(0, 0, 0, 12);
+        tintWheel.setLayoutParams(wLp);
+        layout.addView(tintWheel);
+
+        // Tint colors preset row
+        android.widget.LinearLayout colorRow = new android.widget.LinearLayout(this);
+        colorRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        int[] tintColors = {
+            android.graphics.Color.TRANSPARENT, 0xFFFF0000, 0xFF00FF00, 0xFF0000FF,
+            0xFFFFFF00, 0xFFFF00FF, 0xFF00FFFF, 0xFFFF8C00, 0xFF800080, 0xFFFFFFFF
+        };
+        float dp = getResources().getDisplayMetrics().density;
+        int sz = (int)(30 * dp);
+        for (int tc : tintColors) {
+            android.view.View btn = new android.view.View(this);
+            android.graphics.drawable.GradientDrawable gd = new android.graphics.drawable.GradientDrawable();
+            gd.setShape(android.graphics.drawable.GradientDrawable.OVAL);
+            gd.setColor(tc == android.graphics.Color.TRANSPARENT ? android.graphics.Color.LTGRAY : tc);
+            gd.setStroke(1, android.graphics.Color.parseColor("#DDDDDD"));
+            btn.setBackground(gd);
+            android.widget.LinearLayout.LayoutParams bp = new android.widget.LinearLayout.LayoutParams(sz, sz);
+            bp.setMargins(0, 0, (int)(6*dp), 0);
+            btn.setLayoutParams(bp);
+            final int tColor = tc;
+            btn.setOnClickListener(v -> {
+                if (tColor == android.graphics.Color.TRANSPARENT) {
+                    preview.setColorFilter(null);
+                } else {
+                    preview.setColorFilter(tColor, android.graphics.PorterDuff.Mode.SRC_ATOP);
+                }
+            });
+            colorRow.addView(btn);
+        }
+        layout.addView(colorRow);
+
+        // Wheel listener
+        final int[] tintColor = {android.graphics.Color.TRANSPARENT};
+        tintWheel.setOnColorChangedListener(c -> {
+            tintColor[0] = c;
+            preview.setColorFilter(c, android.graphics.PorterDuff.Mode.SRC_ATOP);
+        });
+
+        // Apply + Cancel buttons
+        android.widget.LinearLayout btnRow = new android.widget.LinearLayout(this);
+        btnRow.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+        btnRow.setGravity(android.view.Gravity.END);
+        android.widget.LinearLayout.LayoutParams brLp = new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        brLp.setMargins(0, 16, 0, 0);
+        btnRow.setLayoutParams(brLp);
+
+        android.widget.TextView btnCancel = new android.widget.TextView(this);
+        btnCancel.setText("Cancel");
+        btnCancel.setTextColor(android.graphics.Color.GRAY);
+        btnCancel.setPadding((int)(16*dp), (int)(8*dp), (int)(16*dp), (int)(8*dp));
+
+        android.widget.TextView btnApply = new android.widget.TextView(this);
+        btnApply.setText("Apply");
+        btnApply.setTextColor(android.graphics.Color.WHITE);
+        btnApply.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
+        android.graphics.drawable.GradientDrawable applyBg = new android.graphics.drawable.GradientDrawable();
+        applyBg.setColor(android.graphics.Color.parseColor("#1565C0"));
+        applyBg.setCornerRadius(16f);
+        btnApply.setBackground(applyBg);
+        btnApply.setPadding((int)(20*dp), (int)(8*dp), (int)(20*dp), (int)(8*dp));
+
+        btnRow.addView(btnCancel);
+        btnRow.addView(btnApply);
+        layout.addView(btnRow);
+
+        // Popup
+        int sw = getResources().getDisplayMetrics().widthPixels;
+        int margin = (int)(25*dp);
+        android.widget.PopupWindow tintPopup = new android.widget.PopupWindow(
+                layout, sw - margin*2, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT, true);
+        tintPopup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+        tintPopup.setElevation(16f);
+        tintPopup.setOutsideTouchable(true);
+
+        int screenH = getResources().getDisplayMetrics().heightPixels;
+        tintPopup.showAtLocation(mainLayout, android.view.Gravity.TOP | android.view.Gravity.LEFT,
+                margin, screenH / 4);
+
+        btnCancel.setOnClickListener(v -> tintPopup.dismiss());
+        btnApply.setOnClickListener(v -> {
+            // Apply tint to bitmap
+            android.graphics.Bitmap tinted = originalBmp.copy(android.graphics.Bitmap.Config.ARGB_8888, true);
+            if (tintColor[0] != android.graphics.Color.TRANSPARENT) {
+                android.graphics.Canvas canvas = new android.graphics.Canvas(tinted);
+                android.graphics.Paint paint = new android.graphics.Paint();
+                paint.setColorFilter(new android.graphics.PorterDuffColorFilter(tintColor[0], android.graphics.PorterDuff.Mode.SRC_ATOP));
+                canvas.drawBitmap(tinted, 0, 0, paint);
+            }
+            android.graphics.drawable.BitmapDrawable bd = new android.graphics.drawable.BitmapDrawable(getResources(), tinted);
+            targetView.setBackground(bd);
+            exportToJson();
+            tintPopup.dismiss();
+            parentPopup.dismiss();
+        });
     }
 
     private void showCanvasBgPopup() {
