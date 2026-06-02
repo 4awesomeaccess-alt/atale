@@ -11646,7 +11646,6 @@ public class MainActivity extends AppCompatActivity {
         // Text Controls hide
         if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) {
             selectionControlsPopup.dismiss();
-        removeSelectionBorder(targetView);
         }
 
         int screenH = getResources().getDisplayMetrics().heightPixels;
