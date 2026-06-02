@@ -10488,41 +10488,31 @@ public class MainActivity extends AppCompatActivity {
         android.widget.ImageView imgSelectedPreview = root.findViewById(R.id.img_selected_preview);
         android.widget.LinearLayout imgTintColors = root.findViewById(R.id.img_tint_colors);
         TextView btnImgApply = root.findViewById(R.id.btn_img_apply);
+        TextView btnShowImages = root.findViewById(R.id.btn_show_images);
+        com.example.newcardmaker.ColorWheelView imgTintWheel = root.findViewById(R.id.img_tint_wheel);
+        androidx.recyclerview.widget.RecyclerView rvPresetRef = root.findViewById(R.id.rv_preset_images);
+        android.widget.LinearLayout btnGalleryOpenRef = root.findViewById(R.id.btn_gallery_open);
 
         final android.graphics.Bitmap[] selectedBmp = {null};
         final int[] selectedTint = {android.graphics.Color.TRANSPARENT};
 
-        // Tint color presets
-        int[] tintPresets = {
-            android.graphics.Color.TRANSPARENT,
-            0xFFFF0000, 0xFF00CC00, 0xFF0000FF, 0xFFFFFF00,
-            0xFFFF00FF, 0xFF00FFFF, 0xFFFF8C00, 0xFF800080,
-            0xFFFFFFFF, 0xFF000000, 0xFFFF69B4, 0xFF00CED1
-        };
-        float dpI = getResources().getDisplayMetrics().density;
-        int szI = (int)(32 * dpI);
-        for (int tc : tintPresets) {
-            android.view.View btn = new android.view.View(this);
-            android.graphics.drawable.GradientDrawable gd = new android.graphics.drawable.GradientDrawable();
-            gd.setShape(android.graphics.drawable.GradientDrawable.OVAL);
-            gd.setColor(tc == android.graphics.Color.TRANSPARENT ? 0xFFEEEEEE : tc);
-            gd.setStroke(2, 0xFFCCCCCC);
-            btn.setBackground(gd);
-            android.widget.LinearLayout.LayoutParams bp = new android.widget.LinearLayout.LayoutParams(szI, szI);
-            bp.setMargins(0, 0, (int)(8*dpI), 0);
-            btn.setLayoutParams(bp);
-            final int tColor = tc;
-            btn.setOnClickListener(v -> {
-                selectedTint[0] = tColor;
+        // Color wheel listener
+        if (imgTintWheel != null) {
+            imgTintWheel.setOnColorChangedListener(c -> {
+                selectedTint[0] = c;
                 if (imgSelectedPreview != null) {
-                    if (tColor == android.graphics.Color.TRANSPARENT) {
-                        imgSelectedPreview.setColorFilter(null);
-                    } else {
-                        imgSelectedPreview.setColorFilter(tColor, android.graphics.PorterDuff.Mode.MULTIPLY);
-                    }
+                    imgSelectedPreview.setColorFilter(c, android.graphics.PorterDuff.Mode.MULTIPLY);
                 }
             });
-            if (imgTintColors != null) imgTintColors.addView(btn);
+        }
+
+        // Show Images button → hide color row, show grid
+        if (btnShowImages != null) {
+            btnShowImages.setOnClickListener(v -> {
+                if (imgColorRow != null) imgColorRow.setVisibility(android.view.View.GONE);
+                if (rvPresetRef != null) rvPresetRef.setVisibility(android.view.View.VISIBLE);
+                if (btnGalleryOpenRef != null) btnGalleryOpenRef.setVisibility(android.view.View.VISIBLE);
+            });
         }
 
         // Apply button
@@ -10623,11 +10613,14 @@ public class MainActivity extends AppCompatActivity {
                         selectedBmp[0] = src;
                         selectedTint[0] = android.graphics.Color.TRANSPARENT;
 
-                        // Show preview + color row
+                        // Hide grid, show color row
+                        if (rvPreset != null) rvPreset.setVisibility(android.view.View.GONE);
+                        if (btnGalleryOpen != null) btnGalleryOpen.setVisibility(android.view.View.GONE);
                         if (imgSelectedPreview != null) {
                             imgSelectedPreview.setImageBitmap(src);
                             imgSelectedPreview.setColorFilter(null);
                         }
+                        if (imgTintWheel != null) imgTintWheel.setColor(0xFFFF0000);
                         if (imgColorRow != null) imgColorRow.setVisibility(android.view.View.VISIBLE);
                     });
                 }
