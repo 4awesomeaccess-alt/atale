@@ -19998,16 +19998,17 @@ public class MainActivity extends AppCompatActivity {
 
         // ✅ User padding tag માંથી read કરો
         Object padTag = tv.getTag(R.id.btn_location);
-        int userPadX = 20; // default
-        int userPadY = 20; // default
+        int userPadX = -1; // -1 = not set
+        int userPadY = -1;
         if (padTag instanceof int[]) {
             int[] userPad = (int[]) padTag;
             userPadX = userPad[0];
             userPadY = userPad.length > 1 ? userPad[1] : userPad[0];
         }
         int strokeExtra = (int) Math.ceil(tv.getStrokeWidth()) + 4;
-        int finalPadX = strokeExtra + userPadX;
-        int finalPadY = strokeExtra + userPadY;
+        // If tag set by user (Gallery image), use directly; else add stroke
+        int finalPadX = userPadX >= 0 ? userPadX : strokeExtra + 20;
+        int finalPadY = userPadY >= 0 ? userPadY : strokeExtra + 20;
 
         // ── BG Image હોય તો
         if (!bgImageUri.isEmpty()) {
@@ -20471,7 +20472,14 @@ public class MainActivity extends AppCompatActivity {
                     border.setCornerRadius(8f);
                     tv.setForeground(border);
                 }
-                tv.setPadding(20, 20, 20, 20);
+                // Preserve user padding
+                Object padTagSel = tv.getTag(R.id.btn_location);
+                if (padTagSel instanceof int[]) {
+                    int[] up = (int[]) padTagSel;
+                    tv.setPadding(up[0], up.length > 1 ? up[1] : up[0], up[0], up.length > 1 ? up[1] : up[0]);
+                } else {
+                    tv.setPadding(20, 20, 20, 20);
+                }
                 return;
             }
 
