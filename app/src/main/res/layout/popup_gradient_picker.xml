@@ -92,17 +92,6 @@
             android:background="#FFFFFF" />
 
         <TextView
-            android:id="@+id/gp_tab_image"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="🖼 Image"
-            android:textColor="#6B7280"
-            android:textSize="11sp"
-            android:gravity="center"
-            android:background="#FFFFFF" />
-
-        <TextView
             android:id="@+id/gp_tab_none"
             android:layout_width="0dp"
             android:layout_height="match_parent"

@@ -10919,8 +10919,7 @@ public class MainActivity extends AppCompatActivity {
         android.widget.LinearLayout panelSolid    = root.findViewById(R.id.gp_panel_solid);
         android.widget.LinearLayout panelGradient = root.findViewById(R.id.gp_panel_gradient);
         android.widget.TextView btnDone     = root.findViewById(R.id.gp_btn_done);
-        android.widget.TextView tabImage    = root.findViewById(R.id.gp_tab_image);
-        android.widget.LinearLayout panelImage    = root.findViewById(R.id.gp_panel_image);
+                android.widget.LinearLayout panelImage    = root.findViewById(R.id.gp_panel_image);
         android.widget.ImageView imgPreview  = root.findViewById(R.id.gp_image_preview);
         android.widget.TextView btnImagePick = root.findViewById(R.id.gp_image_pick);
         android.widget.TextView btnImageRemove = root.findViewById(R.id.gp_image_remove);
@@ -11590,7 +11589,6 @@ public class MainActivity extends AppCompatActivity {
             if (panelGallery != null) panelGallery.setVisibility(android.view.View.VISIBLE);
             tabSolid.setBackgroundColor(0xFF2A3439);    tabSolid.setTextColor(0xFF9CA3AF);
             tabGradient.setBackgroundColor(0xFF2A3439); tabGradient.setTextColor(0xFF9CA3AF);
-            tabImage.setBackgroundColor(0xFF2A3439);    tabImage.setTextColor(0xFF9CA3AF);
             tabNone.setBackgroundColor(0xFF2A3439);     tabNone.setTextColor(0xFF9CA3AF);
             tabGallery.setBackgroundColor(0xFF607D8B);  tabGallery.setTextColor(0xFFFFFFFF);
         });
@@ -11602,7 +11600,6 @@ public class MainActivity extends AppCompatActivity {
             if (panelGallery != null) panelGallery.setVisibility(android.view.View.GONE);
             tabSolid.setBackgroundColor(0xFF607D8B);    tabSolid.setTextColor(0xFFFFFFFF);
             tabGradient.setBackgroundColor(0xFF2A3439); tabGradient.setTextColor(0xFF9CA3AF);
-            tabImage.setBackgroundColor(0xFF2A3439);    tabImage.setTextColor(0xFF9CA3AF);
             tabNone.setBackgroundColor(0xFF2A3439);     tabNone.setTextColor(0xFF9CA3AF);
         });
         tabGradient.setOnClickListener(v -> {
@@ -11611,16 +11608,6 @@ public class MainActivity extends AppCompatActivity {
             panelImage.setVisibility(android.view.View.GONE);
             tabGradient.setBackgroundColor(0xFF607D8B); tabGradient.setTextColor(0xFFFFFFFF);
             tabSolid.setBackgroundColor(0xFF2A3439);    tabSolid.setTextColor(0xFF9CA3AF);
-            tabImage.setBackgroundColor(0xFF2A3439);    tabImage.setTextColor(0xFF9CA3AF);
-            tabNone.setBackgroundColor(0xFF2A3439);     tabNone.setTextColor(0xFF9CA3AF);
-        });
-        tabImage.setOnClickListener(v -> {
-            panelSolid.setVisibility(android.view.View.GONE);
-            panelGradient.setVisibility(android.view.View.GONE);
-            panelImage.setVisibility(android.view.View.VISIBLE);
-            tabImage.setBackgroundColor(0xFF607D8B);    tabImage.setTextColor(0xFFFFFFFF);
-            tabSolid.setBackgroundColor(0xFF2A3439);    tabSolid.setTextColor(0xFF9CA3AF);
-            tabGradient.setBackgroundColor(0xFF2A3439); tabGradient.setTextColor(0xFF9CA3AF);
             tabNone.setBackgroundColor(0xFF2A3439);     tabNone.setTextColor(0xFF9CA3AF);
         });
         tabNone.setOnClickListener(v -> {
