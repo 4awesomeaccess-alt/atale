@@ -10465,33 +10465,22 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // ── Cancel / Done ──
+
+        // ── Pick Color tab → directly open screen color picker ──
         final int originalColor = targetView.getCurrentTextColor();
-
-        // ── Screen Color Picker ──
-        // ── Pick Color tab click → image panel + screen picker option ──
         if (btnScreenPick != null) btnScreenPick.setOnClickListener(v -> {
-            tcPanelSolid.setVisibility(android.view.View.GONE);
-            tcPanelGradient.setVisibility(android.view.View.GONE);
-            if (tcPanelImage != null) tcPanelImage.setVisibility(android.view.View.VISIBLE);
+            popup.dismiss();
+            new com.example.newcardmaker.ScreenColorPickerOverlay(MainActivity.this,
+                new com.example.newcardmaker.ScreenColorPickerOverlay.OnColorPickedListener() {
+                    @Override public void onColorPreview(int color) { targetView.setTextColor(color); }
+                    @Override public void onColorPicked(int color) {
+                        targetView.setTextColor(color);
+                        exportToJson();
+                        showTextColorPopup(targetView);
+                    }
+                    @Override public void onCancelled() { targetView.setTextColor(originalColor); }
+                }).show();
         });
-
-        // ── Gallery open button → screen color picker ──
-        if (btnGalleryOpen != null) {
-            btnGalleryOpen.setText("🎨 Screen থી Color Pick");
-            btnGalleryOpen.setOnClickListener(v -> {
-                popup.dismiss();
-                new com.example.newcardmaker.ScreenColorPickerOverlay(this,
-                    new com.example.newcardmaker.ScreenColorPickerOverlay.OnColorPickedListener() {
-                        @Override public void onColorPreview(int color) { targetView.setTextColor(color); }
-                        @Override public void onColorPicked(int color) {
-                            targetView.setTextColor(color);
-                            exportToJson();
-                            showTextColorPopup(targetView);
-                        }
-                        @Override public void onCancelled() { targetView.setTextColor(originalColor); }
-                    }).show();
-            });
-        }
 
         // ── Gallery/Brush tab click handled via btn_screen_pick ──
 
