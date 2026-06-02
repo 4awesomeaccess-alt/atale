@@ -11636,7 +11636,7 @@ public class MainActivity extends AppCompatActivity {
         int density = (int) getResources().getDisplayMetrics().density;
         int margin25 = 25 * density;
         int popupW  = screenW - (margin25 * 2);
-        int popupH  = (int)(230 * getResources().getDisplayMetrics().density);
+        int popupH  = android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
         android.widget.PopupWindow popup = new android.widget.PopupWindow(
                 root, popupW, popupH, true);
         popup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
@@ -11650,7 +11650,7 @@ public class MainActivity extends AppCompatActivity {
 
         int screenH = getResources().getDisplayMetrics().heightPixels;
         popup.showAtLocation(getWindow().getDecorView().getRootView(),
-            Gravity.TOP | Gravity.START, margin25, screenH - popupH);
+            Gravity.BOTTOM | Gravity.START, margin25, 0);
 
         // Text Controls restore
         popup.setOnDismissListener(() -> {
@@ -11670,7 +11670,7 @@ public class MainActivity extends AppCompatActivity {
                     int dx = (int) event.getRawX() - lastXY[0];
                     int dy = (int) event.getRawY() - lastXY[1];
                     int[] loc = new int[2]; root.getLocationOnScreen(loc);
-                    popup.update(loc[0] + dx, loc[1] + dy, popupW, popupH);
+                    popup.update(loc[0] + dx, loc[1] + dy, popupW, -1);
                     lastXY[0] = (int) event.getRawX(); lastXY[1] = (int) event.getRawY(); break;
             }
             return true;
