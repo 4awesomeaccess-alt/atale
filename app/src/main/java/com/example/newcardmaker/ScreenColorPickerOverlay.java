@@ -103,6 +103,8 @@ public class ScreenColorPickerOverlay {
         int py = Math.max(dp(80), y - dp(150));
         colorPopup.showAtLocation(overlayRoot, Gravity.TOP | Gravity.START, px, py);
     }
+
+    public void show() {
         windowManager = (WindowManager) activity.getSystemService(Activity.WINDOW_SERVICE);
 
         // ── Root overlay (full screen transparent) ──
