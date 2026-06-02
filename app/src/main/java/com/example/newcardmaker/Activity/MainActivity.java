@@ -10443,7 +10443,8 @@ public class MainActivity extends AppCompatActivity {
 
         // ── Screen Color Picker ──
         btnScreenPick.setOnClickListener(v2 -> {
-            popup.dismiss(); // dismiss = onDismissListener = controls show થશે
+            android.util.Log.e("#ImagePicker", "Image picker clicked!");
+            popup.dismiss();
             new com.example.newcardmaker.ScreenColorPickerOverlay(this,
                 new com.example.newcardmaker.ScreenColorPickerOverlay.OnColorPickedListener() {
                     @Override
