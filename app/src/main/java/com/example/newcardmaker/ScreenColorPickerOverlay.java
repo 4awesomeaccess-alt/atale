@@ -49,7 +49,60 @@ public class ScreenColorPickerOverlay {
         this.listener = listener;
     }
 
-    public void show() {
+    private final Handler holdHandler = new Handler(Looper.getMainLooper());
+    private Runnable holdRunnable;
+    private int lastPickedColor = Color.WHITE;
+    private android.widget.PopupWindow colorPopup;
+
+    private void showColorPopup(int color, int x, int y) {
+        // Dismiss previous
+        if (colorPopup != null && colorPopup.isShowing()) colorPopup.dismiss();
+
+        LinearLayout layout = new LinearLayout(activity);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setGravity(Gravity.CENTER);
+        layout.setPadding(dp(16), dp(16), dp(16), dp(16));
+        GradientDrawable bg = new GradientDrawable();
+        bg.setColor(Color.parseColor("#CC1C2529"));
+        bg.setCornerRadius(dp(12));
+        bg.setStroke(dp(2), Color.WHITE);
+        layout.setBackground(bg);
+
+        // Color circle
+        View circle = new View(activity);
+        GradientDrawable circleBg = new GradientDrawable();
+        circleBg.setShape(GradientDrawable.OVAL);
+        circleBg.setColor(color);
+        circleBg.setStroke(dp(3), Color.WHITE);
+        circle.setBackground(circleBg);
+        LinearLayout.LayoutParams clp = new LinearLayout.LayoutParams(dp(80), dp(80));
+        circle.setLayoutParams(clp);
+        layout.addView(circle);
+
+        // Hex text
+        TextView tvHex = new TextView(activity);
+        tvHex.setText(String.format("#%06X", 0xFFFFFF & color));
+        tvHex.setTextColor(Color.WHITE);
+        tvHex.setTextSize(14);
+        tvHex.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
+        tvHex.setGravity(Gravity.CENTER);
+        LinearLayout.LayoutParams hlp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        hlp.topMargin = dp(8);
+        tvHex.setLayoutParams(hlp);
+        layout.addView(tvHex);
+
+        colorPopup = new android.widget.PopupWindow(layout,
+                android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+                android.view.ViewGroup.LayoutParams.WRAP_CONTENT, false);
+        colorPopup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.TRANSPARENT));
+        colorPopup.setOutsideTouchable(false);
+
+        // Show near finger
+        int px = Math.max(0, x - dp(60));
+        int py = Math.max(dp(80), y - dp(150));
+        colorPopup.showAtLocation(overlayRoot, Gravity.TOP | Gravity.START, px, py);
+    }
         windowManager = (WindowManager) activity.getSystemService(Activity.WINDOW_SERVICE);
 
         // ── Root overlay (full screen transparent) ──
@@ -138,10 +191,20 @@ public class ScreenColorPickerOverlay {
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    magnifier.setVisibility(View.VISIBLE);
+                    // Start 2 sec hold timer
+                    holdHandler.removeCallbacks(holdRunnable != null ? holdRunnable : () -> {});
+                    holdRunnable = () -> {
+                        if (colorPopup == null || !colorPopup.isShowing()) {
+                            showColorPopup(lastPickedColor, x, y);
+                        }
+                    };
+                    holdHandler.postDelayed(holdRunnable, 2000);
+
                 case MotionEvent.ACTION_MOVE:
                     magnifier.setVisibility(View.VISIBLE);
 
-                    // Magnifier position — finger ની ઉપર દેખાય
+                    // Magnifier position
                     int magX = Math.max(0, x - dp(45));
                     int magY = Math.max(dp(60), y - dp(120));
                     magLp.leftMargin = magX;
@@ -150,19 +213,22 @@ public class ScreenColorPickerOverlay {
 
                     // Screen pixel color
                     int pickedColor = getPixelColor(x, y);
+                    lastPickedColor = pickedColor;
                     String hex = String.format("#%06X", (0xFFFFFF & pickedColor));
 
-                    // Update magnifier preview
+                    // Update magnifier
                     ((GradientDrawable) colorPreviewBox.getBackground()).setColor(pickedColor);
                     tvHexPreview.setText(hex);
                     tvInstruction.setText("Color: " + hex);
 
-                    // ✅ Real-time text color update
                     if (listener != null) listener.onColorPreview(pickedColor);
                     return true;
 
                 case MotionEvent.ACTION_UP:
-                    // Color select — apply
+                    // Cancel hold timer
+                    if (holdRunnable != null) holdHandler.removeCallbacks(holdRunnable);
+                    if (colorPopup != null && colorPopup.isShowing()) colorPopup.dismiss();
+
                     int finalColor = getPixelColor(x, y);
                     dismiss();
                     if (listener != null) listener.onColorPicked(finalColor);
