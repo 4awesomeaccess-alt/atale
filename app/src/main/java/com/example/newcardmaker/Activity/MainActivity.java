@@ -10544,6 +10544,9 @@ public class MainActivity extends AppCompatActivity {
                 exportToJson();
             });
         }
+
+        // ── Gallery open ──
+        if (btnGalleryOpen != null) {
             btnGalleryOpen.setOnClickListener(v -> {
                 popup.dismiss();
                 android.content.Intent galleryIntent = new android.content.Intent(
