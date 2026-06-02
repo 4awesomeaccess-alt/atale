@@ -11646,6 +11646,7 @@ public class MainActivity extends AppCompatActivity {
         // Text Controls hide
         if (selectionControlsPopup != null && selectionControlsPopup.isShowing()) {
             selectionControlsPopup.dismiss();
+        removeSelectionBorder(targetView);
         }
 
         int screenH = getResources().getDisplayMetrics().heightPixels;
@@ -11655,6 +11656,7 @@ public class MainActivity extends AppCompatActivity {
         // Text Controls restore
         popup.setOnDismissListener(() -> {
             if (selectionControlsPopup != null && !selectionControlsPopup.isShowing()) {
+            applySelectionBorder(targetView);
                 selectionControlsPopup.showAtLocation(mainLayout,
                     Gravity.TOP | Gravity.LEFT, selControlsLastX, selControlsLastY);
             }
