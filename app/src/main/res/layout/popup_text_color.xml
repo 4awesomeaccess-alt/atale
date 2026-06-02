@@ -428,4 +428,43 @@
 
     </LinearLayout>
 
+    <!-- ── Image Picker Panel ── -->
+    <LinearLayout
+        android:id="@+id/tc_panel_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="12dp"
+        android:visibility="gone">
+
+        <!-- Gallery Button -->
+        <LinearLayout
+            android:id="@+id/btn_gallery_open"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/bg_lang_btn"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📷  Gallery માંથી image select"
+                android:textSize="13sp"
+                android:textColor="#1565C0"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <!-- Preset Images Grid -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_preset_images"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
 </LinearLayout>

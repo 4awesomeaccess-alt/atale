@@ -5547,15 +5547,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable android.content.Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // ── Gallery image for text background ──
         if (requestCode == 9999 && resultCode == RESULT_OK && data != null && pendingGalleryTarget != null) {
             android.net.Uri uri = data.getData();
             if (uri != null) {
                 try {
                     android.graphics.Bitmap bmp = android.provider.MediaStore.Images.Media
                             .getBitmap(getContentResolver(), uri);
-                    android.graphics.drawable.BitmapDrawable bd = new android.graphics.drawable.BitmapDrawable(getResources(), bmp);
-                    bd.setTileModeXY(android.graphics.Shader.TileMode.CLAMP, android.graphics.Shader.TileMode.CLAMP);
+                    // Text size mujab crop/scale
+                    int tw = pendingGalleryTarget.getWidth() > 0 ? pendingGalleryTarget.getWidth() : 200;
+                    int th = pendingGalleryTarget.getHeight() > 0 ? pendingGalleryTarget.getHeight() : 80;
+                    android.graphics.Bitmap scaled = android.graphics.Bitmap.createScaledBitmap(bmp, tw, th, true);
+                    android.graphics.drawable.BitmapDrawable bd = new android.graphics.drawable.BitmapDrawable(getResources(), scaled);
                     pendingGalleryTarget.setBackground(bd);
                     exportToJson();
                 } catch (Exception e) {
@@ -10123,6 +10125,9 @@ public class MainActivity extends AppCompatActivity {
         TextView tcTabGradient = root.findViewById(R.id.tc_tab_gradient);
         LinearLayout tcPanelSolid    = root.findViewById(R.id.tc_panel_solid);
         LinearLayout tcPanelGradient = root.findViewById(R.id.tc_panel_gradient);
+        LinearLayout tcPanelImage    = root.findViewById(R.id.tc_panel_image);
+        LinearLayout btnGalleryOpen  = root.findViewById(R.id.btn_gallery_open);
+        androidx.recyclerview.widget.RecyclerView rvPreset = root.findViewById(R.id.rv_preset_images);
 
         // ── Gradient views ──
         View tcGradPreview    = root.findViewById(R.id.tc_grad_preview);
@@ -10464,23 +10469,63 @@ public class MainActivity extends AppCompatActivity {
         final int originalColor = targetView.getCurrentTextColor();
 
         // ── Screen Color Picker ──
-        if (btnGalleryPick != null) {
-            btnGalleryPick.setOnClickListener(v2 -> {
+        // ── Image Picker tab click ──
+        if (btnScreenPick != null) btnScreenPick.setOnClickListener(v -> {
+            tcPanelSolid.setVisibility(android.view.View.GONE);
+            tcPanelGradient.setVisibility(android.view.View.GONE);
+            if (tcPanelImage != null) tcPanelImage.setVisibility(android.view.View.VISIBLE);
+        });
+
+        // ── Gallery open ──
+        if (btnGalleryOpen != null) {
+            btnGalleryOpen.setOnClickListener(v -> {
                 popup.dismiss();
-                // Gallery open karo
                 android.content.Intent galleryIntent = new android.content.Intent(
                         android.content.Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                galleryIntent.putExtra("targetViewTag", System.identityHashCode(targetView));
                 startActivityForResult(galleryIntent, 9999);
-                // Store target view for onActivityResult
                 pendingGalleryTarget = targetView;
             });
         }
 
-        btnScreenPick.setOnClickListener(v2 -> {
-            android.util.Log.e("#ImagePicker", "Image picker clicked!");
-            popup.dismiss();
+        // ── Preset Images Grid ──
+        if (rvPreset != null) {
+            int[] presetRes = {
+                R.drawable.ic_brush_5,
+            };
+            int cols = 3;
+            rvPreset.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, cols));
+            float dpP = getResources().getDisplayMetrics().density;
+            int cellW = (getResources().getDisplayMetrics().widthPixels - (int)(24*dpP)) / cols;
+            int cellH = (int)(targetView.getHeight() > 0 ? targetView.getHeight() : 80 * dpP);
+
+            rvPreset.setAdapter(new androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
+                @Override
+                public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup parent, int viewType) {
+                    android.widget.ImageView iv = new android.widget.ImageView(MainActivity.this);
+                    androidx.recyclerview.widget.RecyclerView.LayoutParams lp =
+                        new androidx.recyclerview.widget.RecyclerView.LayoutParams(cellW, cellH);
+                    lp.setMargins((int)(4*dpP), (int)(4*dpP), (int)(4*dpP), (int)(4*dpP));
+                    iv.setLayoutParams(lp);
+                    iv.setScaleType(android.widget.ImageView.ScaleType.CENTER_CROP);
+                    return new androidx.recyclerview.widget.RecyclerView.ViewHolder(iv) {};
+                }
+                @Override
+                public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder h, int pos) {
+                    android.widget.ImageView iv = (android.widget.ImageView) h.itemView;
+                    iv.setImageResource(presetRes[pos]);
+                    iv.setOnClickListener(v -> {
+                        android.graphics.drawable.BitmapDrawable bd = new android.graphics.drawable.BitmapDrawable(
+                                getResources(),
+                                android.graphics.BitmapFactory.decodeResource(getResources(), presetRes[h.getAdapterPosition()]));
+                        targetView.setBackground(bd);
+                        exportToJson();
+                        popup.dismiss();
+                    });
+                }
+                @Override public int getItemCount() { return presetRes.length; }
+            });
+        }
             new com.example.newcardmaker.ScreenColorPickerOverlay(this,
                 new com.example.newcardmaker.ScreenColorPickerOverlay.OnColorPickedListener() {
                     @Override
