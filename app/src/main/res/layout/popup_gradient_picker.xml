@@ -92,22 +92,22 @@
             android:background="#FFFFFF" />
 
         <TextView
-            android:id="@+id/gp_tab_none"
+            android:id="@+id/gp_tab_gallery"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="✕ None"
+            android:text="🖼 Gallery"
             android:textColor="#6B7280"
             android:textSize="11sp"
             android:gravity="center"
             android:background="#FFFFFF" />
 
         <TextView
-            android:id="@+id/gp_tab_gallery"
+            android:id="@+id/gp_tab_none"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="🖼 Gallery"
+            android:text="✕ None"
             android:textColor="#6B7280"
             android:textSize="11sp"
             android:gravity="center"
