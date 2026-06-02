@@ -194,14 +194,6 @@ public class ScreenColorPickerOverlay {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     magnifier.setVisibility(View.VISIBLE);
-                    // Start 2 sec hold timer
-                    holdHandler.removeCallbacks(holdRunnable != null ? holdRunnable : () -> {});
-                    holdRunnable = () -> {
-                        if (colorPopup == null || !colorPopup.isShowing()) {
-                            showColorPopup(lastPickedColor, x, y);
-                        }
-                    };
-                    holdHandler.postDelayed(holdRunnable, 2000);
 
                 case MotionEvent.ACTION_MOVE:
                     magnifier.setVisibility(View.VISIBLE);
@@ -227,10 +219,6 @@ public class ScreenColorPickerOverlay {
                     return true;
 
                 case MotionEvent.ACTION_UP:
-                    // Cancel hold timer
-                    if (holdRunnable != null) holdHandler.removeCallbacks(holdRunnable);
-                    if (colorPopup != null && colorPopup.isShowing()) colorPopup.dismiss();
-
                     int finalColor = getPixelColor(x, y);
                     dismiss();
                     if (listener != null) listener.onColorPicked(finalColor);
