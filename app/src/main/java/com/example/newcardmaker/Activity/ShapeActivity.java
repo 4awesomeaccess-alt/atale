@@ -113,7 +113,7 @@ public class ShapeActivity extends AppCompatActivity {
         subCatRecycler.setVisibility(View.GONE);
 
         okhttp3.RequestBody reqBody = home_methods.getAPIRequest(
-                invite_AppConstants.METHOD_CAT_PHOTOWALL1,
+                invite_AppConstants.METHOD_ALL_SQUARE_FRAME,
                 0, "", "", "", cid, "", "", "", "", "", "", "", "", "", "", "", null);
 
         new android.os.AsyncTask<Void, Void, ArrayList<invite_ItemSubCat_main>>() {
@@ -211,7 +211,7 @@ public class ShapeActivity extends AppCompatActivity {
         }
 
         requestBody = home_methods.getAPIRequest(
-                invite_AppConstants.METHOD_IMAGE_All_PHOTOGREETING11,
+                invite_AppConstants.METHOD_ALL_SQUARE_FRAME,
                 home_page, "", "", "", "", "", "", "", "", "", "", "", "",
                 "", invite_AppConstants.itemUser.getId(), "", null);
         android.util.Log.e("#fetchImages_cid", "loading all images page=" + home_page);
