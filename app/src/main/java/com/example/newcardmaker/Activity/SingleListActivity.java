@@ -67,90 +67,31 @@ public class SingleListActivity extends AppCompatActivity {
         cid = getIntent().getStringExtra("cid");
         categoryName = getIntent().getStringExtra("name");
 
-        // ── Root
-        LinearLayout root = new LinearLayout(this);
-        root.setOrientation(LinearLayout.VERTICAL);
-        root.setBackgroundColor(Color.parseColor("#F5F5F5"));
+        setContentView(R.layout.singlelist_activity);
 
-        // ── Toolbar
-        LinearLayout toolbar = new LinearLayout(this);
-        toolbar.setOrientation(LinearLayout.HORIZONTAL);
-        toolbar.setBackgroundColor(Color.parseColor("#1565C0"));
-        toolbar.setPadding(16, 48, 16, 16);
-        toolbar.setGravity(Gravity.CENTER_VERTICAL);
+        // ── Views from XML
+        LinearLayout toolbar = findViewById(R.id.home_toolbar);
+        TextView tvTitle = findViewById(R.id.home_tv_title);
+        home_progressBar = findViewById(R.id.home_progressBar);
+        home_ll_empty = findViewById(R.id.home_ll_empty);
+        subCatRecycler = findViewById(R.id.subCatRecycler);
+        home_recyclerView = findViewById(R.id.home_recyclerView);
 
-        TextView btnBack = new TextView(this);
-        btnBack.setText("←");
-        btnBack.setTextSize(22);
-        btnBack.setTextColor(Color.WHITE);
-        btnBack.setPadding(0, 0, 20, 0);
-        btnBack.setOnClickListener(v -> {
-            if (currentSubCatId != null) {
-                // Go back to sub-categories
-                currentSubCatId = null;
-                home_recyclerView.setVisibility(View.GONE);
-                subCatRecycler.setVisibility(View.VISIBLE);
-            } else {
-                finish();
-            }
-        });
-
-        TextView tvTitle = new TextView(this);
-        tvTitle.setText(categoryName != null ? categoryName : "Cards");
-        tvTitle.setTextSize(18);
-        tvTitle.setTextColor(Color.WHITE);
-        tvTitle.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
-        LinearLayout.LayoutParams titleLp = new LinearLayout.LayoutParams(
-                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
-        tvTitle.setLayoutParams(titleLp);
-
-        toolbar.addView(btnBack);
-        toolbar.addView(tvTitle);
-        root.addView(toolbar);
-
-        // ── ProgressBar
-        home_progressBar = new ProgressBar(this);
-        home_progressBar.setVisibility(View.GONE);
-        LinearLayout.LayoutParams pbLp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        pbLp.gravity = Gravity.CENTER_HORIZONTAL;
-        pbLp.setMargins(0, 40, 0, 0);
-        home_progressBar.setLayoutParams(pbLp);
-        root.addView(home_progressBar);
-
-        // ── Empty
-        home_ll_empty = new LinearLayout(this);
-        home_ll_empty.setGravity(Gravity.CENTER);
-        home_ll_empty.setVisibility(View.GONE);
-        home_tv_empty = new TextView(this);
-        home_tv_empty.setTextSize(15);
-        home_tv_empty.setTextColor(Color.GRAY);
-        home_tv_empty.setPadding(40, 80, 40, 40);
-        home_ll_empty.addView(home_tv_empty);
-        root.addView(home_ll_empty);
-
-        // ── Sub-category RecyclerView (2 column grid)
-        subCatRecycler = new RecyclerView(this);
+        // Subcategory grid
         subCatRecycler.setLayoutManager(new GridLayoutManager(this, 2));
         subCatRecycler.setPadding(8, 8, 8, 8);
-        LinearLayout.LayoutParams scLp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
-        subCatRecycler.setLayoutParams(scLp);
-        root.addView(subCatRecycler);
 
-        // ── Image RecyclerView
-        home_recyclerView = new RecyclerView(this);
+        // Image grid
         home_lLayout = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         home_recyclerView.setLayoutManager(home_lLayout);
         home_recyclerView.setPadding(8, 8, 8, 8);
-        LinearLayout.LayoutParams rvLp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
-        home_recyclerView.setLayoutParams(rvLp);
-        home_recyclerView.setVisibility(View.GONE);
-        root.addView(home_recyclerView);
 
-        setContentView(root);
+        // Title
+        if (categoryName != null) tvTitle.setText(categoryName);
+
+        // Back button
+        android.view.View btnBack = findViewById(R.id.btn_back);
+        if (btnBack != null) btnBack.setOnClickListener(v -> finish());
 
         home_methods = new invite_Methods(this);
 
