@@ -34,6 +34,13 @@ public class LanguageActivity extends AppCompatActivity {
         checkHindi    = findViewById(R.id.check_hindi);
         checkEnglish  = findViewById(R.id.check_english);
         LinearLayout btnContinue = findViewById(R.id.btn_continue);
+        LinearLayout btnShapeActivity = findViewById(R.id.btn_shape_activity);
+
+        if (btnShapeActivity != null) {
+            btnShapeActivity.setOnClickListener(v -> {
+                startActivity(new Intent(this, ShapeActivity.class));
+            });
+        }
 
         // Restore saved language
         SharedPreferences prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
