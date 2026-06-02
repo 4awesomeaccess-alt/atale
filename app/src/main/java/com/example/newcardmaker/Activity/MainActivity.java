@@ -11656,6 +11656,11 @@ public class MainActivity extends AppCompatActivity {
                 } else { result2 = gpSelectedBmp[0]; }
                 android.graphics.drawable.BitmapDrawable bdd = new android.graphics.drawable.BitmapDrawable(getResources(), result2);
                 targetView.setBackground(bdd);
+                // Apply padding
+                float dpF2 = getResources().getDisplayMetrics().density;
+                int px3 = (int)(padX[0] * dpF2);
+                int py3 = (int)(padY[0] * dpF2);
+                targetView.setPadding(px3, py3, px3, py3);
                 exportToJson();
             });
         }
