@@ -10118,7 +10118,6 @@ public class MainActivity extends AppCompatActivity {
         TextView btnDone      = root.findViewById(R.id.btn_color_done);
         View btnClose         = root.findViewById(R.id.btn_color_close);
         View btnScreenPick    = root.findViewById(R.id.btn_screen_pick);
-        View btnGalleryPick   = root.findViewById(R.id.btn_gallery_pick);
 
         // ── Tab views ──
         TextView tcTabSolid    = root.findViewById(R.id.tc_tab_solid);
@@ -10476,12 +10475,7 @@ public class MainActivity extends AppCompatActivity {
             if (tcPanelImage != null) tcPanelImage.setVisibility(android.view.View.VISIBLE);
         });
 
-        // ── Gallery/Brush tab click (same panel) ──
-        if (btnGalleryPick != null) btnGalleryPick.setOnClickListener(v -> {
-            tcPanelSolid.setVisibility(android.view.View.GONE);
-            tcPanelGradient.setVisibility(android.view.View.GONE);
-            if (tcPanelImage != null) tcPanelImage.setVisibility(android.view.View.VISIBLE);
-        });
+        // ── Gallery/Brush tab click handled via btn_screen_pick ──
 
         // ── Image panel color row setup ──
         android.widget.LinearLayout imgColorRow = root.findViewById(R.id.img_color_row);
