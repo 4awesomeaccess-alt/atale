@@ -152,6 +152,7 @@ public class ColorWheelView extends View {
     }
 
     private void updateCenterGradient() {
+        if (innerRadius <= 1f) return; // guard: radius must be > 0
         int pureHue = Color.HSVToColor(new float[]{selectedHue, 1f, 1f});
 
         // Horizontal: white → hue (saturation)
