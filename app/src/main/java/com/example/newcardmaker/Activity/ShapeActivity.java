@@ -357,12 +357,12 @@ public class ShapeActivity extends AppCompatActivity {
             protected void onPostExecute(String savedPath) {
                 if (savedPath != null) {
                     android.util.Log.e("#JSON_saved", "path=" + savedPath);
-                    Intent intent = new Intent(SingleListActivity.this, MainActivity.class);
+                    Intent intent = new Intent(ShapeActivity.this, MainActivity.class);
                     intent.putExtra("FILE_PATH", savedPath);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
                 } else {
-                    android.widget.Toast.makeText(SingleListActivity.this,
+                    android.widget.Toast.makeText(ShapeActivity.this,
                             "Download failed", android.widget.Toast.LENGTH_SHORT).show();
                 }
             }
@@ -386,7 +386,7 @@ public class ShapeActivity extends AppCompatActivity {
 
         @Override
         public SCHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            FrameLayout card = new FrameLayout(SingleListActivity.this);
+            FrameLayout card = new FrameLayout(ShapeActivity.this);
             RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(
                     RecyclerView.LayoutParams.MATCH_PARENT,
                     RecyclerView.LayoutParams.WRAP_CONTENT);
@@ -400,14 +400,14 @@ public class ShapeActivity extends AppCompatActivity {
             card.setBackground(bg);
             card.setElevation(3f);
 
-            ImageView imageView = new ImageView(SingleListActivity.this);
+            ImageView imageView = new ImageView(ShapeActivity.this);
             imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             FrameLayout.LayoutParams imgLp = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.MATCH_PARENT, 350);
             imageView.setLayoutParams(imgLp);
             card.addView(imageView);
 
-            TextView tvName = new TextView(SingleListActivity.this);
+            TextView tvName = new TextView(ShapeActivity.this);
             tvName.setTextSize(13);
             tvName.setTextColor(Color.WHITE);
             tvName.setTypeface(android.graphics.Typeface.DEFAULT_BOLD);
@@ -429,7 +429,7 @@ public class ShapeActivity extends AppCompatActivity {
         public void onBindViewHolder(SCHolder holder, int position) {
             invite_ItemSubCat_main item = subCatList.get(position);
 
-            Glide.with(SingleListActivity.this)
+            Glide.with(ShapeActivity.this)
                     .load(item.getImageBig())
                     .fitCenter()
                     .placeholder(android.R.drawable.ic_menu_gallery)
@@ -469,7 +469,7 @@ public class ShapeActivity extends AppCompatActivity {
 
         @Override
         public ImgHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            FrameLayout card = new FrameLayout(SingleListActivity.this);
+            FrameLayout card = new FrameLayout(ShapeActivity.this);
             RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(
                     RecyclerView.LayoutParams.MATCH_PARENT,
                     RecyclerView.LayoutParams.WRAP_CONTENT);
@@ -483,7 +483,7 @@ public class ShapeActivity extends AppCompatActivity {
             card.setBackground(bg);
             card.setElevation(3f);
 
-            ImageView imageView = new ImageView(SingleListActivity.this);
+            ImageView imageView = new ImageView(ShapeActivity.this);
             imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             FrameLayout.LayoutParams imgLp = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.MATCH_PARENT, 380);
@@ -497,7 +497,7 @@ public class ShapeActivity extends AppCompatActivity {
         public void onBindViewHolder(ImgHolder holder, int position) {
             invite_Item_OneImages item = home_arrayList.get(position);
 
-            Glide.with(SingleListActivity.this)
+            Glide.with(ShapeActivity.this)
                     .load(item.getImageBig())
                     .fitCenter()
                     .placeholder(android.R.drawable.ic_menu_gallery)
