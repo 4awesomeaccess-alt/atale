@@ -10544,8 +10544,23 @@ public class MainActivity extends AppCompatActivity {
                         int th = targetView.getHeight() > 0 ? targetView.getHeight() : 80;
                         android.graphics.Bitmap scaled = android.graphics.Bitmap.createScaledBitmap(bmp, tw, th, true);
 
-                        // Tint color picker popup show
-                        showImageTintPicker(targetView, scaled, popup);
+                        // Black → transparent
+                        android.graphics.Bitmap src = scaled.copy(android.graphics.Bitmap.Config.ARGB_8888, true);
+                        int w = src.getWidth(), ht = src.getHeight();
+                        int[] pixels = new int[w * ht];
+                        src.getPixels(pixels, 0, w, 0, 0, w, ht);
+                        for (int i = 0; i < pixels.length; i++) {
+                            int r = (pixels[i] >> 16) & 0xFF;
+                            int g = (pixels[i] >> 8)  & 0xFF;
+                            int b = pixels[i]          & 0xFF;
+                            if (r < 60 && g < 60 && b < 60) pixels[i] = 0x00000000;
+                        }
+                        src.setPixels(pixels, 0, w, 0, 0, w, ht);
+
+                        android.graphics.drawable.BitmapDrawable bd = new android.graphics.drawable.BitmapDrawable(getResources(), src);
+                        targetView.setBackground(bd);
+                        exportToJson();
+                        popup.dismiss();
                     });
                 }
                 @Override public int getItemCount() { return presetRes.length; }
