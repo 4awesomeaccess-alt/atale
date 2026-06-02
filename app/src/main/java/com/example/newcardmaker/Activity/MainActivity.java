@@ -10654,7 +10654,7 @@ public class MainActivity extends AppCompatActivity {
                 if (tColor == android.graphics.Color.TRANSPARENT) {
                     preview.setColorFilter(null);
                 } else {
-                    preview.setColorFilter(tColor, android.graphics.PorterDuff.Mode.SRC_ATOP);
+                    preview.setColorFilter(tColor, android.graphics.PorterDuff.Mode.MULTIPLY);
                 }
             });
             colorRow.addView(btn);
@@ -10665,7 +10665,7 @@ public class MainActivity extends AppCompatActivity {
         final int[] tintColor = {android.graphics.Color.TRANSPARENT};
         tintWheel.setOnColorChangedListener(c -> {
             tintColor[0] = c;
-            preview.setColorFilter(c, android.graphics.PorterDuff.Mode.SRC_ATOP);
+            preview.setColorFilter(c, android.graphics.PorterDuff.Mode.MULTIPLY);
         });
 
         // Apply + Cancel buttons
@@ -10712,14 +10712,34 @@ public class MainActivity extends AppCompatActivity {
 
         btnCancel.setOnClickListener(v -> tintPopup.dismiss());
         btnApply.setOnClickListener(v -> {
-            // Apply tint to bitmap
-            android.graphics.Bitmap tinted = originalBmp.copy(android.graphics.Bitmap.Config.ARGB_8888, true);
-            if (tintColor[0] != android.graphics.Color.TRANSPARENT) {
-                android.graphics.Canvas canvas = new android.graphics.Canvas(tinted);
-                android.graphics.Paint paint = new android.graphics.Paint();
-                paint.setColorFilter(new android.graphics.PorterDuffColorFilter(tintColor[0], android.graphics.PorterDuff.Mode.SRC_ATOP));
-                canvas.drawBitmap(tinted, 0, 0, paint);
+            // Black pixels → transparent, then apply tint color
+            android.graphics.Bitmap src = originalBmp.copy(android.graphics.Bitmap.Config.ARGB_8888, true);
+
+            // Step 1: Black → transparent
+            int w = src.getWidth(), h = src.getHeight();
+            int[] pixels = new int[w * h];
+            src.getPixels(pixels, 0, w, 0, 0, w, h);
+            for (int i = 0; i < pixels.length; i++) {
+                int r = (pixels[i] >> 16) & 0xFF;
+                int g = (pixels[i] >> 8)  & 0xFF;
+                int b = pixels[i]          & 0xFF;
+                // Dark pixels → transparent
+                if (r < 60 && g < 60 && b < 60) {
+                    pixels[i] = 0x00000000; // transparent
+                }
             }
+            src.setPixels(pixels, 0, w, 0, 0, w, h);
+
+            // Step 2: Apply tint color via MULTIPLY
+            android.graphics.Bitmap tinted = android.graphics.Bitmap.createBitmap(w, h, android.graphics.Bitmap.Config.ARGB_8888);
+            android.graphics.Canvas canvas = new android.graphics.Canvas(tinted);
+            canvas.drawBitmap(src, 0, 0, null);
+            if (tintColor[0] != android.graphics.Color.TRANSPARENT) {
+                android.graphics.Paint paint = new android.graphics.Paint();
+                paint.setColorFilter(new android.graphics.PorterDuffColorFilter(tintColor[0], android.graphics.PorterDuff.Mode.MULTIPLY));
+                canvas.drawBitmap(src, 0, 0, paint);
+            }
+
             android.graphics.drawable.BitmapDrawable bd = new android.graphics.drawable.BitmapDrawable(getResources(), tinted);
             targetView.setBackground(bd);
             exportToJson();
