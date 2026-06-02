@@ -11750,7 +11750,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnClose.setOnClickListener(v -> popup.dismiss());
-        btnDone.setOnClickListener(v -> { exportToJson(); popup.dismiss(); });
+        btnDone.setOnClickListener(v -> {
+            // Preserve padding tag before save
+            if (!(targetView.getTag(R.id.btn_location) instanceof int[])) {
+                targetView.setTag(R.id.btn_location, new int[]{targetView.getPaddingLeft(), targetView.getPaddingTop()});
+            }
+            exportToJson();
+            popup.dismiss();
+        });
     }
 
     private void showTextBorderDialog(StrokeTextView targetView) {
