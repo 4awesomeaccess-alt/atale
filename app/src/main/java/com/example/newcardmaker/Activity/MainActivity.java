@@ -10476,6 +10476,13 @@ public class MainActivity extends AppCompatActivity {
             if (tcPanelImage != null) tcPanelImage.setVisibility(android.view.View.VISIBLE);
         });
 
+        // ── Gallery/Brush tab click (same panel) ──
+        if (btnGalleryPick != null) btnGalleryPick.setOnClickListener(v -> {
+            tcPanelSolid.setVisibility(android.view.View.GONE);
+            tcPanelGradient.setVisibility(android.view.View.GONE);
+            if (tcPanelImage != null) tcPanelImage.setVisibility(android.view.View.VISIBLE);
+        });
+
         // ── Gallery open ──
         if (btnGalleryOpen != null) {
             btnGalleryOpen.setOnClickListener(v -> {
@@ -10492,6 +10499,22 @@ public class MainActivity extends AppCompatActivity {
         if (rvPreset != null) {
             int[] presetRes = {
                 R.drawable.ic_brush_5,
+                R.drawable.ic_brush_6,
+                R.drawable.ic_brush_7,
+                R.drawable.ic_brush_8,
+                R.drawable.ic_brush_9,
+                R.drawable.ic_brush_10,
+                R.drawable.ic_brush_11,
+                R.drawable.ic_brush_12,
+                R.drawable.ic_brush_13,
+                R.drawable.ic_brush_14,
+                R.drawable.ic_brush_15,
+                R.drawable.ic_brush_16,
+                R.drawable.ic_brush_17,
+                R.drawable.ic_brush_18,
+                R.drawable.ic_brush_19,
+                R.drawable.ic_brush_20,
+                R.drawable.ic_brush_21,
             };
             int cols = 3;
             rvPreset.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, cols));
