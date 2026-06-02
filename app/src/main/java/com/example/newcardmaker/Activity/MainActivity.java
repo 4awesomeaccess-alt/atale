@@ -11624,6 +11624,12 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(() -> setupGpBrushAdapter(gpBrushGrid, brushRes, serverUrls, targetView, cellW2, cellH2, dpB,
                         gpSelectedBmp, gpSelectedTint, gpBrushGrid, gpGalleryOpen, gpImgPreview, gpImgTintWheel, gpImgColorRow, padX, padY));
             }).start();
+
+            // Initial load with brush only
+            setupGpBrushAdapter(gpBrushGrid, brushRes, serverUrls, targetView, cellW2, cellH2, dpB,
+                    gpSelectedBmp, gpSelectedTint, gpBrushGrid, gpGalleryOpen, gpImgPreview, gpImgTintWheel, gpImgColorRow, padX, padY);
+        }
+
         android.widget.TextView gpBtnPickColor = root.findViewById(R.id.gp_btn_pick_color);
         if (gpBtnPickColor != null) {
             gpBtnPickColor.setOnClickListener(vv -> {
