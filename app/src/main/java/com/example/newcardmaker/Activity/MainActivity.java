@@ -11595,37 +11595,24 @@ public class MainActivity extends AppCompatActivity {
             int cellW2 = (getResources().getDisplayMetrics().widthPixels - (int)(24*dpB)) / 3;
             int cellH2 = (int)(targetView.getHeight() > 0 ? targetView.getHeight() : 80*dpB);
 
-            // Load server images via API
+            // Load server images via invite_Load_OneImages_shape
             java.util.List<String> serverUrls = new java.util.ArrayList<>();
-            new Thread(() -> {
-                try {
-                    String apiUrl = com.example.newcardmaker.invite_online_database.invite_AppConstants.SERVER_URL;
-                    String baseUrl = apiUrl.replace("api.php", "");
-                    java.net.URL url = new java.net.URL(apiUrl);
-                    java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("POST");
-                    conn.setDoOutput(true);
-                    String params = "method=" + com.example.newcardmaker.invite_online_database.invite_AppConstants.METHOD_ALL_SQUARE_FRAME;
-                    conn.getOutputStream().write(params.getBytes());
-                    java.io.InputStream is = conn.getInputStream();
-                    String resp = new java.util.Scanner(is).useDelimiter("\\A").next();
-                    org.json.JSONObject json = new org.json.JSONObject(resp);
-                    org.json.JSONArray arr = json.optJSONArray("data");
-                    if (arr != null) {
-                        for (int i = 0; i < arr.length(); i++) {
-                            org.json.JSONObject item = arr.getJSONObject(i);
-                            String img = item.optString("image", item.optString("img", item.optString("photo", "")));
-                            if (!img.isEmpty()) {
-                                serverUrls.add(baseUrl + "images/" + img);
-                            }
+            okhttp3.RequestBody shapeReqBody = home_methods.getAPIRequest(
+                    com.example.newcardmaker.invite_online_database.invite_AppConstants.METHOD_ALL_SQUARE_FRAME,
+                    1, "", "", "", "", "", "", "", "", "", "", "", "",
+                    "", com.example.newcardmaker.invite_online_database.invite_AppConstants.itemUser.getId(), "", null);
+
+            new com.example.newcardmaker.invite_online_database.invite_Load_OneImages_shape(
+                new com.example.newcardmaker.invite_online_database.invite_ShapeListener() {
+                    @Override public void onStart() {}
+                    @Override public void onEnd(String success, java.util.ArrayList<com.example.newcardmaker.invite_online_database.invite_Item_Shape> result) {
+                        for (com.example.newcardmaker.invite_online_database.invite_Item_Shape item : result) {
+                            if (!item.getImageUrl().isEmpty()) serverUrls.add(item.getImageUrl());
                         }
+                        setupGpBrushAdapter(gpBrushGrid, brushRes, serverUrls, targetView, cellW2, cellH2, dpB,
+                                gpSelectedBmp, gpSelectedTint, gpBrushGrid, gpGalleryOpen, gpImgPreview, gpImgTintWheel, gpImgColorRow, padX, padY);
                     }
-                } catch (Exception e) {
-                    android.util.Log.e("#GalleryAPI", "Error: " + e.getMessage());
-                }
-                runOnUiThread(() -> setupGpBrushAdapter(gpBrushGrid, brushRes, serverUrls, targetView, cellW2, cellH2, dpB,
-                        gpSelectedBmp, gpSelectedTint, gpBrushGrid, gpGalleryOpen, gpImgPreview, gpImgTintWheel, gpImgColorRow, padX, padY));
-            }).start();
+                }, shapeReqBody).execute();
 
             // Initial load with brush only
             setupGpBrushAdapter(gpBrushGrid, brushRes, serverUrls, targetView, cellW2, cellH2, dpB,
