@@ -11782,7 +11782,8 @@ public class MainActivity extends AppCompatActivity {
         int density = (int) getResources().getDisplayMetrics().density;
         int margin25 = 25 * density;
         int popupW  = screenW - (margin25 * 2);
-        int popupH  = android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+        int maxH    = (int)(screenH * 0.40f);
+        int popupH  = maxH;
         android.widget.PopupWindow popup = new android.widget.PopupWindow(
                 root, popupW, popupH, true);
         popup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.WHITE));
