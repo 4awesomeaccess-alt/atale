@@ -37,32 +37,43 @@ public class invite_Load_OneImages_shape {
     private String doInBackground() {
         try {
             String json = invite_JSONParser.okhttpPost(invite_AppConstants.SERVER_URL, requestBody);
-            Log.e("#ShapeAPI", json + "");
+            android.util.Log.e("#ShapeAPI_raw", json + "");
 
             JSONObject root = new JSONObject(json);
-            JSONObject diary = root.optJSONObject("QUOTES_DIARY");
-            if (diary == null) return "0";
 
-            // Try multiple array keys
-            JSONArray arr = null;
-            String[] keys = {"image_quotes", "data", "images", "items"};
-            for (String key : keys) {
-                arr = diary.optJSONArray(key);
-                if (arr != null) break;
+            // QUOTES_DIARY is a JSONArray directly
+            JSONArray arr = root.optJSONArray("QUOTES_DIARY");
+            if (arr == null) {
+                // Try as object with nested array
+                JSONObject diary = root.optJSONObject("QUOTES_DIARY");
+                if (diary != null) {
+                    String[] keys = {"image_quotes", "data", "images", "items", "result"};
+                    for (String key : keys) {
+                        arr = diary.optJSONArray(key);
+                        if (arr != null) break;
+                    }
+                }
             }
-            if (arr == null) return "0";
+            if (arr == null) {
+                android.util.Log.e("#ShapeAPI_err", "No array found in response");
+                return "0";
+            }
 
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject obj = arr.getJSONObject(i);
-                String id       = obj.optString("id", "");
-                String catId    = obj.optString("cat_id", "");
-                String imgB     = obj.optString("quote_image_b", "").replace(" ", "%20");
-                String imgB1    = obj.optString("quote_image_b1", "").replace(" ", "%20");
-                list.add(new invite_Item_Shape(id, catId, imgB, imgB1));
+                if (obj.has("success")) continue; // skip status objects
+                String id    = obj.optString("id", "");
+                String catId = obj.optString("cat_id", "");
+                String imgB  = obj.optString("quote_image_b", "").replace(" ", "%20");
+                String imgB1 = obj.optString("quote_image_b1", "").replace(" ", "%20");
+                if (!id.isEmpty()) {
+                    list.add(new invite_Item_Shape(id, catId, imgB, imgB1));
+                }
             }
+            android.util.Log.e("#ShapeAPI_count", "count=" + list.size());
             return "1";
         } catch (Exception e) {
-            Log.e("#ShapeAPI_err", e.getMessage() + "");
+            android.util.Log.e("#ShapeAPI_err", e.getMessage() + "");
             return "0";
         }
     }
