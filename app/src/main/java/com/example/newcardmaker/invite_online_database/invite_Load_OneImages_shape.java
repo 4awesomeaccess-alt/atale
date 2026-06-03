@@ -61,13 +61,11 @@ public class invite_Load_OneImages_shape {
 
             for (int i = 0; i < arr.length(); i++) {
                 JSONObject obj = arr.getJSONObject(i);
-                if (obj.has("success")) continue; // skip status objects
-                String id    = obj.optString("id", "");
-                String catId = obj.optString("cat_id", "");
-                String imgB  = obj.optString("quote_image_b", "").replace(" ", "%20");
-                String imgB1 = obj.optString("quote_image_b1", "").replace(" ", "%20");
-                if (!id.isEmpty()) {
-                    list.add(new invite_Item_Shape(id, catId, imgB, imgB1));
+                if (obj.has("success")) continue;
+                String id   = obj.optString("id", "");
+                String imgB = obj.optString("quote_image_b", "").replace(" ", "%20");
+                if (!id.isEmpty() && !imgB.isEmpty()) {
+                    list.add(new invite_Item_Shape(id, imgB));
                 }
             }
             android.util.Log.e("#ShapeAPI_count", "count=" + list.size());
