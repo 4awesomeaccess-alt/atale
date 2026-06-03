@@ -11597,7 +11597,8 @@ public class MainActivity extends AppCompatActivity {
 
             // Load server images via invite_Load_OneImages_shape
             java.util.List<String> serverUrls = new java.util.ArrayList<>();
-            okhttp3.RequestBody shapeReqBody = home_methods.getAPIRequest(
+            invite_Methods shapeMethod = new invite_Methods(this);
+            okhttp3.RequestBody shapeReqBody = shapeMethod.getAPIRequest(
                     com.example.newcardmaker.invite_online_database.invite_AppConstants.METHOD_ALL_SQUARE_FRAME,
                     1, "", "", "", "", "", "", "", "", "", "", "", "",
                     "", com.example.newcardmaker.invite_online_database.invite_AppConstants.itemUser.getId(), "", null);
