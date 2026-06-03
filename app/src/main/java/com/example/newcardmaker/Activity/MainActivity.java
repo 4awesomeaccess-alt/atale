@@ -10830,7 +10830,7 @@ public class MainActivity extends AppCompatActivity {
                 androidx.recyclerview.widget.RecyclerView.LayoutParams lp = new androidx.recyclerview.widget.RecyclerView.LayoutParams(cellW, cellH);
                 lp.setMargins((int)(4*dpB),(int)(4*dpB),(int)(4*dpB),(int)(4*dpB));
                 iv.setLayoutParams(lp);
-                iv.setScaleType(android.widget.ImageView.ScaleType.CENTER_CROP);
+                iv.setScaleType(android.widget.ImageView.ScaleType.FIT_CENTER);
                 return new androidx.recyclerview.widget.RecyclerView.ViewHolder(iv) {};
             }
             public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder h, int pos) {
@@ -10845,7 +10845,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     // Server image
                     String url = serverUrls.get(pos - localCount);
-                    com.bumptech.glide.Glide.with(MainActivity.this).load(url).into(iv);
+                    com.bumptech.glide.Glide.with(MainActivity.this).load(url).fitCenter().into(iv);
                     iv.setOnClickListener(vv -> {
                         com.bumptech.glide.Glide.with(MainActivity.this).asBitmap().load(url)
                             .into(new com.bumptech.glide.request.target.CustomTarget<android.graphics.Bitmap>() {
@@ -11584,10 +11584,10 @@ public class MainActivity extends AppCompatActivity {
         // Brush grid setup
         if (gpBrushGrid != null) {
             int[] brushRes = {}; // Only server images
-            gpBrushGrid.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 3));
+            gpBrushGrid.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 2));
             float dpB = getResources().getDisplayMetrics().density;
-            int cellW2 = (getResources().getDisplayMetrics().widthPixels - (int)(24*dpB)) / 3;
-            int cellH2 = (int)(targetView.getHeight() > 0 ? targetView.getHeight() : 80*dpB);
+            int cellW2 = (getResources().getDisplayMetrics().widthPixels - (int)(24*dpB)) / 2;
+            int cellH2 = cellW2; // Square cells - fit image
 
             // Load server images via invite_Load_OneImages_shape
             java.util.List<String> serverUrls = new java.util.ArrayList<>();
