@@ -575,6 +575,16 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
+        <!-- Loading indicator -->
+        <ProgressBar
+            android:id="@+id/gp_brush_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone" />
+
         <!-- Brush image grid -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/gp_brush_grid"

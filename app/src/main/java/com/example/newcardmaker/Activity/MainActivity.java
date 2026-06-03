@@ -11571,6 +11571,7 @@ public class MainActivity extends AppCompatActivity {
         final int[] padX = {0}, padY = {0};
 
         androidx.recyclerview.widget.RecyclerView gpBrushGrid = root.findViewById(R.id.gp_brush_grid);
+        android.widget.ProgressBar gpBrushLoading = root.findViewById(R.id.gp_brush_loading);
         android.widget.LinearLayout gpImgColorRow = root.findViewById(R.id.gp_img_color_row);
         android.widget.ImageView gpImgPreview = root.findViewById(R.id.gp_img_preview);
         com.example.newcardmaker.ColorWheelView gpImgTintWheel = root.findViewById(R.id.gp_img_tint_wheel);
@@ -11596,10 +11597,17 @@ public class MainActivity extends AppCompatActivity {
                     1, "", "", "", "", "", "", "", "", "", "", "", "",
                     "", com.example.newcardmaker.invite_online_database.invite_AppConstants.itemUser.getId(), "", null);
 
+            // Show loading
+            if (gpBrushLoading != null) gpBrushLoading.setVisibility(android.view.View.VISIBLE);
+            if (gpBrushGrid != null) gpBrushGrid.setVisibility(android.view.View.GONE);
+
             new com.example.newcardmaker.invite_online_database.invite_Load_OneImages_shape(
                 new com.example.newcardmaker.invite_online_database.invite_ShapeListener() {
                     @Override public void onStart() {}
                     @Override public void onEnd(String success, java.util.ArrayList<com.example.newcardmaker.invite_online_database.invite_Item_Shape> result) {
+                        // Hide loading
+                        if (gpBrushLoading != null) gpBrushLoading.setVisibility(android.view.View.GONE);
+                        if (gpBrushGrid != null) gpBrushGrid.setVisibility(android.view.View.VISIBLE);
                         for (com.example.newcardmaker.invite_online_database.invite_Item_Shape item : result) {
                             if (!item.getImageUrl().isEmpty()) serverUrls.add(item.getImageUrl());
                         }
