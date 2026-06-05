@@ -7367,7 +7367,6 @@ public class MainActivity extends AppCompatActivity {
                             targetText.setTypeface(Typeface.create(selected, fStyle));
                             targetText.setTag(R.id.btn_add_text, fontKey); // save font key
                             exportToJson();
-                            fontPopup.dismiss();
                             Toast.makeText(this, label + " font apply!", Toast.LENGTH_SHORT).show();
                         });
                     }).start();
@@ -7376,7 +7375,6 @@ public class MainActivity extends AppCompatActivity {
                     targetText.setTypeface(Typeface.create(selected, fStyle));
                     targetText.setTag(R.id.btn_add_text, fontKey);
                     exportToJson();
-                    fontPopup.dismiss();
                     Toast.makeText(this, label + " font apply!", Toast.LENGTH_SHORT).show();
                 }
             });
