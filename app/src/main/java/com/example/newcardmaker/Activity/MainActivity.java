@@ -11584,9 +11584,9 @@ public class MainActivity extends AppCompatActivity {
         // Brush grid setup
         if (gpBrushGrid != null) {
             int[] brushRes = {}; // Only server images
-            gpBrushGrid.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 2));
+            gpBrushGrid.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 4));
             float dpB = getResources().getDisplayMetrics().density;
-            int cellW2 = (getResources().getDisplayMetrics().widthPixels - (int)(24*dpB)) / 2;
+            int cellW2 = (getResources().getDisplayMetrics().widthPixels - (int)(40*dpB)) / 4;
             int cellH2 = cellW2; // Square cells - fit image
 
             // Load server images via invite_Load_OneImages_shape
