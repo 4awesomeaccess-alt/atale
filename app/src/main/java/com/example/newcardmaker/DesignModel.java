@@ -20,4 +20,8 @@ public class DesignModel {
     public String getFileName() { return fileName; }
     public String getFilePath() { return filePath; }
     public String getImagePath() { return imagePath != null ? imagePath : ""; }
+
+    public void setFileName(String fileName) { this.fileName = fileName; }
+    public void setFilePath(String filePath) { this.filePath = filePath; }
+    public void setImagePath(String imagePath) { this.imagePath = imagePath; }
 }

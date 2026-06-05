@@ -32,6 +32,15 @@
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/btn_edit_item"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:padding="6dp"
+        android:src="@android:drawable/ic_menu_edit"
+        android:layout_marginEnd="4dp"
+        android:contentDescription="Rename Design" />
+
+    <ImageView
         android:id="@+id/btn_share_item"
         android:layout_width="36dp"
         android:layout_height="36dp"

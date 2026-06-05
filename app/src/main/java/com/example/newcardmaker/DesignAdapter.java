@@ -68,7 +68,73 @@ public class DesignAdapter extends RecyclerView.Adapter<DesignAdapter.MyViewHold
         holder.btnShare.setOnClickListener(v -> {
             shareJsonFile(v.getContext(), model.getFilePath());
         });
+
+        // 3. EDIT (Rename): Click on Edit Icon
+        if (holder.btnEdit != null) {
+            holder.btnEdit.setOnClickListener(v -> {
+                showRenameDialog(v.getContext(), model, position);
+            });
+        }
     }
+
+    // Rename file function
+    private void showRenameDialog(Context context, DesignModel model, int position) {
+        final android.widget.EditText input = new android.widget.EditText(context);
+        // Remove .json extension for display
+        String currentName = model.getFileName().replace(".json", "");
+        input.setText(currentName);
+        input.setSelection(currentName.length());
+
+        int pad = (int) (16 * context.getResources().getDisplayMetrics().density);
+        android.widget.FrameLayout container = new android.widget.FrameLayout(context);
+        android.widget.FrameLayout.LayoutParams lp = new android.widget.FrameLayout.LayoutParams(
+                android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
+                android.widget.FrameLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(pad, 0, pad, 0);
+        input.setLayoutParams(lp);
+        container.addView(input);
+
+        new androidx.appcompat.app.AlertDialog.Builder(context)
+                .setTitle("Rename Design")
+                .setView(container)
+                .setPositiveButton("Rename", (dialog, which) -> {
+                    String newName = input.getText().toString().trim();
+                    if (newName.isEmpty()) {
+                        Toast.makeText(context, "Name khali na hovu joye", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (!newName.endsWith(".json")) newName += ".json";
+
+                    File oldFile = new File(model.getFilePath());
+                    File newFile = new File(oldFile.getParent(), newName);
+
+                    if (newFile.exists()) {
+                        Toast.makeText(context, "A name pehle thi che", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (oldFile.renameTo(newFile)) {
+                        // Also rename .img file if exists
+                        String oldImg = model.getImagePath();
+                        if (oldImg != null && !oldImg.isEmpty()) {
+                            File oldImgFile = new File(oldImg);
+                            if (oldImgFile.exists()) {
+                                File newImgFile = new File(oldImgFile.getParent(),
+                                        newName.replace(".json", ".img"));
+                                oldImgFile.renameTo(newImgFile);
+                                model.setImagePath(newImgFile.getAbsolutePath());
+                            }
+                        }
+                        model.setFileName(newFile.getName());
+                        model.setFilePath(newFile.getAbsolutePath());
+                        notifyItemChanged(position);
+                        Toast.makeText(context, "Renamed!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "Rename fail thayu", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
 
     // Share File Function — WhatsApp dialog sathe
     private void shareJsonFile(Context context, String filePath) {
@@ -162,13 +228,14 @@ public class DesignAdapter extends RecyclerView.Adapter<DesignAdapter.MyViewHold
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView fileName;
-        ImageView btnShare, btnDelete, ivThumbnail;
+        ImageView btnShare, btnDelete, btnEdit, ivThumbnail;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             fileName = itemView.findViewById(R.id.txt_file_name);
             btnShare = itemView.findViewById(R.id.btn_share_item);
             btnDelete = itemView.findViewById(R.id.btn_delete_item);
+            btnEdit = itemView.findViewById(R.id.btn_edit_item);
             ivThumbnail = itemView.findViewById(R.id.iv_thumbnail);
         }
     }
