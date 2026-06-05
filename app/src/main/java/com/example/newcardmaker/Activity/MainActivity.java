@@ -16322,10 +16322,35 @@ public class MainActivity extends AppCompatActivity {
             captureView.getLocationOnScreen(mainLoc);
             main_image_view.getLocationOnScreen(imgLoc);
 
-            int cropX = Math.max(0, imgLoc[0] - mainLoc[0]);
-            int cropY = Math.max(0, imgLoc[1] - mainLoc[1]);
-            int cropW = Math.min(main_image_view.getWidth(), fullBmp.getWidth() - cropX);
-            int cropH = Math.min(main_image_view.getHeight(), fullBmp.getHeight() - cropY);
+            int viewX = imgLoc[0] - mainLoc[0];
+            int viewY = imgLoc[1] - mainLoc[1];
+            int viewW = main_image_view.getWidth();
+            int viewH = main_image_view.getHeight();
+
+            // Calculate actual drawable bounds inside ImageView (fitCenter)
+            android.graphics.drawable.Drawable drawable = main_image_view.getDrawable();
+            int cropX = viewX, cropY = viewY, cropW = viewW, cropH = viewH;
+            if (drawable != null) {
+                int dW = drawable.getIntrinsicWidth();
+                int dH = drawable.getIntrinsicHeight();
+                if (dW > 0 && dH > 0) {
+                    float scale = Math.min((float) viewW / dW, (float) viewH / dH);
+                    int actualW = (int)(dW * scale);
+                    int actualH = (int)(dH * scale);
+                    int offsetX = (viewW - actualW) / 2;
+                    int offsetY = (viewH - actualH) / 2;
+                    cropX = viewX + offsetX;
+                    cropY = viewY + offsetY;
+                    cropW = actualW;
+                    cropH = actualH;
+                }
+            }
+
+            // Clamp to bitmap bounds
+            cropX = Math.max(0, cropX);
+            cropY = Math.max(0, cropY);
+            cropW = Math.min(cropW, fullBmp.getWidth() - cropX);
+            cropH = Math.min(cropH, fullBmp.getHeight() - cropY);
 
             android.graphics.Bitmap bmp;
             if (cropW > 0 && cropH > 0) {
