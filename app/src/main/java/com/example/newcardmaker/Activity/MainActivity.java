@@ -11111,8 +11111,12 @@ public class MainActivity extends AppCompatActivity {
         android.view.View solidHexPreview     = root.findViewById(R.id.gp_solid_hex_preview);
         android.widget.EditText solidEtHex    = root.findViewById(R.id.gp_solid_et_hex);
         android.widget.SeekBar solidOpacity   = root.findViewById(R.id.gp_solid_opacity);
-        android.widget.TextView solidOpacityVal = null; // removed from XML
+        android.widget.TextView solidOpacityVal = root.findViewById(R.id.gp_opacity_val);
         com.example.newcardmaker.ColorWheelView solidWheel = root.findViewById(R.id.gp_solid_wheel);
+        androidx.recyclerview.widget.RecyclerView solidColorGrid = root.findViewById(R.id.gp_solid_color_grid);
+        android.widget.TextView solidBtnOk = root.findViewById(R.id.gp_solid_btn_ok);
+        android.widget.TextView solidOpacityMinus = root.findViewById(R.id.gp_opacity_minus);
+        android.widget.TextView solidOpacityPlus = root.findViewById(R.id.gp_opacity_plus);
 
         final int[] solidAlpha = {255};
 
@@ -11184,6 +11188,64 @@ public class MainActivity extends AppCompatActivity {
             applySolid.run();
         });
 
+        // ── Preset color grid (4 columns) ──
+        final int[] presetColors = {
+            0xFF1565C0, 0xFF00897B, 0xFFFF5252, 0xFF8E24AA,
+            0xFF558B2F, 0xFFFDD835, 0xFF6A1B9A, 0xFF2E7D32,
+            0xFFFDD835, 0xFF1565C0, 0xFF558B2F, 0xFFC0CA33,
+            0xFFD32F2F, 0xFFE91E63, 0xFF3949AB, 0xFF827717,
+            0xFFFF6F00, 0xFF00ACC1, 0xFF5D4037, 0xFF000000,
+        };
+        if (solidColorGrid != null) {
+            solidColorGrid.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 4));
+            solidColorGrid.setAdapter(new androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
+                public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup p, int vt) {
+                    int size = (int)(44 * getResources().getDisplayMetrics().density);
+                    android.view.View dot = new android.view.View(MainActivity.this);
+                    androidx.recyclerview.widget.RecyclerView.LayoutParams lp =
+                            new androidx.recyclerview.widget.RecyclerView.LayoutParams(size, size);
+                    lp.setMargins(8, 8, 8, 8);
+                    dot.setLayoutParams(lp);
+                    return new androidx.recyclerview.widget.RecyclerView.ViewHolder(dot) {};
+                }
+                public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder h, int pos) {
+                    int color = presetColors[pos];
+                    android.graphics.drawable.GradientDrawable d = new android.graphics.drawable.GradientDrawable();
+                    d.setShape(android.graphics.drawable.GradientDrawable.OVAL);
+                    d.setColor(color);
+                    h.itemView.setBackground(d);
+                    h.itemView.setOnClickListener(v -> {
+                        solidColor[0] = color;
+                        setPreviewColor.accept(color);
+                        solidWheel.setColor(color);
+                        String hex = String.format("%06X", 0xFFFFFF & color);
+                        solidEtHex.setText(hex);
+                        applySolid.run();
+                    });
+                }
+                public int getItemCount() { return presetColors.length; }
+            });
+        }
+
+        // ── OK button → apply ──
+        if (solidBtnOk != null) solidBtnOk.setOnClickListener(v -> applySolid.run());
+
+        // ── Opacity +/- buttons ──
+        if (solidOpacityMinus != null) solidOpacityMinus.setOnClickListener(v -> {
+            int p = Math.max(0, solidOpacity.getProgress() - 10);
+            solidOpacity.setProgress(p);
+            solidAlpha[0] = p;
+            if (solidOpacityVal != null) solidOpacityVal.setText(String.format("%02d", p * 100 / 255));
+            applySolid.run();
+        });
+        if (solidOpacityPlus != null) solidOpacityPlus.setOnClickListener(v -> {
+            int p = Math.min(255, solidOpacity.getProgress() + 10);
+            solidOpacity.setProgress(p);
+            solidAlpha[0] = p;
+            if (solidOpacityVal != null) solidOpacityVal.setText(String.format("%02d", p * 100 / 255));
+            applySolid.run();
+        });
+
         // HEX TextWatcher — type/paste color code → apply
         solidEtHex.addTextChangedListener(new android.text.TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
@@ -11209,7 +11271,7 @@ public class MainActivity extends AppCompatActivity {
             @Override public void onProgressChanged(android.widget.SeekBar s, int progress, boolean fromUser) {
                 if (!fromUser) return;
                 solidAlpha[0] = progress;
-                if (solidOpacityVal != null) solidOpacityVal.setText(String.valueOf(progress));
+                if (solidOpacityVal != null) solidOpacityVal.setText(String.format("%02d", progress * 100 / 255));
                 applySolid.run();
             }
         });
