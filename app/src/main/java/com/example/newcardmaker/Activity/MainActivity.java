@@ -11845,10 +11845,16 @@ public class MainActivity extends AppCompatActivity {
         int margin25 = 25 * density;
         int popupW  = screenW - (margin25 * 2);
         int screenH = getResources().getDisplayMetrics().heightPixels;
-        int maxH    = (int)(screenH * 0.40f);
+        int maxH    = (int)(screenH * 0.45f);
+
+        // Wrap root in ScrollView so content scrolls within max height
+        android.widget.ScrollView scrollWrap = new android.widget.ScrollView(this);
+        scrollWrap.setBackgroundColor(Color.WHITE);
+        scrollWrap.addView(root);
+
         int popupH  = maxH;
         android.widget.PopupWindow popup = new android.widget.PopupWindow(
-                root, popupW, popupH, true);
+                scrollWrap, popupW, popupH, true);
         popup.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(Color.WHITE));
         popup.setElevation(16f);
         popup.setOutsideTouchable(true);
@@ -11880,7 +11886,7 @@ public class MainActivity extends AppCompatActivity {
                     int dx = (int) event.getRawX() - lastXY[0];
                     int dy = (int) event.getRawY() - lastXY[1];
                     int[] loc = new int[2]; root.getLocationOnScreen(loc);
-                    popup.update(loc[0] + dx, loc[1] + dy, popupW, -1);
+                    popup.update(loc[0] + dx, loc[1] + dy, popupW, popupH);
                     lastXY[0] = (int) event.getRawX(); lastXY[1] = (int) event.getRawY(); break;
             }
             return true;
