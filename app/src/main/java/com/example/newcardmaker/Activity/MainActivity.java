@@ -7234,6 +7234,11 @@ public class MainActivity extends AppCompatActivity {
                 {"Mono", "monospace"},
                 {"Cursive", "cursive"},
                 {"Sans-Serif", "sans-serif"},
+                {"Anek Bold", "https://all.imagsnd.com/font/anek_bold.ttf"},
+                {"Anek Medium", "https://all.imagsnd.com/font/anek_med.ttf"},
+                {"Anek Regular", "https://all.imagsnd.com/font/anek_reg.ttf"},
+                {"Anek Thin", "https://all.imagsnd.com/font/anek_think.ttf"},
+                {"Anel Light", "https://all.imagsnd.com/font/anel_light.ttf"},
         };
 
         // ── Root layout
@@ -7306,10 +7311,19 @@ public class MainActivity extends AppCompatActivity {
 
             // Preview
             TextView preview = new TextView(this);
-            preview.setText("Aa Bb 123");
+            preview.setText("Aa Bb 123 ગુજરાતી");
             preview.setTextSize(15);
             preview.setTextColor(Color.parseColor("#212121"));
-            preview.setTypeface(getTypefaceForKey(fontKey));
+            if (fontKey.startsWith("http")) {
+                // Async load for online fonts
+                preview.setTypeface(Typeface.DEFAULT);
+                new Thread(() -> {
+                    Typeface tf = getTypefaceForKey(fontKey);
+                    runOnUiThread(() -> preview.setTypeface(tf));
+                }).start();
+            } else {
+                preview.setTypeface(getTypefaceForKey(fontKey));
+            }
             preview.setLayoutParams(new LinearLayout.LayoutParams(
                     0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
             row.addView(preview);
@@ -7335,7 +7349,6 @@ public class MainActivity extends AppCompatActivity {
             root.addView(row);
 
             row.setOnClickListener(v -> {
-                Typeface selected = getTypefaceForKey(fontKey);
                 boolean bold = targetText.getTypeface() != null
                         && targetText.getTypeface().isBold();
                 boolean italic = targetText.getTypeface() != null
@@ -7344,10 +7357,28 @@ public class MainActivity extends AppCompatActivity {
                 if (bold && italic) style = Typeface.BOLD_ITALIC;
                 else if (bold) style = Typeface.BOLD;
                 else if (italic) style = Typeface.ITALIC;
-                targetText.setTypeface(Typeface.create(selected, style));
-                exportToJson();
-                fontPopup.dismiss();
-                Toast.makeText(this, label + " font apply!", Toast.LENGTH_SHORT).show();
+                final int fStyle = style;
+
+                if (fontKey.startsWith("http")) {
+                    Toast.makeText(this, "Loading " + label + "...", Toast.LENGTH_SHORT).show();
+                    new Thread(() -> {
+                        Typeface selected = getTypefaceForKey(fontKey);
+                        runOnUiThread(() -> {
+                            targetText.setTypeface(Typeface.create(selected, fStyle));
+                            targetText.setTag(R.id.btn_add_text, fontKey); // save font key
+                            exportToJson();
+                            fontPopup.dismiss();
+                            Toast.makeText(this, label + " font apply!", Toast.LENGTH_SHORT).show();
+                        });
+                    }).start();
+                } else {
+                    Typeface selected = getTypefaceForKey(fontKey);
+                    targetText.setTypeface(Typeface.create(selected, fStyle));
+                    targetText.setTag(R.id.btn_add_text, fontKey);
+                    exportToJson();
+                    fontPopup.dismiss();
+                    Toast.makeText(this, label + " font apply!", Toast.LENGTH_SHORT).show();
+                }
             });
         }
 
@@ -7407,6 +7438,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    // Font cache map
+    private final java.util.Map<String, Typeface> fontCache = new java.util.HashMap<>();
+
     private Typeface getTypefaceForKey(String key) {
         switch (key) {
             case "serif":
@@ -7418,7 +7452,43 @@ public class MainActivity extends AppCompatActivity {
             case "sans-serif":
                 return Typeface.create("sans-serif", Typeface.NORMAL);
             default:
+                // Online font URL
+                if (key != null && key.startsWith("http")) {
+                    if (fontCache.containsKey(key)) return fontCache.get(key);
+                    Typeface tf = loadFontFromUrl(key);
+                    if (tf != null) { fontCache.put(key, tf); return tf; }
+                    return Typeface.DEFAULT;
+                }
                 return Typeface.DEFAULT;
+        }
+    }
+
+    private Typeface loadFontFromUrl(String url) {
+        try {
+            String fileName = url.substring(url.lastIndexOf('/') + 1);
+            java.io.File fontDir = new java.io.File(getCacheDir(), "fonts");
+            if (!fontDir.exists()) fontDir.mkdirs();
+            java.io.File fontFile = new java.io.File(fontDir, fileName);
+
+            // Download if not cached
+            if (!fontFile.exists() || fontFile.length() == 0) {
+                java.net.URL u = new java.net.URL(url);
+                java.net.HttpURLConnection conn = (java.net.HttpURLConnection) u.openConnection();
+                conn.setConnectTimeout(15000);
+                conn.setReadTimeout(15000);
+                conn.connect();
+                if (conn.getResponseCode() != 200) return null;
+                java.io.InputStream is = conn.getInputStream();
+                java.io.FileOutputStream fos = new java.io.FileOutputStream(fontFile);
+                byte[] buf = new byte[4096];
+                int len;
+                while ((len = is.read(buf)) > 0) fos.write(buf, 0, len);
+                fos.close(); is.close(); conn.disconnect();
+            }
+            return Typeface.createFromFile(fontFile);
+        } catch (Exception e) {
+            Log.e("#FontLoad", "Error: " + e.getMessage());
+            return null;
         }
     }
 
