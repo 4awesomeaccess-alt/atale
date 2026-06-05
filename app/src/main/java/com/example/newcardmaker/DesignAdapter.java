@@ -49,9 +49,14 @@ public class DesignAdapter extends RecyclerView.Adapter<DesignAdapter.MyViewHold
         if (holder.ivThumbnail != null) {
             String imgPath = model.getImagePath();
             if (!imgPath.isEmpty()) {
+                File imgF = new File(imgPath);
+                // Use file lastModified as signature to bust cache on update
                 Glide.with(holder.itemView.getContext())
-                        .load(imgPath)
+                        .load(imgF)
                         .fitCenter()
+                        .skipMemoryCache(true)
+                        .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.NONE)
+                        .signature(new com.bumptech.glide.signature.ObjectKey(imgF.lastModified()))
                         .placeholder(android.R.drawable.ic_menu_gallery)
                         .into(holder.ivThumbnail);
             } else {
