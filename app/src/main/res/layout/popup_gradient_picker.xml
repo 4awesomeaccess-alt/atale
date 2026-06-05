@@ -134,14 +134,14 @@
                 android:id="@+id/gp_solid_color_grid"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="0.8"
                 android:layout_marginEnd="12dp" />
 
             <!-- Right: Hex + OK + Color Wheel -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="1.2"
                 android:orientation="vertical">
 
                 <!-- Hex row + OK -->
