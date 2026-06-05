@@ -61,57 +61,59 @@
 
     </LinearLayout>
 
-    <!-- ── Tab Row: Solid / Gradient ── -->
+    <!-- ── Tab Row: Solid / Gradient / Shape / None ── -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="#F3F4F6">
+        android:background="@drawable/bg_tabs_container"
+        android:padding="4dp"
+        android:layout_margin="12dp">
 
         <TextView
             android:id="@+id/gp_tab_solid"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="44dp"
             android:layout_weight="1"
-            android:text="⬛ Solid"
-            android:textColor="#FFFFFF"
-            android:textSize="11sp"
+            android:text="🎨 Solid"
+            android:textColor="#2E7D32"
+            android:textSize="13sp"
             android:textStyle="bold"
             android:gravity="center"
-            android:background="#1565C0" />
+            android:background="@drawable/bg_tab_active" />
 
         <TextView
             android:id="@+id/gp_tab_gradient"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="44dp"
             android:layout_weight="1"
             android:text="🌈 Gradient"
             android:textColor="#6B7280"
-            android:textSize="11sp"
+            android:textSize="13sp"
             android:gravity="center"
-            android:background="#FFFFFF" />
+            android:background="@drawable/bg_tab_inactive" />
 
         <TextView
             android:id="@+id/gp_tab_gallery"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="44dp"
             android:layout_weight="1"
             android:text="🔷 Shape"
             android:textColor="#6B7280"
-            android:textSize="11sp"
+            android:textSize="13sp"
             android:gravity="center"
-            android:background="#FFFFFF" />
+            android:background="@drawable/bg_tab_inactive" />
 
         <TextView
             android:id="@+id/gp_tab_none"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="44dp"
             android:layout_weight="1"
-            android:text="✕ None"
+            android:text="⃠ None"
             android:textColor="#6B7280"
-            android:textSize="11sp"
+            android:textSize="13sp"
             android:gravity="center"
-            android:background="#FFFFFF" />
+            android:background="@drawable/bg_tab_inactive" />
 
     </LinearLayout>
 
