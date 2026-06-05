@@ -34,6 +34,9 @@ public class ListActivity extends AppCompatActivity {
     List<DesignModel> designList = new ArrayList<>();
 
     private static final int PICK_JSON_FILE = 100;
+    private static final int PICK_THUMBNAIL_IMG = 101;
+    private DesignModel editingModel = null;
+    private int editingPosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +115,13 @@ public class ListActivity extends AppCompatActivity {
         }
 
         adapter = new DesignAdapter(designList);
+        adapter.setOnEditImageListener((model, position) -> {
+            editingModel = model;
+            editingPosition = position;
+            Intent gi = new Intent(Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(gi, PICK_THUMBNAIL_IMG);
+        });
         recyclerView.setAdapter(adapter);
 
         // Jo file na hoy to toast dekhaado
@@ -137,6 +147,44 @@ public class ListActivity extends AppCompatActivity {
 
             Uri fileUri = data.getData();
             readJsonFromUri(fileUri);
+        }
+
+        // Thumbnail image change
+        if (requestCode == PICK_THUMBNAIL_IMG &&
+                resultCode == RESULT_OK &&
+                data != null &&
+                data.getData() != null &&
+                editingModel != null) {
+
+            Uri imgUri = data.getData();
+            try {
+                // Copy selected image to internal dir
+                File jsonFile = new File(editingModel.getFilePath());
+                String baseName = jsonFile.getName().replace(".json", "");
+                File destImg = new File(jsonFile.getParent(), baseName + "_thumb.jpg");
+
+                InputStream is = getContentResolver().openInputStream(imgUri);
+                java.io.FileOutputStream fos = new java.io.FileOutputStream(destImg);
+                byte[] buf = new byte[4096];
+                int len;
+                while ((len = is.read(buf)) > 0) fos.write(buf, 0, len);
+                fos.close(); is.close();
+
+                // Update .img file to point to new thumbnail path
+                File imgRefFile = new File(jsonFile.getParent(), baseName + ".img");
+                java.io.FileOutputStream imgFos = new java.io.FileOutputStream(imgRefFile);
+                imgFos.write(destImg.getAbsolutePath().getBytes());
+                imgFos.close();
+
+                // Update model + refresh
+                editingModel.setImagePath(destImg.getAbsolutePath());
+                if (editingPosition >= 0) adapter.notifyItemChanged(editingPosition);
+                Toast.makeText(this, "Thumbnail updated!", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Toast.makeText(this, "Image update fail: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+            editingModel = null;
+            editingPosition = -1;
         }
     }
 

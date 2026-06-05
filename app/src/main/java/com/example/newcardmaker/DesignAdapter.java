@@ -23,6 +23,12 @@ public class DesignAdapter extends RecyclerView.Adapter<DesignAdapter.MyViewHold
 
     private List<DesignModel> designList;
 
+    public interface OnEditImageListener {
+        void onEditImage(DesignModel model, int position);
+    }
+    private OnEditImageListener editImageListener;
+    public void setOnEditImageListener(OnEditImageListener l) { this.editImageListener = l; }
+
     public DesignAdapter(List<DesignModel> designList) {
         this.designList = designList;
     }
@@ -86,16 +92,28 @@ public class DesignAdapter extends RecyclerView.Adapter<DesignAdapter.MyViewHold
         input.setSelection(currentName.length());
 
         int pad = (int) (16 * context.getResources().getDisplayMetrics().density);
-        android.widget.FrameLayout container = new android.widget.FrameLayout(context);
-        android.widget.FrameLayout.LayoutParams lp = new android.widget.FrameLayout.LayoutParams(
-                android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
-                android.widget.FrameLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(pad, 0, pad, 0);
-        input.setLayoutParams(lp);
+        android.widget.LinearLayout container = new android.widget.LinearLayout(context);
+        container.setOrientation(android.widget.LinearLayout.VERTICAL);
+        container.setPadding(pad, pad/2, pad, 0);
         container.addView(input);
 
+        // Change image button
+        android.widget.Button btnChangeImg = new android.widget.Button(context);
+        btnChangeImg.setText("🖼 Change Thumbnail Image");
+        btnChangeImg.setTextColor(android.graphics.Color.WHITE);
+        btnChangeImg.setBackgroundColor(android.graphics.Color.parseColor("#1565C0"));
+        android.widget.LinearLayout.LayoutParams blp = new android.widget.LinearLayout.LayoutParams(
+                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
+                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+        blp.setMargins(0, pad, 0, 0);
+        btnChangeImg.setLayoutParams(blp);
+        btnChangeImg.setOnClickListener(v -> {
+            if (editImageListener != null) editImageListener.onEditImage(model, position);
+        });
+        container.addView(btnChangeImg);
+
         new androidx.appcompat.app.AlertDialog.Builder(context)
-                .setTitle("Rename Design")
+                .setTitle("Edit Design")
                 .setView(container)
                 .setPositiveButton("Rename", (dialog, which) -> {
                     String newName = input.getText().toString().trim();
