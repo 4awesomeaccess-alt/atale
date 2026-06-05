@@ -43,7 +43,7 @@ public class DesignAdapter extends RecyclerView.Adapter<DesignAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         DesignModel model = designList.get(position);
-        holder.fileName.setText(model.getFileName());
+        holder.fileName.setText(model.getFileName().replace(".json", ""));
 
         // Thumbnail load
         if (holder.ivThumbnail != null) {
