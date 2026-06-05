@@ -11782,6 +11782,7 @@ public class MainActivity extends AppCompatActivity {
         int density = (int) getResources().getDisplayMetrics().density;
         int margin25 = 25 * density;
         int popupW  = screenW - (margin25 * 2);
+        int screenH = getResources().getDisplayMetrics().heightPixels;
         int maxH    = (int)(screenH * 0.40f);
         int popupH  = maxH;
         android.widget.PopupWindow popup = new android.widget.PopupWindow(
@@ -11795,7 +11796,6 @@ public class MainActivity extends AppCompatActivity {
             selectionControlsPopup.dismiss();
         }
 
-        int screenH = getResources().getDisplayMetrics().heightPixels;
         popup.showAtLocation(getWindow().getDecorView().getRootView(),
             Gravity.BOTTOM | Gravity.START, margin25, 0);
 
