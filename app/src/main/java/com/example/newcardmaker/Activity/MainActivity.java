@@ -11197,7 +11197,7 @@ public class MainActivity extends AppCompatActivity {
             0xFFFF6F00, 0xFF00ACC1, 0xFF5D4037, 0xFF000000,
         };
         if (solidColorGrid != null) {
-            solidColorGrid.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 4));
+            solidColorGrid.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 3));
             solidColorGrid.setAdapter(new androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
                 public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup p, int vt) {
                     int size = (int)(30 * getResources().getDisplayMetrics().density);
