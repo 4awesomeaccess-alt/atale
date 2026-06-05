@@ -16305,6 +16305,9 @@ public class MainActivity extends AppCompatActivity {
         try {
             if (main_image_view == null || main_image_view.getWidth() == 0) return;
 
+            // Remove selection borders before capture
+            deselectAll();
+
             // Capture only the canvas (main_layout) area
             android.view.View captureView = findViewById(R.id.main_layout);
             if (captureView == null) captureView = main_image_view;
