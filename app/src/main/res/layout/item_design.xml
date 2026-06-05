@@ -10,7 +10,7 @@
         android:id="@+id/iv_thumbnail"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:scaleType="centerCrop"
+        android:scaleType="fitCenter"
         android:background="#E0E0E0"
         android:layout_marginEnd="12dp" />
 

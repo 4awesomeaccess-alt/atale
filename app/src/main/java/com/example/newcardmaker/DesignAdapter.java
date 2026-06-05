@@ -51,7 +51,7 @@ public class DesignAdapter extends RecyclerView.Adapter<DesignAdapter.MyViewHold
             if (!imgPath.isEmpty()) {
                 Glide.with(holder.itemView.getContext())
                         .load(imgPath)
-                        .centerCrop()
+                        .fitCenter()
                         .placeholder(android.R.drawable.ic_menu_gallery)
                         .into(holder.ivThumbnail);
             } else {

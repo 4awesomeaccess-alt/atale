@@ -16303,20 +16303,41 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveThumbnail(File jsonFile) {
         try {
+            if (main_image_view == null || main_image_view.getWidth() == 0) return;
+
+            // Capture only the canvas (main_layout) area
             android.view.View captureView = findViewById(R.id.main_layout);
             if (captureView == null) captureView = main_image_view;
-            if (captureView == null || captureView.getWidth() == 0) return;
 
-            android.graphics.Bitmap bmp = android.graphics.Bitmap.createBitmap(
+            // Full capture
+            android.graphics.Bitmap fullBmp = android.graphics.Bitmap.createBitmap(
                     captureView.getWidth(), captureView.getHeight(),
                     android.graphics.Bitmap.Config.ARGB_8888);
-            android.graphics.Canvas canvas = new android.graphics.Canvas(bmp);
+            android.graphics.Canvas canvas = new android.graphics.Canvas(fullBmp);
             captureView.draw(canvas);
+
+            // Crop to main_image_view bounds (the actual card area)
+            int[] mainLoc = new int[2];
+            int[] imgLoc = new int[2];
+            captureView.getLocationOnScreen(mainLoc);
+            main_image_view.getLocationOnScreen(imgLoc);
+
+            int cropX = Math.max(0, imgLoc[0] - mainLoc[0]);
+            int cropY = Math.max(0, imgLoc[1] - mainLoc[1]);
+            int cropW = Math.min(main_image_view.getWidth(), fullBmp.getWidth() - cropX);
+            int cropH = Math.min(main_image_view.getHeight(), fullBmp.getHeight() - cropY);
+
+            android.graphics.Bitmap bmp;
+            if (cropW > 0 && cropH > 0) {
+                bmp = android.graphics.Bitmap.createBitmap(fullBmp, cropX, cropY, cropW, cropH);
+            } else {
+                bmp = fullBmp;
+            }
 
             String baseName = jsonFile.getName().replace(".json", "");
             File thumbFile = new File(jsonFile.getParent(), baseName + "_thumb.jpg");
             java.io.FileOutputStream tFos = new java.io.FileOutputStream(thumbFile);
-            bmp.compress(android.graphics.Bitmap.CompressFormat.JPEG, 80, tFos);
+            bmp.compress(android.graphics.Bitmap.CompressFormat.JPEG, 85, tFos);
             tFos.close();
 
             // Write thumbnail path to .img file
