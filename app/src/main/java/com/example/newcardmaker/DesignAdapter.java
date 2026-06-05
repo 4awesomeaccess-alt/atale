@@ -135,6 +135,7 @@ public class DesignAdapter extends RecyclerView.Adapter<DesignAdapter.MyViewHold
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
+    }
 
     // Share File Function — WhatsApp dialog sathe
     private void shareJsonFile(Context context, String filePath) {
