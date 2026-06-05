@@ -16296,6 +16296,37 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // Save page thumbnail screenshot
+        saveThumbnail(file);
+    }
+
+    private void saveThumbnail(File jsonFile) {
+        try {
+            android.view.View captureView = findViewById(R.id.main_layout);
+            if (captureView == null) captureView = main_image_view;
+            if (captureView == null || captureView.getWidth() == 0) return;
+
+            android.graphics.Bitmap bmp = android.graphics.Bitmap.createBitmap(
+                    captureView.getWidth(), captureView.getHeight(),
+                    android.graphics.Bitmap.Config.ARGB_8888);
+            android.graphics.Canvas canvas = new android.graphics.Canvas(bmp);
+            captureView.draw(canvas);
+
+            String baseName = jsonFile.getName().replace(".json", "");
+            File thumbFile = new File(jsonFile.getParent(), baseName + "_thumb.jpg");
+            java.io.FileOutputStream tFos = new java.io.FileOutputStream(thumbFile);
+            bmp.compress(android.graphics.Bitmap.CompressFormat.JPEG, 80, tFos);
+            tFos.close();
+
+            // Write thumbnail path to .img file
+            File imgRefFile = new File(jsonFile.getParent(), baseName + ".img");
+            java.io.FileOutputStream imgFos = new java.io.FileOutputStream(imgRefFile);
+            imgFos.write(thumbFile.getAbsolutePath().getBytes());
+            imgFos.close();
+        } catch (Exception e) {
+            Log.e("#Thumbnail", "Error: " + e.getMessage());
+        }
     }
 
     private void importFromJson(String filePath) {
