@@ -10951,6 +10951,12 @@ public class MainActivity extends AppCompatActivity {
         }
         // Apply
         targetView.setBackground(new android.graphics.drawable.BitmapDrawable(getResources(), src));
+        // ✅ Save shape url to tag (for JSON persistence)
+        if (urlTag != null && !urlTag.isEmpty()) {
+            targetView.setTag(R.id.btn_sticker_gallery, urlTag);
+            targetView.setTag(R.id.btn_bg_color, null);
+            targetView.setTag(R.id.btn_open_lock_panel, null);
+        }
         exportToJson();
         // Show color row
         selectedBmp[0] = src;
