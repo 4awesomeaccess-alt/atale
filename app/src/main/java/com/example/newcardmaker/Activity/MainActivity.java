@@ -11239,7 +11239,7 @@ public class MainActivity extends AppCompatActivity {
             // ✅ If shape (bg image) present → apply color as tint on the shape
             if (hasTextBgImage(targetView)) {
                 String shapeUrl = targetView.getTag(R.id.btn_sticker_gallery).toString();
-                final int tintColor = colorWithAlpha;
+                final int solidTintColor = colorWithAlpha;
                 Glide.with(MainActivity.this).asBitmap().load(shapeUrl)
                     .into(new com.bumptech.glide.request.target.CustomTarget<android.graphics.Bitmap>() {
                         @Override public void onResourceReady(@androidx.annotation.NonNull android.graphics.Bitmap bitmap,
@@ -11250,10 +11250,10 @@ public class MainActivity extends AppCompatActivity {
                             android.graphics.Bitmap result = scaled.copy(android.graphics.Bitmap.Config.ARGB_8888, true);
                             android.graphics.Canvas cv = new android.graphics.Canvas(result);
                             android.graphics.Paint pt = new android.graphics.Paint();
-                            pt.setColorFilter(new android.graphics.PorterDuffColorFilter(tintColor, android.graphics.PorterDuff.Mode.MULTIPLY));
+                            pt.setColorFilter(new android.graphics.PorterDuffColorFilter(solidTintColor, android.graphics.PorterDuff.Mode.MULTIPLY));
                             cv.drawBitmap(scaled, 0, 0, pt);
                             targetView.setBackground(new android.graphics.drawable.BitmapDrawable(getResources(), result));
-                            targetView.setTag(R.id.btn_text_color, new int[]{tintColor, 255});
+                            targetView.setTag(R.id.btn_text_color, new int[]{solidTintColor, 255});
                             exportToJson();
                         }
                         @Override public void onLoadCleared(@androidx.annotation.Nullable android.graphics.drawable.Drawable p) {}
