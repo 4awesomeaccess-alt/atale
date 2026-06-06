@@ -269,28 +269,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="12dp"
+        android:padding="8dp"
         android:visibility="gone">
 
         <!-- Gradient Preview (live) -->
         <View
             android:id="@+id/gp_gradient_preview"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:layout_height="30dp"
             android:background="@drawable/bg_color_preview"
-            android:layout_marginBottom="10dp" />
+            android:layout_marginBottom="6dp" />
 
         <!-- Color 1 / Color 2 selectable tabs -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="6dp">
 
             <LinearLayout
                 android:id="@+id/gp_color1_tab"
                 android:layout_width="0dp"
-                android:layout_height="44dp"
+                android:layout_height="38dp"
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
@@ -319,7 +319,7 @@
             <LinearLayout
                 android:id="@+id/gp_color2_tab"
                 android:layout_width="0dp"
-                android:layout_height="44dp"
+                android:layout_height="38dp"
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
@@ -364,8 +364,8 @@
         <com.example.newcardmaker.ColorWheelView
             android:id="@+id/gp_grad_wheel"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginBottom="10dp" />
+            android:layout_height="110dp"
+            android:layout_marginBottom="6dp" />
 
         <!-- Direction Row -->
         <LinearLayout
@@ -373,7 +373,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="6dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -383,10 +383,10 @@
                 android:textSize="12sp"
                 android:layout_marginEnd="8dp" />
 
-            <TextView android:id="@+id/gp_dir_lr" android:layout_width="0dp" android:layout_weight="1" android:layout_height="32dp" android:text="→" android:textColor="#FFFFFF" android:textSize="14sp" android:gravity="center" android:background="@drawable/bg_tab_active" android:layout_marginEnd="4dp" />
-            <TextView android:id="@+id/gp_dir_tb" android:layout_width="0dp" android:layout_weight="1" android:layout_height="32dp" android:text="↓" android:textColor="#6B7280" android:textSize="14sp" android:gravity="center" android:background="@drawable/bg_tab_inactive" android:layout_marginEnd="4dp" />
-            <TextView android:id="@+id/gp_dir_diag" android:layout_width="0dp" android:layout_weight="1" android:layout_height="32dp" android:text="↘" android:textColor="#6B7280" android:textSize="14sp" android:gravity="center" android:background="@drawable/bg_tab_inactive" android:layout_marginEnd="4dp" />
-            <TextView android:id="@+id/gp_dir_rad" android:layout_width="0dp" android:layout_weight="1" android:layout_height="32dp" android:text="◎" android:textColor="#6B7280" android:textSize="14sp" android:gravity="center" android:background="@drawable/bg_tab_inactive" />
+            <TextView android:id="@+id/gp_dir_lr" android:layout_width="0dp" android:layout_weight="1" android:layout_height="30dp" android:text="→" android:textColor="#FFFFFF" android:textSize="14sp" android:gravity="center" android:background="@drawable/bg_tab_active" android:layout_marginEnd="4dp" />
+            <TextView android:id="@+id/gp_dir_tb" android:layout_width="0dp" android:layout_weight="1" android:layout_height="30dp" android:text="↓" android:textColor="#6B7280" android:textSize="14sp" android:gravity="center" android:background="@drawable/bg_tab_inactive" android:layout_marginEnd="4dp" />
+            <TextView android:id="@+id/gp_dir_diag" android:layout_width="0dp" android:layout_weight="1" android:layout_height="30dp" android:text="↘" android:textColor="#6B7280" android:textSize="14sp" android:gravity="center" android:background="@drawable/bg_tab_inactive" android:layout_marginEnd="4dp" />
+            <TextView android:id="@+id/gp_dir_rad" android:layout_width="0dp" android:layout_weight="1" android:layout_height="30dp" android:text="◎" android:textColor="#6B7280" android:textSize="14sp" android:gravity="center" android:background="@drawable/bg_tab_inactive" />
 
         </LinearLayout>
 
@@ -394,14 +394,14 @@
         <TextView
             android:id="@+id/gp_gradient_apply"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="36dp"
             android:text="Apply Gradient"
             android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:textStyle="bold"
             android:gravity="center"
             android:background="@drawable/bg_continue_btn"
-            android:layout_marginBottom="10dp" />
+            android:layout_marginBottom="6dp" />
 
         <!-- Gradient Opacity -->
         <LinearLayout
