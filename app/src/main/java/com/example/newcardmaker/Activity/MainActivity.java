@@ -11581,7 +11581,7 @@ public class MainActivity extends AppCompatActivity {
                     db.setBackgroundResource(R.drawable.bg_tab_inactive);
                     db.setTextColor(0xFF6B7280);
                 }
-                dirBtns[idx].setBackgroundResource(R.drawable.bg_tab_active);
+                dirBtns[idx].setBackgroundResource(R.drawable.bg_continue_btn);
                 dirBtns[idx].setTextColor(0xFFFFFFFF);
                 updateGradPreview.run();
             });
