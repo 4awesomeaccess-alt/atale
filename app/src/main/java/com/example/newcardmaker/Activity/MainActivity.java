@@ -11762,7 +11762,16 @@ public class MainActivity extends AppCompatActivity {
         android.widget.TextView tabGallery = root.findViewById(R.id.gp_tab_gallery);
         android.widget.LinearLayout panelGallery = root.findViewById(R.id.gp_panel_gallery);
         android.widget.LinearLayout gpGalleryOpen = root.findViewById(R.id.gp_gallery_open);
-        final int[] padX = {0}, padY = {0};
+        // Init padX/padY from saved padding tag (dp values)
+        int initPadX = 0, initPadY = 0;
+        Object padInitTag = targetView.getTag(R.id.btn_location);
+        if (padInitTag instanceof int[]) {
+            int[] pp = (int[]) padInitTag;
+            float dens = getResources().getDisplayMetrics().density;
+            initPadX = (int)(pp[0] / dens);
+            initPadY = (int)((pp.length > 1 ? pp[1] : pp[0]) / dens);
+        }
+        final int[] padX = {initPadX}, padY = {initPadY};
 
         androidx.recyclerview.widget.RecyclerView gpBrushGrid = root.findViewById(R.id.gp_brush_grid);
         android.widget.ProgressBar gpBrushLoading = root.findViewById(R.id.gp_brush_loading);
@@ -11881,16 +11890,24 @@ public class MainActivity extends AppCompatActivity {
             exportToJson();
         };
 
-        if (seekPadX != null) seekPadX.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
-            public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) { padX[0]=p; if(tvPadX!=null)tvPadX.setText(String.valueOf(p)); applyPadding.run(); }
-            public void onStartTrackingTouch(android.widget.SeekBar s) {}
-            public void onStopTrackingTouch(android.widget.SeekBar s) {}
-        });
-        if (seekPadY != null) seekPadY.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
-            public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) { padY[0]=p; if(tvPadY!=null)tvPadY.setText(String.valueOf(p)); applyPadding.run(); }
-            public void onStartTrackingTouch(android.widget.SeekBar s) {}
-            public void onStopTrackingTouch(android.widget.SeekBar s) {}
-        });
+        if (seekPadX != null) {
+            seekPadX.setProgress(padX[0]);
+            if (tvPadX != null) tvPadX.setText(String.valueOf(padX[0]));
+            seekPadX.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+                public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) { padX[0]=p; if(tvPadX!=null)tvPadX.setText(String.valueOf(p)); applyPadding.run(); }
+                public void onStartTrackingTouch(android.widget.SeekBar s) {}
+                public void onStopTrackingTouch(android.widget.SeekBar s) {}
+            });
+        }
+        if (seekPadY != null) {
+            seekPadY.setProgress(padY[0]);
+            if (tvPadY != null) tvPadY.setText(String.valueOf(padY[0]));
+            seekPadY.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener() {
+                public void onProgressChanged(android.widget.SeekBar s, int p, boolean f) { padY[0]=p; if(tvPadY!=null)tvPadY.setText(String.valueOf(p)); applyPadding.run(); }
+                public void onStartTrackingTouch(android.widget.SeekBar s) {}
+                public void onStopTrackingTouch(android.widget.SeekBar s) {}
+            });
+        }
         if (btnPadXM != null) btnPadXM.setOnClickListener(v -> { if(seekPadX!=null&&seekPadX.getProgress()>0){seekPadX.setProgress(seekPadX.getProgress()-1);} });
         if (btnPadXP != null) btnPadXP.setOnClickListener(v -> { if(seekPadX!=null){seekPadX.setProgress(seekPadX.getProgress()+1);} });
         if (btnPadYM != null) btnPadYM.setOnClickListener(v -> { if(seekPadY!=null&&seekPadY.getProgress()>0){seekPadY.setProgress(seekPadY.getProgress()-1);} });
