@@ -11258,11 +11258,26 @@ public class MainActivity extends AppCompatActivity {
 
         // ── Preset color grid (4 columns) ──
         final int[] presetColors = {
-            0xFF1565C0, 0xFF00897B, 0xFFFF5252, 0xFF8E24AA,
-            0xFF558B2F, 0xFFFDD835, 0xFF6A1B9A, 0xFF2E7D32,
-            0xFFFDD835, 0xFF1565C0, 0xFF558B2F, 0xFFC0CA33,
-            0xFFD32F2F, 0xFFE91E63, 0xFF3949AB, 0xFF827717,
-            0xFFFF6F00, 0xFF00ACC1, 0xFF5D4037, 0xFF000000,
+            // Row: Reds & Pinks
+            0xFFD32F2F, 0xFFE53935, 0xFFFF5252, 0xFFFF1744, 0xFFE91E63, 0xFFF06292,
+            0xFFAD1457, 0xFFC2185B, 0xFFFF80AB, 0xFFEC407A,
+            // Purples
+            0xFF8E24AA, 0xFF9C27B0, 0xFF6A1B9A, 0xFF7B1FA2, 0xFFBA68C8, 0xFFCE93D8,
+            0xFF673AB7, 0xFF512DA8, 0xFF9575CD, 0xFF7E57C2,
+            // Blues
+            0xFF3949AB, 0xFF3F51B5, 0xFF1565C0, 0xFF1976D2, 0xFF2196F3, 0xFF42A5F5,
+            0xFF0288D1, 0xFF039BE5, 0xFF00ACC1, 0xFF00BCD4,
+            // Teals & Greens
+            0xFF00897B, 0xFF009688, 0xFF26A69A, 0xFF2E7D32, 0xFF388E3C, 0xFF43A047,
+            0xFF558B2F, 0xFF689F38, 0xFF7CB342, 0xFF8BC34A,
+            // Yellows & Limes
+            0xFFC0CA33, 0xFFAFB42B, 0xFFFDD835, 0xFFFBC02D, 0xFFF9A825, 0xFFFFEB3B,
+            // Oranges & Browns
+            0xFFFF6F00, 0xFFFB8C00, 0xFFF57C00, 0xFFEF6C00, 0xFFFF9800, 0xFFFFA726,
+            0xFF6D4C41, 0xFF5D4037, 0xFF795548, 0xFF8D6E63,
+            // Neutrals
+            0xFF000000, 0xFF424242, 0xFF616161, 0xFF9E9E9E, 0xFFBDBDBD, 0xFFFFFFFF,
+            0xFF263238, 0xFF455A64, 0xFF607D8B, 0xFF90A4AE,
         };
         if (solidColorGrid != null) {
             solidColorGrid.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 3));
@@ -11281,6 +11296,7 @@ public class MainActivity extends AppCompatActivity {
                     android.graphics.drawable.GradientDrawable d = new android.graphics.drawable.GradientDrawable();
                     d.setShape(android.graphics.drawable.GradientDrawable.OVAL);
                     d.setColor(color);
+                    d.setStroke((int)(1 * getResources().getDisplayMetrics().density), 0x33000000);
                     h.itemView.setBackground(d);
                     h.itemView.setOnClickListener(v -> {
                         solidColor[0] = color;
