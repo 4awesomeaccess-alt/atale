@@ -11578,10 +11578,10 @@ public class MainActivity extends AppCompatActivity {
             dirBtns[i].setOnClickListener(v -> {
                 gradDirection[0] = idx;
                 for (android.widget.TextView db : dirBtns) {
-                    db.setBackgroundColor(0xFF374151);
-                    db.setTextColor(0xFF9CA3AF);
+                    db.setBackgroundResource(R.drawable.bg_tab_inactive);
+                    db.setTextColor(0xFF6B7280);
                 }
-                dirBtns[idx].setBackgroundColor(0xFF607D8B);
+                dirBtns[idx].setBackgroundResource(R.drawable.bg_tab_active);
                 dirBtns[idx].setTextColor(0xFFFFFFFF);
                 updateGradPreview.run();
             });
