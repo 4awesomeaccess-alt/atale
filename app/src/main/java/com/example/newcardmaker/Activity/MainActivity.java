@@ -17501,6 +17501,10 @@ public class MainActivity extends AppCompatActivity {
             textView.setTag(R.id.btn_bg_color, gradGd2);
             textView.setTag(R.id.btn_open_lock_panel, new int[]{gc1, gc2, gdir, galpha});
         }
+
+        // ── Padding load
+        int savedPadLeft   = obj.optInt("paddingLeft",   20);
+        int savedPadTop    = obj.optInt("paddingTop",     20);
         int savedPadRight  = obj.optInt("paddingRight",   savedPadLeft);
         int savedPadBottom = obj.optInt("paddingBottom",  savedPadTop);
 
