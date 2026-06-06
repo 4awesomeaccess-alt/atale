@@ -11235,6 +11235,33 @@ public class MainActivity extends AppCompatActivity {
             int c = solidColor[0];
             int colorWithAlpha = Color.argb(solidAlpha[0],
                 Color.red(c), Color.green(c), Color.blue(c));
+
+            // ✅ If shape (bg image) present → apply color as tint on the shape
+            if (hasTextBgImage(targetView)) {
+                String shapeUrl = targetView.getTag(R.id.btn_sticker_gallery).toString();
+                final int tintColor = colorWithAlpha;
+                Glide.with(MainActivity.this).asBitmap().load(shapeUrl)
+                    .into(new com.bumptech.glide.request.target.CustomTarget<android.graphics.Bitmap>() {
+                        @Override public void onResourceReady(@androidx.annotation.NonNull android.graphics.Bitmap bitmap,
+                                @androidx.annotation.Nullable com.bumptech.glide.request.transition.Transition<? super android.graphics.Bitmap> t) {
+                            int vw = targetView.getWidth() > 0 ? targetView.getWidth() : 300;
+                            int vh = targetView.getHeight() > 0 ? targetView.getHeight() : 100;
+                            android.graphics.Bitmap scaled = android.graphics.Bitmap.createScaledBitmap(bitmap, vw, vh, true);
+                            android.graphics.Bitmap result = scaled.copy(android.graphics.Bitmap.Config.ARGB_8888, true);
+                            android.graphics.Canvas cv = new android.graphics.Canvas(result);
+                            android.graphics.Paint pt = new android.graphics.Paint();
+                            pt.setColorFilter(new android.graphics.PorterDuffColorFilter(tintColor, android.graphics.PorterDuff.Mode.MULTIPLY));
+                            cv.drawBitmap(scaled, 0, 0, pt);
+                            targetView.setBackground(new android.graphics.drawable.BitmapDrawable(getResources(), result));
+                            targetView.setTag(R.id.btn_text_color, new int[]{tintColor, 255});
+                            exportToJson();
+                        }
+                        @Override public void onLoadCleared(@androidx.annotation.Nullable android.graphics.drawable.Drawable p) {}
+                    });
+                return;
+            }
+
+            // No shape → solid background
             GradientDrawable gd = new GradientDrawable();
             gd.setColor(colorWithAlpha);
             Object borderTag = targetView.getTag(R.id.btn_add_sticker);
