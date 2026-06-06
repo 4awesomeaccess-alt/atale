@@ -11832,6 +11832,7 @@ public class MainActivity extends AppCompatActivity {
                                 pt2.setColorFilter(new android.graphics.PorterDuffColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY));
                                 cv3.drawBitmap(gpSelectedBmp[0], 0, 0, pt2);
                                 targetView.setBackground(new android.graphics.drawable.BitmapDrawable(getResources(), res2));
+                                targetView.setTag(R.id.btn_text_color, new int[]{color, 255});
                                 exportToJson();
                             }
                         }
@@ -11852,6 +11853,8 @@ public class MainActivity extends AppCompatActivity {
                     pt.setColorFilter(new android.graphics.PorterDuffColorFilter(c, android.graphics.PorterDuff.Mode.MULTIPLY));
                     cv2.drawBitmap(gpSelectedBmp[0], 0, 0, pt);
                     targetView.setBackground(new android.graphics.drawable.BitmapDrawable(getResources(), result));
+                    // ✅ Save tint info for JSON persistence
+                    targetView.setTag(R.id.btn_text_color, new int[]{c, 255});
                     exportToJson();
                 }
             });
@@ -20517,7 +20520,7 @@ public class MainActivity extends AppCompatActivity {
             Color.red(tintData[0]),
             Color.green(tintData[0]),
             Color.blue(tintData[0]));
-        bg.setColorFilter(tint, android.graphics.PorterDuff.Mode.SRC_ATOP);
+        bg.setColorFilter(tint, android.graphics.PorterDuff.Mode.MULTIPLY);
         tv.invalidate();
     }
 
