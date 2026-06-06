@@ -276,71 +276,88 @@
         <View
             android:id="@+id/gp_gradient_preview"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="26dp"
             android:background="@drawable/bg_color_preview"
             android:layout_marginBottom="6dp" />
 
-        <!-- Color 1 / Color 2 selectable tabs -->
+        <!-- Wheel (left) + Color1/Color2 tabs (right) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginBottom="6dp">
 
-            <LinearLayout
-                android:id="@+id/gp_color1_tab"
+            <!-- Color Wheel -->
+            <com.example.newcardmaker.ColorWheelView
+                android:id="@+id/gp_grad_wheel"
                 android:layout_width="0dp"
-                android:layout_height="38dp"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:background="@drawable/bg_tab_active"
-                android:padding="6dp"
-                android:layout_marginEnd="6dp">
+                android:layout_weight="1.4"
+                android:layout_height="110dp"
+                android:layout_marginEnd="8dp" />
 
-                <View
-                    android:id="@+id/gp_color1_box"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:background="@drawable/bg_color_preview"
-                    android:layout_marginEnd="6dp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Color 1"
-                    android:textColor="#2E7D32"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
+            <!-- Color 1 / Color 2 vertical tabs -->
             <LinearLayout
-                android:id="@+id/gp_color2_tab"
                 android:layout_width="0dp"
-                android:layout_height="38dp"
                 android:layout_weight="1"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:background="@drawable/bg_tab_inactive"
-                android:padding="6dp">
+                android:layout_height="110dp"
+                android:orientation="vertical">
 
-                <View
-                    android:id="@+id/gp_color2_box"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:background="@drawable/bg_color_preview"
-                    android:layout_marginEnd="6dp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                <LinearLayout
+                    android:id="@+id/gp_color1_tab"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:text="Color 2"
-                    android:textColor="#6B7280"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_tab_active"
+                    android:padding="6dp"
+                    android:layout_marginBottom="6dp">
+
+                    <View
+                        android:id="@+id/gp_color1_box"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:background="@drawable/bg_color_preview"
+                        android:layout_marginEnd="6dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Color 1"
+                        android:textColor="#2E7D32"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/gp_color2_tab"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_tab_inactive"
+                    android:padding="6dp">
+
+                    <View
+                        android:id="@+id/gp_color2_box"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:background="@drawable/bg_color_preview"
+                        android:layout_marginEnd="6dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Color 2"
+                        android:textColor="#6B7280"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -359,13 +376,6 @@
             android:layout_height="0dp"
             android:visibility="gone"
             android:text="0000FF" />
-
-        <!-- Color Wheel (applies to selected color tab) -->
-        <com.example.newcardmaker.ColorWheelView
-            android:id="@+id/gp_grad_wheel"
-            android:layout_width="match_parent"
-            android:layout_height="110dp"
-            android:layout_marginBottom="6dp" />
 
         <!-- Direction Row -->
         <LinearLayout
