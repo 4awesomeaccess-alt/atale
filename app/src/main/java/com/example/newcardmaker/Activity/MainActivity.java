@@ -17815,6 +17815,13 @@ public class MainActivity extends AppCompatActivity {
         final int fStrokeColor = strokeColor;
         final boolean fIsLocked = isLocked;
 
+        // ── Gradient info (if present)
+        final boolean fHasGrad = obj.optBoolean("hasGradient", false);
+        final int fGradC1 = obj.optInt("gradColor1", Color.RED);
+        final int fGradC2 = obj.optInt("gradColor2", Color.BLUE);
+        final int fGradDir = obj.optInt("gradDirection", 0);
+        final int fGradAlpha = obj.optInt("gradAlpha", 255);
+
         // ── post() — layout ready પછી apply
         textView.post(() -> {
 
@@ -17834,6 +17841,29 @@ public class MainActivity extends AppCompatActivity {
                 applyBorderStyle(gd, fBorderStyle);
             }
             textView.setBackground(gd);
+
+            // ── Gradient restore (overrides solid)
+            if (fHasGrad) {
+                GradientDrawable.Orientation go;
+                switch (fGradDir) {
+                    case 1:  go = GradientDrawable.Orientation.TOP_BOTTOM; break;
+                    case 2:  go = GradientDrawable.Orientation.TL_BR; break;
+                    default: go = GradientDrawable.Orientation.LEFT_RIGHT; break;
+                }
+                GradientDrawable ggd;
+                if (fGradDir == 3) {
+                    ggd = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{fGradC1, fGradC2});
+                    ggd.setGradientType(GradientDrawable.RADIAL_GRADIENT);
+                    ggd.setGradientRadius(500f);
+                } else {
+                    ggd = new GradientDrawable(go, new int[]{fGradC1, fGradC2});
+                }
+                applyBorderStyle(ggd, fBorderStyle);
+                ggd.setAlpha(fGradAlpha);
+                textView.setBackground(ggd);
+                textView.setTag(R.id.btn_bg_color, ggd);
+                textView.setTag(R.id.btn_open_lock_panel, new int[]{fGradC1, fGradC2, fGradDir, fGradAlpha});
+            }
 
             // ── Stroke re-apply (gradient safe)
             textView.setStrokeWidth(fStrokeW);
