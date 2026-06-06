@@ -11944,14 +11944,17 @@ public class MainActivity extends AppCompatActivity {
             tabSolid.setBackgroundResource(R.drawable.bg_tab_active); tabSolid.setTextColor(0xFF2E7D32);
             tabGradient.setBackgroundResource(R.drawable.bg_tab_inactive); tabGradient.setTextColor(0xFF6B7280);
             tabNone.setBackgroundResource(R.drawable.bg_tab_inactive); tabNone.setTextColor(0xFF6B7280);
+            if (tabGallery != null) { tabGallery.setBackgroundResource(R.drawable.bg_tab_inactive); tabGallery.setTextColor(0xFF6B7280); }
         });
         tabGradient.setOnClickListener(v -> {
             panelSolid.setVisibility(android.view.View.GONE);
             panelGradient.setVisibility(android.view.View.VISIBLE);
             panelImage.setVisibility(android.view.View.GONE);
+            if (panelGallery != null) panelGallery.setVisibility(android.view.View.GONE);
             tabGradient.setBackgroundResource(R.drawable.bg_tab_active); tabGradient.setTextColor(0xFF2E7D32);
             tabSolid.setBackgroundResource(R.drawable.bg_tab_inactive); tabSolid.setTextColor(0xFF6B7280);
             tabNone.setBackgroundResource(R.drawable.bg_tab_inactive); tabNone.setTextColor(0xFF6B7280);
+            if (tabGallery != null) { tabGallery.setBackgroundResource(R.drawable.bg_tab_inactive); tabGallery.setTextColor(0xFF6B7280); }
         });
         tabNone.setOnClickListener(v -> {
             targetView.setBackground(null);
