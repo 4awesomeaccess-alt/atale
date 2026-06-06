@@ -11617,6 +11617,9 @@ public class MainActivity extends AppCompatActivity {
             targetView.setTag(R.id.btn_sticker_gallery, "");
             // ✅ Gradient tag ma save karo - restore mate
             targetView.setTag(R.id.btn_bg_color, gradGd);
+            // ✅ Gradient info save (color1, color2, direction, alpha) for JSON persistence
+            targetView.setTag(R.id.btn_open_lock_panel,
+                    new int[]{gradColor1[0], gradColor2[0], gradDirection[0], gradAlpha[0]});
             targetView.setBackground(gradGd);
             exportToJson();
         });
@@ -16651,6 +16654,21 @@ public class MainActivity extends AppCompatActivity {
                         int savedBgColor = getStoredBackgroundColor(tv);
                         obj.put("bgColor", savedBgColor);
 
+                        // ── Gradient info (if applied)
+                        Object gradInfoTag = tv.getTag(R.id.btn_open_lock_panel);
+                        if (gradInfoTag instanceof int[]) {
+                            int[] gi = (int[]) gradInfoTag;
+                            if (gi.length >= 4) {
+                                obj.put("hasGradient", true);
+                                obj.put("gradColor1", gi[0]);
+                                obj.put("gradColor2", gi[1]);
+                                obj.put("gradDirection", gi[2]);
+                                obj.put("gradAlpha", gi[3]);
+                            }
+                        } else {
+                            obj.put("hasGradient", false);
+                        }
+
                         // ── Padding — user value tag માંથી
                         Object padTag = tv.getTag(R.id.btn_location);
                         if (padTag instanceof int[]) {
@@ -17457,9 +17475,32 @@ public class MainActivity extends AppCompatActivity {
         textView.setTag(bgColor);                          // bg color tag
         textView.setTag(R.id.btn_add_sticker, borderStyle); // border style tag
 
-// ── Padding load
-        int savedPadLeft   = obj.optInt("paddingLeft",   20);
-        int savedPadTop    = obj.optInt("paddingTop",     20);
+        // ── Gradient restore (overrides solid bg if present)
+        if (obj.optBoolean("hasGradient", false)) {
+            int gc1 = obj.optInt("gradColor1", Color.RED);
+            int gc2 = obj.optInt("gradColor2", Color.BLUE);
+            int gdir = obj.optInt("gradDirection", 0);
+            int galpha = obj.optInt("gradAlpha", 255);
+            GradientDrawable.Orientation gorient;
+            switch (gdir) {
+                case 1:  gorient = GradientDrawable.Orientation.TOP_BOTTOM; break;
+                case 2:  gorient = GradientDrawable.Orientation.TL_BR; break;
+                default: gorient = GradientDrawable.Orientation.LEFT_RIGHT; break;
+            }
+            GradientDrawable gradGd2;
+            if (gdir == 3) {
+                gradGd2 = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{gc1, gc2});
+                gradGd2.setGradientType(GradientDrawable.RADIAL_GRADIENT);
+                gradGd2.setGradientRadius(500f);
+            } else {
+                gradGd2 = new GradientDrawable(gorient, new int[]{gc1, gc2});
+            }
+            applyBorderStyle(gradGd2, borderStyle);
+            gradGd2.setAlpha(galpha);
+            textView.setBackground(gradGd2);
+            textView.setTag(R.id.btn_bg_color, gradGd2);
+            textView.setTag(R.id.btn_open_lock_panel, new int[]{gc1, gc2, gdir, galpha});
+        }
         int savedPadRight  = obj.optInt("paddingRight",   savedPadLeft);
         int savedPadBottom = obj.optInt("paddingBottom",  savedPadTop);
 
