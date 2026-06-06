@@ -16671,20 +16671,6 @@ public class MainActivity extends AppCompatActivity {
                             obj.put("hasGradient", false);
                         }
 
-                        // ── Text BG image (shape) url
-                        Object bgImgTag = tv.getTag(R.id.btn_sticker_gallery);
-                        String bgImgUrl = bgImgTag != null ? bgImgTag.toString() : "";
-                        obj.put("textBgImage", bgImgUrl);
-                        // ── BG image tint (if any)
-                        Object tintTag = tv.getTag(R.id.btn_text_color);
-                        if (tintTag instanceof int[]) {
-                            int[] td = (int[]) tintTag;
-                            if (td.length >= 2) {
-                                obj.put("bgTintColor", td[0]);
-                                obj.put("bgTintAlpha", td[1]);
-                            }
-                        }
-
                         // ── Padding — user value tag માંથી
                         Object padTag = tv.getTag(R.id.btn_location);
                         if (padTag instanceof int[]) {
@@ -17431,15 +17417,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        String bgImageUri = obj.optString("bgImageUri", "");
-        if (!bgImageUri.isEmpty()) {
-            final StrokeTextView finalTextView = textView;
-            Uri bgUri = Uri.parse(bgImageUri);
-            // post — view add + measure પછી load
-            mainLayout.post(() -> applyTextBgImage(bgUri, finalTextView));
-        }
-
-
         boolean isLocked = obj.optBoolean("isLocked", false);
         if (isLocked) {
             // post — view add થઈ ગયા પછી lock apply
@@ -17519,7 +17496,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // ── Text BG image (shape) restore
-        String fTextBgImg1 = obj.optString("textBgImage", "");
+        String fTextBgImg1 = obj.optString("bgImageUri", "");
         if (!fTextBgImg1.isEmpty()) {
             textView.setTag(R.id.btn_sticker_gallery, fTextBgImg1);
             int tintC1 = obj.optInt("bgTintColor", 0);
@@ -17851,11 +17828,6 @@ public class MainActivity extends AppCompatActivity {
         final int fGradDir = obj.optInt("gradDirection", 0);
         final int fGradAlpha = obj.optInt("gradAlpha", 255);
 
-        // ── Text BG image (shape) info
-        final String fTextBgImg = obj.optString("textBgImage", "");
-        final int fBgTintC = obj.optInt("bgTintColor", 0);
-        final int fBgTintA = obj.optInt("bgTintAlpha", 0);
-
         // ── post() — layout ready પછી apply
         textView.post(() -> {
 
@@ -17897,18 +17869,6 @@ public class MainActivity extends AppCompatActivity {
                 textView.setBackground(ggd);
                 textView.setTag(R.id.btn_bg_color, ggd);
                 textView.setTag(R.id.btn_open_lock_panel, new int[]{fGradC1, fGradC2, fGradDir, fGradAlpha});
-            }
-
-            // ── Text BG image (shape) restore
-            if (!fTextBgImg.isEmpty()) {
-                textView.setTag(R.id.btn_sticker_gallery, fTextBgImg);
-                if (fBgTintC != 0 || fBgTintA != 0) {
-                    textView.setTag(R.id.btn_text_color, new int[]{fBgTintC, fBgTintA});
-                }
-                try {
-                    applyTextBgImage(Uri.parse(fTextBgImg), textView);
-                    reapplyTint(textView);
-                } catch (Exception ignored) {}
             }
 
             // ── Stroke re-apply (gradient safe)
