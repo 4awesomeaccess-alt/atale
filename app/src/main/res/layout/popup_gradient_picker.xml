@@ -267,87 +267,105 @@
     <LinearLayout
         android:id="@+id/gp_panel_gradient"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="8dp"
+        android:padding="12dp"
         android:visibility="gone">
 
-        <!-- Gradient Preview -->
+        <!-- Gradient Preview (live) -->
         <View
             android:id="@+id/gp_gradient_preview"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginBottom="6dp" />
+            android:layout_height="44dp"
+            android:background="@drawable/bg_color_preview"
+            android:layout_marginBottom="10dp" />
 
-        <!-- Color 1 + Color 2 Row -->
+        <!-- Color 1 / Color 2 selectable tabs -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="6dp">
+            android:layout_marginBottom="10dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Color 1:"
-                android:textColor="#CFD8DC"
-                android:textSize="10sp"
-                android:layout_marginEnd="4dp" />
-
-            <View
-                android:id="@+id/gp_color1_box"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:background="#FF0000"
-                android:layout_marginEnd="6dp" />
-
-            <EditText
-                android:id="@+id/gp_color1_hex"
+            <LinearLayout
+                android:id="@+id/gp_color1_tab"
                 android:layout_width="0dp"
-                android:layout_height="28dp"
+                android:layout_height="44dp"
                 android:layout_weight="1"
-                android:text="FF0000"
-                android:textColor="#111827"
-                android:textSize="10sp"
-                android:background="#F3F4F6"
-                android:paddingHorizontal="4dp"
-                android:inputType="text"
-                android:maxLength="6"
-                android:singleLine="true" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_tab_active"
+                android:padding="6dp"
+                android:layout_marginEnd="6dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Color 2:"
-                android:textColor="#CFD8DC"
-                android:textSize="10sp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="4dp" />
+                <View
+                    android:id="@+id/gp_color1_box"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:background="@drawable/bg_color_preview"
+                    android:layout_marginEnd="6dp" />
 
-            <View
-                android:id="@+id/gp_color2_box"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:background="#0000FF"
-                android:layout_marginEnd="6dp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Color 1"
+                    android:textColor="#2E7D32"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/gp_color2_hex"
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/gp_color2_tab"
                 android:layout_width="0dp"
-                android:layout_height="28dp"
+                android:layout_height="44dp"
                 android:layout_weight="1"
-                android:text="0000FF"
-                android:textColor="#111827"
-                android:textSize="10sp"
-                android:background="#F3F4F6"
-                android:paddingHorizontal="4dp"
-                android:inputType="text"
-                android:maxLength="6"
-                android:singleLine="true" />
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_tab_inactive"
+                android:padding="6dp">
+
+                <View
+                    android:id="@+id/gp_color2_box"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:background="@drawable/bg_color_preview"
+                    android:layout_marginEnd="6dp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Color 2"
+                    android:textColor="#6B7280"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
         </LinearLayout>
+
+        <!-- Hidden hex inputs (kept for Java compatibility) -->
+        <EditText
+            android:id="@+id/gp_color1_hex"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            android:text="FF0000" />
+        <EditText
+            android:id="@+id/gp_color2_hex"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            android:text="0000FF" />
+
+        <!-- Color Wheel (applies to selected color tab) -->
+        <com.example.newcardmaker.ColorWheelView
+            android:id="@+id/gp_grad_wheel"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginBottom="10dp" />
 
         <!-- Direction Row -->
         <LinearLayout
@@ -355,20 +373,20 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="6dp">
+            android:layout_marginBottom="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Direction:"
-                android:textColor="#CFD8DC"
-                android:textSize="10sp"
-                android:layout_marginEnd="6dp" />
+                android:textColor="#374151"
+                android:textSize="12sp"
+                android:layout_marginEnd="8dp" />
 
-            <TextView android:id="@+id/gp_dir_lr" android:layout_width="wrap_content" android:layout_height="26dp" android:text="→" android:textColor="#111827" android:textSize="13sp" android:gravity="center" android:paddingHorizontal="8dp" android:background="#1565C0" android:layout_marginEnd="4dp" />
-            <TextView android:id="@+id/gp_dir_tb" android:layout_width="wrap_content" android:layout_height="26dp" android:text="↓" android:textColor="#9CA3AF" android:textSize="13sp" android:gravity="center" android:paddingHorizontal="8dp" android:background="#F3F4F6" android:layout_marginEnd="4dp" />
-            <TextView android:id="@+id/gp_dir_diag" android:layout_width="wrap_content" android:layout_height="26dp" android:text="↘" android:textColor="#9CA3AF" android:textSize="13sp" android:gravity="center" android:paddingHorizontal="8dp" android:background="#F3F4F6" android:layout_marginEnd="4dp" />
-            <TextView android:id="@+id/gp_dir_rad" android:layout_width="wrap_content" android:layout_height="26dp" android:text="◎" android:textColor="#9CA3AF" android:textSize="13sp" android:gravity="center" android:paddingHorizontal="8dp" android:background="#F3F4F6" />
+            <TextView android:id="@+id/gp_dir_lr" android:layout_width="0dp" android:layout_weight="1" android:layout_height="32dp" android:text="→" android:textColor="#FFFFFF" android:textSize="14sp" android:gravity="center" android:background="@drawable/bg_tab_active" android:layout_marginEnd="4dp" />
+            <TextView android:id="@+id/gp_dir_tb" android:layout_width="0dp" android:layout_weight="1" android:layout_height="32dp" android:text="↓" android:textColor="#6B7280" android:textSize="14sp" android:gravity="center" android:background="@drawable/bg_tab_inactive" android:layout_marginEnd="4dp" />
+            <TextView android:id="@+id/gp_dir_diag" android:layout_width="0dp" android:layout_weight="1" android:layout_height="32dp" android:text="↘" android:textColor="#6B7280" android:textSize="14sp" android:gravity="center" android:background="@drawable/bg_tab_inactive" android:layout_marginEnd="4dp" />
+            <TextView android:id="@+id/gp_dir_rad" android:layout_width="0dp" android:layout_weight="1" android:layout_height="32dp" android:text="◎" android:textColor="#6B7280" android:textSize="14sp" android:gravity="center" android:background="@drawable/bg_tab_inactive" />
 
         </LinearLayout>
 
@@ -376,13 +394,14 @@
         <TextView
             android:id="@+id/gp_gradient_apply"
             android:layout_width="match_parent"
-            android:layout_height="28dp"
-            android:text="✅ Apply Gradient"
-            android:textColor="#111827"
-            android:textSize="12sp"
+            android:layout_height="40dp"
+            android:text="Apply Gradient"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
             android:gravity="center"
-            android:background="#4CAF50"
-            android:layout_marginBottom="6dp" />
+            android:background="@drawable/bg_continue_btn"
+            android:layout_marginBottom="10dp" />
 
         <!-- Gradient Opacity -->
         <LinearLayout
@@ -394,27 +413,28 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="α Opacity:"
-                android:textColor="#9CA3AF"
-                android:textSize="10sp"
+                android:text="Opacity:"
+                android:textColor="#374151"
+                android:textSize="12sp"
                 android:layout_marginEnd="6dp" />
 
             <SeekBar
                 android:id="@+id/gp_grad_opacity"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:max="255"
                 android:progress="255"
-                android:progressTint="#4CAF50"
-                android:thumbTint="#CFD8DC" />
+                android:progressTint="#EF9A9A"
+                android:thumbTint="#FFFFFF" />
 
             <TextView
                 android:id="@+id/gp_grad_opacity_val"
-                android:layout_width="28dp"
+                android:layout_width="32dp"
                 android:layout_height="wrap_content"
                 android:text="255"
-                android:textColor="#CFD8DC"
-                android:textSize="9sp"
+                android:textColor="#374151"
+                android:textSize="11sp"
                 android:gravity="end"
                 android:layout_marginStart="4dp" />
 

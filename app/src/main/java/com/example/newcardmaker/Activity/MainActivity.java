@@ -11502,8 +11502,46 @@ public class MainActivity extends AppCompatActivity {
             wDone.setOnClickListener(vv -> { exportToJson(); wp2.dismiss(); });
         };
 
-        color1Box.setOnClickListener(v -> openGradWheel.accept(gradColor1[0], true));
-        color2Box.setOnClickListener(v -> openGradWheel.accept(gradColor2[0], false));
+        // ── Inline gradient wheel + color tab selection ──
+        com.example.newcardmaker.ColorWheelView gradWheel = root.findViewById(R.id.gp_grad_wheel);
+        android.widget.LinearLayout color1Tab = root.findViewById(R.id.gp_color1_tab);
+        android.widget.LinearLayout color2Tab = root.findViewById(R.id.gp_color2_tab);
+        final boolean[] editingColor1 = {true};
+
+        // Init boxes
+        color1Box.setBackgroundColor(gradColor1[0]);
+        color2Box.setBackgroundColor(gradColor2[0]);
+        if (gradWheel != null) gradWheel.setColor(gradColor1[0]);
+
+        Runnable selectTab1 = () -> {
+            editingColor1[0] = true;
+            if (color1Tab != null) color1Tab.setBackgroundResource(R.drawable.bg_tab_active);
+            if (color2Tab != null) color2Tab.setBackgroundResource(R.drawable.bg_tab_inactive);
+            if (gradWheel != null) gradWheel.setColor(gradColor1[0]);
+        };
+        Runnable selectTab2 = () -> {
+            editingColor1[0] = false;
+            if (color1Tab != null) color1Tab.setBackgroundResource(R.drawable.bg_tab_inactive);
+            if (color2Tab != null) color2Tab.setBackgroundResource(R.drawable.bg_tab_active);
+            if (gradWheel != null) gradWheel.setColor(gradColor2[0]);
+        };
+        if (color1Tab != null) color1Tab.setOnClickListener(v -> selectTab1.run());
+        if (color2Tab != null) color2Tab.setOnClickListener(v -> selectTab2.run());
+
+        if (gradWheel != null) {
+            gradWheel.setOnColorChangedListener(c -> {
+                if (editingColor1[0]) {
+                    gradColor1[0] = c;
+                    color1Box.setBackgroundColor(c);
+                    etColor1.setText(String.format("%06X", 0xFFFFFF & c));
+                } else {
+                    gradColor2[0] = c;
+                    color2Box.setBackgroundColor(c);
+                    etColor2.setText(String.format("%06X", 0xFFFFFF & c));
+                }
+                updateGradPreview.run();
+            });
+        }
 
         etColor1.addTextChangedListener(new android.text.TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
