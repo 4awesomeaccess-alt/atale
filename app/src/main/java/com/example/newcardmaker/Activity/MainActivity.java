@@ -11236,6 +11236,7 @@ public class MainActivity extends AppCompatActivity {
             applyBorderStyle(gd, borderStyle);
             targetView.setTag(R.id.btn_sticker_gallery, "");
             targetView.setTag(R.id.btn_bg_color, null);
+            targetView.setTag(R.id.btn_open_lock_panel, null);
             targetView.setTag(colorWithAlpha);
             targetView.setBackground(gd);
         };
@@ -11963,6 +11964,7 @@ public class MainActivity extends AppCompatActivity {
             targetView.setBackground(null);
             targetView.setTag(Color.TRANSPARENT);
             targetView.setTag(R.id.btn_bg_color, null);
+            targetView.setTag(R.id.btn_open_lock_panel, null);
             targetView.setTag(R.id.btn_sticker_gallery, "");
             exportToJson();
         });
@@ -20864,6 +20866,27 @@ public class MainActivity extends AppCompatActivity {
                 Object padTagSel = tv.getTag(R.id.btn_location);
                 if (padTagSel instanceof int[]) {
                     int[] up = (int[]) padTagSel;
+                    tv.setPadding(up[0], up.length > 1 ? up[1] : up[0], up[0], up.length > 1 ? up[1] : up[0]);
+                } else {
+                    tv.setPadding(20, 20, 20, 20);
+                }
+                return;
+            }
+
+            // ✅ Gradient background check — preserve it, use foreground border
+            Object gradTag = tv.getTag(R.id.btn_bg_color);
+            if (gradTag instanceof GradientDrawable || gradTag instanceof android.graphics.drawable.LayerDrawable) {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                    GradientDrawable border = new GradientDrawable();
+                    border.setColor(Color.TRANSPARENT);
+                    border.setStroke(6, Color.CYAN);
+                    border.setCornerRadius(8f);
+                    tv.setForeground(border);
+                }
+                tv.setBackground((android.graphics.drawable.Drawable) gradTag);
+                Object padTagG = tv.getTag(R.id.btn_location);
+                if (padTagG instanceof int[]) {
+                    int[] up = (int[]) padTagG;
                     tv.setPadding(up[0], up.length > 1 ? up[1] : up[0], up[0], up.length > 1 ? up[1] : up[0]);
                 } else {
                     tv.setPadding(20, 20, 20, 20);
