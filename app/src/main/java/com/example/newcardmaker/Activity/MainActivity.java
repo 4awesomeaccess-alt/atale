@@ -16253,6 +16253,321 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // ───────────────────────────────────────────────────────────
+    // Manage Pages dialog (grid thumbnails + long-press drag reorder)
+    // ───────────────────────────────────────────────────────────
+    private int managePagesSelectedIndex = 0;
+
+    private interface OnPagePick { void pick(int index); }
+
+    private void showManagePagesDialog() {
+        // save current canvas so thumbnails are fresh
+        saveCurrentPage();
+        managePagesSelectedIndex = currentPageIndex;
+
+        final android.view.View dialogView = getLayoutInflater().inflate(R.layout.dialog_manage_pages, null);
+        final AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.GradientDrawable() {{
+                setColor(android.graphics.Color.WHITE);
+                setCornerRadius(dp(18));
+            }});
+        }
+
+        final RecyclerView rv = dialogView.findViewById(R.id.rv_manage_pages);
+        rv.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 4));
+
+        final android.widget.TextView tvSelected = dialogView.findViewById(R.id.tv_manage_selected);
+        final LinearLayout deletedContainer = dialogView.findViewById(R.id.manage_deleted_container);
+        final android.widget.TextView tvDeletedEmpty = dialogView.findViewById(R.id.tv_manage_deleted_empty);
+
+        final ManagePagesAdapter adapter = new ManagePagesAdapter();
+        rv.setAdapter(adapter);
+
+        final Runnable updateSelectedLabel = () ->
+                tvSelected.setText(String.format("Selected: Page %02d", managePagesSelectedIndex + 1));
+        updateSelectedLabel.run();
+
+        final Runnable rebuildDeleted = () ->
+                buildManageDeletedRows(deletedContainer, tvDeletedEmpty, adapter, updateSelectedLabel);
+        rebuildDeleted.run();
+
+        // tap a page → select + open it on canvas
+        adapter.onPageTap = (pos) -> {
+            if (pos < 0 || pos >= allPagesData.size()) return;
+            managePagesSelectedIndex = pos;
+            if (pos != currentPageIndex) {
+                saveCurrentPage();
+                currentPageIndex = pos;
+                loadPageData(allPagesData.get(currentPageIndex));
+                updatePageIndicator();
+                mainLayout.post(() -> { lockedViews.clear(); refreshLockedLayersPanel(); });
+            }
+            adapter.notifyDataSetChanged();
+            updateSelectedLabel.run();
+        };
+
+        // add a new blank page
+        adapter.onAddTap = () -> {
+            saveCurrentPage();
+            allPagesData.add(createEmptyPage());
+            currentPageIndex = allPagesData.size() - 1;
+            currentImageUrl = "";
+            loadPageData(allPagesData.get(currentPageIndex));
+            updatePageIndicator();
+            managePagesSelectedIndex = currentPageIndex;
+            adapter.notifyDataSetChanged();
+            updateSelectedLabel.run();
+            exportToJson();
+        };
+
+        // ── Long-press drag to reorder ──
+        androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback cb =
+            new androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback(
+                androidx.recyclerview.widget.ItemTouchHelper.UP |
+                androidx.recyclerview.widget.ItemTouchHelper.DOWN |
+                androidx.recyclerview.widget.ItemTouchHelper.LEFT |
+                androidx.recyclerview.widget.ItemTouchHelper.RIGHT, 0) {
+
+            @Override
+            public int getMovementFlags(RecyclerView r, RecyclerView.ViewHolder vh) {
+                if (vh.getItemViewType() == ManagePagesAdapter.TYPE_ADD) return 0;
+                return super.getMovementFlags(r, vh);
+            }
+
+            @Override
+            public boolean canDropOver(RecyclerView r, RecyclerView.ViewHolder cur, RecyclerView.ViewHolder tgt) {
+                return tgt.getItemViewType() == ManagePagesAdapter.TYPE_PAGE;
+            }
+
+            @Override
+            public boolean onMove(RecyclerView r, RecyclerView.ViewHolder vh, RecyclerView.ViewHolder target) {
+                int from = vh.getAdapterPosition();
+                int to = target.getAdapterPosition();
+                if (from < 0 || to < 0 || from >= allPagesData.size() || to >= allPagesData.size()) return false;
+                java.util.Collections.swap(allPagesData, from, to);
+                if (currentPageIndex == from) currentPageIndex = to;
+                else if (currentPageIndex == to) currentPageIndex = from;
+                if (managePagesSelectedIndex == from) managePagesSelectedIndex = to;
+                else if (managePagesSelectedIndex == to) managePagesSelectedIndex = from;
+                adapter.notifyItemMoved(from, to);
+                return true;
+            }
+
+            @Override
+            public void clearView(RecyclerView r, RecyclerView.ViewHolder vh) {
+                super.clearView(r, vh);
+                adapter.notifyDataSetChanged();
+                updateSelectedLabel.run();
+                updatePageIndicator();
+                exportToJson();
+            }
+
+            @Override public void onSwiped(RecyclerView.ViewHolder vh, int dir) {}
+            @Override public boolean isLongPressDragEnabled() { return true; }
+        };
+        new androidx.recyclerview.widget.ItemTouchHelper(cb).attachToRecyclerView(rv);
+
+        // ── Duplicate selected page ──
+        dialogView.findViewById(R.id.btn_manage_duplicate).setOnClickListener(v -> {
+            if (managePagesSelectedIndex < 0 || managePagesSelectedIndex >= allPagesData.size()) return;
+            saveCurrentPage();
+            try {
+                JSONObject copy = new JSONObject(allPagesData.get(managePagesSelectedIndex).toString());
+                allPagesData.add(managePagesSelectedIndex + 1, copy);
+            } catch (Exception e) { return; }
+            if (currentPageIndex > managePagesSelectedIndex) currentPageIndex++;
+            adapter.notifyDataSetChanged();
+            updatePageIndicator();
+            updateSelectedLabel.run();
+            exportToJson();
+            Toast.makeText(this, "Page duplicate thai gayu", Toast.LENGTH_SHORT).show();
+        });
+
+        // ── Move / Insert selected page to a chosen position ──
+        dialogView.findViewById(R.id.btn_manage_move).setOnClickListener(v -> {
+            if (managePagesSelectedIndex < 0 || managePagesSelectedIndex >= allPagesData.size()) return;
+            final int total = allPagesData.size();
+            android.widget.NumberPicker np = new android.widget.NumberPicker(this);
+            String[] labels = new String[total];
+            for (int i = 0; i < total; i++) labels[i] = "Position " + (i + 1);
+            np.setMinValue(0);
+            np.setMaxValue(0);
+            np.setDisplayedValues(labels);
+            np.setMaxValue(total - 1);
+            np.setValue(managePagesSelectedIndex);
+            np.setWrapSelectorWheel(false);
+
+            new AlertDialog.Builder(this)
+                .setTitle("Move Page to position")
+                .setView(np)
+                .setPositiveButton("Move", (d, w) -> {
+                    int target = np.getValue();
+                    if (target == managePagesSelectedIndex) return;
+                    JSONObject curRef = (currentPageIndex >= 0 && currentPageIndex < allPagesData.size())
+                            ? allPagesData.get(currentPageIndex) : null;
+                    JSONObject selRef = allPagesData.remove(managePagesSelectedIndex);
+                    allPagesData.add(target, selRef);
+                    if (curRef != null) currentPageIndex = allPagesData.indexOf(curRef);
+                    managePagesSelectedIndex = allPagesData.indexOf(selRef);
+                    adapter.notifyDataSetChanged();
+                    updatePageIndicator();
+                    updateSelectedLabel.run();
+                    exportToJson();
+                    Toast.makeText(this, "Page move thai gayu", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+        });
+
+        // ── Delete selected page (move to Recently Deleted) ──
+        dialogView.findViewById(R.id.btn_manage_delete).setOnClickListener(v -> {
+            if (allPagesData.size() <= 1) {
+                Toast.makeText(this, "ઓછામાં ઓછું એક પેજ રાખવું જરૂરી છે!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (managePagesSelectedIndex < 0 || managePagesSelectedIndex >= allPagesData.size()) return;
+            saveCurrentPage();
+            final int del = managePagesSelectedIndex;
+            JSONObject curRef = allPagesData.get(currentPageIndex);
+            try {
+                JSONObject toDel = new JSONObject(allPagesData.get(del).toString());
+                toDel.put("_deletedPageNum", del + 1);
+                deletedPagesList.add(toDel);
+            } catch (Exception e) {
+                deletedPagesList.add(allPagesData.get(del));
+            }
+            boolean deletingCurrent = (del == currentPageIndex);
+            allPagesData.remove(del);
+            if (deletingCurrent) {
+                currentPageIndex = Math.min(del, allPagesData.size() - 1);
+                loadPageData(allPagesData.get(currentPageIndex));
+                mainLayout.post(() -> { lockedViews.clear(); refreshLockedLayersPanel(); });
+            } else {
+                currentPageIndex = allPagesData.indexOf(curRef);
+            }
+            managePagesSelectedIndex = Math.min(del, allPagesData.size() - 1);
+            adapter.notifyDataSetChanged();
+            updateSelectedLabel.run();
+            updatePageIndicator();
+            rebuildDeleted.run();
+            exportToJson();
+            Toast.makeText(this, "Page moved to Deleted List", Toast.LENGTH_SHORT).show();
+        });
+
+        dialogView.findViewById(R.id.btn_close_manage_pages).setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
+    }
+
+    private void buildManageDeletedRows(final LinearLayout container, final android.widget.TextView emptyView,
+                                        final ManagePagesAdapter adapter, final Runnable updateSelectedLabel) {
+        container.removeAllViews();
+        if (deletedPagesList.isEmpty()) {
+            emptyView.setVisibility(View.VISIBLE);
+            return;
+        }
+        emptyView.setVisibility(View.GONE);
+        for (int i = 0; i < deletedPagesList.size(); i++) {
+            final int idx = i;
+            final JSONObject dp = deletedPagesList.get(i);
+            android.view.View row = getLayoutInflater().inflate(R.layout.item_manage_deleted, container, false);
+            android.widget.ImageView iv = row.findViewById(R.id.iv_manage_del_thumb);
+            android.widget.TextView title = row.findViewById(R.id.tv_manage_del_title);
+            generatePageThumbnail(dp, iv);
+            title.setText("Deleted Page " + dp.optInt("_deletedPageNum", idx + 1));
+
+            row.findViewById(R.id.btn_manage_restore).setOnClickListener(v -> {
+                saveCurrentPage();
+                JSONObject restored = deletedPagesList.remove(idx);
+                allPagesData.add(restored);
+                adapter.notifyDataSetChanged();
+                updatePageIndicator();
+                updateSelectedLabel.run();
+                buildManageDeletedRows(container, emptyView, adapter, updateSelectedLabel);
+                exportToJson();
+                Toast.makeText(this, "Page restore thai gayu", Toast.LENGTH_SHORT).show();
+            });
+
+            row.findViewById(R.id.btn_manage_remove).setOnClickListener(v -> {
+                deletedPagesList.remove(idx);
+                buildManageDeletedRows(container, emptyView, adapter, updateSelectedLabel);
+                exportToJson();
+            });
+
+            container.addView(row);
+        }
+    }
+
+    private class ManagePagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+        static final int TYPE_PAGE = 0;
+        static final int TYPE_ADD = 1;
+
+        OnPagePick onPageTap;
+        Runnable onAddTap;
+
+        @Override
+        public int getItemViewType(int position) {
+            return position < allPagesData.size() ? TYPE_PAGE : TYPE_ADD;
+        }
+
+        @Override
+        public int getItemCount() {
+            return allPagesData.size() + 1;
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup parent, int viewType) {
+            if (viewType == TYPE_ADD) {
+                return new AddVH(getLayoutInflater().inflate(R.layout.item_manage_add, parent, false));
+            }
+            return new PageVH(getLayoutInflater().inflate(R.layout.item_manage_page, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            if (holder instanceof AddVH) {
+                holder.itemView.findViewById(R.id.btn_manage_add_card).setOnClickListener(v -> {
+                    if (onAddTap != null) onAddTap.run();
+                });
+                return;
+            }
+            final PageVH vh = (PageVH) holder;
+            final int pos = position;
+            JSONObject page = allPagesData.get(pos);
+            vh.tvNum.setText(String.format("%02d", pos + 1));
+            vh.tvLabel.setText(String.format("Page %02d", pos + 1));
+            generatePageThumbnail(page, vh.ivThumb);
+            vh.frame.setBackgroundResource(pos == managePagesSelectedIndex
+                    ? R.drawable.bg_manage_page_card_selected
+                    : R.drawable.bg_manage_page_card);
+            vh.openBadge.setVisibility(pos == currentPageIndex ? View.VISIBLE : View.GONE);
+            vh.itemView.setOnClickListener(v -> {
+                int p = vh.getAdapterPosition();
+                if (p != RecyclerView.NO_POSITION && onPageTap != null) onPageTap.pick(p);
+            });
+        }
+
+        class PageVH extends RecyclerView.ViewHolder {
+            android.widget.ImageView ivThumb;
+            android.widget.TextView tvNum, tvLabel, openBadge;
+            android.view.View frame;
+            PageVH(android.view.View v) {
+                super(v);
+                ivThumb = v.findViewById(R.id.iv_manage_thumb);
+                tvNum = v.findViewById(R.id.tv_manage_num);
+                tvLabel = v.findViewById(R.id.tv_manage_label);
+                openBadge = v.findViewById(R.id.tv_manage_open_badge);
+                frame = v.findViewById(R.id.manage_card_frame);
+            }
+        }
+        class AddVH extends RecyclerView.ViewHolder {
+            AddVH(android.view.View v) { super(v); }
+        }
+    }
+
+
     private void showDeletedPagesDialog() {
         android.view.View dialogView = getLayoutInflater().inflate(R.layout.dialog_deleted_pages, null);
 
@@ -17442,12 +17757,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         View btnPagesTop = findViewById(R.id.btn_pages_top);
-        if (btnPagesTop != null) btnPagesTop.setOnClickListener(v -> {
-            int total = (allPagesData != null) ? allPagesData.size() : 0;
-            Toast.makeText(this, "Page " + (currentPageIndex + 1) + " / " + total, Toast.LENGTH_SHORT).show();
-            View realBtn = findViewById(R.id.btn_show_delete_page);
-            if (realBtn != null) realBtn.performClick();
-        });
+        if (btnPagesTop != null) btnPagesTop.setOnClickListener(v -> showManagePagesDialog());
 
         View btnLayersTop = findViewById(R.id.btn_layers_top);
         if (btnLayersTop != null) btnLayersTop.setOnClickListener(v ->

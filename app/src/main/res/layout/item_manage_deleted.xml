@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
+
+    <ImageView
+        android:id="@+id/iv_manage_del_thumb"
+        android:layout_width="40dp"
+        android:layout_height="52dp"
+        android:scaleType="centerCrop"
+        android:background="#F5F5F5"
+        android:layout_marginEnd="12dp"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_manage_del_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Deleted Page 03"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#212121"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Deleted just now"
+            android:textSize="11sp"
+            android:textColor="#9E9E9E"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/btn_manage_restore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Restore"
+        android:textSize="12sp"
+        android:textColor="#2E7D32"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_marginEnd="6dp"
+        android:background="@drawable/bg_manage_restore_btn"
+        android:clickable="true"
+        android:focusable="true"/>
+
+    <TextView
+        android:id="@+id/btn_manage_remove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remove"
+        android:textSize="12sp"
+        android:textColor="#E53935"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="@drawable/bg_manage_remove_btn"
+        android:clickable="true"
+        android:focusable="true"/>
+</LinearLayout>
