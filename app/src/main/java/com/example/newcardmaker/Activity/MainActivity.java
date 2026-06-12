@@ -8554,6 +8554,15 @@ public class MainActivity extends AppCompatActivity {
 
         setupDragHandle(cv);
 
+        // Close button — text control popup ने બંધ કરે
+        View btnCloseTextControls = cv.findViewById(R.id.btn_close_controls);
+        if (btnCloseTextControls != null) btnCloseTextControls.setOnClickListener(v -> {
+            try {
+                if (selectionControlsPopup != null && selectionControlsPopup.isShowing())
+                    selectionControlsPopup.dismiss();
+            } catch (Exception ignored) {}
+        });
+
         selOriginalSize = targetView.getTextSize();
 
         // ════════════════════════════
