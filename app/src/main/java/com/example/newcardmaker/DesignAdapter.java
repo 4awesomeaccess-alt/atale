@@ -168,6 +168,23 @@ public class DesignAdapter extends RecyclerView.Adapter<DesignAdapter.MyViewHold
             return;
         }
 
+        // Re-encrypt local (keystore) → shared (portable) key so other devices can open
+        try {
+            java.io.FileInputStream fis = new java.io.FileInputStream(file);
+            byte[] raw = new byte[(int) file.length()];
+            fis.read(raw); fis.close();
+            String json = com.example.newcardmaker.EncryptionHelper.decryptAny(raw);
+            byte[] sharedEnc = com.example.newcardmaker.EncryptionHelper.encryptShared(json);
+            File shareDir = new File(context.getCacheDir(), "share");
+            if (!shareDir.exists()) shareDir.mkdirs();
+            File shareFile = new File(shareDir, file.getName());
+            java.io.FileOutputStream fos = new java.io.FileOutputStream(shareFile);
+            fos.write(sharedEnc); fos.close();
+            file = shareFile; // share the portable copy
+        } catch (Exception e) {
+            // fallback: share original file as-is
+        }
+
         Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
 
         // Dialog banavo

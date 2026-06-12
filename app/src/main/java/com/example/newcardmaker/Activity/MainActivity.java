@@ -16473,7 +16473,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.println(ASSERT, "currentOpenFilePath", currentOpenFilePath + "");
         try (FileOutputStream fos = new FileOutputStream(file)) {
-            fos.write(jsonData.getBytes());
+            fos.write(com.example.newcardmaker.EncryptionHelper.encryptLocal(jsonData));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -16569,7 +16569,7 @@ public class MainActivity extends AppCompatActivity {
             fis.read(data);
             fis.close();
 
-            String jsonString = new String(data, "UTF-8");
+            String jsonString = com.example.newcardmaker.EncryptionHelper.decryptAny(data);
             JSONObject mainObj = new JSONObject(jsonString);
 
             allPagesData.clear();

@@ -190,7 +190,7 @@ public class ListActivity extends AppCompatActivity {
 
     private void readJsonFromUri(Uri uri) {
         try {
-            // Content resolver thi read karo
+            // Content resolver thi read karo (bytes — file encrypted hoy shake)
             InputStream inputStream = getContentResolver().openInputStream(uri);
 
             if (inputStream == null) {
@@ -198,20 +198,17 @@ public class ListActivity extends AppCompatActivity {
                 return;
             }
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-            StringBuilder sb = new StringBuilder();
-            String line;
-
-            while ((line = reader.readLine()) != null) {
-                sb.append(line).append("\n");
-            }
-
-            reader.close();
+            java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
+            byte[] buf = new byte[4096];
+            int n;
+            while ((n = inputStream.read(buf)) > 0) baos.write(buf, 0, n);
             inputStream.close();
+            byte[] rawBytes = baos.toByteArray();
 
-            String jsonString = sb.toString().trim();
+            // Decrypt (shared/local/plaintext auto-detect)
+            String jsonString = com.example.newcardmaker.EncryptionHelper.decryptAny(rawBytes).trim();
 
-            Log.d("DEBUG_JSON", "Read JSON: " + jsonString); // Logcat ma check karo
+            Log.d("DEBUG_JSON", "Read JSON len: " + jsonString.length());
 
             if (jsonString.isEmpty()) {
                 Toast.makeText(this, "File is empty!", Toast.LENGTH_SHORT).show();
@@ -230,11 +227,11 @@ public class ListActivity extends AppCompatActivity {
                 }
             }
 
-            // ✅ File copy to app directory
+            // ✅ File copy to app directory — re-encrypt with LOCAL key
             String fileName = "design_" + System.currentTimeMillis() + ".json";
             File destFile = new File(getExternalFilesDir(null), fileName);
             try (java.io.FileOutputStream fos = new java.io.FileOutputStream(destFile)) {
-                fos.write(jsonString.getBytes(StandardCharsets.UTF_8));
+                fos.write(com.example.newcardmaker.EncryptionHelper.encryptLocal(jsonString));
             }
 
             Toast.makeText(this, "✅ " + fileName + " add થઈ ગઈ!", Toast.LENGTH_SHORT).show();
