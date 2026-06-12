@@ -247,6 +247,18 @@ public class MainActivity extends AppCompatActivity {
 
     private PopupWindow currentStickerToolbarPopup = null;
     private PopupWindow selectionControlsPopup = null;
+
+    // Tracks the currently-open control popup (text/type, stroke, transform,
+    // spacing, move, opacity) so opening one closes any other that is open.
+    private android.widget.PopupWindow activeControlPopup = null;
+    private void setActiveControlPopup(android.widget.PopupWindow pw) {
+        try {
+            if (activeControlPopup != null && activeControlPopup != pw && activeControlPopup.isShowing()) {
+                activeControlPopup.dismiss();
+            }
+        } catch (Exception ignored) {}
+        activeControlPopup = pw;
+    }
     private float selOriginalSize = 0f; // Text size px
     private int selOriginalW = 0, selOriginalH = 0; // Image size
     private static final int SEL_MOVE_STEP = 10;
@@ -8099,6 +8111,7 @@ public class MainActivity extends AppCompatActivity {
         int popH = root.getMeasuredHeight();
         int startX = (screenW - pw) / 2;
         int startY = screenH - popH - dp(60);
+        setActiveControlPopup(pw2);
         pw2.showAtLocation(mainLayout, android.view.Gravity.NO_GRAVITY, startX, startY);
 
         final int[] dragStart = {0, 0};
@@ -8470,6 +8483,7 @@ public class MainActivity extends AppCompatActivity {
         int popupH = root.getMeasuredHeight();
         int startX = (screenW - pw) / 2;
         int startY = screenH - popupH - dp(60); // bottom ma, nav bar upar
+        setActiveControlPopup(spacingPopup);
         spacingPopup.showAtLocation(mainLayout, android.view.Gravity.NO_GRAVITY, startX, startY);
 
         // ── Drag to move
@@ -20233,6 +20247,7 @@ public class MainActivity extends AppCompatActivity {
         int sw = getResources().getDisplayMetrics().widthPixels;
         int sh = getResources().getDisplayMetrics().heightPixels;
         int popW = (int)(sw * 0.7f);
+        setActiveControlPopup(pw);
         pw.showAtLocation(mainLayout, android.view.Gravity.TOP | android.view.Gravity.LEFT,
                 (sw - popW) / 2, sh - 500);
 
@@ -20327,6 +20342,7 @@ public class MainActivity extends AppCompatActivity {
         int popW = (int)(sw * 0.85f);
         int startX = (sw - popW) / 2;
         int startY = sh - 350; // approximate from bottom
+        setActiveControlPopup(pw);
         pw.showAtLocation(mainLayout, android.view.Gravity.TOP | android.view.Gravity.LEFT, startX, startY);
 
         // Drag handle only - title bar
@@ -20489,6 +20505,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         int screenH = getResources().getDisplayMetrics().heightPixels;
+        setActiveControlPopup(popup);
         popup.showAtLocation(getWindow().getDecorView().getRootView(),
             Gravity.TOP | Gravity.START, 0, screenH - popupH);
 
