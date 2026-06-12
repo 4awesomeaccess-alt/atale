@@ -359,10 +359,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // ── Open button
-        findViewById(R.id.btn_open_lock_panel).setOnClickListener(v -> drawerLayout.openDrawer(androidx.core.view.GravityCompat.START));
+        findViewById(R.id.btn_open_lock_panel).setOnClickListener(v -> drawerLayout.openDrawer(androidx.core.view.GravityCompat.END));
 
 // ── Close button
-        findViewById(R.id.btn_close_lock_panel).setOnClickListener(v -> drawerLayout.closeDrawer(androidx.core.view.GravityCompat.START));
+        findViewById(R.id.btn_close_lock_panel).setOnClickListener(v -> drawerLayout.closeDrawer(androidx.core.view.GravityCompat.END));
+
+        // ══════════ NEW UI WIRING ══════════
+        setupNewToolbarUI();
 
 // ── Unlock All
         findViewById(R.id.btn_unlock_all).setOnClickListener(v -> {
@@ -412,13 +415,13 @@ public class MainActivity extends AppCompatActivity {
                 }
                 refreshLockedLayersPanel();
                 if (lockedViews.isEmpty()) {
-                    drawerLayout.closeDrawer(androidx.core.view.GravityCompat.START);
+                    drawerLayout.closeDrawer(androidx.core.view.GravityCompat.END);
                 }
             }
 
             @Override
             public void onSelect(View view, int position) {
-                drawerLayout.closeDrawer(androidx.core.view.GravityCompat.START);
+                drawerLayout.closeDrawer(androidx.core.view.GravityCompat.END);
 
                 view.post(() -> {
                     view.setAlpha(0.2f);
@@ -1881,7 +1884,7 @@ public class MainActivity extends AppCompatActivity {
 
         refreshLockedLayersPanel();
         exportToJson();
-        drawerLayout.closeDrawer(androidx.core.view.GravityCompat.START);
+        drawerLayout.closeDrawer(androidx.core.view.GravityCompat.END);
 
         Toast.makeText(this, "🔓 બધા unlock થઈ ગયા!", Toast.LENGTH_SHORT).show();
     }
@@ -17400,7 +17403,142 @@ public class MainActivity extends AppCompatActivity {
     private void updatePageIndicator() {
         txtPageIndicator.setText("Page: " + (currentPageIndex + 1) + " / " + allPagesData.size());
         updateDeletedPageBadge();
+        // Top bar page status + count badge
+        android.widget.TextView pageStatus = findViewById(R.id.tv_page_status);
+        if (pageStatus != null) {
+            pageStatus.setText(String.format("Page %02d Open", currentPageIndex + 1));
+        }
+        android.widget.TextView pageBadge = findViewById(R.id.tv_page_count_badge);
+        if (pageBadge != null) {
+            pageBadge.setText(String.valueOf(allPagesData.size()));
+        }
     }
+
+    private boolean isLandscapeToolPanel = false;
+
+    private void setupNewToolbarUI() {
+        // ── Top bar: Back, Edit title, Save JPG/PDF, Pages, Layers ──
+        View btnBack = findViewById(R.id.btn_back_top);
+        if (btnBack != null) btnBack.setOnClickListener(v -> onBackPressed());
+
+        View btnEditTitle = findViewById(R.id.btn_edit_title);
+        if (btnEditTitle != null) btnEditTitle.setOnClickListener(v -> showRenameTitleDialog());
+
+        View btnSaveJpg = findViewById(R.id.btn_save_jpg);
+        if (btnSaveJpg != null) btnSaveJpg.setOnClickListener(v -> {
+            exportToJson();
+            saveAllPagesAsImages();
+        });
+
+        View btnSavePdf = findViewById(R.id.btn_save_pdf);
+        if (btnSavePdf != null) btnSavePdf.setOnClickListener(v -> {
+            if (!SubscriptionManager.getInstance(this).isSubscribed()) {
+                startActivity(new Intent(this, PremiumActivity.class));
+                return;
+            }
+            exportToJson();
+            saveAllPagesAsClickablePdf();
+            Toast.makeText(this, "Pdf download thay che", Toast.LENGTH_SHORT).show();
+        });
+
+        View btnPagesTop = findViewById(R.id.btn_pages_top);
+        if (btnPagesTop != null) btnPagesTop.setOnClickListener(v -> {
+            View realBtn = findViewById(R.id.btn_show_delete_page);
+            if (realBtn != null) realBtn.performClick();
+        });
+
+        View btnLayersTop = findViewById(R.id.btn_layers_top);
+        if (btnLayersTop != null) btnLayersTop.setOnClickListener(v ->
+            drawerLayout.openDrawer(androidx.core.view.GravityCompat.END));
+
+        // ── Floating add button ──
+        View fab = findViewById(R.id.fab_add);
+        if (fab != null) fab.setOnClickListener(v -> openToolPanel());
+
+        // ── Tool panel buttons (portrait) → delegate to existing handlers ──
+        wireToolButton(R.id.tp_new_text, R.id.btn_add_text);
+        wireToolButton(R.id.tp_photo, R.id.btn_sticker_gallery);
+        wireToolButton(R.id.tp_sticker, R.id.btn_add_sticker);
+        wireToolButton(R.id.tp_frame, R.id.btn_photo_frame);
+        wireToolButton(R.id.tp_location, R.id.btn_location);
+        wireShapeButton(R.id.tp_shape);
+
+        wireToolButton(R.id.tpl_new_text, R.id.btn_add_text);
+        wireToolButton(R.id.tpl_photo, R.id.btn_sticker_gallery);
+        wireToolButton(R.id.tpl_sticker, R.id.btn_add_sticker);
+        wireToolButton(R.id.tpl_frame, R.id.btn_photo_frame);
+        wireToolButton(R.id.tpl_location, R.id.btn_location);
+        wireShapeButton(R.id.tpl_shape);
+
+        // ── Orientation toggle ──
+        View tpToggle = findViewById(R.id.tp_orient_toggle);
+        if (tpToggle != null) tpToggle.setOnClickListener(v -> { isLandscapeToolPanel = true; openToolPanel(); });
+        View tplToggle = findViewById(R.id.tpl_orient_toggle);
+        if (tplToggle != null) tplToggle.setOnClickListener(v -> { isLandscapeToolPanel = false; openToolPanel(); });
+
+        // ── Close buttons → close panel, show fab ──
+        View tpClose = findViewById(R.id.tp_close);
+        if (tpClose != null) tpClose.setOnClickListener(v -> closeToolPanel());
+        View tplClose = findViewById(R.id.tpl_close);
+        if (tplClose != null) tplClose.setOnClickListener(v -> closeToolPanel());
+
+        updatePageIndicator();
+    }
+
+    private void wireToolButton(int panelBtnId, int realBtnId) {
+        View pb = findViewById(panelBtnId);
+        if (pb != null) pb.setOnClickListener(v -> {
+            View real = findViewById(realBtnId);
+            if (real != null) real.performClick();
+            closeToolPanel();
+        });
+    }
+
+    private void wireShapeButton(int panelBtnId) {
+        View pb = findViewById(panelBtnId);
+        if (pb != null) pb.setOnClickListener(v -> {
+            startActivity(new Intent(this, ShapeActivity.class));
+            closeToolPanel();
+        });
+    }
+
+    private void openToolPanel() {
+        View fab = findViewById(R.id.fab_add);
+        View portrait = findViewById(R.id.tool_panel_portrait);
+        View landscape = findViewById(R.id.tool_panel_landscape);
+        if (fab != null) fab.setVisibility(View.GONE);
+        if (isLandscapeToolPanel) {
+            if (portrait != null) portrait.setVisibility(View.GONE);
+            if (landscape != null) landscape.setVisibility(View.VISIBLE);
+        } else {
+            if (landscape != null) landscape.setVisibility(View.GONE);
+            if (portrait != null) portrait.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void closeToolPanel() {
+        View fab = findViewById(R.id.fab_add);
+        View portrait = findViewById(R.id.tool_panel_portrait);
+        View landscape = findViewById(R.id.tool_panel_landscape);
+        if (portrait != null) portrait.setVisibility(View.GONE);
+        if (landscape != null) landscape.setVisibility(View.GONE);
+        if (fab != null) fab.setVisibility(View.VISIBLE);
+    }
+
+    private void showRenameTitleDialog() {
+        final android.widget.EditText input = new android.widget.EditText(this);
+        android.widget.TextView title = findViewById(R.id.tv_design_title);
+        if (title != null) input.setText(title.getText().toString());
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Rename Design")
+            .setView(input)
+            .setPositiveButton("OK", (d, w) -> {
+                if (title != null) title.setText(input.getText().toString());
+            })
+            .setNegativeButton("Cancel", null)
+            .show();
+    }
+
 
     private void updateDeletedPageBadge() {
         android.widget.TextView badge = findViewById(R.id.tv_deleted_page_count);

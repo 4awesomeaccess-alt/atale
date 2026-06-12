@@ -7,421 +7,477 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
-        android:id="@+id/main_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/main_image_view"
+        <!-- ══════════ TOP BAR ══════════ -->
+        <RelativeLayout
+            android:id="@+id/top_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"/>
-    </RelativeLayout>
-    
+            android:layout_height="64dp"
+            android:layout_alignParentTop="true"
+            android:background="#FFFFFF"
+            android:elevation="8dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp">
 
+            <!-- Back -->
+            <ImageView
+                android:id="@+id/btn_back_top"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                android:padding="8dp"
+                android:src="@android:drawable/ic_menu_revert"
+                app:tint="#222222" />
 
-    <RelativeLayout
-        android:id="@+id/main_layout1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-        <include
-            android:id="@+id/include_multi_select_toolbar"
-            layout="@layout/layout_multi_select_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_above="@id/bottom_bt_scroll"/>
-
-        <include
-            android:id="@+id/include_page_liner"
-            layout="@layout/layout_page_liner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/bottom_bt_scroll"/>
-
-
-        <HorizontalScrollView
-            android:id="@+id/bottom_bt_scroll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/bg_bottom_toolbar"
-            android:fillViewport="true"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:scrollbars="none"
-            android:elevation="16dp"
-            android:translationZ="16dp">
-
+            <!-- Title + Page status -->
             <LinearLayout
-                android:id="@+id/bottom_controls"
+                android:id="@+id/top_title_box"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp">
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/btn_back_top"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tv_design_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Royal Wedding Invite"
+                        android:textColor="#111111"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:maxWidth="150dp"
+                        android:ellipsize="end"
+                        android:singleLine="true" />
+
+                    <ImageView
+                        android:id="@+id/btn_edit_title"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:padding="5dp"
+                        android:layout_marginStart="4dp"
+                        android:src="@android:drawable/ic_menu_edit"
+                        app:tint="#444444" />
+
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/btn_open_lock_panel"
-                    android:layout_width="28dp"
-                    android:layout_height="72dp"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentStart="true"
-                    android:gravity="center"
-                    android:text="🔒"
-                    android:textSize="12sp"
-                    android:background="#CC1565C0"
-                    android:textColor="#FFFFFF"
-                    android:elevation="6dp"/>
-
-                <LinearLayout
-                      android:id="@+id/btn_add_text"
-                      style="@style/BottomToolItem">
-                      <ImageView
-                          android:layout_width="24dp"
-                          android:layout_height="24dp"
-                          android:src="@drawable/ic_add_text"
-                          app:tint="@android:color/white"/>
-                      <TextView
-                          style="@style/BottomToolText"
-                          android:text="Add Text"/>
-                  </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btn_photo_frame"
-                    style="@style/BottomToolItem">
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_add_text"
-                        app:tint="@android:color/white"/>
-                    <TextView
-                        style="@style/BottomToolText"
-                        android:text="Photo frame"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btn_sticker_gallery"
-                    style="@style/BottomToolItem">
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_add_text"
-                        app:tint="@android:color/white"/>
-                    <TextView
-                        style="@style/BottomToolText"
-                        android:text="Add Image"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btn_remove_bg_offline"
-                    style="@style/BottomToolItem">
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_change_bg"
-                        app:tint="@android:color/white"/>
-                    <TextView
-                        style="@style/BottomToolText"
-                        android:text="Remove BG"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btn_set_background"
-                    style="@style/BottomToolItem">
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_add_image"
-                        app:tint="@android:color/white"/>
-                    <TextView
-                        style="@style/BottomToolText"
-                        android:text="Add bg Image+"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btn_save_json"
-                    style="@style/BottomToolItem"
-                    android:visibility="gone">
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_save_json"
-                        app:tint="@android:color/white"/>
-                    <TextView
-                        style="@style/BottomToolText"
-                        android:text="Save JSON"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btn_location"
-                    style="@style/BottomToolItem">
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_location"
-                        app:tint="@android:color/white"/>
-                    <TextView
-                        style="@style/BottomToolText"
-                        android:text="Location"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btn_show_list"
-                    style="@style/BottomToolItem"
-                    android:visibility="gone">
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_list_json"
-                        app:tint="@android:color/white"/>
-                    <TextView
-                        style="@style/BottomToolText"
-                        android:text="List JSON"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btn_add_sticker"
-                    style="@style/BottomToolItem">
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_sticker"
-                        app:tint="@android:color/white"/>
-                    <TextView
-                        style="@style/BottomToolText"
-                        android:text="Sticker"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btn_add_page"
-                    style="@style/BottomToolItem">
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_add_page"
-                        app:tint="@android:color/white"/>
-                    <TextView
-                        style="@style/BottomToolText"
-                        android:text="Add Page"/>
-                </LinearLayout>
-
-                <FrameLayout
-                    android:id="@+id/btn_delete_page"
+                    android:id="@+id/tv_page_status"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:text="Page 01 Open"
+                    android:textColor="#2E7D32"
+                    android:textSize="12sp" />
 
-                    <LinearLayout
-                        style="@style/BottomToolItem">
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_delete_page"
-                            app:tint="@android:color/white"/>
-                        <TextView
-                            style="@style/BottomToolText"
-                            android:text="Delete Page"/>
-                    </LinearLayout>
+            </LinearLayout>
 
+            <!-- Right: Save JPG + Save PDF -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:id="@+id/btn_save_jpg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:paddingHorizontal="6dp"
+                    android:background="@drawable/bg_topbtn_jpg"
+                    android:layout_marginEnd="6dp">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_menu_save"
+                        app:tint="#FFFFFF" />
                     <TextView
-                        android:id="@+id/tv_deleted_page_count"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_gravity="top|end"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginEnd="2dp"
-                        android:background="@drawable/badge_circle"
-                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Save JPG"
                         android:textColor="#FFFFFF"
                         android:textSize="9sp"
-                        android:textStyle="bold"
-                        android:text="0"
-                        android:visibility="gone"/>
+                        android:textStyle="bold" />
+                </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/btn_save_pdf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:paddingHorizontal="6dp"
+                    android:background="@drawable/bg_topbtn_pdf">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@android:drawable/ic_menu_save"
+                        app:tint="#FFFFFF" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Save PDF"
+                        android:textColor="#FFFFFF"
+                        android:textSize="9sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Center: Pages + Layers -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_topbar_center"
+                android:padding="4dp">
+
+                <FrameLayout
+                    android:id="@+id/btn_pages_top"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:paddingHorizontal="10dp">
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:src="@drawable/ic_add_page"
+                            app:tint="#333333" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Pages"
+                            android:textColor="#333333"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_page_count_badge"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="top|end"
+                        android:background="@drawable/badge_circle"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textColor="#FFFFFF"
+                        android:textSize="9sp"
+                        android:textStyle="bold" />
                 </FrameLayout>
 
                 <LinearLayout
-                    android:id="@+id/btn_show_delete_page"
-                    style="@style/BottomToolItem">
+                    android:id="@+id/btn_layers_top"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:paddingHorizontal="10dp">
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_delete_page_show"
-                        app:tint="@android:color/white"/>
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_sticker"
+                        app:tint="#333333" />
                     <TextView
-                        style="@style/BottomToolText"
-                        android:text="Show Pages"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Layers"
+                        android:textColor="#333333"
+                        android:textSize="10sp" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/btn_show_deleted_texts"
-                    style="@style/BottomToolItem">
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_deleted_text"
-                        app:tint="@android:color/white"/>
-                    <TextView
-                        style="@style/BottomToolText"
-                        android:text="Deleted Text"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/btn_save_dialog"
-                    style="@style/BottomToolItem">
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_save_image"
-                        app:tint="@android:color/white"/>
-                    <TextView
-                        style="@style/BottomToolText"
-                        android:text="Save"/>
-                </LinearLayout>
             </LinearLayout>
-        </HorizontalScrollView>
+
+        </RelativeLayout>
+
+        <!-- ══════════ CANVAS ══════════ -->
+        <RelativeLayout
+            android:id="@+id/main_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/top_bar">
+
+            <ImageView
+                android:id="@+id/main_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"/>
+        </RelativeLayout>
+
+        <!-- ══════════ OVERLAY TOOLBARS ══════════ -->
+        <RelativeLayout
+            android:id="@+id/main_layout1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/top_bar">
+
+            <include
+                android:id="@+id/include_multi_select_toolbar"
+                layout="@layout/layout_multi_select_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_above="@id/bottom_bt_scroll"/>
+
+            <include
+                android:id="@+id/include_page_liner"
+                layout="@layout/layout_page_liner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/bottom_bt_scroll"/>
+
+            <!-- OLD bottom toolbar — HIDDEN but IDs preserved for existing logic -->
+            <HorizontalScrollView
+                android:id="@+id/bottom_bt_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/bg_bottom_toolbar"
+                android:fillViewport="true"
+                android:visibility="gone"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/bottom_controls"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/btn_open_lock_panel"
+                        android:layout_width="28dp"
+                        android:layout_height="72dp"
+                        android:gravity="center"
+                        android:text="🔒"
+                        android:textSize="12sp"
+                        android:background="#CC1565C0"
+                        android:textColor="#FFFFFF"/>
+
+                    <LinearLayout android:id="@+id/btn_add_text" style="@style/BottomToolItem">
+                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_add_text" app:tint="@android:color/white"/>
+                        <TextView style="@style/BottomToolText" android:text="Add Text"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:id="@+id/btn_photo_frame" style="@style/BottomToolItem">
+                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_add_text" app:tint="@android:color/white"/>
+                        <TextView style="@style/BottomToolText" android:text="Photo frame"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:id="@+id/btn_sticker_gallery" style="@style/BottomToolItem">
+                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_add_text" app:tint="@android:color/white"/>
+                        <TextView style="@style/BottomToolText" android:text="Add Image"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:id="@+id/btn_remove_bg_offline" style="@style/BottomToolItem">
+                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_change_bg" app:tint="@android:color/white"/>
+                        <TextView style="@style/BottomToolText" android:text="Remove BG"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:id="@+id/btn_set_background" style="@style/BottomToolItem">
+                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_add_image" app:tint="@android:color/white"/>
+                        <TextView style="@style/BottomToolText" android:text="Add bg Image+"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:id="@+id/btn_save_json" style="@style/BottomToolItem" android:visibility="gone">
+                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_save_json" app:tint="@android:color/white"/>
+                        <TextView style="@style/BottomToolText" android:text="Save JSON"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:id="@+id/btn_location" style="@style/BottomToolItem">
+                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_location" app:tint="@android:color/white"/>
+                        <TextView style="@style/BottomToolText" android:text="Location"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:id="@+id/btn_show_list" style="@style/BottomToolItem" android:visibility="gone">
+                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_list_json" app:tint="@android:color/white"/>
+                        <TextView style="@style/BottomToolText" android:text="List JSON"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:id="@+id/btn_add_sticker" style="@style/BottomToolItem">
+                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_sticker" app:tint="@android:color/white"/>
+                        <TextView style="@style/BottomToolText" android:text="Sticker"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:id="@+id/btn_add_page" style="@style/BottomToolItem">
+                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_add_page" app:tint="@android:color/white"/>
+                        <TextView style="@style/BottomToolText" android:text="Add Page"/>
+                    </LinearLayout>
+
+                    <FrameLayout android:id="@+id/btn_delete_page" android:layout_width="wrap_content" android:layout_height="wrap_content">
+                        <LinearLayout style="@style/BottomToolItem">
+                            <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_delete_page" app:tint="@android:color/white"/>
+                            <TextView style="@style/BottomToolText" android:text="Delete Page"/>
+                        </LinearLayout>
+                        <TextView android:id="@+id/tv_deleted_page_count" android:layout_width="18dp" android:layout_height="18dp" android:layout_gravity="top|end" android:background="@drawable/badge_circle" android:gravity="center" android:textColor="#FFFFFF" android:textSize="9sp" android:textStyle="bold" android:text="0" android:visibility="gone"/>
+                    </FrameLayout>
+
+                    <LinearLayout android:id="@+id/btn_show_delete_page" style="@style/BottomToolItem">
+                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_delete_page_show" app:tint="@android:color/white"/>
+                        <TextView style="@style/BottomToolText" android:text="Show Pages"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:id="@+id/btn_show_deleted_texts" style="@style/BottomToolItem">
+                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_deleted_text" app:tint="@android:color/white"/>
+                        <TextView style="@style/BottomToolText" android:text="Deleted Text"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:id="@+id/btn_save_dialog" style="@style/BottomToolItem">
+                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_save_image" app:tint="@android:color/white"/>
+                        <TextView style="@style/BottomToolText" android:text="Save"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+        </RelativeLayout>
+
+        <!-- ══════════ FLOATING ADD BUTTON ══════════ -->
+        <TextView
+            android:id="@+id/fab_add"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="+"
+            android:textColor="#FFFFFF"
+            android:textSize="32sp"
+            android:background="@drawable/bg_fab_add"
+            android:elevation="12dp" />
+
+        <!-- ══════════ TOOL POPUP — PORTRAIT (vertical left) ══════════ -->
+        <LinearLayout
+            android:id="@+id/tool_panel_portrait"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/top_bar"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical"
+            android:background="@drawable/bg_tool_panel"
+            android:padding="6dp"
+            android:elevation="16dp"
+            android:visibility="gone">
+
+            <TextView android:layout_width="56dp" android:layout_height="wrap_content" android:gravity="center" android:text="⠿\nDrag &amp; Move" android:textSize="9sp" android:textColor="#888888" android:paddingVertical="6dp"/>
+            <LinearLayout android:id="@+id/tp_new_text" style="@style/ToolPanelItem">
+                <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_add_text" app:tint="#333333"/>
+                <TextView style="@style/ToolPanelLabel" android:text="New Text"/>
+            </LinearLayout>
+            <LinearLayout android:id="@+id/tp_photo" style="@style/ToolPanelItem">
+                <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_add_image" app:tint="#333333"/>
+                <TextView style="@style/ToolPanelLabel" android:text="Photo"/>
+            </LinearLayout>
+            <LinearLayout android:id="@+id/tp_sticker" style="@style/ToolPanelItem">
+                <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_sticker" app:tint="#333333"/>
+                <TextView style="@style/ToolPanelLabel" android:text="Sticker"/>
+            </LinearLayout>
+            <LinearLayout android:id="@+id/tp_shape" style="@style/ToolPanelItem">
+                <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_sticker" app:tint="#333333"/>
+                <TextView style="@style/ToolPanelLabel" android:text="Shape"/>
+            </LinearLayout>
+            <LinearLayout android:id="@+id/tp_frame" style="@style/ToolPanelItem">
+                <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_add_text" app:tint="#333333"/>
+                <TextView style="@style/ToolPanelLabel" android:text="Frame"/>
+            </LinearLayout>
+            <LinearLayout android:id="@+id/tp_location" style="@style/ToolPanelItem">
+                <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_location" app:tint="#333333"/>
+                <TextView style="@style/ToolPanelLabel" android:text="Location"/>
+            </LinearLayout>
+            <TextView android:id="@+id/tp_orient_toggle" android:layout_width="56dp" android:layout_height="wrap_content" android:gravity="center" android:text="Landscape" android:textSize="10sp" android:textColor="#555555" android:background="#EEEEEE" android:paddingVertical="6dp" android:layout_marginTop="4dp"/>
+            <TextView android:id="@+id/tp_close" android:layout_width="56dp" android:layout_height="40dp" android:gravity="center" android:text="✕" android:textSize="20sp" android:textColor="#FFFFFF" android:background="@drawable/bg_tool_close" android:layout_marginTop="4dp"/>
+
+        </LinearLayout>
+
+        <!-- ══════════ TOOL POPUP — LANDSCAPE (horizontal bottom) ══════════ -->
+        <LinearLayout
+            android:id="@+id/tool_panel_landscape"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_tool_panel"
+            android:padding="6dp"
+            android:elevation="16dp"
+            android:visibility="gone">
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center" android:text="⠿\nDrag" android:textSize="9sp" android:textColor="#888888" android:paddingHorizontal="6dp"/>
+            <LinearLayout android:id="@+id/tpl_new_text" style="@style/ToolPanelItemH">
+                <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_add_text" app:tint="#333333"/>
+                <TextView style="@style/ToolPanelLabel" android:text="New Text"/>
+            </LinearLayout>
+            <LinearLayout android:id="@+id/tpl_photo" style="@style/ToolPanelItemH">
+                <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_add_image" app:tint="#333333"/>
+                <TextView style="@style/ToolPanelLabel" android:text="Photo"/>
+            </LinearLayout>
+            <LinearLayout android:id="@+id/tpl_sticker" style="@style/ToolPanelItemH">
+                <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_sticker" app:tint="#333333"/>
+                <TextView style="@style/ToolPanelLabel" android:text="Sticker"/>
+            </LinearLayout>
+            <LinearLayout android:id="@+id/tpl_shape" style="@style/ToolPanelItemH">
+                <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_sticker" app:tint="#333333"/>
+                <TextView style="@style/ToolPanelLabel" android:text="Shape"/>
+            </LinearLayout>
+            <LinearLayout android:id="@+id/tpl_frame" style="@style/ToolPanelItemH">
+                <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_add_text" app:tint="#333333"/>
+                <TextView style="@style/ToolPanelLabel" android:text="Frame"/>
+            </LinearLayout>
+            <LinearLayout android:id="@+id/tpl_location" style="@style/ToolPanelItemH">
+                <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_location" app:tint="#333333"/>
+                <TextView style="@style/ToolPanelLabel" android:text="Location"/>
+            </LinearLayout>
+            <TextView android:id="@+id/tpl_orient_toggle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center" android:text="Portrait" android:textSize="10sp" android:textColor="#555555" android:background="#EEEEEE" android:paddingHorizontal="8dp" android:paddingVertical="6dp" android:layout_marginStart="4dp"/>
+            <TextView android:id="@+id/tpl_close" android:layout_width="48dp" android:layout_height="48dp" android:gravity="center" android:text="✕" android:textSize="20sp" android:textColor="#FFFFFF" android:background="@drawable/bg_tool_close" android:layout_marginStart="4dp"/>
+
+        </LinearLayout>
 
     </RelativeLayout>
 
-
-    <!-- ══════════════════════════════════
-         LEFT DRAWER — Locked Layers
-    ══════════════════════════════════ -->
+    <!-- ══════════ RIGHT DRAWER — Layers ══════════ -->
     <LinearLayout
         android:id="@+id/lock_panel_drawer"
         android:layout_width="280dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
+        android:layout_gravity="end"
         android:orientation="vertical"
         android:background="#FFFFFF"
         android:elevation="8dp">
 
-        <!-- Header -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="#1565C0"
-            android:gravity="center_vertical"
-            android:paddingStart="16dp"
-            android:paddingEnd="8dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="🔒 Locked Layers"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/btn_close_lock_panel"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:gravity="center"
-                android:text="✕"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:clickable="true"
-                android:focusable="true"/>
-
+        <LinearLayout android:layout_width="match_parent" android:layout_height="56dp" android:background="#1565C0" android:gravity="center_vertical" android:paddingStart="16dp" android:paddingEnd="8dp">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="🔒 Locked Layers" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold"/>
+            <TextView android:id="@+id/btn_close_lock_panel" android:layout_width="40dp" android:layout_height="40dp" android:gravity="center" android:text="✕" android:textColor="#FFFFFF" android:textSize="18sp" android:clickable="true" android:focusable="true"/>
         </LinearLayout>
 
-        <!-- Unlock All -->
-        <Button
-            android:id="@+id/btn_unlock_all"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:text="🔓 Unlock All"
-            android:textSize="13sp"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#43A047"
-            android:layout_margin="8dp"/>
-        <!-- Drawer ની અંદર — Unlock All Button ની નીચે -->
+        <Button android:id="@+id/btn_unlock_all" android:layout_width="match_parent" android:layout_height="40dp" android:text="🔓 Unlock All" android:textSize="13sp" android:textColor="#FFFFFF" android:backgroundTint="#43A047" android:layout_margin="8dp"/>
 
-        <!-- ── Tab Bar -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal"
-            android:background="#F5F5F5">
-
-            <TextView
-                android:id="@+id/tab_all_layers"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="All"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:background="#1565C0"
-                android:clickable="true"
-                android:focusable="true"/>
-
-            <TextView
-                android:id="@+id/tab_locked_layers"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="🔒 Locked"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:textColor="#888888"
-                android:background="#F5F5F5"
-                android:clickable="true"
-                android:focusable="true"/>
-
-            <TextView
-                android:id="@+id/tab_unlocked_layers"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="🔓 Open"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:textColor="#888888"
-                android:background="#F5F5F5"
-                android:clickable="true"
-                android:focusable="true"/>
-
+        <LinearLayout android:layout_width="match_parent" android:layout_height="40dp" android:orientation="horizontal" android:background="#F5F5F5">
+            <TextView android:id="@+id/tab_all_layers" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="All" android:textSize="12sp" android:textStyle="bold" android:textColor="#FFFFFF" android:background="#1565C0" android:clickable="true" android:focusable="true"/>
+            <TextView android:id="@+id/tab_locked_layers" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="🔒 Locked" android:textSize="12sp" android:textStyle="bold" android:textColor="#888888" android:background="#F5F5F5" android:clickable="true" android:focusable="true"/>
+            <TextView android:id="@+id/tab_unlocked_layers" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="🔓 Open" android:textSize="12sp" android:textStyle="bold" android:textColor="#888888" android:background="#F5F5F5" android:clickable="true" android:focusable="true"/>
         </LinearLayout>
 
-        <!-- Count -->
-        <TextView
-            android:id="@+id/tv_lock_count"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="0 layers locked"
-            android:textSize="12sp"
-            android:textColor="#888888"
-            android:paddingStart="16dp"
-            android:paddingBottom="8dp"/>
+        <TextView android:id="@+id/tv_lock_count" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="0 layers locked" android:textSize="12sp" android:textColor="#888888" android:paddingStart="16dp" android:paddingBottom="8dp"/>
 
-        <!-- List -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_locked_layers"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:visibility="gone"/>
+        <androidx.recyclerview.widget.RecyclerView android:id="@+id/rv_locked_layers" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:visibility="gone"/>
 
-        <!-- Empty -->
-        <TextView
-            android:id="@+id/tv_lock_empty"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="🔓&#10;Koi layer locked nathi"
-            android:textSize="14sp"
-            android:textColor="#BBBBBB"
-            android:visibility="visible"/>
+        <TextView android:id="@+id/tv_lock_empty" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:gravity="center" android:text="🔓&#10;Koi layer locked nathi" android:textSize="14sp" android:textColor="#BBBBBB" android:visibility="visible"/>
 
     </LinearLayout>
 
