@@ -414,37 +414,86 @@
             android:orientation="horizontal"
             android:gravity="center_vertical"
             android:background="@drawable/bg_tool_panel"
-            android:padding="6dp"
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="6dp"
             android:elevation="16dp"
             android:visibility="gone">
 
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center" android:text="⠿\nDrag" android:textSize="9sp" android:textColor="#888888" android:paddingHorizontal="6dp"/>
-            <LinearLayout android:id="@+id/tpl_new_text" style="@style/ToolPanelItemH">
-                <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_add_text" app:tint="#333333"/>
-                <TextView style="@style/ToolPanelLabel" android:text="New Text"/>
+            <!-- Drag & Move handle -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingHorizontal="6dp">
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_drag_dots"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Drag &amp;\nMove" android:textSize="9sp" android:textColor="#888888" android:gravity="center" android:layout_marginTop="2dp"/>
             </LinearLayout>
-            <LinearLayout android:id="@+id/tpl_photo" style="@style/ToolPanelItemH">
-                <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_add_image" app:tint="#333333"/>
-                <TextView style="@style/ToolPanelLabel" android:text="Photo"/>
-            </LinearLayout>
-            <LinearLayout android:id="@+id/tpl_sticker" style="@style/ToolPanelItemH">
-                <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_sticker" app:tint="#333333"/>
-                <TextView style="@style/ToolPanelLabel" android:text="Sticker"/>
-            </LinearLayout>
-            <LinearLayout android:id="@+id/tpl_shape" style="@style/ToolPanelItemH">
-                <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_sticker" app:tint="#333333"/>
-                <TextView style="@style/ToolPanelLabel" android:text="Shape"/>
-            </LinearLayout>
-            <LinearLayout android:id="@+id/tpl_frame" style="@style/ToolPanelItemH">
-                <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_add_text" app:tint="#333333"/>
-                <TextView style="@style/ToolPanelLabel" android:text="Frame"/>
-            </LinearLayout>
-            <LinearLayout android:id="@+id/tpl_location" style="@style/ToolPanelItemH">
-                <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_location" app:tint="#333333"/>
-                <TextView style="@style/ToolPanelLabel" android:text="Location"/>
-            </LinearLayout>
-            <TextView android:id="@+id/tpl_orient_toggle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center" android:text="Portrait" android:textSize="10sp" android:textColor="#555555" android:background="#EEEEEE" android:paddingHorizontal="8dp" android:paddingVertical="6dp" android:layout_marginStart="4dp"/>
-            <TextView android:id="@+id/tpl_close" android:layout_width="48dp" android:layout_height="48dp" android:gravity="center" android:text="✕" android:textSize="20sp" android:textColor="#FFFFFF" android:background="@drawable/bg_tool_close" android:layout_marginStart="4dp"/>
+
+            <!-- Tools (scrollable) -->
+            <HorizontalScrollView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:scrollbars="none">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <LinearLayout android:id="@+id/tpl_new_text" style="@style/ToolPanelItemH">
+                        <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_add_text" app:tint="#333333"/>
+                        <TextView style="@style/ToolPanelLabel" android:text="New Text"/>
+                    </LinearLayout>
+                    <LinearLayout android:id="@+id/tpl_photo" style="@style/ToolPanelItemH">
+                        <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_add_image" app:tint="#333333"/>
+                        <TextView style="@style/ToolPanelLabel" android:text="Photo"/>
+                    </LinearLayout>
+                    <LinearLayout android:id="@+id/tpl_sticker" style="@style/ToolPanelItemH">
+                        <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_sticker" app:tint="#333333"/>
+                        <TextView style="@style/ToolPanelLabel" android:text="Sticker"/>
+                    </LinearLayout>
+                    <LinearLayout android:id="@+id/tpl_shape" style="@style/ToolPanelItemH">
+                        <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_sticker" app:tint="#333333"/>
+                        <TextView style="@style/ToolPanelLabel" android:text="Shape"/>
+                    </LinearLayout>
+                    <LinearLayout android:id="@+id/tpl_frame" style="@style/ToolPanelItemH">
+                        <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_add_text" app:tint="#333333"/>
+                        <TextView style="@style/ToolPanelLabel" android:text="Frame"/>
+                    </LinearLayout>
+                    <LinearLayout android:id="@+id/tpl_location" style="@style/ToolPanelItemH">
+                        <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_location" app:tint="#333333"/>
+                        <TextView style="@style/ToolPanelLabel" android:text="Location"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <!-- Portrait toggle (vertical text) -->
+            <TextView
+                android:id="@+id/tpl_orient_toggle"
+                android:layout_width="34dp"
+                android:layout_height="56dp"
+                android:gravity="center"
+                android:text="Portrait"
+                android:textSize="11sp"
+                android:textColor="#555555"
+                android:background="#EEEEEE"
+                android:rotation="270"
+                android:layout_marginStart="2dp"/>
+
+            <!-- Close -->
+            <TextView
+                android:id="@+id/tpl_close"
+                android:layout_width="48dp"
+                android:layout_height="56dp"
+                android:gravity="center"
+                android:text="✕"
+                android:textSize="22sp"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/bg_tool_close"
+                android:layout_marginStart="4dp"/>
 
         </LinearLayout>
 
