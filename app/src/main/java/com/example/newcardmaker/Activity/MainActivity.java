@@ -9771,6 +9771,7 @@ public class MainActivity extends AppCompatActivity {
                 View rootView = getWindow().getDecorView().getRootView();
                 android.util.DisplayMetrics dm2 = new android.util.DisplayMetrics();
                 getWindowManager().getDefaultDisplay().getMetrics(dm2);
+                setActiveControlPopup(borderPopup);
                 borderPopup.showAtLocation(rootView, Gravity.TOP | Gravity.LEFT, 0, dm2.heightPixels / 4);
 
                 // ── Drag (smooth)
