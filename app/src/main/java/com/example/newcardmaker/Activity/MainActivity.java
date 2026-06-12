@@ -16253,6 +16253,24 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Reliable short vibration (works regardless of system haptic-feedback toggle)
+    private void doVibrate(int ms) {
+        try {
+            android.os.Vibrator vib;
+            if (android.os.Build.VERSION.SDK_INT >= 31) {
+                android.os.VibratorManager vm = (android.os.VibratorManager)
+                        getSystemService(android.content.Context.VIBRATOR_MANAGER_SERVICE);
+                vib = (vm != null) ? vm.getDefaultVibrator() : null;
+            } else {
+                vib = (android.os.Vibrator) getSystemService(android.content.Context.VIBRATOR_SERVICE);
+            }
+            if (vib != null && vib.hasVibrator()) {
+                vib.vibrate(android.os.VibrationEffect.createOneShot(ms,
+                        android.os.VibrationEffect.DEFAULT_AMPLITUDE));
+            }
+        } catch (Exception ignored) {}
+    }
+
     // ───────────────────────────────────────────────────────────
     // Manage Pages dialog (grid thumbnails + long-press drag reorder)
     // ───────────────────────────────────────────────────────────
@@ -16357,8 +16375,10 @@ public class MainActivity extends AppCompatActivity {
                     vh.itemView.animate().scaleX(1.08f).scaleY(1.08f).setDuration(120).start();
                     androidx.core.view.ViewCompat.setElevation(vh.itemView, dp(12));
                     vh.itemView.setAlpha(0.95f);
-                    // haptic tick confirms the long-press grab
-                    vh.itemView.performHapticFeedback(android.view.HapticFeedbackConstants.LONG_PRESS);
+                    // reliable vibration confirms the long-press grab
+                    doVibrate(45);
+                    vh.itemView.performHapticFeedback(android.view.HapticFeedbackConstants.LONG_PRESS,
+                            android.view.HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                 }
             }
 
