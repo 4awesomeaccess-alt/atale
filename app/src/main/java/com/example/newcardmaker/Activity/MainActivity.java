@@ -1511,6 +1511,7 @@ public class MainActivity extends AppCompatActivity {
             dragHandle.setOnTouchListener((v2, event) -> {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        doVibrate(40); // grab popup to move → haptic
                         lastTX[0] = event.getRawX();
                         lastTY[0] = event.getRawY();
                         return true;
@@ -2354,6 +2355,7 @@ public class MainActivity extends AppCompatActivity {
         dragHandle.setOnTouchListener((v, ev) -> {
             switch (ev.getAction()) {
                 case android.view.MotionEvent.ACTION_DOWN:
+                    doVibrate(40); // grab popup to move → haptic
                     lastRaw[0] = ev.getRawX();
                     lastRaw[1] = ev.getRawY();
                     return true;
@@ -7408,6 +7410,7 @@ public class MainActivity extends AppCompatActivity {
         tvTitle.setOnTouchListener((v, ev) -> {
             switch (ev.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
+                    doVibrate(40); // grab popup to move → haptic
                     lastY[0] = ev.getRawY();
                     isDragging[0] = true;
                     return true;
@@ -8103,6 +8106,7 @@ public class MainActivity extends AppCompatActivity {
         header.setOnTouchListener((v, e) -> {
             switch (e.getAction()) {
                 case android.view.MotionEvent.ACTION_DOWN:
+                    doVibrate(40); // grab popup to move → haptic
                     dragStart[0] = (int) e.getRawX(); dragStart[1] = (int) e.getRawY(); break;
                 case android.view.MotionEvent.ACTION_MOVE:
                     pos[0] += (int) e.getRawX() - dragStart[0];
@@ -8474,6 +8478,7 @@ public class MainActivity extends AppCompatActivity {
         header.setOnTouchListener((v, e) -> {
             switch (e.getAction()) {
                 case android.view.MotionEvent.ACTION_DOWN:
+                    doVibrate(40); // grab popup to move → haptic
                     dragStart[0] = (int) e.getRawX();
                     dragStart[1] = (int) e.getRawY();
                     break;
@@ -9762,6 +9767,7 @@ public class MainActivity extends AppCompatActivity {
                     borderDrag.setOnTouchListener((bv, event) -> {
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_DOWN:
+                                doVibrate(40); // grab popup to move → haptic
                                 bLastX[0] = event.getRawX();
                                 bLastY[0] = event.getRawY();
                                 int[] bloc = new int[2];
@@ -10341,7 +10347,7 @@ public class MainActivity extends AppCompatActivity {
             final int[] lxy4 = {0, 0};
             wTitle.setOnTouchListener((vv, ev) -> {
                 switch (ev.getAction()) {
-                    case MotionEvent.ACTION_DOWN: lxy4[0]=(int)ev.getRawX(); lxy4[1]=(int)ev.getRawY(); break;
+                    case MotionEvent.ACTION_DOWN: doVibrate(40); lxy4[0]=(int)ev.getRawX(); lxy4[1]=(int)ev.getRawY(); break;
                     case MotionEvent.ACTION_MOVE:
                         int dx=(int)ev.getRawX()-lxy4[0]; int dy=(int)ev.getRawY()-lxy4[1];
                         int[] l4=new int[2]; wr.getLocationOnScreen(l4);
@@ -10519,6 +10525,7 @@ public class MainActivity extends AppCompatActivity {
         titleBar.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    doVibrate(40); // grab popup to move → haptic
                     lastX[0] = (int) event.getRawX();
                     lastY[0] = (int) event.getRawY();
                     return true;
@@ -11045,6 +11052,7 @@ public class MainActivity extends AppCompatActivity {
             dragHandle.setOnTouchListener((v, event) -> {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        doVibrate(40); // grab popup to move → haptic
                         lastXY[0] = (int) event.getRawX();
                         lastXY[1] = (int) event.getRawY();
                         break;
@@ -11526,7 +11534,7 @@ public class MainActivity extends AppCompatActivity {
             final int[] lxy3 = {0, 0};
             wTitle.setOnTouchListener((vv, ev) -> {
                 switch (ev.getAction()) {
-                    case MotionEvent.ACTION_DOWN: lxy3[0] = (int)ev.getRawX(); lxy3[1] = (int)ev.getRawY(); break;
+                    case MotionEvent.ACTION_DOWN: doVibrate(40); lxy3[0] = (int)ev.getRawX(); lxy3[1] = (int)ev.getRawY(); break;
                     case MotionEvent.ACTION_MOVE:
                         int dx = (int)ev.getRawX() - lxy3[0]; int dy = (int)ev.getRawY() - lxy3[1];
                         int[] loc3 = new int[2]; wr.getLocationOnScreen(loc3);
@@ -12062,6 +12070,7 @@ public class MainActivity extends AppCompatActivity {
         dragHandle.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    doVibrate(40); // grab popup to move → haptic
                     lastXY[0] = (int) event.getRawX(); lastXY[1] = (int) event.getRawY(); break;
                 case MotionEvent.ACTION_MOVE:
                     int dx = (int) event.getRawX() - lastXY[0];
@@ -12555,6 +12564,7 @@ public class MainActivity extends AppCompatActivity {
         dragHandle.setOnTouchListener((vv, ev) -> {
             switch (ev.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    doVibrate(40); // grab popup to move → haptic
                     lastDrag[0] = ev.getRawX(); lastDrag[1] = ev.getRawY();
                     int[] loc = new int[2]; root.getLocationOnScreen(loc);
                     int[] mLoc = new int[2]; mainLayout.getLocationOnScreen(mLoc);
@@ -14064,6 +14074,7 @@ public class MainActivity extends AppCompatActivity {
                 public boolean onTouch(View v2, MotionEvent e) {
                     switch (e.getActionMasked()) {
                         case MotionEvent.ACTION_DOWN:
+                            doVibrate(40); // grab popup to move → haptic
                             dX = alignPopupWindow.getContentView().getX() - e.getRawX();
                             dY = alignPopupWindow.getContentView().getY() - e.getRawY();
                             break;
@@ -15022,6 +15033,7 @@ public class MainActivity extends AppCompatActivity {
             dragHandle.setOnTouchListener((v2, event) -> {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        doVibrate(40); // grab popup to move → haptic
                         lastTX[0] = event.getRawX();
                         lastTY[0] = event.getRawY();
                         return true;
@@ -19922,7 +19934,7 @@ public class MainActivity extends AppCompatActivity {
             final int[] lxy = {0, 0};
             wTitle.setOnTouchListener((vv, ev) -> {
                 switch (ev.getAction()) {
-                    case MotionEvent.ACTION_DOWN: lxy[0]=(int)ev.getRawX(); lxy[1]=(int)ev.getRawY(); break;
+                    case MotionEvent.ACTION_DOWN: doVibrate(40); lxy[0]=(int)ev.getRawX(); lxy[1]=(int)ev.getRawY(); break;
                     case MotionEvent.ACTION_MOVE:
                         int dx=(int)ev.getRawX()-lxy[0]; int dy=(int)ev.getRawY()-lxy[1];
                         int[] l=new int[2]; wr.getLocationOnScreen(l);
@@ -19963,7 +19975,7 @@ public class MainActivity extends AppCompatActivity {
             final int[] lxy = {0, 0};
             wTitle.setOnTouchListener((vv, ev) -> {
                 switch (ev.getAction()) {
-                    case MotionEvent.ACTION_DOWN: lxy[0]=(int)ev.getRawX(); lxy[1]=(int)ev.getRawY(); break;
+                    case MotionEvent.ACTION_DOWN: doVibrate(40); lxy[0]=(int)ev.getRawX(); lxy[1]=(int)ev.getRawY(); break;
                     case MotionEvent.ACTION_MOVE:
                         int dx=(int)ev.getRawX()-lxy[0]; int dy=(int)ev.getRawY()-lxy[1];
                         int[] l=new int[2]; wr.getLocationOnScreen(l);
@@ -20156,7 +20168,7 @@ public class MainActivity extends AppCompatActivity {
         final int[] lxy = {0, 0};
         dragHandle.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN: lxy[0]=(int)event.getRawX(); lxy[1]=(int)event.getRawY(); break;
+                case MotionEvent.ACTION_DOWN: doVibrate(40); lxy[0]=(int)event.getRawX(); lxy[1]=(int)event.getRawY(); break;
                 case MotionEvent.ACTION_MOVE:
                     int dx=(int)event.getRawX()-lxy[0]; int dy=(int)event.getRawY()-lxy[1];
                     int[] loc=new int[2]; root.getLocationOnScreen(loc);
@@ -20222,6 +20234,7 @@ public class MainActivity extends AppCompatActivity {
         dragTarget.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    doVibrate(40); // grab popup to move → haptic
                     dxy[0] = event.getRawX(); dxy[1] = event.getRawY();
                     int[] loc = new int[2];
                     popupView.getLocationOnScreen(loc);
@@ -20324,6 +20337,7 @@ public class MainActivity extends AppCompatActivity {
         dragTarget.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    doVibrate(40); // grab popup to move → haptic
                     downXY[0] = event.getRawX();
                     downXY[1] = event.getRawY();
                     // Fresh position read
@@ -20481,6 +20495,7 @@ public class MainActivity extends AppCompatActivity {
         dragHandle.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    doVibrate(40); // grab popup to move → haptic
                     lastXY[0] = (int) event.getRawX();
                     lastXY[1] = (int) event.getRawY(); break;
                 case MotionEvent.ACTION_MOVE:
@@ -21438,6 +21453,7 @@ public class MainActivity extends AppCompatActivity {
         dragHandle.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
+                    doVibrate(40); // grab popup to move → haptic
                     lastX[0] = (int) event.getRawX();
                     lastY[0] = (int) event.getRawY();
                     break;
@@ -21876,6 +21892,7 @@ public class MainActivity extends AppCompatActivity {
         dragHandle.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case android.view.MotionEvent.ACTION_DOWN:
+                    doVibrate(40); // grab popup to move → haptic
                     lastXY[0] = (int) event.getRawX();
                     lastXY[1] = (int) event.getRawY();
                     break;
