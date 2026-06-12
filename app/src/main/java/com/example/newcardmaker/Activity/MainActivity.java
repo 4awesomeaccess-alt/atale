@@ -16602,9 +16602,25 @@ public class MainActivity extends AppCompatActivity {
             });
 
             row.findViewById(R.id.btn_manage_remove).setOnClickListener(v -> {
-                deletedPagesList.remove(idx);
-                buildManageDeletedRows(container, emptyView, adapter, updateSelectedLabel);
-                exportToJson();
+                android.view.View cv = getLayoutInflater().inflate(R.layout.dialog_confirm_remove_page, null);
+                final AlertDialog confirm = new AlertDialog.Builder(this).setView(cv).create();
+                if (confirm.getWindow() != null) {
+                    confirm.getWindow().setBackgroundDrawable(new android.graphics.drawable.GradientDrawable() {{
+                        setColor(android.graphics.Color.WHITE);
+                        setCornerRadius(dp(18));
+                    }});
+                }
+                ((android.widget.TextView) cv.findViewById(R.id.tv_remove_title))
+                        .setText("Delete Page " + dp.optInt("_deletedPageNum", idx + 1) + "?");
+                cv.findViewById(R.id.btn_remove_cancel).setOnClickListener(c -> confirm.dismiss());
+                cv.findViewById(R.id.btn_remove_confirm).setOnClickListener(c -> {
+                    confirm.dismiss();
+                    if (idx >= 0 && idx < deletedPagesList.size()) deletedPagesList.remove(idx);
+                    buildManageDeletedRows(container, emptyView, adapter, updateSelectedLabel);
+                    exportToJson();
+                    Toast.makeText(this, "Page permanently removed", Toast.LENGTH_SHORT).show();
+                });
+                confirm.show();
             });
 
             container.addView(row);
