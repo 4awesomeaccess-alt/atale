@@ -17482,7 +17482,34 @@ public class MainActivity extends AppCompatActivity {
         View tplClose = findViewById(R.id.tpl_close);
         if (tplClose != null) tplClose.setOnClickListener(v -> closeToolPanel());
 
+        // ── Drag handles → move the panels ──
+        setupPanelDrag(findViewById(R.id.tp_drag_handle), findViewById(R.id.tool_panel_portrait));
+        setupPanelDrag(findViewById(R.id.tpl_drag_handle), findViewById(R.id.tool_panel_landscape));
+
         updatePageIndicator();
+    }
+
+    private void setupPanelDrag(View handle, View panel) {
+        if (handle == null || panel == null) return;
+        final float[] startTouch = new float[2];
+        final float[] startTrans = new float[2];
+        handle.setOnTouchListener((v, event) -> {
+            switch (event.getActionMasked()) {
+                case android.view.MotionEvent.ACTION_DOWN:
+                    startTouch[0] = event.getRawX();
+                    startTouch[1] = event.getRawY();
+                    startTrans[0] = panel.getTranslationX();
+                    startTrans[1] = panel.getTranslationY();
+                    return true;
+                case android.view.MotionEvent.ACTION_MOVE:
+                    float dx = event.getRawX() - startTouch[0];
+                    float dy = event.getRawY() - startTouch[1];
+                    panel.setTranslationX(startTrans[0] + dx);
+                    panel.setTranslationY(startTrans[1] + dy);
+                    return true;
+            }
+            return false;
+        });
     }
 
     private void wireToolButton(int panelBtnId, int realBtnId) {

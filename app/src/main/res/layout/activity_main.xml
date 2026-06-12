@@ -375,7 +375,16 @@
             android:elevation="16dp"
             android:visibility="gone">
 
-            <TextView android:layout_width="56dp" android:layout_height="wrap_content" android:gravity="center" android:text="⠿\nDrag &amp; Move" android:textSize="9sp" android:textColor="#888888" android:paddingVertical="6dp"/>
+            <LinearLayout
+                android:id="@+id/tp_drag_handle"
+                android:layout_width="56dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingVertical="6dp">
+                <ImageView android:layout_width="22dp" android:layout_height="22dp" android:src="@drawable/ic_drag_dots"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Drag &amp;\nMove" android:textSize="9sp" android:textColor="#888888" android:gravity="center" android:layout_marginTop="2dp"/>
+            </LinearLayout>
             <LinearLayout android:id="@+id/tp_new_text" style="@style/ToolPanelItem">
                 <ImageView style="@style/ToolPanelIcon" android:src="@drawable/ic_add_text" app:tint="#333333"/>
                 <TextView style="@style/ToolPanelLabel" android:text="New Text"/>
@@ -421,6 +430,7 @@
 
             <!-- Drag & Move handle -->
             <LinearLayout
+                android:id="@+id/tpl_drag_handle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
