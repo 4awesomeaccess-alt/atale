@@ -17443,6 +17443,8 @@ public class MainActivity extends AppCompatActivity {
 
         View btnPagesTop = findViewById(R.id.btn_pages_top);
         if (btnPagesTop != null) btnPagesTop.setOnClickListener(v -> {
+            int total = (allPagesData != null) ? allPagesData.size() : 0;
+            Toast.makeText(this, "Page " + (currentPageIndex + 1) + " / " + total, Toast.LENGTH_SHORT).show();
             View realBtn = findViewById(R.id.btn_show_delete_page);
             if (realBtn != null) realBtn.performClick();
         });
