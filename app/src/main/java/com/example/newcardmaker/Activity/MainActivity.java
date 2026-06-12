@@ -17938,6 +17938,16 @@ public class MainActivity extends AppCompatActivity {
         if (btnSettingsTop != null) btnSettingsTop.setOnClickListener(v ->
                 startActivity(new Intent(this, SettingsActivity.class)));
 
+        // One-time tip so users discover that popups can be dragged to move
+        android.content.SharedPreferences movePrefs = getSharedPreferences("app_prefs", MODE_PRIVATE);
+        if (!movePrefs.getBoolean("popup_move_hint_shown", false)) {
+            movePrefs.edit().putBoolean("popup_move_hint_shown", true).apply();
+            if (mainLayout != null) mainLayout.postDelayed(() ->
+                Toast.makeText(this,
+                    "ℹ️ Tip: કોઈ પણ popup ની ઉપરની પટ્ટી (⠿) પકડીને ખસેડી શકાય",
+                    Toast.LENGTH_LONG).show(), 1500);
+        }
+
         View btnSaveJpg = findViewById(R.id.btn_save_jpg);
         if (btnSaveJpg != null) btnSaveJpg.setOnClickListener(v -> {
             exportToJson();
