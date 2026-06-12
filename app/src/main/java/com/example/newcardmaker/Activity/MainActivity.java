@@ -16257,6 +16257,7 @@ public class MainActivity extends AppCompatActivity {
     // Manage Pages dialog (grid thumbnails + long-press drag reorder)
     // ───────────────────────────────────────────────────────────
     private int managePagesSelectedIndex = 0;
+    private boolean managePagesHintShown = false;
 
     private interface OnPagePick { void pick(int index); }
 
@@ -16349,8 +16350,24 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onSelectedChanged(RecyclerView.ViewHolder vh, int actionState) {
+                super.onSelectedChanged(vh, actionState);
+                if (actionState == androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_DRAG && vh != null) {
+                    // visual "lift" so the user sees the page is picked up
+                    vh.itemView.animate().scaleX(1.08f).scaleY(1.08f).setDuration(120).start();
+                    androidx.core.view.ViewCompat.setElevation(vh.itemView, dp(12));
+                    vh.itemView.setAlpha(0.95f);
+                    // haptic tick confirms the long-press grab
+                    vh.itemView.performHapticFeedback(android.view.HapticFeedbackConstants.LONG_PRESS);
+                }
+            }
+
+            @Override
             public void clearView(RecyclerView r, RecyclerView.ViewHolder vh) {
                 super.clearView(r, vh);
+                vh.itemView.animate().scaleX(1f).scaleY(1f).setDuration(120).start();
+                androidx.core.view.ViewCompat.setElevation(vh.itemView, 0f);
+                vh.itemView.setAlpha(1f);
                 adapter.notifyDataSetChanged();
                 updateSelectedLabel.run();
                 updatePageIndicator();
@@ -16451,6 +16468,22 @@ public class MainActivity extends AppCompatActivity {
 
         dialogView.findViewById(R.id.btn_close_manage_pages).setOnClickListener(v -> dialog.dismiss());
         dialog.show();
+
+        // One-time discovery hint: gently wiggle the first page card so the
+        // user notices pages can be long-pressed and dragged.
+        if (!managePagesHintShown && allPagesData.size() > 1) {
+            managePagesHintShown = true;
+            rv.postDelayed(() -> {
+                RecyclerView.ViewHolder vh = rv.findViewHolderForAdapterPosition(0);
+                if (vh != null) {
+                    android.view.View card = vh.itemView;
+                    card.animate().translationX(dp(10)).setDuration(140)
+                        .withEndAction(() -> card.animate().translationX(-dp(8)).setDuration(140)
+                        .withEndAction(() -> card.animate().translationX(0).setDuration(140).start())
+                        .start()).start();
+                }
+            }, 450);
+        }
     }
 
     // ───────────────────────────────────────────────────────────

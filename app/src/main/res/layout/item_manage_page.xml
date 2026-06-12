@@ -38,6 +38,15 @@
             android:background="@drawable/bg_manage_num_badge"/>
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_margin="4dp"
+            android:text="⠿"
+            android:textSize="14sp"
+            android:textColor="#9E9E9E"/>
+
+        <TextView
             android:id="@+id/tv_manage_open_badge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
