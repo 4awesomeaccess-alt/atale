@@ -16309,19 +16309,11 @@ public class MainActivity extends AppCompatActivity {
             updateSelectedLabel.run();
         };
 
-        // add a new blank page
-        adapter.onAddTap = () -> {
-            saveCurrentPage();
-            allPagesData.add(createEmptyPage());
-            currentPageIndex = allPagesData.size() - 1;
-            currentImageUrl = "";
-            loadPageData(allPagesData.get(currentPageIndex));
-            updatePageIndicator();
-            managePagesSelectedIndex = currentPageIndex;
+        // add a new page → open the Add New Page options dialog
+        adapter.onAddTap = () -> showAddNewPageDialog(() -> {
             adapter.notifyDataSetChanged();
             updateSelectedLabel.run();
-            exportToJson();
-        };
+        });
 
         // ── Long-press drag to reorder ──
         androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback cb =
@@ -16460,6 +16452,125 @@ public class MainActivity extends AppCompatActivity {
         dialogView.findViewById(R.id.btn_close_manage_pages).setOnClickListener(v -> dialog.dismiss());
         dialog.show();
     }
+
+    // ───────────────────────────────────────────────────────────
+    // Add New Page dialog (After / Before / End / Choose Position)
+    // ───────────────────────────────────────────────────────────
+    private void showAddNewPageDialog(final Runnable onAdded) {
+        final int total = allPagesData.size();
+        final android.view.View dv = getLayoutInflater().inflate(R.layout.dialog_add_new_page, null);
+        final AlertDialog dialog = new AlertDialog.Builder(this).setView(dv).create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new android.graphics.drawable.GradientDrawable() {{
+                setColor(android.graphics.Color.WHITE);
+                setCornerRadius(dp(18));
+            }});
+        }
+
+        // mode: 0=after, 1=before, 2=end, 3=position ; selPos = 1-based chosen position
+        final int[] mode = {0};
+        final int[] selPos = {Math.min(currentPageIndex + 1, total)};
+
+        final android.view.View rAfter = dv.findViewById(R.id.radio_add_after);
+        final android.view.View rBefore = dv.findViewById(R.id.radio_add_before);
+        final android.view.View rEnd = dv.findViewById(R.id.radio_add_end);
+        final android.view.View rPos = dv.findViewById(R.id.radio_choose_pos);
+        final android.widget.TextView badge = dv.findViewById(R.id.tv_add_pos_badge);
+        final android.widget.GridLayout grid = dv.findViewById(R.id.grid_add_positions);
+
+        // dynamic subtitles with current page number
+        ((android.widget.TextView) dv.findViewById(R.id.sub_add_after))
+                .setText("Insert new page after Page " + String.format("%02d", currentPageIndex + 1));
+        ((android.widget.TextView) dv.findViewById(R.id.sub_add_before))
+                .setText("Insert new page before Page " + String.format("%02d", currentPageIndex + 1));
+
+        // resolve target display position (1-based) for the badge
+
+        final Runnable refresh = new Runnable() {
+            @Override public void run() {
+                rAfter.setBackgroundResource(mode[0] == 0 ? R.drawable.bg_radio_selected : R.drawable.bg_radio_unselected);
+                rBefore.setBackgroundResource(mode[0] == 1 ? R.drawable.bg_radio_selected : R.drawable.bg_radio_unselected);
+                rEnd.setBackgroundResource(mode[0] == 2 ? R.drawable.bg_radio_selected : R.drawable.bg_radio_unselected);
+                rPos.setBackgroundResource(mode[0] == 3 ? R.drawable.bg_radio_selected : R.drawable.bg_radio_unselected);
+
+                int displayPos;
+                if (mode[0] == 0) displayPos = currentPageIndex + 2;
+                else if (mode[0] == 1) displayPos = currentPageIndex + 1;
+                else if (mode[0] == 2) displayPos = total + 1;
+                else displayPos = selPos[0];
+                badge.setText(String.format("%02d", displayPos));
+
+                // highlight position buttons
+                for (int i = 0; i < grid.getChildCount(); i++) {
+                    android.view.View child = grid.getChildAt(i);
+                    boolean on = (mode[0] == 3) && (((Integer) child.getTag()) == selPos[0]);
+                    child.setBackgroundResource(on ? R.drawable.bg_pos_btn_selected : R.drawable.bg_pos_btn);
+                    if (child instanceof android.widget.TextView) {
+                        ((android.widget.TextView) child).setTextColor(on ? 0xFFE53935 : 0xFF212121);
+                    }
+                }
+            }
+        };
+
+        // build position buttons (1..total)
+        grid.removeAllViews();
+        for (int p = 1; p <= total; p++) {
+            final int pos = p;
+            android.widget.TextView b = new android.widget.TextView(this);
+            b.setText(String.format("%02d", p));
+            b.setTextSize(14);
+            b.setTypeface(null, android.graphics.Typeface.BOLD);
+            b.setGravity(android.view.Gravity.CENTER);
+            b.setTag(Integer.valueOf(pos));
+            b.setBackgroundResource(R.drawable.bg_pos_btn);
+            android.widget.GridLayout.LayoutParams lp = new android.widget.GridLayout.LayoutParams();
+            lp.width = dp(56);
+            lp.height = dp(44);
+            lp.setMargins(dp(4), dp(4), dp(4), dp(4));
+            b.setLayoutParams(lp);
+            b.setOnClickListener(v -> {
+                mode[0] = 3;
+                selPos[0] = pos;
+                refresh.run();
+            });
+            grid.addView(b);
+        }
+
+        dv.findViewById(R.id.opt_add_after).setOnClickListener(v -> { mode[0] = 0; refresh.run(); });
+        dv.findViewById(R.id.opt_add_before).setOnClickListener(v -> { mode[0] = 1; refresh.run(); });
+        dv.findViewById(R.id.opt_add_end).setOnClickListener(v -> { mode[0] = 2; refresh.run(); });
+        dv.findViewById(R.id.opt_choose_pos).setOnClickListener(v -> { mode[0] = 3; refresh.run(); });
+
+        refresh.run();
+
+        dv.findViewById(R.id.btn_add_cancel).setOnClickListener(v -> dialog.dismiss());
+
+        dv.findViewById(R.id.btn_add_confirm).setOnClickListener(v -> {
+            int insertIndex;
+            if (mode[0] == 0) insertIndex = currentPageIndex + 1;
+            else if (mode[0] == 1) insertIndex = currentPageIndex;
+            else if (mode[0] == 2) insertIndex = allPagesData.size();
+            else insertIndex = selPos[0] - 1;
+            if (insertIndex < 0) insertIndex = 0;
+            if (insertIndex > allPagesData.size()) insertIndex = allPagesData.size();
+
+            saveCurrentPage();
+            allPagesData.add(insertIndex, createEmptyPage());
+            currentPageIndex = insertIndex;
+            currentImageUrl = "";
+            loadPageData(allPagesData.get(currentPageIndex));
+            updatePageIndicator();
+            managePagesSelectedIndex = currentPageIndex;
+            mainLayout.post(() -> { lockedViews.clear(); refreshLockedLayersPanel(); });
+            if (onAdded != null) onAdded.run();
+            exportToJson();
+            dialog.dismiss();
+            Toast.makeText(this, "Page " + (insertIndex + 1) + " add thai gayu", Toast.LENGTH_SHORT).show();
+        });
+
+        dialog.show();
+    }
+
 
     private void buildManageDeletedRows(final LinearLayout container, final android.widget.TextView emptyView,
                                         final ManagePagesAdapter adapter, final Runnable updateSelectedLabel) {
