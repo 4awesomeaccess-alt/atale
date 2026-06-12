@@ -12028,7 +12028,7 @@ public class MainActivity extends AppCompatActivity {
         // ── PopupWindow ──
         int screenW = getResources().getDisplayMetrics().widthPixels;
         int density = (int) getResources().getDisplayMetrics().density;
-        int margin25 = 25 * density;
+        int margin25 = 8 * density;
         int popupW  = screenW - (margin25 * 2);
         int screenH = getResources().getDisplayMetrics().heightPixels;
         int maxH    = (int)(screenH * 0.45f);
