@@ -13253,7 +13253,6 @@ public class MainActivity extends AppCompatActivity {
         final boolean[] dragging = {false};
         final float[] dragStartX = {0};
         final float[] dragStartY = {0};
-        final boolean[] posInit = {false};
 
         View.OnTouchListener dragListener = (v2, event) -> {
             switch (event.getAction()) {
@@ -13261,17 +13260,6 @@ public class MainActivity extends AppCompatActivity {
                     dragStartX[0] = event.getRawX();
                     dragStartY[0] = event.getRawY();
                     dragging[0] = true;
-                    // First touch — get actual popup position
-                    if (!posInit[0] && selectionControlsPopup != null && selectionControlsPopup.isShowing()) {
-                        int[] loc = new int[2];
-                        selectionControlsPopup.getContentView().getLocationInWindow(loc);
-                        // Window offset add karo
-                        int[] rootLoc = new int[2];
-                        mainLayout.getLocationOnScreen(rootLoc);
-                        selControlsLastX = loc[0];
-                        selControlsLastY = loc[1];
-                        posInit[0] = true;
-                    }
                     return true;
 
                 case MotionEvent.ACTION_MOVE:
@@ -14295,14 +14283,18 @@ public class MainActivity extends AppCompatActivity {
         if (isSelControlsMoved) {
             selectionControlsPopup.showAtLocation(mainLayout, Gravity.TOP | Gravity.LEFT, selControlsLastX, selControlsLastY);
         } else {
-            // First time — bottom center ma show karo
-            selectionControlsPopup.showAtLocation(mainLayout, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-            // Post kari ne actual position read karo drag mate
+            // First time — TOP|LEFT thi show karo jethi drag nu coordinate space
+            // same rahe; measure thaya pachi bottom-center par muko
+            selectionControlsPopup.showAtLocation(mainLayout, Gravity.TOP | Gravity.LEFT, 0, 0);
             selectionControlsPopup.getContentView().post(() -> {
-                int[] loc = new int[2];
-                selectionControlsPopup.getContentView().getLocationOnScreen(loc);
-                selControlsLastX = loc[0];
-                selControlsLastY = loc[1];
+                int popW = selectionControlsPopup.getContentView().getWidth();
+                int popH = selectionControlsPopup.getContentView().getHeight();
+                int sw = getResources().getDisplayMetrics().widthPixels;
+                int sh = getResources().getDisplayMetrics().heightPixels;
+                selControlsLastX = Math.max(0, (sw - popW) / 2);
+                selControlsLastY = Math.max(0, sh - popH - dp(80));
+                if (selectionControlsPopup != null && selectionControlsPopup.isShowing())
+                    selectionControlsPopup.update(selControlsLastX, selControlsLastY, -1, -1);
             });
         }
     }
