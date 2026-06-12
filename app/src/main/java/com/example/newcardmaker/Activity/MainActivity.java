@@ -16256,6 +16256,9 @@ public class MainActivity extends AppCompatActivity {
     // Reliable short vibration (works regardless of system haptic-feedback toggle)
     private void doVibrate(int ms) {
         try {
+            // respect the user's Settings → Vibration toggle (default on)
+            android.content.SharedPreferences sp = getSharedPreferences("app_prefs", MODE_PRIVATE);
+            if (!sp.getBoolean("vibration_enabled", true)) return;
             android.os.Vibrator vib;
             if (android.os.Build.VERSION.SDK_INT >= 31) {
                 android.os.VibratorManager vm = (android.os.VibratorManager)
@@ -17918,6 +17921,10 @@ public class MainActivity extends AppCompatActivity {
 
         View btnEditTitle = findViewById(R.id.btn_edit_title);
         if (btnEditTitle != null) btnEditTitle.setOnClickListener(v -> showRenameTitleDialog());
+
+        View btnSettingsTop = findViewById(R.id.btn_settings_top);
+        if (btnSettingsTop != null) btnSettingsTop.setOnClickListener(v ->
+                startActivity(new Intent(this, SettingsActivity.class)));
 
         View btnSaveJpg = findViewById(R.id.btn_save_jpg);
         if (btnSaveJpg != null) btnSaveJpg.setOnClickListener(v -> {
